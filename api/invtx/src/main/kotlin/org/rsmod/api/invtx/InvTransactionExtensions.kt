@@ -101,12 +101,14 @@ public fun Transaction<InvObj>.add(
     strict: Boolean = true,
     cert: Boolean = false,
     uncert: Boolean = false,
+    counted: Boolean = false,
 ) {
     insert {
         this.into = inv
         this.obj = obj
         this.cert = cert
         this.uncert = uncert
+        this.counted = counted
         this.vars = vars
         if (strict) {
             this.strictCount = count
@@ -259,11 +261,13 @@ public fun Transaction<InvObj>.delete(
     slot: Int? = null,
     strict: Boolean = true,
     placehold: Boolean = false,
+    counted: Boolean = false,
 ) {
     delete {
         this.from = inv
         this.obj = obj
         this.placehold = placehold
+        this.counted = counted
         if (strict) {
             this.strictCount = count
             this.strictSlot = slot

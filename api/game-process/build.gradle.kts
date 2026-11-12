@@ -8,6 +8,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(projects.api.areaChecker)
     implementation(libs.bundles.logging)
     implementation(libs.fastutil)
     implementation(libs.guice)
@@ -37,8 +38,10 @@ dependencies {
     integrationImplementation(libs.fastutil)
     integrationImplementation(libs.rsprot.api)
     integrationImplementation(projects.api.combat.combatCommons)
+    integrationImplementation(projects.api.death)
     integrationImplementation(projects.api.deathPlugin)
     integrationImplementation(projects.api.hitPlugin)
+    integrationImplementation(projects.api.net)
     integrationImplementation(projects.api.player)
     integrationImplementation(projects.api.random)
     integrationImplementation(projects.api.registry)

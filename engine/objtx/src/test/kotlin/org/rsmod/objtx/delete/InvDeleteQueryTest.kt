@@ -20,6 +20,43 @@ import org.rsmod.objtx.transaction
 @Execution(ExecutionMode.SAME_THREAD)
 class InvDeleteQueryTest {
     @Test
+    fun `delete counted non-stackable objs across slots`() {
+        val inventory = inv()
+        inventory[2] = Obj(abyssal_whip, 4)
+        inventory[8] = Obj(abyssal_whip, 4)
+        val result = transaction {
+            val inv = select(inventory)
+            delete {
+                from = inv
+                obj = abyssal_whip
+                strictCount = 6
+                counted = true
+            }
+        }
+        assertNull(inventory[2])
+        assertEquals(Obj(abyssal_whip, 2), inventory[8])
+        assertTrue(result.success)
+        assertEquals(6, result.completed())
+    }
+
+    @Test
+    fun `counted non-stackable delete is atomic when count is insufficient`() {
+        val inventory = inv()
+        inventory[2] = Obj(abyssal_whip, 4)
+        val result = transaction {
+            val inv = select(inventory)
+            delete {
+                from = inv
+                obj = abyssal_whip
+                strictCount = 5
+                counted = true
+            }
+        }
+        assertEquals(TransactionResult.NotEnoughObjCount, result.err)
+        assertEquals(Obj(abyssal_whip, 4), inventory[2])
+    }
+
+    @Test
     fun `delete obj from empty inv`() {
         val inventory = inv()
         val result = transaction {

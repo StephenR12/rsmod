@@ -22,7 +22,30 @@ public class HeldBanksideEvents {
     ) : KeyedEvent
 }
 
+public class BankedObjEvents {
+    public class ConfigureCharges(
+        public val slot: Int,
+        public val obj: InvObj,
+        public val type: UnpackedObjType,
+    ) : SuspendEvent<ProtectedAccess> {
+        override val id: Long = type.id.toLong()
+    }
+}
+
 public class HeldDropEvents {
+    /**
+     * Published only when a drop is about to be committed, after any valuable-item warning has been
+     * accepted. Scripts may replace the obj placed on the ground while the inventory verification
+     * and post-drop event continue to refer to the originally selected obj.
+     */
+    public class Prepare(
+        public val player: Player,
+        public val dropSlot: Int,
+        public val obj: InvObj,
+        public val type: UnpackedObjType,
+        public var groundObj: InvObj = obj,
+    ) : UnboundEvent
+
     public class Trigger(
         public val player: Player,
         public val dropSlot: Int,

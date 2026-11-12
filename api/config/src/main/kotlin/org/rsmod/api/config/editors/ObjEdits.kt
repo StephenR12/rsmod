@@ -6,6 +6,7 @@ import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.type.editors.obj.ObjEditor
+import org.rsmod.api.type.script.dsl.ObjPluginBuilder
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.stat.StatType
 
@@ -27,11 +28,31 @@ internal object ObjEdits : ObjEditor() {
         }
         edit(objs.snowball) { param[params.player_op5_text] = "Pelt" }
 
+        edit(objs.bryophytas_staff_uncharged) {
+            param[params.charged_variant] = objs.bryophytas_staff
+            bryophytasStaffRequirements()
+        }
+        edit(objs.bryophytas_staff) {
+            param[params.uncharged_variant] = objs.bryophytas_staff_uncharged
+            bryophytasStaffRequirements()
+        }
+
+        edit(objs.tome_of_water_uncharged) { param[params.charged_variant] = objs.tome_of_water }
+        edit(objs.tome_of_water) { param[params.uncharged_variant] = objs.tome_of_water_uncharged }
+
         editSkillCapes()
         editMaxCapes()
         editGeneralStorage()
+        editHunterPouchStorage()
         editBoneWeapons()
         editGracefulSets()
+    }
+
+    private fun ObjPluginBuilder.bryophytasStaffRequirements() {
+        param[params.statreq1_skill] = stats.attack
+        param[params.statreq1_level] = 30
+        param[params.statreq2_skill] = stats.magic
+        param[params.statreq2_level] = 30
     }
 
     private fun editSkillCapes() {
@@ -180,43 +201,43 @@ internal object ObjEdits : ObjEditor() {
     private fun editGeneralStorage() {
         edit(objs.rcu_pouch_small) {
             param[params.bankside_extraop_bit] = 0
-            param[params.bankside_extraop_varbit] = varbits.small_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_small_amount
         }
 
         edit(objs.rcu_pouch_medium) {
             param[params.bankside_extraop_bit] = 1
-            param[params.bankside_extraop_varbit] = varbits.medium_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_medium_amount
         }
         edit(objs.rcu_pouch_medium_degrade) {
             param[params.bankside_extraop_bit] = 1
-            param[params.bankside_extraop_varbit] = varbits.medium_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_medium_amount
         }
 
         edit(objs.rcu_pouch_large) {
             param[params.bankside_extraop_bit] = 2
-            param[params.bankside_extraop_varbit] = varbits.large_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_large_amount
         }
         edit(objs.rcu_pouch_large_degrade) {
             param[params.bankside_extraop_bit] = 2
-            param[params.bankside_extraop_varbit] = varbits.large_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_large_amount
         }
 
         edit(objs.rcu_pouch_giant) {
             param[params.bankside_extraop_bit] = 3
-            param[params.bankside_extraop_varbit] = varbits.giant_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_giant_amount
         }
         edit(objs.rcu_pouch_giant_degrade) {
             param[params.bankside_extraop_bit] = 3
-            param[params.bankside_extraop_varbit] = varbits.giant_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_giant_amount
         }
 
         edit(objs.rcu_pouch_colossal) {
             param[params.bankside_extraop_bit] = 4
-            param[params.bankside_extraop_varbit] = varbits.colossal_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_colossal_amount
         }
         edit(objs.rcu_pouch_colossal_degrade) {
             param[params.bankside_extraop_bit] = 4
-            param[params.bankside_extraop_varbit] = varbits.colossal_pouch_storage_count
+            param[params.bankside_extraop_varbit] = varbits.essence_pouch_colossal_amount
         }
 
         edit(objs.coal_bag) {
@@ -228,6 +249,25 @@ internal object ObjEdits : ObjEditor() {
             param[params.bankside_extraop_bit] = 5
             param[params.bankside_extraop_varbit] = varbits.coal_bag_storage_count
             param[params.bankside_extraop_flip] = true
+        }
+    }
+
+    private fun editHunterPouchStorage() {
+        val pouches =
+            listOf(
+                objs.small_meat_pouch,
+                objs.large_meat_pouch,
+                objs.small_fur_pouch,
+                objs.medium_fur_pouch,
+                objs.large_fur_pouch,
+                objs.small_meat_pouch_open,
+                objs.large_meat_pouch_open,
+                objs.small_fur_pouch_open,
+                objs.medium_fur_pouch_open,
+                objs.large_fur_pouch_open,
+            )
+        for (pouch in pouches) {
+            edit(pouch) { param[params.bankside_extraop] = "Empty" }
         }
     }
 

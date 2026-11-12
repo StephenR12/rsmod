@@ -8,11 +8,13 @@ import org.rsmod.api.config.refs.params
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
 import org.rsmod.api.market.MarketPrices
+import org.rsmod.api.player.events.ObjTradeEvents
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.output.objExamine
 import org.rsmod.api.shops.cost.StandardGpCostCalculations
 import org.rsmod.api.shops.restock.ShopRestockProcess
 import org.rsmod.api.utils.format.formatAmount
+import org.rsmod.events.EventBus
 import org.rsmod.game.entity.Player
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.Inventory
@@ -30,6 +32,7 @@ constructor(
     private val objTypes: ObjTypeList,
     private val restockProcess: ShopRestockProcess,
     private val marketPrices: MarketPrices,
+    private val eventBus: EventBus,
 ) : StandardShopOperations {
     private val currencyObj: UnpackedObjType by lazy { objTypes[objs.coins] }
 
@@ -153,7 +156,7 @@ constructor(
         val uncert = objTypes.uncert(obj)
         val objType = objTypes[uncert]
 
-        val tradeable = objType.tradeable || objType.stockmarket
+        val tradeable = isTradeable(player, obj, objType)
         if (!tradeable) {
             player.mes("You can't sell this item.")
             return
@@ -194,7 +197,7 @@ constructor(
         val objType = objTypes[obj]
         val uncertType = objTypes.uncert(objType)
 
-        val tradeable = uncertType.tradeable || uncertType.stockmarket
+        val tradeable = isTradeable(player, obj, uncertType)
         if (!tradeable) {
             player.mes("You can't sell this item.")
             return
@@ -266,6 +269,15 @@ constructor(
         val type = objTypes[obj]
         val marketPrice = marketPrices[type] ?: 0
         player.objExamine(type, obj.count, marketPrice)
+    }
+
+    private fun isTradeable(player: Player, obj: InvObj, type: UnpackedObjType): Boolean {
+        if (!type.tradeable && !type.stockmarket) {
+            return false
+        }
+        val query = ObjTradeEvents.Query(player = player, obj = obj, type = type)
+        eventBus.publish(query)
+        return !query.denied
     }
 
     private fun Inventory.initialStockCount(obj: InvObj): Int = initialStockCount(obj.id)

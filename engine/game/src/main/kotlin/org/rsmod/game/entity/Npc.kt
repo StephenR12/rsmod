@@ -431,6 +431,13 @@ public class Npc(
         facePlayer(target)
     }
 
+    public fun playerFollow(target: Player) {
+        resetMovement()
+
+        mode = NpcMode.PlayerFollow
+        facePlayer(target)
+    }
+
     public fun playerFaceClose(target: Player) {
         resetMovement()
 

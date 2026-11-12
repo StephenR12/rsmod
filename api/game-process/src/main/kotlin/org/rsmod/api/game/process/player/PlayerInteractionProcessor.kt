@@ -9,6 +9,7 @@ import org.rsmod.api.player.interact.LocTInteractions
 import org.rsmod.api.player.interact.NpcInteractions
 import org.rsmod.api.player.interact.NpcTInteractions
 import org.rsmod.api.player.interact.ObjInteractions
+import org.rsmod.api.player.interact.ObjTInteractions
 import org.rsmod.api.player.interact.PlayerInteractions
 import org.rsmod.api.player.interact.PlayerTInteractions
 import org.rsmod.api.player.isValidTarget
@@ -31,10 +32,13 @@ import org.rsmod.game.interact.InteractionNpc
 import org.rsmod.game.interact.InteractionNpcOp
 import org.rsmod.game.interact.InteractionNpcT
 import org.rsmod.game.interact.InteractionObj
+import org.rsmod.game.interact.InteractionObjOp
+import org.rsmod.game.interact.InteractionObjT
 import org.rsmod.game.interact.InteractionPlayer
 import org.rsmod.game.interact.InteractionPlayerOp
 import org.rsmod.game.interact.InteractionPlayerT
 import org.rsmod.game.movement.RouteRequestPathingEntity
+import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.interact.InteractionStep
 import org.rsmod.interact.InteractionTarget
 import org.rsmod.interact.Interactions
@@ -47,6 +51,7 @@ constructor(
     private val eventBus: EventBus,
     private val locRegistry: LocRegistry,
     private val objRegistry: ObjRegistry,
+    private val objTypes: ObjTypeList,
     private val boundValidator: BoundValidator,
     private val rayCastValidator: RayCastValidator,
     private val locInteractions: LocInteractions,
@@ -54,6 +59,7 @@ constructor(
     private val npcInteractions: NpcInteractions,
     private val npcTInteractions: NpcTInteractions,
     private val objInteractions: ObjInteractions,
+    private val objTInteractions: ObjTInteractions,
     private val playerInteractions: PlayerInteractions,
     private val playerTInteractions: PlayerTInteractions,
     private val protectedAccess: ProtectedAccessLauncher,
@@ -221,7 +227,8 @@ constructor(
             is InteractionLocT -> triggerOp(this, interaction)
             is InteractionNpcOp -> triggerOp(this, interaction)
             is InteractionNpcT -> triggerOp(this, interaction)
-            is InteractionObj -> triggerOp(this, interaction)
+            is InteractionObjOp -> triggerOp(this, interaction)
+            is InteractionObjT -> triggerOp(this, interaction)
             is InteractionPlayerOp -> triggerOp(this, interaction)
             is InteractionPlayerT -> triggerOp(this, interaction)
         }
@@ -232,7 +239,8 @@ constructor(
             is InteractionLocT -> triggerAp(this, interaction)
             is InteractionNpcOp -> triggerAp(this, interaction)
             is InteractionNpcT -> triggerAp(this, interaction)
-            is InteractionObj -> triggerAp(this, interaction)
+            is InteractionObjOp -> triggerAp(this, interaction)
+            is InteractionObjT -> triggerAp(this, interaction)
             is InteractionPlayerOp -> triggerAp(this, interaction)
             is InteractionPlayerT -> triggerAp(this, interaction)
         }
@@ -344,6 +352,7 @@ constructor(
             width = 1,
             length = 1,
             distance = interaction.apRange,
+            checkLineOfSight = interaction.apCheckLineOfSight,
         )
 
     /* Player interactions */
@@ -418,10 +427,14 @@ constructor(
         width: Int,
         length: Int,
         distance: Int,
+        checkLineOfSight: Boolean = true,
     ): Boolean {
         val withinDistance = isWithinDistance(target, distance, width, length)
         if (!withinDistance) {
             return false
+        }
+        if (!checkLineOfSight) {
+            return true
         }
         val hasLos =
             rayCastValidator.hasLineOfSight(
@@ -436,14 +449,15 @@ constructor(
 
     private fun Player.shouldCancelInteraction(interaction: Interaction): Boolean =
         when (interaction) {
-            is InteractionLoc -> !interaction.isValid()
+            is InteractionLoc -> !interaction.isValid(this)
             is InteractionNpc -> !interaction.isValid()
             is InteractionObj -> !interaction.isValid(this)
             is InteractionPlayer -> !interaction.isValid()
         }
 
-    private fun InteractionLoc.isValid(): Boolean {
-        return locRegistry.isValid(target.coords, target.id)
+    private fun InteractionLoc.isValid(observer: Player): Boolean {
+        return observer.privateLocs.findExactType(target.coords, target.id) != null ||
+            locRegistry.isValid(target.coords, target.id)
     }
 
     private fun InteractionNpc.isValid(): Boolean {
@@ -531,15 +545,47 @@ constructor(
         }
     }
 
-    private fun triggerOp(player: Player, interaction: InteractionObj) {
+    private fun triggerOp(player: Player, interaction: InteractionObjOp) {
         val op = objInteractions.opTrigger(interaction.target, interaction.op)
         if (op != null) {
             protectedAccess.launch(player) { eventBus.publish(this, op) }
         }
     }
 
-    public fun triggerAp(player: Player, interaction: InteractionObj) {
+    public fun triggerAp(player: Player, interaction: InteractionObjOp) {
         val ap = objInteractions.apTrigger(interaction.target, interaction.op)
+        if (ap != null) {
+            protectedAccess.launch(player) { eventBus.publish(this, ap) }
+        }
+    }
+
+    public fun triggerOp(player: Player, interaction: InteractionObjT) {
+        val target = interaction.target
+        val targetType = objTypes[target]
+        val op =
+            objTInteractions.opTrigger(
+                target,
+                targetType,
+                interaction.component,
+                interaction.comsub,
+                interaction.objType,
+            )
+        if (op != null) {
+            protectedAccess.launch(player) { eventBus.publish(this, op) }
+        }
+    }
+
+    public fun triggerAp(player: Player, interaction: InteractionObjT) {
+        val target = interaction.target
+        val targetType = objTypes[target]
+        val ap =
+            objTInteractions.apTrigger(
+                target,
+                targetType,
+                interaction.component,
+                interaction.comsub,
+                interaction.objType,
+            )
         if (ap != null) {
             protectedAccess.launch(player) { eventBus.publish(this, ap) }
         }

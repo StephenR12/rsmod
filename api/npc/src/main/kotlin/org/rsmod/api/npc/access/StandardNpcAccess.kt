@@ -360,6 +360,10 @@ public class StandardNpcAccess(
         npc.playerEscape(target)
     }
 
+    public fun playerFollow(target: Player) {
+        npc.playerFollow(target)
+    }
+
     public fun playerFaceClose(target: Player) {
         npc.playerFaceClose(target)
     }

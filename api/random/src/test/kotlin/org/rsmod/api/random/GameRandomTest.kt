@@ -161,6 +161,14 @@ class GameRandomTest {
     }
 
     @Test
+    fun `pick five requests all five random indices`() {
+        val random = UpperBoundRandom()
+
+        assertEquals("fifth", random.pick("first", "second", "third", "fourth", "fifth"))
+        assertEquals(5, random.lastMaxExclusive)
+    }
+
+    @Test
     fun `pickOrNull from array`() {
         val random = FixedRandom(0)
 
@@ -189,5 +197,18 @@ class GameRandomTest {
         val list = listOf("first", "second")
         random.set(1)
         assertEquals("second", random.pickOrNull(list))
+    }
+
+    private class UpperBoundRandom : GameRandom {
+        var lastMaxExclusive: Int? = null
+
+        override fun of(maxExclusive: Int): Int {
+            lastMaxExclusive = maxExclusive
+            return maxExclusive - 1
+        }
+
+        override fun of(minInclusive: Int, maxInclusive: Int): Int = maxInclusive
+
+        override fun randomDouble(): Double = 1.0
     }
 }

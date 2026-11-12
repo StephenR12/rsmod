@@ -59,6 +59,7 @@ public data class UnpackedSeqType(
     public val mayaAnimationSounds: Map<Int, SeqFrameSound>?,
     public val keyframeRangeStart: Int,
     public val keyframeRangeEnd: Int,
+    public val verticalOffset: Int,
     public val keyframeWalkMerge: BooleanArray,
     public val debugName: String?,
     public val crossWorldSound: Boolean,
@@ -119,6 +120,7 @@ public data class UnpackedSeqType(
             "mayaAnimationSounds=$mayaAnimationSounds, " +
             "keyframeRangeStart=$keyframeRangeStart, " +
             "keyframeRangeEnd=$keyframeRangeEnd, " +
+            "verticalOffset=$verticalOffset, " +
             "keyframeWalkMerge=${keyframeWalkMerge.contentToString()}" +
             ")"
 
@@ -147,6 +149,7 @@ public data class UnpackedSeqType(
         if (mayaAnimationSounds != other.mayaAnimationSounds) return false
         if (keyframeRangeStart != other.keyframeRangeStart) return false
         if (keyframeRangeEnd != other.keyframeRangeEnd) return false
+        if (verticalOffset != other.verticalOffset) return false
         if (!keyframeWalkMerge.contentEquals(other.keyframeWalkMerge)) return false
         return true
     }

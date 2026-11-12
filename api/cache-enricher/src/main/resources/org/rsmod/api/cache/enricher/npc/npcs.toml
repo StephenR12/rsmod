@@ -41653,18 +41653,22 @@ examine = 'A creature of nightmares.'
 [[config]]
 npc = 'muspah'
 examine = 'Imagination gone wild.'
+freeze_resistance = 33
 
 [[config]]
 npc = 'muspah_melee'
 examine = 'Imagination gone wild.'
+freeze_resistance = 33
 
 [[config]]
 npc = 'muspah_soulsplit'
 examine = 'Imagination gone wild.'
+freeze_resistance = 33
 
 [[config]]
 npc = 'muspah_final'
 examine = 'Imagination gone wild.'
+freeze_resistance = 33
 
 [[config]]
 npc = 'muspah_teleport_quest'
@@ -41673,6 +41677,7 @@ examine = 'A creature of nightmares.'
 [[config]]
 npc = 'muspah_teleport'
 examine = 'Imagination gone wild.'
+freeze_resistance = 33
 
 [[config]]
 npc = 'muspah_projectile'
@@ -51145,4 +51150,3 @@ examine = 'A knight in fancy armour.'
 [[config]]
 npc = 'dom_pet'
 examine = 'Doom on a small scale.'
-

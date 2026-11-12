@@ -36,5 +36,33 @@ internal object InvBuilds : InvBuilder() {
             protect = false
             size = 28
         }
+
+        build("hunter_fur_pouch_storage") {
+            scope = InvScope.Perm
+            stack = InvStackType.Never
+            protect = false
+            size = 28
+        }
+
+        build("hunter_meat_pouch_storage") {
+            scope = InvScope.Perm
+            stack = InvStackType.Never
+            protect = false
+            size = 28
+        }
+
+        build("fish_barrel_storage") {
+            scope = InvScope.Perm
+            stack = InvStackType.Never
+            protect = false
+            size = 28
+        }
+
+        build("gem_bag_storage") {
+            scope = InvScope.Perm
+            stack = InvStackType.Never
+            protect = false
+            size = 300
+        }
     }
 }

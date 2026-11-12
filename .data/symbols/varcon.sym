@@ -1,3 +1,7 @@
 0	woodcutting_tree_cut_ticks
 1	woodcutting_tree_last_cut
 2	woodcutting_tree_loc
+3	bird_snare_owner_slot
+4	bird_snare_phase
+5	bird_snare_bird_index
+6	bird_snare_smoked

@@ -8,24 +8,35 @@ import com.github.michaelbull.logging.InlineLogger
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.nio.file.AtomicMoveNotSupportedException
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.nio.file.StandardOpenOption
+import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
 import java.util.zip.ZipInputStream
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createDirectories
+import kotlin.io.path.createTempDirectory
 import kotlin.io.path.createTempFile
 import kotlin.io.path.deleteExisting
+import kotlin.io.path.deleteIfExists
 import kotlin.io.path.deleteRecursively
+import kotlin.io.path.exists
+import kotlin.io.path.fileSize
 import kotlin.io.path.inputStream
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.moveTo
 import kotlin.io.path.name
 import kotlin.io.path.outputStream
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.rsmod.api.cache.delta.CacheArchiveIndexManifestExporter
+import org.rsmod.api.cache.delta.CacheDeltaJson
 import org.rsmod.api.core.Build
 import org.rsmod.server.shared.DirectoryConstants
 
@@ -56,14 +67,23 @@ class GameServerCacheDownloader : CliktCommand(name = "cache-download") {
                 .build()
         cacheDir.createDirectories()
 
-        // TODO: add support for extracting .tar.gz files
-        val cacheArchiveDir = vanillaCacheDir
-        cacheArchiveDir.deleteRecursively()
-        cacheArchiveDir.createDirectories()
-        downloadAndExtractCache(client, cacheUrl, cacheArchiveDir)
-
-        val xteaFile = xteaFile
-        downloadOrFindXteaFile(client, cacheArchiveDir, xteaUrl, xteaFile)
+        val stagingDir = createTempDirectory(cacheDir, ".cache-download-")
+        try {
+            // TODO: add support for extracting .tar.gz files
+            val stagedCacheDir = stagingDir.resolve("vanilla")
+            val stagedXteaFile = stagingDir.resolve("xteas.json")
+            stagedCacheDir.createDirectories()
+            downloadAndExtractCache(client, cacheUrl, stagedCacheDir)
+            downloadOrFindXteaFile(client, stagedCacheDir, xteaUrl, stagedXteaFile)
+            CacheDownloadStaging.install(
+                stagedCacheDir = stagedCacheDir,
+                stagedXteaFile = stagedXteaFile,
+                targetCacheDir = vanillaCacheDir,
+                targetXteaFile = xteaFile,
+            )
+        } finally {
+            stagingDir.deleteRecursively()
+        }
     }
 
     private fun downloadAndExtractCache(client: OkHttpClient, cacheUrl: String, outputDir: Path) {
@@ -129,6 +149,187 @@ class GameServerCacheDownloader : CliktCommand(name = "cache-download") {
 
     private fun downloadXteaFile(client: OkHttpClient, xteaUrl: String, outputFile: Path) {
         client.download(xteaUrl, outputFile)
+    }
+}
+
+/** Validates a complete download before replacing the last accepted cache and XTEA pair. */
+@OptIn(ExperimentalPathApi::class)
+object CacheDownloadStaging {
+    fun install(
+        stagedCacheDir: Path,
+        stagedXteaFile: Path,
+        targetCacheDir: Path,
+        targetXteaFile: Path,
+        verifyIdentity: (Path, Path) -> Unit = ::verifyPinnedIdentity,
+    ) {
+        recoverInterruptedPromotion(targetCacheDir, targetXteaFile)
+        validate(stagedCacheDir, stagedXteaFile)
+        verifyIdentity(stagedCacheDir, stagedXteaFile)
+        promote(stagedCacheDir, stagedXteaFile, targetCacheDir, targetXteaFile)
+    }
+
+    fun recoverInterruptedPromotion(targetCacheDir: Path, targetXteaFile: Path) {
+        val parent = requireCommonParent(targetCacheDir, targetXteaFile)
+        if (!parent.isDirectory()) {
+            return
+        }
+        val backups = parent.listDirectoryEntries(".cache-backup-*").filter(Path::isDirectory)
+        require(backups.size <= 1) {
+            "Multiple interrupted cache promotions require manual recovery: $backups"
+        }
+        val backupDir = backups.singleOrNull() ?: return
+        val committed = backupDir.resolve("committed").isRegularFile()
+        if (!committed || !targetCacheDir.isDirectory() || !targetXteaFile.isRegularFile()) {
+            recoverBackup(backupDir, targetCacheDir, targetXteaFile)
+        }
+        backupDir.deleteRecursively()
+    }
+
+    private fun validate(stagedCacheDir: Path, stagedXteaFile: Path) {
+        require(stagedCacheDir.isDirectory()) { "Downloaded cache directory is missing." }
+        val requiredCacheFiles =
+            listOf("main_file_cache.dat2", "main_file_cache.idx255", "main_file_cache.idx0")
+        requiredCacheFiles.forEach { filename ->
+            val file = stagedCacheDir.resolve(filename)
+            require(file.isRegularFile() && file.fileSize() > 0L) {
+                "Downloaded cache is incomplete: missing or empty $filename."
+            }
+        }
+        require(stagedXteaFile.isRegularFile() && stagedXteaFile.fileSize() > 0L) {
+            "Downloaded XTEA file is missing or empty."
+        }
+    }
+
+    fun verifyPinnedIdentity(stagedCacheDir: Path, stagedXteaFile: Path) {
+        require(sha256(stagedXteaFile) == Build.XTEA_SHA256) {
+            "Downloaded XTEAs do not match the pinned revision contract."
+        }
+        val manifest =
+            CacheArchiveIndexManifestExporter.export(
+                cacheDirectory = stagedCacheDir,
+                revision = Build.FINAL_SUBREVISION,
+                archive = Build.CACHE_ARCHIVE,
+                capturedAt = Build.CACHE_CAPTURED_AT,
+            )
+        require(manifest.entries.size == Build.CACHE_GROUPS) {
+            "Downloaded cache group count does not match the pinned revision contract."
+        }
+        require(
+            manifest.entries.sumOf { it.attributes.getValue("fileCount").toInt() } ==
+                Build.CACHE_FILE_IDENTITIES
+        ) {
+            "Downloaded cache file count does not match the pinned revision contract."
+        }
+        val manifestFile = createTempFile(stagedCacheDir.parent, ".archive-index-", ".json")
+        try {
+            CacheDeltaJson.writeManifest(manifestFile, manifest)
+            require(sha256(manifestFile) == Build.CACHE_ARCHIVE_INDEX_MANIFEST_SHA256) {
+                "Downloaded cache content does not match the pinned revision contract."
+            }
+        } finally {
+            manifestFile.deleteIfExists()
+        }
+    }
+
+    private fun sha256(path: Path): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        path.inputStream().use { input ->
+            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+            while (true) {
+                val read = input.read(buffer)
+                if (read < 0) break
+                digest.update(buffer, 0, read)
+            }
+        }
+        return digest.digest().joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+    }
+
+    private fun promote(
+        stagedCacheDir: Path,
+        stagedXteaFile: Path,
+        targetCacheDir: Path,
+        targetXteaFile: Path,
+    ) {
+        val parent = requireCommonParent(targetCacheDir, targetXteaFile)
+        parent.createDirectories()
+        val backupDir = createTempDirectory(parent, ".cache-backup-")
+        val backupCacheDir = backupDir.resolve("vanilla")
+        val backupXteaFile = backupDir.resolve("xteas.json")
+        Files.writeString(
+            backupDir.resolve("promotion-state"),
+            "cacheExisted=${targetCacheDir.exists()}\nxteaExisted=${targetXteaFile.exists()}\n",
+        )
+        var discardBackup = false
+        try {
+            if (targetCacheDir.exists()) {
+                moveAtomically(targetCacheDir, backupCacheDir)
+            }
+            if (targetXteaFile.exists()) {
+                moveAtomically(targetXteaFile, backupXteaFile)
+            }
+            moveAtomically(stagedCacheDir, targetCacheDir)
+            moveAtomically(stagedXteaFile, targetXteaFile)
+            Files.createFile(backupDir.resolve("committed"))
+            discardBackup = true
+        } catch (failure: Exception) {
+            runCatching { recoverBackup(backupDir, targetCacheDir, targetXteaFile) }
+                .onSuccess { discardBackup = true }
+                .onFailure(failure::addSuppressed)
+            throw failure
+        } finally {
+            if (discardBackup) {
+                backupDir.deleteRecursively()
+            }
+        }
+    }
+
+    private fun recoverBackup(backupDir: Path, targetCacheDir: Path, targetXteaFile: Path) {
+        val state =
+            Files.readAllLines(backupDir.resolve("promotion-state"))
+                .filter(String::isNotBlank)
+                .associate { line ->
+                    val (key, value) = line.split("=", limit = 2)
+                    key to value.toBooleanStrict()
+                }
+        val cacheExisted =
+            requireNotNull(state["cacheExisted"]) { "Promotion journal is missing cache state." }
+        val xteaExisted =
+            requireNotNull(state["xteaExisted"]) { "Promotion journal is missing XTEA state." }
+        val backupCacheDir = backupDir.resolve("vanilla")
+        val backupXteaFile = backupDir.resolve("xteas.json")
+
+        if (backupCacheDir.exists()) {
+            if (targetCacheDir.exists()) {
+                targetCacheDir.deleteRecursively()
+            }
+            moveAtomically(backupCacheDir, targetCacheDir)
+        } else if (!cacheExisted && targetCacheDir.exists()) {
+            targetCacheDir.deleteRecursively()
+        }
+
+        if (backupXteaFile.exists()) {
+            targetXteaFile.deleteIfExists()
+            moveAtomically(backupXteaFile, targetXteaFile)
+        } else if (!xteaExisted) {
+            targetXteaFile.deleteIfExists()
+        }
+    }
+
+    private fun requireCommonParent(targetCacheDir: Path, targetXteaFile: Path): Path {
+        val parent =
+            requireNotNull(targetCacheDir.parent) { "Cache target must have a parent directory." }
+        require(targetXteaFile.parent == parent) {
+            "Cache and XTEA targets must share one parent directory."
+        }
+        return parent
+    }
+
+    private fun moveAtomically(source: Path, target: Path) {
+        try {
+            Files.move(source, target, StandardCopyOption.ATOMIC_MOVE)
+        } catch (_: AtomicMoveNotSupportedException) {
+            Files.move(source, target)
+        }
     }
 }
 

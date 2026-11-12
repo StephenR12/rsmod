@@ -179,6 +179,7 @@ constructor(
             InteractionOp.Op3 -> LocEvents.Op3(base, vis, type)
             InteractionOp.Op4 -> LocEvents.Op4(base, vis, type)
             InteractionOp.Op5 -> LocEvents.Op5(base, vis, type)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun toContentOp(
@@ -194,6 +195,7 @@ constructor(
             InteractionOp.Op3 -> LocContentEvents.Op3(base, vis, type, contentGroup)
             InteractionOp.Op4 -> LocContentEvents.Op4(base, vis, type, contentGroup)
             InteractionOp.Op5 -> LocContentEvents.Op5(base, vis, type, contentGroup)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun toUnimplementedOp(
@@ -208,6 +210,7 @@ constructor(
             InteractionOp.Op3 -> LocUnimplementedEvents.Op3(base, vis, type)
             InteractionOp.Op4 -> LocUnimplementedEvents.Op4(base, vis, type)
             InteractionOp.Op5 -> LocUnimplementedEvents.Op5(base, vis, type)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun toDefaultOp(
@@ -222,6 +225,7 @@ constructor(
             InteractionOp.Op3 -> LocDefaultEvents.Op3(base, vis, type)
             InteractionOp.Op4 -> LocDefaultEvents.Op4(base, vis, type)
             InteractionOp.Op5 -> LocDefaultEvents.Op5(base, vis, type)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun toAp(
@@ -236,6 +240,7 @@ constructor(
             InteractionOp.Op3 -> LocEvents.Ap3(base, vis, type)
             InteractionOp.Op4 -> LocEvents.Ap4(base, vis, type)
             InteractionOp.Op5 -> LocEvents.Ap5(base, vis, type)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun toContentAp(
@@ -251,6 +256,7 @@ constructor(
             InteractionOp.Op3 -> LocContentEvents.Ap3(base, vis, type, contentGroup)
             InteractionOp.Op4 -> LocContentEvents.Ap4(base, vis, type, contentGroup)
             InteractionOp.Op5 -> LocContentEvents.Ap5(base, vis, type, contentGroup)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun toDefaultAp(
@@ -265,6 +271,7 @@ constructor(
             InteractionOp.Op3 -> LocDefaultEvents.Ap3(base, vis, type)
             InteractionOp.Op4 -> LocDefaultEvents.Ap4(base, vis, type)
             InteractionOp.Op5 -> LocDefaultEvents.Ap5(base, vis, type)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun UnpackedLocType.multiVarValue(vars: VarPlayerIntMap): Int? {
@@ -293,3 +300,6 @@ constructor(
         return type.hasOp(op)
     }
 }
+
+private fun unsupportedPlayerOperation(op: InteractionOp): Nothing =
+    throw IllegalArgumentException("Interaction operation $op is only valid for player targets.")

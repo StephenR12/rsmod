@@ -48,6 +48,7 @@ public class Realm(public val name: String) {
  *   `true`), depending on the login server's safeguards.
  * @param autoAssignDisplayNames If `true`, player display names will be automatically assigned
  *   based on their login name.
+ * @param worldFlags Bit-packed properties of the world selected by the server configuration.
  */
 public data class RealmConfig(
     val id: Int,
@@ -61,4 +62,27 @@ public data class RealmConfig(
     val requireRegistration: Boolean,
     val ignorePasswords: Boolean,
     val autoAssignDisplayNames: Boolean,
-)
+    val worldFlags: Int,
+) {
+    public fun hasWorldFlag(flag: WorldFlag): Boolean = worldFlags and flag.mask != 0
+}
+
+/** Cache-233 world-list flags, shared by gameplay rules and the revision-matched client. */
+public enum class WorldFlag(public val mask: Int) {
+    Members(1),
+    Pvp(1 shl 2),
+    Bounty(1 shl 5),
+    PvpArena(1 shl 6),
+    SkillTotal(1 shl 7),
+    QuestSpeedrunning(1 shl 8),
+    HighRisk(1 shl 10),
+    LastManStanding(1 shl 14),
+    Beta(1 shl 16),
+    LegacyOnly(1 shl 22),
+    EocOnly(1 shl 23),
+    NoSaveMode(1 shl 25),
+    Tournament(1 shl 26),
+    FreshStart(1 shl 27),
+    Deadman(1 shl 29),
+    Seasonal(1 shl 30),
+}

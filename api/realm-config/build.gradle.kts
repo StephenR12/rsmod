@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.api.gameProcess)
     implementation(projects.api.parsers.json)
     implementation(projects.api.realm)
+    implementation(projects.api.serverConfig)
     implementation(projects.api.script)
     implementation(projects.engine.map)
     implementation(projects.engine.plugin)

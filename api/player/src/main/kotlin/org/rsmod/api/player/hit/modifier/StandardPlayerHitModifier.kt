@@ -1,6 +1,8 @@
 package org.rsmod.api.player.hit.modifier
 
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.magic.StaffOfTheDeadStateRepository
+import org.rsmod.api.player.magic.WardOfArceuusStateRepository
 import org.rsmod.game.entity.Player
 import org.rsmod.game.hit.HitBuilder
 import org.rsmod.game.hit.HitType
@@ -18,6 +20,14 @@ public object StandardPlayerHitModifier : PlayerHitModifier {
         if (protectionPrayer) {
             val reduction = if (isFromPlayer) 40 else 100
             damage = (damage * (100 - reduction)) / 100
+        }
+
+        if (sourceIsDemon && WardOfArceuusStateRepository.isActiveForHitModifier(target)) {
+            damage -= damage / 10
+        }
+
+        if (type == HitType.Melee && StaffOfTheDeadStateRepository.isActiveForHitModifier(target)) {
+            damage /= 2
         }
     }
 }

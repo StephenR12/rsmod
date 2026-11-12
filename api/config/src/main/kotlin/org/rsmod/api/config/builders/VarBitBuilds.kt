@@ -166,5 +166,11 @@ internal object VarBitBuilds : VarBitBuilder() {
             startBit = 25
             endBit = 30
         }
+
+        build("tbwt_tinsay_reward_claimed") {
+            baseVar = varps.generic_storage_65531
+            startBit = 31
+            endBit = 31
+        }
     }
 }

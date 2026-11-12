@@ -2,7 +2,12 @@ package org.rsmod.api.script
 
 import org.rsmod.api.player.events.interact.ObjContentEvents
 import org.rsmod.api.player.events.interact.ObjEvents
+import org.rsmod.api.player.events.interact.ObjTContentEvents
+import org.rsmod.api.player.events.interact.ObjTDefaultEvents
+import org.rsmod.api.player.events.interact.ObjTEvents
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.events.EventBus
+import org.rsmod.game.type.comp.ComponentType
 import org.rsmod.game.type.content.ContentGroupType
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.plugin.scripts.ScriptContext
@@ -36,6 +41,40 @@ public fun ScriptContext.onOpObj1(
     content: ContentGroupType,
     action: suspend ProtectedAccess.(ObjContentEvents.Op1) -> Unit,
 ): Unit = onProtectedEvent(content.id, action)
+
+public fun ScriptContext.onOpObjT(
+    component: ComponentType,
+    action: suspend ProtectedAccess.(ObjTDefaultEvents.Op) -> Unit,
+): Unit = onProtectedEvent(component.packed, action)
+
+public fun ScriptContext.onOpObjT(
+    type: ObjType,
+    component: ComponentType,
+    action: suspend ProtectedAccess.(ObjTEvents.Op) -> Unit,
+): Unit = onProtectedEvent(EventBus.composeLongKey(type.id, component.packed), action)
+
+public fun ScriptContext.onOpObjT(
+    content: ContentGroupType,
+    component: ComponentType,
+    action: suspend ProtectedAccess.(ObjTContentEvents.Op) -> Unit,
+): Unit = onProtectedEvent(EventBus.composeLongKey(content.id, component.packed), action)
+
+public fun ScriptContext.onApObjT(
+    component: ComponentType,
+    action: suspend ProtectedAccess.(ObjTDefaultEvents.Ap) -> Unit,
+): Unit = onProtectedEvent(component.packed, action)
+
+public fun ScriptContext.onApObjT(
+    type: ObjType,
+    component: ComponentType,
+    action: suspend ProtectedAccess.(ObjTEvents.Ap) -> Unit,
+): Unit = onProtectedEvent(EventBus.composeLongKey(type.id, component.packed), action)
+
+public fun ScriptContext.onApObjT(
+    content: ContentGroupType,
+    component: ComponentType,
+    action: suspend ProtectedAccess.(ObjTContentEvents.Ap) -> Unit,
+): Unit = onProtectedEvent(EventBus.composeLongKey(content.id, component.packed), action)
 
 public fun ScriptContext.onOpObj2(
     content: ContentGroupType,

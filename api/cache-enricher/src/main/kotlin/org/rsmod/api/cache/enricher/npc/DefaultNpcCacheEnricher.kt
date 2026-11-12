@@ -66,6 +66,7 @@ constructor(
         putInt(config.cannonImmunity, params.cannon_immunity)
         putInt(config.thrallImmunity, params.thrall_immunity)
         putInt(config.burnImmunity, params.burn_immunity)
+        putInt(config.freezeResistance, params.freeze_resistance)
         putInt(config.slayerReq, params.slayer_levelrequire)
         putSlayerXpMod(config.slayerXp, params.slayer_experience)
         putCombatXpMod(config.bonusXp, params.npc_com_xp_multiplier)

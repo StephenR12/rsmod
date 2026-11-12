@@ -4,7 +4,7 @@ import org.rsmod.api.realm.RealmConfig
 import org.rsmod.map.CoordGrid
 
 internal object TestRealmConfig {
-    fun create(): RealmConfig =
+    fun create(worldFlags: Int = 0): RealmConfig =
         RealmConfig(
             id = 0,
             loginMessage = null,
@@ -17,5 +17,6 @@ internal object TestRealmConfig {
             requireRegistration = false,
             ignorePasswords = true,
             autoAssignDisplayNames = true,
+            worldFlags = worldFlags,
         )
 }

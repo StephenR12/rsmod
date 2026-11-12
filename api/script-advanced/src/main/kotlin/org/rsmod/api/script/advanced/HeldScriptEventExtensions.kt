@@ -6,6 +6,9 @@ import org.rsmod.api.script.onEvent
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.plugin.scripts.ScriptContext
 
+public fun ScriptContext.onPrepareDropHeld(action: HeldDropEvents.Prepare.() -> Unit): Unit =
+    onEvent(action)
+
 public fun ScriptContext.onDropHeld(action: HeldDropEvents.Drop.() -> Unit): Unit = onEvent(action)
 
 public fun ScriptContext.onDestroyHeld(action: HeldDropEvents.Destroy.() -> Unit): Unit =

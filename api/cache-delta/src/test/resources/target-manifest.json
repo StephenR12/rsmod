@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "revision": "234.1",
+  "archive": 2400,
+  "capturedAt": "2025-10-08T10:00:00Z",
+  "entries": [
+    {
+      "domain": "interfaces",
+      "key": "12:42",
+      "symbol": "bank_new_button",
+      "fingerprint": "sha256:new-button",
+      "attributes": {},
+      "riskTags": []
+    },
+    {
+      "domain": "objects",
+      "key": "22370",
+      "symbol": "bryophytas_staff",
+      "fingerprint": "sha256:new-staff",
+      "attributes": {
+        "morphs": "22368"
+      },
+      "riskTags": [
+        "item-charge-risk"
+      ]
+    },
+    {
+      "domain": "sounds",
+      "key": "3182",
+      "symbol": "magic_spell_thunderbolt",
+      "fingerprint": "sha256:unchanged",
+      "attributes": {},
+      "riskTags": []
+    }
+  ]
+}

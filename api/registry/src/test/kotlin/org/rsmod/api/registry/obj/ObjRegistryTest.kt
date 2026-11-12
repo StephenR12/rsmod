@@ -106,6 +106,20 @@ class ObjRegistryTest {
     }
 
     @Test
+    fun `private stackable objs with different server vars remain separate`() {
+        val types = objTypeListFactory.createDefault()
+        val obj1 = objFactory.create(types.stackable1(), receiverId = 1, vars = 10)
+        val obj2 = objFactory.create(types.stackable1(), receiverId = 1, vars = 20)
+
+        val registry = objRegistryFactory.create()
+        registry.add(obj1)
+        registry.add(obj2)
+
+        assertEquals(2, registry.count())
+        assertEquals(setOf(10, 20), registry.findAll(obj1.coords).map { it.vars }.toSet())
+    }
+
+    @Test
     fun `add differing private stackable objs on same coordinates`() {
         val types = objTypeListFactory.createDefault()
         val obj1 = objFactory.create(types.stackable1(), receiverId = 1)

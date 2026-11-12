@@ -9,6 +9,8 @@ public class HitBuilder(
     public val sourceSlot: Int?,
     public val isFromNpc: Boolean,
     public val isFromPlayer: Boolean,
+    public val sourceIsDemon: Boolean,
+    public val successful: Boolean,
     public var clientDelay: Int?,
     private var righthandType: Int?,
     private var secondaryType: Int?,
@@ -30,6 +32,7 @@ public class HitBuilder(
         return Hit(
             type = type,
             hitmark = hitmark,
+            successful = successful,
             sourceUid = sourceUid,
             righthandObj = righthandType,
             secondaryObj = secondaryType,

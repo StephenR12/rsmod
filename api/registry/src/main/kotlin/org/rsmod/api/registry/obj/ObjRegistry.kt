@@ -101,6 +101,9 @@ constructor(private val updates: ZoneUpdateMap, private val objTypes: ObjTypeLis
         if (type != other.type) {
             return false
         }
+        if (vars != other.vars) {
+            return false
+        }
         // Only private objs can merge.
         if (!isPrivate || receiverId != other.nullableReceiverId) {
             return false
@@ -113,7 +116,14 @@ constructor(private val updates: ZoneUpdateMap, private val objTypes: ObjTypeLis
     }
 
     private fun Obj.singleCopy(): Obj =
-        Obj(coords, entity.copy(count = 1), creationCycle, receiverId)
+        Obj(
+            coords,
+            entity.copy(count = 1),
+            creationCycle,
+            receiverId,
+            ownerId = ownerId,
+            vars = vars,
+        )
 
     public companion object {
         /**

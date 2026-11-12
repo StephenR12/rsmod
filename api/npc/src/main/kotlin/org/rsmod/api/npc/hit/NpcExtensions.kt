@@ -131,12 +131,14 @@ public fun Npc.queueHit(
     hitmark: HitmarkTypeGroup = visHitmark(),
     specific: Boolean = false,
     sourceSecondary: ObjType? = null,
+    successful: Boolean = damage > 0,
 ): Hit {
     val builder =
         InternalNpcHits.createBuilder(
             source = source,
             type = type,
             damage = damage,
+            successful = successful,
             secondaryObj = sourceSecondary,
             hitmark = hitmark,
             clientDelay = 0,

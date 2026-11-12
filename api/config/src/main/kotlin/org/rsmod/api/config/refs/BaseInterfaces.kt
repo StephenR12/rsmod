@@ -9,8 +9,8 @@ typealias interfaces = BaseInterfaces
 object BaseInterfaces : InterfaceReferences() {
     val fade_overlay = find("fade_overlay", 9223372035931967580)
 
-    val bank_main = find("bankmain", 479914382)
-    val bank_side = find("bankside", 1999686874)
+    val bank_main = find("bankmain", 9223372035325606435)
+    val bank_side = find("bankside", 9223372036209799336)
     val bankpin_settings = find("bankpin_settings", 642937557)
 
     val toplevel = find("toplevel", 9223372034726091525)
@@ -24,7 +24,7 @@ object BaseInterfaces : InterfaceReferences() {
     val chatbox = find("chatbox", 9223372035380135649)
     val popout = find("popout", 9223372036050024336)
     val pm_chat = find("pm_chat", 9223372036709596550)
-    val orbs = find("orbs", 9223372034748519799)
+    val orbs = find("orbs", 9223372035038655028)
     val xp_drops = find("xp_drops", 9223372035590703519)
     val stats = find("stats", 9223372036078334889)
     val side_journal = find("side_journal", 9223372034964910410)
@@ -56,12 +56,21 @@ object BaseInterfaces : InterfaceReferences() {
     val double_obj_dialogue = find("objectbox_double", 9223372035376440778)
     val destroy_obj_dialogue = find("confirmdestroy", 923450919)
     val menu = find("menu", 130230041)
+    val skillmulti = find("skillmulti")
+    val silver_crafting = find("silver_crafting")
+    val crafting_gold = find("crafting_gold")
+    val tanner = find("tanner")
+    val hunting_customfurs = find("hunting_customfurs")
 
     val popupoverlay = find("popupoverlay", 9223372035707796330)
     val ge_collection_box = find("ge_collect", 9223372036801773648)
     val ca_overview = find("ca_overview", 9223372035062537910)
     val collection = find("collection", 1925563159)
     val bond_main = find("bond_main", 9223372036023293853)
+    val dream_monster_stat = find("dream_monster_stat")
+    val dream_player_stats = find("dream_player_stats")
+    val teleport_other = find("teleport_other")
     val poh_options = find("poh_options", 9223372035476859568)
     val settings = find("settings", 1605189305)
+    val animation_picker = find("animation_picker")
 }

@@ -45,6 +45,7 @@ internal object ParamBuilds : ParamBuilder() {
 
         build<Int>("slayer_experience") { default = 0 }
         build<Int>("slayer_levelrequire") { default = 0 }
+        build<CategoryType>("slayer_category")
 
         build<Boolean>("magic_defence_uses_defence_level") { default = false }
         build<String>("spell_worn_req_message")

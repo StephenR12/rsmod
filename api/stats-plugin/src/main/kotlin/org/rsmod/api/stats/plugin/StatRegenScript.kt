@@ -5,6 +5,7 @@ import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.timers
+import org.rsmod.api.player.back
 import org.rsmod.api.player.hands
 import org.rsmod.api.player.stat.baseHitpointsLvl
 import org.rsmod.api.player.stat.hitpoints
@@ -66,7 +67,18 @@ public class StatRegenScript @Inject constructor(private val statTypes: StatType
         if (hitpoints >= baseHitpointsLvl) {
             return
         }
-        val amount = if (hands.isType(objs.regen_bracelet)) 2 else 1
+        val capeMultiplier =
+            if (
+                back.isType(objs.hitpoints_skillcape) ||
+                    back.isType(objs.hitpoints_skillcape_t) ||
+                    back.isType(objs.max_cape_worn)
+            ) {
+                2
+            } else {
+                1
+            }
+        val braceletMultiplier = if (hands.isType(objs.regen_bracelet)) 2 else 1
+        val amount = capeMultiplier * braceletMultiplier
         statHeal(stats.hitpoints, constant = amount, percent = 0)
     }
 

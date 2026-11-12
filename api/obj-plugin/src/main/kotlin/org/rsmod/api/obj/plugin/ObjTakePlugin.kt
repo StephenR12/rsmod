@@ -16,13 +16,28 @@ import org.rsmod.objtx.TransactionResultList
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
-public class ObjTakePlugin @Inject constructor(private val repo: ObjRepository) : PluginScript() {
+public class ObjTakePlugin
+@Inject
+constructor(
+    private val repo: ObjRepository,
+    destinations: Set<ObjTakeDestination>,
+    transforms: Set<ObjTakeTransform>,
+) : PluginScript() {
+    private val destinations =
+        destinations.sortedWith(
+            compareByDescending<ObjTakeDestination> { it.priority }.thenBy { it.javaClass.name }
+        )
+    private val transforms =
+        transforms.sortedWith(
+            compareByDescending<ObjTakeTransform> { it.priority }.thenBy { it.javaClass.name }
+        )
+
     override fun ScriptContext.startup() {
         onDefaultOpObj3 { triggerTake(it.obj) }
     }
 
     private suspend fun ProtectedAccess.triggerTake(obj: Obj) {
-        if (!player.hasInvSpace(obj)) {
+        if (!player.hasDestinationSpace(obj)) {
             player.mes(Constants.dm_take_invspace)
             return
         }
@@ -31,7 +46,7 @@ public class ObjTakePlugin @Inject constructor(private val repo: ObjRepository) 
             takeFar(obj)
         } else {
             soundSynth(synths.pick2)
-            player.takeClose(obj)
+            takeClose(obj)
         }
     }
 
@@ -39,25 +54,41 @@ public class ObjTakePlugin @Inject constructor(private val repo: ObjRepository) 
         delay(1)
         anim(seqs.human_pickuptable)
         soundSynth(synths.pick2)
-        player.takeClose(obj)
+        takeClose(obj)
     }
 
-    private fun Player.takeClose(obj: Obj) {
+    private fun ProtectedAccess.takeClose(obj: Obj) {
+        val take = player.transaction(obj)
+        if (take.result.failure) {
+            mes(Constants.dm_take_invspace)
+            return
+        }
         val removed = repo.del(obj)
         if (!removed) {
             mes(Constants.dm_take_taken)
             return
         }
-        val take = transaction(obj)
-        if (take.failure) {
-            mes(Constants.dm_take_invspace)
-        } else {
-            take.commitAll()
-        }
+        take.result.commitAll()
+        take.destination?.onTake(this, obj)
     }
 
-    private fun Player.hasInvSpace(obj: Obj): Boolean = transaction(obj).success
+    private fun Player.hasDestinationSpace(obj: Obj): Boolean = transaction(obj).result.success
 
-    private fun Player.transaction(obj: Obj): TransactionResultList<InvObj> =
-        invAdd(inv, obj.type, obj.count, autoCommit = false)
+    private fun Player.transaction(obj: Obj): TakeTransaction {
+        val redirect =
+            destinations.firstNotNullOfOrNull { destination ->
+                destination.destination(this, obj)?.let { destination to it }
+            }
+        val target = redirect?.second ?: inv
+        val type = transforms.firstNotNullOfOrNull { it.transform(this, obj) } ?: obj.type
+        return TakeTransaction(
+            result = invAdd(target, type, obj.count, vars = obj.vars, autoCommit = false),
+            destination = redirect?.first,
+        )
+    }
+
+    private data class TakeTransaction(
+        val result: TransactionResultList<InvObj>,
+        val destination: ObjTakeDestination?,
+    )
 }

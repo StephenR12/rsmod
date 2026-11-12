@@ -13,6 +13,7 @@ import org.rsmod.game.type.obj.UnpackedObjType
 public data class Hit(
     public val type: HitType,
     public val hitmark: Hitmark,
+    public val successful: Boolean,
     private val sourceUid: Int?,
     private val righthandObj: Int?,
     private val secondaryObj: Int?,
@@ -51,5 +52,6 @@ public data class Hit(
     }
 
     override fun toString(): String =
-        "Hit(type=$type, righthandObj=$righthandObj, secondaryObj=$secondaryObj, hitmark=$hitmark)"
+        "Hit(type=$type, successful=$successful, righthandObj=$righthandObj, " +
+            "secondaryObj=$secondaryObj, hitmark=$hitmark)"
 }

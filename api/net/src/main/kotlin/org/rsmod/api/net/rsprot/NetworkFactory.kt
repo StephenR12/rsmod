@@ -36,7 +36,7 @@ constructor(
     private val js5Groups = Js5GroupResponseProvider(store)
     private val npcSupplier = NpcSupplier.provide()
 
-    override val ports: List<Int> = listOf(43594)
+    override val ports: List<Int> = listOf(configuredPort())
 
     override val supportedClientTypes: List<OldSchoolClientType> =
         listOf(OldSchoolClientType.DESKTOP)
@@ -72,5 +72,16 @@ constructor(
 
     override fun getWorldEntityInfoSupplier(): WorldEntityInfoSupplier {
         return WorldEntityProvider.provide()
+    }
+
+    private fun configuredPort(): Int {
+        val configured = System.getProperty(NETWORK_PORT_PROPERTY)?.toIntOrNull() ?: DEFAULT_PORT
+        require(configured in 0..65535) { "Invalid network port: $configured" }
+        return configured
+    }
+
+    private companion object {
+        private const val DEFAULT_PORT = 43594
+        private const val NETWORK_PORT_PROPERTY = "rsmod.network.port"
     }
 }

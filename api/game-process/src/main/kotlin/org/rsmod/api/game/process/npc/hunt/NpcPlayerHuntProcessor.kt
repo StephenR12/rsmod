@@ -1,10 +1,20 @@
 package org.rsmod.api.game.process.npc.hunt
 
 import jakarta.inject.Inject
+import org.rsmod.api.area.checker.AreaChecker
 import org.rsmod.api.config.constants
+import org.rsmod.api.config.refs.npcs
+import org.rsmod.api.config.refs.params
+import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.hunt.Hunt
+import org.rsmod.api.npc.interact.AiPlayerInteractions
 import org.rsmod.api.npc.isValidTarget
+import org.rsmod.api.npc.mapMultiway
+import org.rsmod.api.npc.opPlayer2
+import org.rsmod.api.player.isInPvnCombat
+import org.rsmod.api.player.isValidTarget
+import org.rsmod.api.player.stat.stat
 import org.rsmod.api.random.CoreRandom
 import org.rsmod.api.random.GameRandom
 import org.rsmod.game.MapClock
@@ -14,6 +24,7 @@ import org.rsmod.game.entity.player.PlayerUid
 import org.rsmod.game.type.hunt.HuntCheckNotTooStrong
 import org.rsmod.game.type.hunt.HuntModeTypeList
 import org.rsmod.game.type.hunt.HuntType
+import org.rsmod.game.type.hunt.HuntVis
 import org.rsmod.game.type.hunt.UnpackedHuntModeType
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.varn.VarnTypeList
@@ -29,9 +40,15 @@ constructor(
     private val varpTypes: VarpTypeList,
     private val varnTypes: VarnTypeList,
     private val objTypes: ObjTypeList,
+    private val areaChecker: AreaChecker,
+    private val interactions: AiPlayerInteractions,
 ) {
     public fun process(npc: Npc) {
         if (!npc.isValidTarget() || npc.isDelayed) {
+            return
+        }
+
+        if (!npc.hasInteraction() && npc.tryGoad()) {
             return
         }
 
@@ -56,6 +73,43 @@ constructor(
             npc.huntPlayer(huntType)
         }
     }
+
+    private fun Npc.tryGoad(): Boolean {
+        if (!isAttackableMonster() || id in GOADING_IMMUNE_NPCS) {
+            return false
+        }
+        val multiway = mapMultiway(areaChecker)
+        if (!multiway && Math.floorMod(mapClock.cycle, SINGLEWAY_RECHECK_CYCLES) != 0) {
+            return false
+        }
+
+        val slayerRequirement = visType.param(params.slayer_levelrequire)
+        var target: Player? = null
+        var count = 0
+        for (player in hunt.findPlayers(coords, GOADING_RADIUS, HuntVis.Off)) {
+            if (!player.isValidTarget() || player.vars[varbits.goading_potion_timer] <= 0) {
+                continue
+            }
+            if (player.stat(stats.slayer) < slayerRequirement) {
+                continue
+            }
+            if (!multiway && player.isInPvnCombat()) {
+                continue
+            }
+            count++
+            if (random.of(minInclusive = 0, maxInclusive = count - 1) == 0) {
+                target = player
+            }
+        }
+        if (target == null) {
+            return false
+        }
+        opPlayer2(target, interactions)
+        return true
+    }
+
+    private fun Npc.isAttackableMonster(): Boolean =
+        visType.op.getOrNull(ATTACK_OP_INDEX) == "Attack"
 
     private fun Npc.huntPlayer(mode: UnpackedHuntModeType) {
         var target = PlayerUid.NULL
@@ -187,5 +241,19 @@ constructor(
     // this to a dynamic lookup on `AreaIndex` instead.
     private fun Player.isInMulti(): Boolean {
         return vars[varbits.multiway_indicator] == 1
+    }
+
+    private companion object {
+        const val ATTACK_OP_INDEX = 1
+        const val GOADING_RADIUS = 4
+        const val SINGLEWAY_RECHECK_CYCLES = 5
+        val GOADING_IMMUNE_NPCS =
+            setOf(
+                npcs.fight_caves_jad_healer.id,
+                npcs.inferno_nibbler.id,
+                npcs.inferno_jad_healer.id,
+                npcs.inferno_jad_healer_finalwave.id,
+                npcs.jad_challenge_healer.id,
+            )
     }
 }

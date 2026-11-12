@@ -97,6 +97,7 @@ constructor(
     private fun Player.sendZonePersistentUpdates(zone: ZoneKey) {
         val spawnedLocs = locReg.findAllSpawned(zone)
         sendPersistentLocs(spawnedLocs)
+        sendPersistentLocs(privateLocs.findAll(zone))
 
         val spawnedObjs = objReg.findAll(zone)
         sendPersistentObjs(spawnedObjs, observerUUID)

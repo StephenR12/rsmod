@@ -10,6 +10,7 @@ object VarpEdits : VarpEditor() {
         edit(varps.if2) { temporary = true }
         edit(varps.if3) { temporary = true }
         edit(varps.date_vars) { transmitOnDiff = true }
+        edit(varps.date_minutes) { transmitOnDiff = true }
         edit(varps.canoeing_menu) { temporary = true }
     }
 }

@@ -6,6 +6,21 @@ import org.rsmod.game.inv.isAnyType
 import org.rsmod.game.inv.isType
 
 public object EquipmentChecks {
+    public fun isToxicBlowpipe(obj: InvObj?): Boolean =
+        obj.isAnyType(objs.toxic_blowpipe, objs.blazing_blowpipe)
+
+    public fun isDizanasQuiver(obj: InvObj?): Boolean =
+        obj.isAnyType(
+            objs.dizanas_quiver_uncharged,
+            objs.dizanas_quiver_uncharged_trouver,
+            objs.dizanas_quiver_charged,
+            objs.dizanas_quiver_charged_trouver,
+            objs.dizanas_quiver_infinite,
+            objs.dizanas_quiver_infinite_trouver,
+            objs.dizanas_max_cape,
+            objs.dizanas_max_cape_trouver,
+        )
+
     public fun isSmokeStaff(obj: InvObj?): Boolean =
         obj.isAnyType(objs.smoke_battlestaff, objs.mystic_smoke_staff, objs.twinflame_staff)
 
@@ -195,6 +210,112 @@ public object EquipmentChecks {
                 objs.torags_hammers_50,
                 objs.torags_hammers_25,
             )
+
+    public fun isGuthanSet(helm: InvObj?, top: InvObj?, legs: InvObj?, weapon: InvObj?): Boolean =
+        helm.isAnyType(
+            objs.guthans_helm_100,
+            objs.guthans_helm_75,
+            objs.guthans_helm_50,
+            objs.guthans_helm_25,
+        ) &&
+            top.isAnyType(
+                objs.guthans_platebody_100,
+                objs.guthans_platebody_75,
+                objs.guthans_platebody_50,
+                objs.guthans_platebody_25,
+            ) &&
+            legs.isAnyType(
+                objs.guthans_chainskirt_100,
+                objs.guthans_chainskirt_75,
+                objs.guthans_chainskirt_50,
+                objs.guthans_chainskirt_25,
+            ) &&
+            weapon.isAnyType(
+                objs.guthans_warspear_100,
+                objs.guthans_warspear_75,
+                objs.guthans_warspear_50,
+                objs.guthans_warspear_25,
+            )
+
+    public fun isKarilSet(helm: InvObj?, top: InvObj?, legs: InvObj?, weapon: InvObj?): Boolean =
+        helm.isAnyType(
+            objs.karils_coif_100,
+            objs.karils_coif_75,
+            objs.karils_coif_50,
+            objs.karils_coif_25,
+        ) &&
+            top.isAnyType(
+                objs.karils_leathertop_100,
+                objs.karils_leathertop_75,
+                objs.karils_leathertop_50,
+                objs.karils_leathertop_25,
+            ) &&
+            legs.isAnyType(
+                objs.karils_leatherskirt_100,
+                objs.karils_leatherskirt_75,
+                objs.karils_leatherskirt_50,
+                objs.karils_leatherskirt_25,
+            ) &&
+            weapon.isAnyType(
+                objs.karils_crossbow_100,
+                objs.karils_crossbow_75,
+                objs.karils_crossbow_50,
+                objs.karils_crossbow_25,
+            )
+
+    public fun isVeracSet(helm: InvObj?, top: InvObj?, legs: InvObj?, weapon: InvObj?): Boolean =
+        helm.isAnyType(
+            objs.veracs_helm_100,
+            objs.veracs_helm_75,
+            objs.veracs_helm_50,
+            objs.veracs_helm_25,
+        ) &&
+            top.isAnyType(
+                objs.veracs_brassard_100,
+                objs.veracs_brassard_75,
+                objs.veracs_brassard_50,
+                objs.veracs_brassard_25,
+            ) &&
+            legs.isAnyType(
+                objs.veracs_plateskirt_100,
+                objs.veracs_plateskirt_75,
+                objs.veracs_plateskirt_50,
+                objs.veracs_plateskirt_25,
+            ) &&
+            weapon.isAnyType(
+                objs.veracs_flail_100,
+                objs.veracs_flail_75,
+                objs.veracs_flail_50,
+                objs.veracs_flail_25,
+            )
+
+    public fun isBloodMoonSet(
+        helm: InvObj?,
+        top: InvObj?,
+        legs: InvObj?,
+        weapon: InvObj?,
+    ): Boolean =
+        helm.isAnyType(objs.blood_moon_helm, objs.blood_moon_helm_used) &&
+            top.isAnyType(objs.blood_moon_chestplate, objs.blood_moon_chestplate_used) &&
+            legs.isAnyType(objs.blood_moon_tassets, objs.blood_moon_tassets_used) &&
+            weapon.isType(objs.dual_macuahuitl)
+
+    public fun isBlueMoonSet(helm: InvObj?, top: InvObj?, legs: InvObj?, weapon: InvObj?): Boolean =
+        helm.isAnyType(objs.blue_moon_helm, objs.blue_moon_helm_used) &&
+            top.isAnyType(objs.blue_moon_chestplate, objs.blue_moon_chestplate_used) &&
+            legs.isAnyType(objs.blue_moon_tassets, objs.blue_moon_tassets_used) &&
+            weapon.isType(objs.blue_moon_spear)
+
+    public fun isEclipseMoonSet(
+        helm: InvObj?,
+        top: InvObj?,
+        legs: InvObj?,
+        weapon: InvObj?,
+    ): Boolean =
+        helm.isAnyType(objs.eclipse_moon_helm, objs.eclipse_moon_helm_used) &&
+            top.isAnyType(objs.eclipse_moon_chestplate, objs.eclipse_moon_chestplate_used) &&
+            legs.isAnyType(objs.eclipse_moon_tassets, objs.eclipse_moon_tassets_used) &&
+            weapon.isType(objs.eclipse_atlatl)
 
     public fun isAhrimSet(helm: InvObj?, top: InvObj?, legs: InvObj?, weapon: InvObj?): Boolean =
         helm.isAnyType(

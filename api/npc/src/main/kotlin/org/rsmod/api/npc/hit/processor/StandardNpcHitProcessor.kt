@@ -6,6 +6,7 @@ import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.queues
 import org.rsmod.api.npc.access.StandardNpcAccess
 import org.rsmod.api.npc.events.NpcHitEvents
+import org.rsmod.api.npc.events.NpcKillEvents
 import org.rsmod.api.npc.headbar.InternalNpcHeadbars
 import org.rsmod.api.player.output.soundSynth
 import org.rsmod.events.EventBus
@@ -62,6 +63,8 @@ constructor(private val playerList: PlayerList, private val eventBus: EventBus) 
         playDefendSound(hit)
 
         val queueDeath = npc.hitpoints == 0 && queues.death !in npc.queueList
+        val creditedPlayer =
+            if (queueDeath && hit.isFromPlayer) hit.resolvePlayerSource(playerList) else null
         if (queueDeath) {
             queueDeath()
         }
@@ -73,6 +76,9 @@ constructor(private val playerList: PlayerList, private val eventBus: EventBus) 
         npc.showHeadbar(headbar)
 
         npc.publishHitEvent(hit)
+        if (creditedPlayer != null) {
+            eventBus.publish(NpcKillEvents.Credited(creditedPlayer, npc))
+        }
     }
 
     private fun StandardNpcAccess.playDefendSound(hit: Hit) {

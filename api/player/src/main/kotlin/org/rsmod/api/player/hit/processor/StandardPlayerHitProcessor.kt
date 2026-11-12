@@ -7,6 +7,7 @@ import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.queues
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
+import org.rsmod.api.player.events.PlayerHitEvents
 import org.rsmod.api.player.headbar.InternalPlayerHeadbars
 import org.rsmod.api.player.lefthand
 import org.rsmod.api.player.output.soundSynth
@@ -51,6 +52,8 @@ public object StandardPlayerHitProcessor : QueuedPlayerHitProcessor {
 
         val headbar = hit.createHeadbar(player.hitpoints, player.baseHitpointsLvl)
         player.showHeadbar(headbar)
+
+        publish(PlayerHitEvents.Impact(player, hit, damage))
     }
 
     private fun Hit.isValid(access: ProtectedAccess): Boolean {

@@ -6,7 +6,9 @@ import org.rsmod.api.combat.commons.player.queueCombatRetaliate
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.death.plugin.PlayerDeathScript
 import org.rsmod.api.hit.plugin.PlayerHitScript
+import org.rsmod.api.player.events.PlayerDeathEvent
 import org.rsmod.api.player.hit.queueHit
+import org.rsmod.api.player.queueDeath
 import org.rsmod.api.player.stat.hitpoints
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.api.testing.factory.npcTypeFactory
@@ -60,6 +62,18 @@ class PlayerQueueProcessorTest {
 
             // If death queue script was triggered, the player should now be delayed.
             assertTrue(player.isDelayed)
+        }
+
+    @Test
+    fun GameTestState.`completed standard death publishes the player death event`() =
+        runGameTest(PlayerDeathScript::class) {
+            var completed = false
+            eventBus.subscribeUnbound(PlayerDeathEvent.Completed::class.java) { completed = true }
+
+            player.queueDeath()
+            advanceUntil({ completed }, timeoutTicks = 10)
+
+            assertTrue(completed)
         }
 
     private companion object {

@@ -14,6 +14,7 @@ import org.rsmod.api.db.util.setSqliteTimestamp
 import org.rsmod.api.parsers.jackson.readReifiedValue
 import org.rsmod.api.parsers.json.Json
 import org.rsmod.api.realm.Realm
+import org.rsmod.api.realm.WorldFlag
 import org.rsmod.game.entity.Player
 import org.rsmod.game.type.varp.VarpLifetime
 import org.rsmod.game.type.varp.VarpTypeList
@@ -42,8 +43,8 @@ constructor(
         val insert =
             connection.prepareStatement(
                 """
-                    INSERT INTO accounts (login_username, password_hash)
-                    VALUES (?, ?)
+                    INSERT INTO accounts (login_username, password_hash, members)
+                    VALUES (?, ?, ?)
                     ON CONFLICT(login_username) DO NOTHING
                 """
                     .trimIndent()
@@ -51,6 +52,7 @@ constructor(
         insert.use {
             it.setString(1, lowercaseName)
             it.setString(2, hashedPassword)
+            it.setBoolean(3, realm.config.hasWorldFlag(WorldFlag.Members))
             it.executeUpdate()
         }
 

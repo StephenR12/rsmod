@@ -934,3 +934,7 @@
 933	pub_auburnvale
 934	pub_nemus
 935	dom_lootpile_during
+936	hunter_fur_pouch_storage
+937	hunter_meat_pouch_storage
+938	fish_barrel_storage
+939	gem_bag_storage

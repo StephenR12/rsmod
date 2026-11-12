@@ -8,7 +8,7 @@ import org.rsmod.api.npc.events.interact.ApEvent
 import org.rsmod.api.npc.events.interact.OpEvent
 import org.rsmod.events.EventBus
 import org.rsmod.game.entity.Npc
-import org.rsmod.game.interact.InteractionObj
+import org.rsmod.game.interact.InteractionObjOp
 import org.rsmod.game.interact.InteractionOp
 import org.rsmod.game.obj.Obj
 import org.rsmod.game.type.obj.ObjTypeList
@@ -25,7 +25,7 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
     ) {
         val opTrigger = hasOpTrigger(obj, op, type)
         val interaction =
-            InteractionObj(target = obj, op = op, hasOpTrigger = opTrigger, hasApTrigger = false)
+            InteractionObjOp(target = obj, op = op, hasOpTrigger = opTrigger, hasApTrigger = false)
         npc.interaction = interaction
         npc.walk(obj.coords)
     }
@@ -33,7 +33,7 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
     public fun interactAp(npc: Npc, obj: Obj, op: InteractionOp) {
         val apRange = npc.visType.attackRange
         val interaction =
-            InteractionObj(
+            InteractionObjOp(
                 target = obj,
                 op = op,
                 hasOpTrigger = false,
@@ -109,6 +109,7 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
             InteractionOp.Op3 -> AiObjEvents.Op3(this)
             InteractionOp.Op4 -> AiObjEvents.Op4(this)
             InteractionOp.Op5 -> AiObjEvents.Op5(this)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun Obj.toContentOp(contentGroup: Int, op: InteractionOp): AiObjContentEvents.Op =
@@ -118,6 +119,7 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
             InteractionOp.Op3 -> AiObjContentEvents.Op3(this, contentGroup)
             InteractionOp.Op4 -> AiObjContentEvents.Op4(this, contentGroup)
             InteractionOp.Op5 -> AiObjContentEvents.Op5(this, contentGroup)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun Obj.toDefaultOp(op: InteractionOp): AiObjDefaultEvents.Op =
@@ -127,6 +129,7 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
             InteractionOp.Op3 -> AiObjDefaultEvents.Op3(this)
             InteractionOp.Op4 -> AiObjDefaultEvents.Op4(this)
             InteractionOp.Op5 -> AiObjDefaultEvents.Op5(this)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun Obj.toAp(op: InteractionOp): AiObjEvents.Ap =
@@ -136,6 +139,7 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
             InteractionOp.Op3 -> AiObjEvents.Ap3(this)
             InteractionOp.Op4 -> AiObjEvents.Ap4(this)
             InteractionOp.Op5 -> AiObjEvents.Ap5(this)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun Obj.toContentAp(contentGroup: Int, op: InteractionOp): AiObjContentEvents.Ap =
@@ -145,14 +149,19 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
             InteractionOp.Op3 -> AiObjContentEvents.Ap3(this, contentGroup)
             InteractionOp.Op4 -> AiObjContentEvents.Ap4(this, contentGroup)
             InteractionOp.Op5 -> AiObjContentEvents.Ap5(this, contentGroup)
+            else -> unsupportedPlayerOperation(op)
         }
 
     private fun Obj.toDefaultAp(op: InteractionOp): AiObjDefaultEvents.Ap =
         when (op) {
             InteractionOp.Op1 -> AiObjDefaultEvents.Ap1(this)
-            InteractionOp.Op2 -> AiObjDefaultEvents.Ap1(this)
-            InteractionOp.Op3 -> AiObjDefaultEvents.Ap1(this)
-            InteractionOp.Op4 -> AiObjDefaultEvents.Ap1(this)
-            InteractionOp.Op5 -> AiObjDefaultEvents.Ap1(this)
+            InteractionOp.Op2 -> AiObjDefaultEvents.Ap2(this)
+            InteractionOp.Op3 -> AiObjDefaultEvents.Ap3(this)
+            InteractionOp.Op4 -> AiObjDefaultEvents.Ap4(this)
+            InteractionOp.Op5 -> AiObjDefaultEvents.Ap5(this)
+            else -> unsupportedPlayerOperation(op)
         }
 }
+
+private fun unsupportedPlayerOperation(op: InteractionOp): Nothing =
+    throw IllegalArgumentException("Interaction operation $op is only valid for player targets.")

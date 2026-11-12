@@ -33,7 +33,9 @@ constructor(private val modLevelTypes: ModLevelTypeList) :
         player.coords = CoordGrid(data.coordX, data.coordZ, data.coordLevel)
         player.runEnergy = data.runEnergy
         player.xpRate = data.xpRate
-        player.lastLogin = LocalDateTime.now()
+        val now = LocalDateTime.now()
+        player.createdAt = data.createdAt ?: now
+        player.lastLogin = now
         player.vars.backing.putAll(data.varps)
         player.assignModLevel(data.modLevel)
     }

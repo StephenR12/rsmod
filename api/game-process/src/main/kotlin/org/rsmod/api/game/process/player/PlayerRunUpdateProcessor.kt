@@ -31,7 +31,9 @@ public class PlayerRunUpdateProcessor @Inject constructor(private val objTypes: 
     private fun Player.updateRunEnergy() {
         val startRunEnergy = runEnergy
 
-        if (pendingStepCount > 1) {
+        if (pendingStepCount > 1 && currentMapClock < runEnergyDrainBlockedUntil) {
+            return
+        } else if (pendingStepCount > 1) {
             decreaseRunEnergy()
         } else {
             restoreRunEnergy()

@@ -7,7 +7,6 @@ import org.rsmod.api.player.output.ClientScripts.shopMainInit
 import org.rsmod.api.player.startInvTransmit
 import org.rsmod.api.player.ui.ifOpenMainSidePair
 import org.rsmod.api.player.ui.ifSetEvents
-import org.rsmod.api.player.ui.ifSetText
 import org.rsmod.api.shops.config.ShopComponents
 import org.rsmod.api.shops.config.ShopInterfaces
 import org.rsmod.api.shops.config.ShopParams
@@ -33,7 +32,6 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
         title: String,
         shopInv: InvType,
         currency: CurrencyType = currencies.standard_gp,
-        subtext: String = DEFAULT_SUBTEXT,
     ) {
         val buyPercentage = activeNpc.type.param(ShopParams.shop_buy_percentage) / 10.0
         val sellPercentage = activeNpc.type.param(ShopParams.shop_sell_percentage) / 10.0
@@ -46,7 +44,6 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
             sellPercentage = sellPercentage,
             changePercentage = changePercentage,
             currency = currency,
-            subtext = subtext,
         )
     }
 
@@ -58,7 +55,6 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
         sellPercentage: Double,
         changePercentage: Double,
         currency: CurrencyType = currencies.standard_gp,
-        subtext: String = DEFAULT_SUBTEXT,
     ) {
         val inv = shopInv.toInventory(player)
         open(
@@ -70,7 +66,6 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
             buyPercentage = buyPercentage,
             sellPercentage = sellPercentage,
             changePercentage = changePercentage,
-            subtext = subtext,
         )
     }
 
@@ -83,7 +78,6 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
         buyPercentage: Double,
         sellPercentage: Double,
         changePercentage: Double,
-        subtext: String,
     ) {
         player.openedShop = Shop(shopInv, currency, buyPercentage, sellPercentage, changePercentage)
 
@@ -96,7 +90,6 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
             transparency = -1,
             eventBus = eventBus,
         )
-        player.ifSetText(ShopComponents.shop_subtext, subtext)
         shopMainInit(player, shopInv.type, title)
 
         player.ifSetEvents(
@@ -160,10 +153,5 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
             "`shopInv` must not have shared scope. (shopInv=$unpacked)"
         }
         return player.invMap.getOrPut(unpacked)
-    }
-
-    public companion object {
-        public const val DEFAULT_SUBTEXT: String =
-            "Right click on shop to buy item - Right-click on inventory to sell item"
     }
 }

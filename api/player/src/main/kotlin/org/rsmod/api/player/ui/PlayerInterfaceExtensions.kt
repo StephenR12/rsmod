@@ -547,6 +547,37 @@ internal fun Player.ifChoice(
     ifSetEvents(components.chatmenu_pbutton, 1..choiceCountInclusive, IfEvent.PauseButton)
 }
 
+/** Opens the cache's generic multi-product quantity chooser as a chat modal. */
+internal fun Player.ifSkillMulti(
+    title: String,
+    actionMode: Int,
+    maxQuantity: Int,
+    initialQuantity: Int,
+    choices: List<ObjType>,
+    eventBus: EventBus,
+) {
+    require(choices.size in 1..10) { "Skill-multi choices must contain between 1 and 10 objs." }
+    require(maxQuantity >= 1) { "Skill-multi maximum quantity must be positive." }
+    require(initialQuantity in 1..maxQuantity) {
+        "Skill-multi initial quantity must be within the selectable range."
+    }
+
+    ifOpenChat(interfaces.skillmulti, constants.modal_fixedwidthandheight, eventBus)
+    val arguments =
+        buildList<Any>(14) {
+            add(actionMode)
+            add(maxQuantity)
+            repeat(10) { add(choices.getOrNull(it)?.id ?: -1) }
+            add(initialQuantity)
+            add(title)
+        }
+    runClientScript(2046, *arguments.toTypedArray())
+
+    for (button in skillMultiButtons.take(choices.size)) {
+        ifSetEvents(button, 1..maxQuantity, IfEvent.PauseButton)
+    }
+}
+
 internal fun Player.ifChatPlayer(
     title: String,
     text: String,
@@ -617,6 +648,20 @@ private fun Player.ifSetPauseText(component: ComponentType, text: String) {
     }
     ifSetText(component, text)
 }
+
+private val skillMultiButtons =
+    listOf(
+        components.skillmulti_a,
+        components.skillmulti_b,
+        components.skillmulti_c,
+        components.skillmulti_d,
+        components.skillmulti_e,
+        components.skillmulti_f,
+        components.skillmulti_g,
+        components.skillmulti_h,
+        components.skillmulti_i,
+        components.skillmulti_j,
+    )
 
 private fun Player.ifSetObj(target: ComponentType, obj: Int, zoomOrCount: Int) {
     client.write(IfSetObject(target.packed, obj, zoomOrCount))

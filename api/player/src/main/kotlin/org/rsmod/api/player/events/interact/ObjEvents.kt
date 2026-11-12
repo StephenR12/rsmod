@@ -1,6 +1,10 @@
 package org.rsmod.api.player.events.interact
 
+import org.rsmod.events.EventBus
 import org.rsmod.game.obj.Obj
+import org.rsmod.game.type.comp.ComponentType
+import org.rsmod.game.type.obj.ObjType
+import org.rsmod.game.type.obj.UnpackedObjType
 
 public sealed class ObjEvents {
     public sealed class Op(public val obj: Obj) : OpEvent(obj.type.toLong())
@@ -84,4 +88,58 @@ public sealed class ObjDefaultEvents {
     public class Ap4(obj: Obj) : Ap(obj)
 
     public class Ap5(obj: Obj) : Ap(obj)
+}
+
+public class ObjTEvents {
+    public class Op(
+        public val obj: Obj,
+        public val comsub: Int,
+        public val objType: ObjType?,
+        targetType: UnpackedObjType,
+        component: ComponentType,
+    ) : OpEvent(EventBus.composeLongKey(targetType.id, component.packed))
+
+    public class Ap(
+        public val obj: Obj,
+        public val comsub: Int,
+        public val objType: ObjType?,
+        targetType: UnpackedObjType,
+        component: ComponentType,
+    ) : ApEvent(EventBus.composeLongKey(targetType.id, component.packed))
+}
+
+public class ObjTContentEvents {
+    public class Op(
+        public val obj: Obj,
+        public val comsub: Int,
+        public val objType: ObjType?,
+        component: ComponentType,
+        content: Int,
+    ) : OpEvent(EventBus.composeLongKey(content, component.packed))
+
+    public class Ap(
+        public val obj: Obj,
+        public val comsub: Int,
+        public val objType: ObjType?,
+        component: ComponentType,
+        content: Int,
+    ) : ApEvent(EventBus.composeLongKey(content, component.packed))
+}
+
+public class ObjTDefaultEvents {
+    public class Op(
+        public val obj: Obj,
+        public val comsub: Int,
+        public val objType: ObjType?,
+        public val targetType: UnpackedObjType,
+        component: ComponentType,
+    ) : OpEvent(component.packed.toLong())
+
+    public class Ap(
+        public val obj: Obj,
+        public val comsub: Int,
+        public val objType: ObjType?,
+        public val targetType: UnpackedObjType,
+        component: ComponentType,
+    ) : ApEvent(component.packed.toLong())
 }

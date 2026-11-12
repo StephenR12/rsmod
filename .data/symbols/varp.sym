@@ -343,6 +343,7 @@
 711	soulbane_unprotected
 712	soulbane_unprotected2
 714	rag_quest
+715	rag_and_bone_man_ii_handed_mask
 716	rag_bone_2
 718	pest_instance
 720	abyssal_pouches2
@@ -2278,6 +2279,16 @@
 4846	dom_previous_deepest_level
 4848	collection_count_unsynced
 
+65494	rag_and_bone_man_i_handed_mask
+65495	skillcape_hitpoints_boost_ready_at
+65496	skillcape_prayer_boost_ready_at
+65497	hunter_expert_received_hunter_kit
+65498	mausoleum_bridge_repair_state
+65499	fremennik_sea_boots_teleports_used
+65500	fremennik_sea_boots_last_teleport_day
+65501	surge_potion_cooldown_cycles
+65502	godwars_altar_available_at
+65503	ring_of_forging_uses
 65504	music_playlist
 65505	music_temp_state_3
 65506	music_temp_state_2
@@ -2309,3 +2320,9 @@
 65532	bank_serverside_vars
 65533	emote_counters
 65534	emote_clock_premier_shield
+65535	herblore_chemistry_amulet_uses
+65536	birdhouse_ready_at_a
+65537	birdhouse_ready_at_b
+65538	birdhouse_ready_at_c
+65539	birdhouse_ready_at_d
+65540	dt2_vestige_progress

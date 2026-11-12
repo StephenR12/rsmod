@@ -44,7 +44,9 @@ constructor(
         }
 
         val coords = CoordGrid(message.x, message.z, player.level)
-        val loc = locRegistry.findType(coords, message.id)
+        val loc =
+            player.privateLocs.findExactType(coords, message.id)
+                ?: locRegistry.findType(coords, message.id)
         if (loc == null) {
             player.clearMapFlag()
             player.clearPendingAction(eventBus)

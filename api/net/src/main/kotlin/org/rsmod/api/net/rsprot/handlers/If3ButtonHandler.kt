@@ -34,19 +34,8 @@ constructor(
 
     private val If3Button.buttonOp: IfButtonOp
         get() =
-            when (op) {
-                1 -> IfButtonOp.Op1
-                2 -> IfButtonOp.Op2
-                3 -> IfButtonOp.Op3
-                4 -> IfButtonOp.Op4
-                5 -> IfButtonOp.Op5
-                6 -> IfButtonOp.Op6
-                7 -> IfButtonOp.Op7
-                8 -> IfButtonOp.Op8
-                9 -> IfButtonOp.Op9
-                10 -> IfButtonOp.Op10
-                else -> throw NotImplementedError("Unhandled If3Button op: $this")
-            }
+            IfButtonOp.entries.getOrNull(op - 1)
+                ?: throw NotImplementedError("Unhandled If3Button op: $this")
 
     @OptIn(InternalApi::class)
     override fun handle(player: Player, message: If3Button) {

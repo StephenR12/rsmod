@@ -1,5 +1,8 @@
 package org.rsmod.api.script
 
+import org.rsmod.api.player.events.ObjTradeEvents
+import org.rsmod.api.player.events.PlayerCombatEvents
+import org.rsmod.api.player.events.PlayerHitEvents
 import org.rsmod.api.player.events.PlayerMovementEvent
 import org.rsmod.api.player.events.PlayerQueueEvents
 import org.rsmod.api.player.events.PlayerTimerEvent
@@ -23,6 +26,18 @@ public fun ScriptContext.onPlayerLogin(action: SessionStateEvent.Login.() -> Uni
     onEvent(action)
 
 public fun ScriptContext.onPlayerLogout(action: SessionStateEvent.Logout.() -> Unit): Unit =
+    onEvent(action)
+
+/** Registers a listener for applied incoming player hits. */
+public fun ScriptContext.onPlayerHit(action: PlayerHitEvents.Impact.() -> Unit): Unit =
+    onEvent(action)
+
+/** Registers a listener for validated player combat engagement. */
+public fun ScriptContext.onPlayerCombatEngage(action: PlayerCombatEvents.Engage.() -> Unit): Unit =
+    onEvent(action)
+
+/** Registers a listener that can refine cache tradeability for stateful objects. */
+public fun ScriptContext.onObjTradeQuery(action: ObjTradeEvents.Query.() -> Unit): Unit =
     onEvent(action)
 
 /* Op functions */

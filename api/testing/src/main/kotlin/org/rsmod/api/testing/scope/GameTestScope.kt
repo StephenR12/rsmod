@@ -69,6 +69,7 @@ import org.rsmod.api.registry.obj.ObjRegistry
 import org.rsmod.api.registry.player.PlayerRegistry
 import org.rsmod.api.registry.region.RegionRegistry
 import org.rsmod.api.registry.zone.ZonePlayerActivityBitSet
+import org.rsmod.api.registry.zone.ZoneUpdateMap
 import org.rsmod.api.repo.controller.ControllerRepository
 import org.rsmod.api.repo.loc.LocRepository
 import org.rsmod.api.repo.npc.NpcRepository
@@ -886,6 +887,7 @@ constructor(
             bind(PlayerRegistry::class.java).`in`(Scopes.SINGLETON)
             bind(PlayerRepository::class.java).`in`(Scopes.SINGLETON)
             bind(ZonePlayerActivityBitSet::class.java).`in`(Scopes.SINGLETON)
+            bind(ZoneUpdateMap::class.java).`in`(Scopes.SINGLETON)
             bind(NpcList::class.java).`in`(Scopes.SINGLETON)
             bind(NpcRegistry::class.java).`in`(Scopes.SINGLETON)
             bind(NpcRepository::class.java).`in`(Scopes.SINGLETON)
@@ -1026,6 +1028,10 @@ constructor(
         private val sequence = SequenceRandom(size = 128)
         private val default = DefaultGameRandom(seed = 123456)
 
+        /** Inclusive bounds supplied to the most recent integer roll, if one has occurred. */
+        public var lastInclusiveRange: IntRange? = null
+            private set
+
         /** @see [SequenceRandom.next] */
         public var next: Int by sequence::next
 
@@ -1040,6 +1046,7 @@ constructor(
 
         internal inner class InternalRandomImpl : GameRandom {
             override fun of(maxExclusive: Int): Int {
+                lastInclusiveRange = 0 until maxExclusive
                 return if (sequence.hasNext) {
                     sequence.of(maxExclusive)
                 } else {
@@ -1048,6 +1055,7 @@ constructor(
             }
 
             override fun of(minInclusive: Int, maxInclusive: Int): Int {
+                lastInclusiveRange = minInclusive..maxInclusive
                 return if (sequence.hasNext) {
                     sequence.of(minInclusive, maxInclusive)
                 } else {

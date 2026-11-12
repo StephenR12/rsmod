@@ -7,6 +7,10 @@ import org.rsmod.api.type.refs.varp.VarpReferences
 typealias varps = BaseVarps
 
 object BaseVarps : VarpReferences() {
+    val skillcape_hitpoints_boost_ready_at = find("skillcape_hitpoints_boost_ready_at")
+    val skillcape_prayer_boost_ready_at = find("skillcape_prayer_boost_ready_at")
+    val toggle_list = find("toggle_list")
+    val vengeance_anim_toggles = find("vengeance_anim_toggles")
     /*
      * These "generic" temporary-state varps are used across multiple interfaces to track temporary
      * state. Unlike varps tied to a specific piece of content with child varbits, these are more
@@ -26,7 +30,15 @@ object BaseVarps : VarpReferences() {
     val option_nodef = find("option_nodef", 39044574)
     val sa_energy = find("sa_energy", 68098142)
     val sa_attack = find("sa_attack", 68325123)
+    val slayer_count = find("slayer_count")
+    val slayer_target = find("slayer_target")
+    val poison = find("poison")
+    val poison_2 = find("poison_2")
+    val disease = find("disease")
     val soulreaper_souls = find("soulreaper_stacks", 858899946)
+    val iban_charges = find("ibanmulti")
+    val magearena = find("magearena")
+    val magearena_charge = find("magearena_charge")
 
     val option_run = find("option_run", 39271563)
     val option_attackpriority = find("option_attackpriority", 251271828)
@@ -41,7 +53,16 @@ object BaseVarps : VarpReferences() {
     val settings_tracking = find("settings_tracking", 648034597)
     val chat_filter_assist = find("chat_filter_assist", 239468797)
 
+    /** Cache varp 101: the player's persistent quest-point total. */
+    val quest_points = find("qp")
+
     val cookquest = find("cookquest", 6586291)
+    val tbwt_main = find("tbwt_main")
+    val tbwt_tiadeche = find("tbwt_tiadeche")
+    val druidic_ritual = find("druidquest")
+    val golem_quest = find("golem_quest")
+    val heroes_quest = find("heroquest")
+    val legends_quest = find("legendsquest")
     val doricquest = find("doricquest", 7040253)
     val haunted = find("haunted", 7267234)
     val runemysteries = find("runemysteries", 14303645)
@@ -52,6 +73,25 @@ object BaseVarps : VarpReferences() {
     val dragonquest = find("dragonquest", 39952498)
     val vampire = find("vampire", 40406460)
     val sheep = find("sheep", 40633441)
+    val squire = find("squire")
+    val mcannon = find("mcannon")
+    val elenaquest = find("elenaquest")
+    val itwatchtower = find("itwatchtower")
+    val eadgar_quest = find("eadgar_quest")
+    val biohazard = find("biohazard")
+    val priest_in_peril = find("priestperil")
+    val monkey_madness = find("mm_main")
+    val great_brain_robbery = find("brain_quest_var")
+    val rag_and_bone_man_i = find("rag_quest")
+    val rag_and_bone_man_ii = find("rag_quest")
+    /** Cache varp 715: unused by cache-233 client scripts/varbits and reserved for II hand-ins. */
+    val rag_and_bone_man_ii_handed_mask = find("rag_and_bone_man_ii_handed_mask")
+    val onesmallfavour = find("onesmallfavour")
+    val big_chompy_bird_hunting = find("chompybird")
+    val elid_main = find("elid_main")
+    val morttonquest = find("morttonquest")
+    val waterfall_quest = find("waterfall_quest")
+    val kandarin_achievement_diary2 = find("kandarin_achievement_diary2")
 
     val colosseum_glory = find("colosseum_glory", 937435372)
 
@@ -70,8 +110,15 @@ object BaseVarps : VarpReferences() {
 
     val map_clock = find("map_clock", 698878341)
     val date_vars = find("date_vars", 698424318)
+    val date_minutes = find("date_minutes")
+    val aide_tele_timer = find("aide_tele_timer")
+    val skillcape_perks = find("skillcape_perks")
 
     /* Server-side-only types */
+    val surge_potion_cooldown_cycles = find("surge_potion_cooldown_cycles")
+    val dt2_vestige_progress = find("dt2_vestige_progress")
+    val godwars_altar_available_at = find("godwars_altar_available_at")
+    val rag_and_bone_man_i_handed_mask = find("rag_and_bone_man_i_handed_mask")
     val music_playlist = find("music_playlist")
     val music_temp_state_3 = find("music_temp_state_3")
     val music_temp_state_2 = find("music_temp_state_2")

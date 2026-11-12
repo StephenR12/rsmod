@@ -22,6 +22,9 @@ import org.rsmod.api.npc.apPlayer2
 import org.rsmod.api.npc.apPlayer3
 import org.rsmod.api.npc.apPlayer4
 import org.rsmod.api.npc.apPlayer5
+import org.rsmod.api.npc.apPlayer6
+import org.rsmod.api.npc.apPlayer7
+import org.rsmod.api.npc.apPlayer8
 import org.rsmod.api.npc.interact.AiLocInteractions
 import org.rsmod.api.npc.interact.AiNpcInteractions
 import org.rsmod.api.npc.interact.AiObjInteractions
@@ -47,6 +50,9 @@ import org.rsmod.api.npc.opPlayer2
 import org.rsmod.api.npc.opPlayer3
 import org.rsmod.api.npc.opPlayer4
 import org.rsmod.api.npc.opPlayer5
+import org.rsmod.api.npc.opPlayer6
+import org.rsmod.api.npc.opPlayer7
+import org.rsmod.api.npc.opPlayer8
 import org.rsmod.api.random.CoreRandom
 import org.rsmod.api.random.GameRandom
 import org.rsmod.game.MapClock
@@ -290,11 +296,17 @@ constructor(
             NpcMode.OpPlayer3 -> opPlayer3(target, playerInteractions)
             NpcMode.OpPlayer4 -> opPlayer4(target, playerInteractions)
             NpcMode.OpPlayer5 -> opPlayer5(target, playerInteractions)
+            NpcMode.OpPlayer6 -> opPlayer6(target, playerInteractions)
+            NpcMode.OpPlayer7 -> opPlayer7(target, playerInteractions)
+            NpcMode.OpPlayer8 -> opPlayer8(target, playerInteractions)
             NpcMode.ApPlayer1 -> apPlayer1(target, playerInteractions)
             NpcMode.ApPlayer2 -> apPlayer2(target, playerInteractions)
             NpcMode.ApPlayer3 -> apPlayer3(target, playerInteractions)
             NpcMode.ApPlayer4 -> apPlayer4(target, playerInteractions)
             NpcMode.ApPlayer5 -> apPlayer5(target, playerInteractions)
+            NpcMode.ApPlayer6 -> apPlayer6(target, playerInteractions)
+            NpcMode.ApPlayer7 -> apPlayer7(target, playerInteractions)
+            NpcMode.ApPlayer8 -> apPlayer8(target, playerInteractions)
             else -> throw NotImplementedError("Unhandled npc mode hunt: $mode")
         }
     }

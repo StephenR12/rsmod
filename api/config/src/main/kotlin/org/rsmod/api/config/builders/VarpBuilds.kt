@@ -4,6 +4,12 @@ import org.rsmod.api.type.builders.varp.VarpBuilder
 
 internal object VarpBuilds : VarpBuilder() {
     init {
+        build("skillcape_hitpoints_boost_ready_at") { transmitNever = true }
+        build("skillcape_prayer_boost_ready_at") { transmitNever = true }
+        build("surge_potion_cooldown_cycles") { transmitNever = true }
+        build("dt2_vestige_progress") { transmitNever = true }
+        build("godwars_altar_available_at")
+        build("rag_and_bone_man_i_handed_mask") { transmitNever = true }
         build("music_playlist") { temporary = true }
         build("music_temp_state_3") { temporary = true }
         build("music_temp_state_2") { temporary = true }

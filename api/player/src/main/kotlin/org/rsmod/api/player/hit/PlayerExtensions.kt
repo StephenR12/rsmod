@@ -127,6 +127,7 @@ public fun Player.queueHit(
     hitmark: HitmarkTypeGroup = hitmark_groups.regular_damage,
     sourceSecondary: ObjType? = null,
     modifier: PlayerHitModifier = StandardPlayerHitModifier,
+    successful: Boolean = damage > 0,
 ): Hit {
     val builder =
         InternalPlayerHits.createBuilder(
@@ -134,6 +135,7 @@ public fun Player.queueHit(
             source = source,
             type = type,
             damage = damage,
+            successful = successful,
             secondaryObj = sourceSecondary,
             hitmark = hitmark,
             clientDelay = 0,
@@ -375,6 +377,7 @@ public fun Player.queueImpactHit(
     hitmark: HitmarkTypeGroup = hitmark_groups.regular_damage,
     sourceSecondary: ObjType? = null,
     modifier: PlayerHitModifier = StandardPlayerHitModifier,
+    successful: Boolean = damage > 0,
 ) {
     val builder =
         InternalPlayerHits.createBuilder(
@@ -382,6 +385,7 @@ public fun Player.queueImpactHit(
             source = source,
             type = type,
             damage = damage,
+            successful = successful,
             secondaryObj = sourceSecondary,
             hitmark = hitmark,
             clientDelay = 0,

@@ -67,6 +67,48 @@ public value class ZoneLocMap(private val entries: Int2ObjectMap<Byte2IntOpenHas
         map[locZoneKey.packed] = locEntity.packed
     }
 
+    public fun remove(zone: ZoneKey, locZoneKey: LocZoneKey): LocEntity? {
+        val map = entries.getOrDefault(zone.packed, null) ?: return null
+        if (!map.containsKey(locZoneKey.packed)) {
+            return null
+        }
+        val removed = LocEntity(map.remove(locZoneKey.packed))
+        if (map.isEmpty()) {
+            entries.remove(zone.packed)
+        }
+        return removed
+    }
+
+    public fun findExactType(coords: org.rsmod.map.CoordGrid, id: Int): LocInfo? {
+        val zoneKey = ZoneKey.from(coords)
+        val zone = entries.getOrDefault(zoneKey.packed, null) ?: return null
+        val zoneCoords = zoneKey.toCoords()
+        for (entry in zone.byte2IntEntrySet()) {
+            val entity = LocEntity(entry.intValue)
+            if (entity.id != id) {
+                continue
+            }
+            val key = LocZoneKey(entry.byteKey)
+            val locCoords = zoneCoords.translate(key.x, key.z)
+            if (locCoords == coords) {
+                return LocInfo(key.layer, locCoords, entity)
+            }
+        }
+        return null
+    }
+
+    public fun findAll(zone: ZoneKey): Sequence<LocInfo> {
+        val zoneLocs = entries.getOrDefault(zone.packed, null) ?: return emptySequence()
+        return sequence {
+            val zoneCoords = zone.toCoords()
+            for (entry in zoneLocs.byte2IntEntrySet()) {
+                val key = LocZoneKey(entry.byteKey)
+                val coords = zoneCoords.translate(key.x, key.z)
+                yield(LocInfo(key.layer, coords, LocEntity(entry.intValue)))
+            }
+        }
+    }
+
     /**
      * Should only be used when building large portions of a zone at a time, such as when the game
      * map is first being initialised.

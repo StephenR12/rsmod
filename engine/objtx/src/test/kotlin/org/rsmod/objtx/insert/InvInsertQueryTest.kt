@@ -21,6 +21,26 @@ import org.rsmod.objtx.transaction
 @Execution(ExecutionMode.SAME_THREAD)
 class InvInsertQueryTest {
     @Test
+    fun `insert counted non-stackable obj into one slot`() {
+        val inventory = inv()
+        val slot = 19
+        val transaction = transaction {
+            val inv = select(inventory)
+            insert {
+                into = inv
+                obj = abyssal_whip
+                strictCount = 4
+                strictSlot = slot
+                counted = true
+            }
+        }
+        assertEquals(Obj(abyssal_whip, 4), inventory[slot])
+        assertEquals(1, inventory.occupiedSpace())
+        assertTrue(transaction.success)
+        assertEquals(4, transaction.completed())
+    }
+
+    @Test
     fun `insert non-stackable obj`() {
         val inventory = inv()
         val transaction = transaction {

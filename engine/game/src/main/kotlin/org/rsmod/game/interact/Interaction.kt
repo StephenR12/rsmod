@@ -14,6 +14,7 @@ public sealed class Interaction(
     public val hasOpTrigger: Boolean,
     public val hasApTrigger: Boolean,
     public var apRange: Int,
+    public val apCheckLineOfSight: Boolean = true,
     public var apRangeCalled: Boolean = false,
     public var interacted: Boolean = false,
 ) {
@@ -103,13 +104,13 @@ public class InteractionNpcT(
     startApRange: Int = PathingEntity.DEFAULT_AP_RANGE,
 ) : InteractionNpc(target, hasOpTrigger, hasApTrigger, startApRange)
 
-public class InteractionObj(
+public sealed class InteractionObj(
     public val target: Obj,
-    public val op: InteractionOp,
     hasOpTrigger: Boolean,
     hasApTrigger: Boolean,
     startApRange: Int = PathingEntity.DEFAULT_AP_RANGE,
-) : Interaction(hasOpTrigger, hasApTrigger, startApRange) {
+    apCheckLineOfSight: Boolean = true,
+) : Interaction(hasOpTrigger, hasApTrigger, startApRange, apCheckLineOfSight) {
     override fun toString(): String =
         "InteractionObj(" +
             "target=$target, " +
@@ -120,6 +121,25 @@ public class InteractionObj(
             "interacted=$interacted" +
             ")"
 }
+
+public class InteractionObjOp(
+    public val op: InteractionOp,
+    target: Obj,
+    hasOpTrigger: Boolean,
+    hasApTrigger: Boolean,
+    startApRange: Int = PathingEntity.DEFAULT_AP_RANGE,
+) : InteractionObj(target, hasOpTrigger, hasApTrigger, startApRange)
+
+public class InteractionObjT(
+    public val objType: ObjType?,
+    public val component: ComponentType,
+    public val comsub: Int,
+    target: Obj,
+    hasOpTrigger: Boolean,
+    hasApTrigger: Boolean,
+    startApRange: Int = PathingEntity.DEFAULT_AP_RANGE,
+    apCheckLineOfSight: Boolean = true,
+) : InteractionObj(target, hasOpTrigger, hasApTrigger, startApRange, apCheckLineOfSight)
 
 public sealed class InteractionPlayer(
     public val target: Player,

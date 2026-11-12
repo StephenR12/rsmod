@@ -105,6 +105,8 @@ public class Transaction<T>(
         public var uncert: Boolean = false,
         public var transform: Boolean = false,
         public var untransform: Boolean = false,
+        /** Store the requested count in one slot without treating the obj as globally stackable. */
+        public var counted: Boolean = false,
     ) : TransactionQuery {
         public var count: Int
             get() = preferredCount ?: 0
@@ -170,6 +172,9 @@ public class Transaction<T>(
             if (template != null && vars > 0) {
                 return TransactionResult.VarObjIncorrectlyHasCert
             }
+            if (counted) {
+                return insertCounted(obj, count, capacity)
+            }
             if (vars > 0) {
                 return insertIndividual(obj, count, capacity)
             }
@@ -199,6 +204,27 @@ public class Transaction<T>(
                 return insertStack(obj, count, capacity)
             }
             return insertIndividual(obj, count, capacity)
+        }
+
+        private fun TransactionInventory<T>.insertCounted(
+            obj: Int,
+            count: Int,
+            capacity: Int,
+        ): TransactionResult {
+            if (this@Transaction.isDummyitem(obj)) {
+                return TransactionResult.RestrictedDummyitem
+            }
+            val strictSlot = strictSlot
+            if (strictSlot != null && this[strictSlot] != null) {
+                return TransactionResult.StrictSlotTaken
+            }
+            val emptySlot =
+                indexOfNull(solveSlot, capacity) ?: return TransactionResult.NotEnoughSpace
+            if (capacity != image.size && occupiedSpace() >= capacity) {
+                return TransactionResult.NotEnoughSpace
+            }
+            this[emptySlot] = TransactionObj(obj, count, vars)
+            return TransactionResult.Ok(requested = count, completed = count)
         }
 
         private fun TransactionInventory<T>.insertStack(
@@ -299,6 +325,8 @@ public class Transaction<T>(
         public var strictSlot: Int? = null,
         private var preferredSlot: Int = 0,
         public var placehold: Boolean = false,
+        /** Consume stored counts even when the cache type is not globally stackable. */
+        public var counted: Boolean = false,
     ) : TransactionQuery {
         public var count: Int
             get() = preferredCount ?: 0
@@ -329,6 +357,9 @@ public class Transaction<T>(
         }
 
         private fun TransactionInventory<T>.delete(obj: Int, count: Int): TransactionResult {
+            if (counted) {
+                return deleteCounted(obj, count)
+            }
             if (stackAll) {
                 return deleteStack(obj, count)
             }
@@ -341,6 +372,48 @@ public class Transaction<T>(
                 return deleteStack(obj, count)
             }
             return deleteIndividual(obj, count)
+        }
+
+        private fun TransactionInventory<T>.deleteCounted(obj: Int, count: Int): TransactionResult {
+            val slots = indexesOf(obj, image.size, solveSlot, mutableListOf())
+            if (slots.isEmpty() && isStrictCount) {
+                return TransactionResult.ObjNotFound
+            } else if (strictSlot != null && slots.firstOrNull() != strictSlot) {
+                return TransactionResult.ObjNotFound
+            } else if (slots.isEmpty()) {
+                return TransactionResult.Ok(requested = count, completed = 0)
+            }
+            val available = slots.sumOf { this[it]?.count ?: 0 }
+            if (available < count && isStrictCount) {
+                return TransactionResult.NotEnoughObjCount
+            }
+            var remaining = min(available, count)
+            val completed = remaining
+            for (slot in slots) {
+                if (remaining == 0) {
+                    break
+                }
+                val removeObj =
+                    this[slot]
+                        ?: return TransactionResult.Exception("Unexpected null obj at slot `$slot`")
+                val removeCount = min(removeObj.count, remaining)
+                val newCount = removeObj.count - removeCount
+                this[slot] =
+                    if (newCount > 0) {
+                        removeObj.copy(count = newCount)
+                    } else if (placehold) {
+                        val placeholderTemplate = this@Transaction.placeholderTemplate(obj)
+                        if (placeholderTemplate != null && !placeholderTemplate.isPlaceholder) {
+                            TransactionObj(placeholderTemplate.link)
+                        } else {
+                            null
+                        }
+                    } else {
+                        null
+                    }
+                remaining -= removeCount
+            }
+            return TransactionResult.Ok(requested = count, completed = completed)
         }
 
         private fun TransactionInventory<T>.deleteStack(obj: Int, count: Int): TransactionResult {

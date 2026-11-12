@@ -55,6 +55,7 @@ object Constants {
     const val setting_lit_maxhit_min_threshold = 10
 
     const val overlay_timer_woodcutting: Int = 2
+    const val overlay_timer_mining: Int = 1
 
     const val combat_default_attackrate = 4
     const val combat_pstaff_attackrate = 4

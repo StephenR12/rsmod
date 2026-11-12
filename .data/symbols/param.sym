@@ -13,7 +13,9 @@
 12	ranged_strength
 14	attackrate
 23	levelrequire
+40	saradominitem
 41	zamorakitem
+42	guthixitem
 59	no_bank
 65	npc_magic_damage_bonus
 148	wear_op_index
@@ -168,6 +170,7 @@
 1801	slayer_task_boss_displayname
 1802	slayer_task_boss_location
 1935	spell_maxhit
+2257	bank_autocharge
 
 65386	graceful_restore_rate
 65387	prayer_drain_effect
@@ -302,6 +305,13 @@
 65516	poh_door_east
 65517	poh_door_south
 65518	poh_door_flag
+65519	mining_pickaxe_interval
+65520	mining_success_low
+65521	mining_success_high
+65522	mining_pickaxe_fast_interval_chance
+65523	mining_pickaxe_sote_required
+65524	mining_gem_rock
+65525	woodcutting_clue_nest_base_chance
 65529	game_message
 65530	game_message2
 65531	climb_anim

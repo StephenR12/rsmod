@@ -106,6 +106,19 @@ class PlayerZoneUpdateProcessorTest {
                 )
             locRegistry.add(loc)
 
+            // Store a player-private loc. It must be resent with the spawned world loc when this
+            // zone first enters the player's build area (and after later map rebuilds).
+            val privateLoc =
+                LocInfo(
+                    layer = 0,
+                    coords = startCoords.translate(3, 2),
+                    entity = LocEntity(standardLoc, 10, 0),
+                )
+            val privateZone = ZoneKey.from(privateLoc.coords)
+            val privateGrid = ZoneGrid.from(privateLoc.coords)
+            privateLocs[privateZone, LocZoneKey(privateGrid.x, privateGrid.z, privateLoc.layer)] =
+                privateLoc.entity
+
             // Spawn an obj in obj registry to be sent as a zone update.
             val obj =
                 Obj(
@@ -126,9 +139,9 @@ class PlayerZoneUpdateProcessorTest {
             assertEquals(startZone, lastProcessedZone)
 
             // `processVisibleZoneUpdates`
-            assertEquals(2, captured.count { it is ZoneProt })
-            assertEquals(1, captured.countOf<LocAddChangeV2>())
-            assertEquals(standardLoc, captured.singleMapOf(LocAddChangeV2::id))
+            assertEquals(3, captured.count { it is ZoneProt })
+            assertEquals(2, captured.countOf<LocAddChangeV2>())
+            assertEquals(listOf(standardLoc, standardLoc), captured.mapOf(LocAddChangeV2::id))
             assertEquals(1, captured.countOf<ObjAdd>())
             assertEquals(standardObj, captured.singleMapOf(ObjAdd::id))
 

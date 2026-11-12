@@ -7,10 +7,13 @@ import org.rsmod.api.config.refs.jingles
 import org.rsmod.api.config.refs.midis
 import org.rsmod.api.config.refs.queues
 import org.rsmod.api.config.refs.seqs
+import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
 import org.rsmod.api.player.deathResetTimers
 import org.rsmod.api.player.disablePrayers
+import org.rsmod.api.player.events.PlayerDeathEvent
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.player.vars.intVarBit
 import org.rsmod.api.player.vars.intVarp
 import org.rsmod.game.entity.Player
 import org.rsmod.game.type.stat.StatTypeList
@@ -19,6 +22,7 @@ import org.rsmod.map.CoordGrid
 @Singleton
 public class PlayerDeath @Inject constructor(private val statTypes: StatTypeList) {
     private var Player.specialAttackType by intVarp(varps.sa_attack)
+    private var Player.teleblockCycles by intVarBit(varbits.teleblock_cycles)
 
     public suspend fun death(access: ProtectedAccess) {
         access.deathSequence()
@@ -55,6 +59,7 @@ public class PlayerDeath @Inject constructor(private val statTypes: StatTypeList
             components.toplevel_target_side12,
             components.toplevel_target_side13,
         )
+        publish(PlayerDeathEvent.Completed(player))
     }
 
     private fun ProtectedAccess.resetPlayerState(stats: StatTypeList) {
@@ -62,6 +67,7 @@ public class PlayerDeath @Inject constructor(private val statTypes: StatTypeList
         player.deathResetTimers()
 
         player.specialAttackType = 0
+        player.teleblockCycles = 0
         player.skullIcon = null
 
         rebuildAppearance()

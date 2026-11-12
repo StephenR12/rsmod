@@ -7,6 +7,24 @@ import org.rsmod.api.type.builders.varobjbit.VarObjBitBuilder
 typealias varobjs = BaseVarObjBits
 
 object BaseVarObjBits : VarObjBitBuilder() {
+    val blood_essence_charges =
+        build("blood_essence_charges") {
+            startBit = 0
+            endBit = 9
+        }
+
+    val gnomish_firelighter_charges =
+        build("gnomish_firelighter_charges") {
+            startBit = 0
+            endBit = 9
+        }
+
+    val gnomish_firelighter_colour =
+        build("gnomish_firelighter_colour") {
+            startBit = 10
+            endBit = 12
+        }
+
     val charges_16383 =
         build("charges_16383") {
             startBit = 0
@@ -19,17 +37,41 @@ object BaseVarObjBits : VarObjBitBuilder() {
             endBit = 14
         }
 
+    val tome_of_water_charges =
+        build("tome_of_water_charges") {
+            startBit = 0
+            endBit = 14
+        }
+
     val stamina_charges =
         build("stamina_charges") {
             startBit = 0
             endBit = 10
         }
 
-    val snakeboss_blowpipe_darrtype =
+    val infernal_tool_charges =
+        build("infernal_tool_charges") {
+            startBit = 0
+            endBit = 12
+        }
+
+    val crystal_tool_charges =
+        build("crystal_tool_charges") {
+            startBit = 0
+            endBit = 14
+        }
+
+    val snakeboss_blowpipe_darttype =
         build("snakeboss_blowpipe_darttype") {
             startBit = 0
             endBit = 3
         }
+
+    @Deprecated(
+        message = "Use snakeboss_blowpipe_darttype.",
+        replaceWith = ReplaceWith("snakeboss_blowpipe_darttype"),
+    )
+    val snakeboss_blowpipe_darrtype = snakeboss_blowpipe_darttype
 
     val snakeboss_blowpipe_dartcount =
         build("snakeboss_blowpipe_dartcount") {

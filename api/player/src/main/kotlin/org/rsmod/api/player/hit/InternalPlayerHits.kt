@@ -3,6 +3,7 @@ package org.rsmod.api.player.hit
 import kotlin.math.max
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.hitmark_groups
+import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
 import org.rsmod.api.player.righthand
@@ -37,6 +38,8 @@ internal object InternalPlayerHits {
             sourceUid = source.uid.packed,
             sourceNpcSlot = source.slotId,
             sourcePlayerSlot = null,
+            sourceIsDemon = source.type.param(params.demon) != 0,
+            successful = damage > 0,
             clientDelay = clientDelay,
             isPrivateHit = specific,
         )
@@ -47,6 +50,7 @@ internal object InternalPlayerHits {
         source: Player,
         type: HitType,
         damage: Int,
+        successful: Boolean,
         secondaryObj: ObjType?,
         hitmark: HitmarkTypeGroup,
         clientDelay: Int,
@@ -68,6 +72,8 @@ internal object InternalPlayerHits {
             sourceUid = source.uid.packed,
             sourceNpcSlot = null,
             sourcePlayerSlot = source.slotId,
+            sourceIsDemon = false,
+            successful = successful,
             clientDelay = clientDelay,
             isPrivateHit = specific,
         )
@@ -95,6 +101,8 @@ internal object InternalPlayerHits {
             sourceUid = null,
             sourceNpcSlot = null,
             sourcePlayerSlot = null,
+            sourceIsDemon = false,
+            successful = damage > 0,
             clientDelay = clientDelay,
             isPrivateHit = specific,
         )
@@ -111,6 +119,8 @@ internal object InternalPlayerHits {
         sourceUid: Int?,
         sourceNpcSlot: Int?,
         sourcePlayerSlot: Int?,
+        sourceIsDemon: Boolean,
+        successful: Boolean,
         clientDelay: Int,
         isPrivateHit: Boolean,
     ): HitBuilder {
@@ -128,6 +138,8 @@ internal object InternalPlayerHits {
             sourceSlot = sourcePlayerSlot ?: sourceNpcSlot,
             isFromNpc = sourceNpcSlot != null,
             isFromPlayer = sourcePlayerSlot != null,
+            sourceIsDemon = sourceIsDemon,
+            successful = successful,
             clientDelay = clientDelay,
             righthandType = righthandObj,
             secondaryType = secondaryObj,

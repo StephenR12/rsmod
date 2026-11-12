@@ -36,6 +36,21 @@ public fun Npc.opPlayer5(target: Player, interactions: AiPlayerInteractions) {
     interactions.interactOp(this, target, InteractionOp.Op5)
 }
 
+public fun Npc.opPlayer6(target: Player, interactions: AiPlayerInteractions) {
+    opMode(NpcMode.OpPlayer6)
+    interactions.interactOp(this, target, InteractionOp.Op6)
+}
+
+public fun Npc.opPlayer7(target: Player, interactions: AiPlayerInteractions) {
+    opMode(NpcMode.OpPlayer7)
+    interactions.interactOp(this, target, InteractionOp.Op7)
+}
+
+public fun Npc.opPlayer8(target: Player, interactions: AiPlayerInteractions) {
+    opMode(NpcMode.OpPlayer8)
+    interactions.interactOp(this, target, InteractionOp.Op8)
+}
+
 public fun Npc.apPlayer1(target: Player, interactions: AiPlayerInteractions) {
     opMode(NpcMode.ApPlayer1)
     interactions.interactAp(this, target, InteractionOp.Op1)
@@ -59,6 +74,21 @@ public fun Npc.apPlayer4(target: Player, interactions: AiPlayerInteractions) {
 public fun Npc.apPlayer5(target: Player, interactions: AiPlayerInteractions) {
     opMode(NpcMode.ApPlayer5)
     interactions.interactAp(this, target, InteractionOp.Op5)
+}
+
+public fun Npc.apPlayer6(target: Player, interactions: AiPlayerInteractions) {
+    opMode(NpcMode.ApPlayer6)
+    interactions.interactAp(this, target, InteractionOp.Op6)
+}
+
+public fun Npc.apPlayer7(target: Player, interactions: AiPlayerInteractions) {
+    opMode(NpcMode.ApPlayer7)
+    interactions.interactAp(this, target, InteractionOp.Op7)
+}
+
+public fun Npc.apPlayer8(target: Player, interactions: AiPlayerInteractions) {
+    opMode(NpcMode.ApPlayer8)
+    interactions.interactAp(this, target, InteractionOp.Op8)
 }
 
 public fun Npc.opNpc1(target: Npc, interactions: AiNpcInteractions) {
@@ -207,7 +237,7 @@ public fun Npc.apObj4(target: Obj, interactions: AiObjInteractions) {
 }
 
 public fun Npc.apObj5(target: Obj, interactions: AiObjInteractions) {
-    opMode(NpcMode.ApLoc5)
+    opMode(NpcMode.ApObj5)
     interactions.interactAp(this, target, InteractionOp.Op5)
 }
 

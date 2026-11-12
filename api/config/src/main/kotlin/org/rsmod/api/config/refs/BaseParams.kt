@@ -6,6 +6,7 @@ import org.rsmod.api.config.aliases.ParamBool
 import org.rsmod.api.config.aliases.ParamCategory
 import org.rsmod.api.config.aliases.ParamComponent
 import org.rsmod.api.config.aliases.ParamCoord
+import org.rsmod.api.config.aliases.ParamDbRow
 import org.rsmod.api.config.aliases.ParamHeadbar
 import org.rsmod.api.config.aliases.ParamHitmark
 import org.rsmod.api.config.aliases.ParamInt
@@ -35,6 +36,7 @@ object BaseParams : ParamReferences() {
     val spell_name: ParamStr = find("spell_name", 18275894384405)
     val spell_levelreq: ParamInt = find("spell_levelreq", 88687215086)
     val spell_type: ParamInt = find("spell_type", 88673369246)
+    val spell_membersonly: ParamBool = find("spell_membersonly")
     val spell_runetype_4: ParamObj = find("spell_runetype_4", 93740947053)
     val spell_runecount_4: ParamInt = find("spell_runecount_4", 88687215089)
     val spell_drain_stat: ParamStat = find("spell_drain_stat", 70092251206)
@@ -51,6 +53,7 @@ object BaseParams : ParamReferences() {
     val wear_op7: ParamStr = find("wear_op7", 97133155623)
     val wear_op8: ParamStr = find("wear_op8", 97133155624)
     val bankside_extraop: ParamStr = find("bankside_extraop", 97133155761)
+    val bank_autocharge: ParamDbRow = find("bank_autocharge")
     val statreq1_skill: ParamStat = find("statreq1_skill", 70092228127)
     val statreq1_level: ParamInt = find("statreq1_level", 88687192592)
     val statreq2_skill: ParamStat = find("statreq2_skill", 70092228128)
@@ -81,6 +84,9 @@ object BaseParams : ParamReferences() {
     val magic_damage: ParamInt = find("magic_damage", 88687192455)
     val npc_magic_damage_bonus: ParamInt = find("npc_magic_damage_bonus", 88687192221)
     val item_prayer_bonus: ParamInt = find("item_prayer_bonus", 88687192167)
+    val saradominitem: ParamInt = find("saradominitem")
+    val zamorakitem: ParamInt = find("zamorakitem")
+    val guthixitem: ParamInt = find("guthixitem")
     val draconic: ParamInt = find("draconic", 88687192346)
     val golem: ParamInt = find("golem", 88687193334)
     val kalphite: ParamInt = find("kalphite", 88687193509)
@@ -102,6 +108,7 @@ object BaseParams : ParamReferences() {
     val freeze_resistance: ParamInt = find("freeze_resistance")
     val slayer_experience: ParamInt = find("slayer_experience")
     val slayer_levelrequire: ParamInt = find("slayer_levelrequire")
+    val slayer_category: ParamCategory = find("slayer_category")
     val magic_defence_uses_defence_level: ParamBool = find("magic_defence_uses_defence_level")
     val spell_worn_req_message: ParamStr = find("spell_worn_req_message")
     val elemental_weakness_type: ParamInt = find("elemental_weakness_type")
@@ -143,6 +150,7 @@ object BaseParams : ParamReferences() {
     val hitmark_max: ParamHitmark = find("hitmark_max")
     val headbar: ParamHeadbar = find("headbar")
     val rewarditem: ParamObj = find("rewarditem")
+    val spell_parent_obj: ParamObj = find("spell_parent_obj")
     val next_npc_stage: ParamNpc = find("next_npc_stage")
     val bankside_extraop_flip: ParamBool = find("bankside_extraop_conditional_flip")
     val bankside_extraop_varbit: ParamVarBit = find("bankside_extraop_conditional_varbit")

@@ -28,6 +28,18 @@ public fun ScriptContext.onOpPlayer5(
     action: suspend ProtectedAccess.(PlayerEvents.Op5) -> Unit
 ): Unit = onProtectedEvent<PlayerEvents.Op5>(OpDefaultEvent.ID, action)
 
+public fun ScriptContext.onOpPlayer6(
+    action: suspend ProtectedAccess.(PlayerEvents.Op6) -> Unit
+): Unit = onProtectedEvent<PlayerEvents.Op6>(OpDefaultEvent.ID, action)
+
+public fun ScriptContext.onOpPlayer7(
+    action: suspend ProtectedAccess.(PlayerEvents.Op7) -> Unit
+): Unit = onProtectedEvent<PlayerEvents.Op7>(OpDefaultEvent.ID, action)
+
+public fun ScriptContext.onOpPlayer8(
+    action: suspend ProtectedAccess.(PlayerEvents.Op8) -> Unit
+): Unit = onProtectedEvent<PlayerEvents.Op8>(OpDefaultEvent.ID, action)
+
 /* Ap functions */
 public fun ScriptContext.onApPlayer1(
     action: suspend ProtectedAccess.(PlayerEvents.Ap1) -> Unit
@@ -48,3 +60,15 @@ public fun ScriptContext.onApPlayer4(
 public fun ScriptContext.onApPlayer5(
     action: suspend ProtectedAccess.(PlayerEvents.Ap5) -> Unit
 ): Unit = onProtectedEvent<PlayerEvents.Ap5>(ApDefaultEvent.ID, action)
+
+public fun ScriptContext.onApPlayer6(
+    action: suspend ProtectedAccess.(PlayerEvents.Ap6) -> Unit
+): Unit = onProtectedEvent<PlayerEvents.Ap6>(ApDefaultEvent.ID, action)
+
+public fun ScriptContext.onApPlayer7(
+    action: suspend ProtectedAccess.(PlayerEvents.Ap7) -> Unit
+): Unit = onProtectedEvent<PlayerEvents.Ap7>(ApDefaultEvent.ID, action)
+
+public fun ScriptContext.onApPlayer8(
+    action: suspend ProtectedAccess.(PlayerEvents.Ap8) -> Unit
+): Unit = onProtectedEvent<PlayerEvents.Ap8>(ApDefaultEvent.ID, action)

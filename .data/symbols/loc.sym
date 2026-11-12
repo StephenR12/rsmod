@@ -57688,3 +57688,15 @@
 57687	shutterwindow_offset
 57688	shutterwindow3_offset
 57689	bathmirror_small
+57703	diary_waterfall_rope_rock
+57704	diary_waterfall_rope_rock_noop
+57705	diary_waterfall_rope_rock_op
+57706	diary_waterfall_rope_tree
+57707	diary_waterfall_rope_tree_noop
+57708	diary_waterfall_rope_tree_op
+57709	fenk_bridgespan
+57710	fenk_bridgebroken_mirror
+57711	fenk_bridge_build
+57712	fenk_bridge_build_mirror
+57713	fenk_bridge_repaired
+57714	fenk_bridge_repaired_mirror

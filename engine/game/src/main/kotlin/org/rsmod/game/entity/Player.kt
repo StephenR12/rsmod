@@ -25,6 +25,7 @@ import org.rsmod.game.hero.HeroPoints
 import org.rsmod.game.hit.Hitmark
 import org.rsmod.game.inv.Inventory
 import org.rsmod.game.inv.InventoryMap
+import org.rsmod.game.map.ZoneLocMap
 import org.rsmod.game.movement.MoveSpeed
 import org.rsmod.game.queue.EngineQueueList
 import org.rsmod.game.queue.EngineQueueType
@@ -164,6 +165,8 @@ public class Player(
     public var followCoord: CoordGrid = CoordGrid.NULL
     public var buildArea: CoordGrid = CoordGrid.NULL
     public val visibleZoneKeys: IntList = IntArrayList()
+    /** Per-player location overrides that are re-sent whenever their zones enter view. */
+    public val privateLocs: ZoneLocMap = ZoneLocMap()
     public var lastMapBuildComplete: Int = Int.MIN_VALUE
 
     public val activeAreas: ShortArraySet = ShortArraySet()
@@ -172,6 +175,9 @@ public class Player(
 
     public var runEnergy: Int = 1000
     public var runWeight: Int = 0
+
+    /** Map clock before which running steps must not consume run energy. */
+    public var runEnergyDrainBlockedUntil: Int = Int.MIN_VALUE
 
     /**
      * The player's current mod level.
@@ -212,6 +218,7 @@ public class Player(
     public lateinit var inv: Inventory
     public lateinit var worn: Inventory
 
+    public var createdAt: LocalDateTime = LocalDateTime.now()
     public var lastLogin: LocalDateTime = LocalDateTime.now()
 
     /*

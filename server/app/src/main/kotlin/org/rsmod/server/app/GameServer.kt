@@ -33,6 +33,7 @@ import org.rsmod.game.type.TypeListMap
 import org.rsmod.plugin.module.PluginModule
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
+import org.rsmod.server.install.CacheDownloadStaging
 import org.rsmod.server.install.GameNetworkRsaGenerator
 import org.rsmod.server.install.GameServerCachePacker
 import org.rsmod.server.install.GameServerInstall
@@ -293,6 +294,10 @@ class GameServer(private val skipTypeVerificationOverride: Boolean? = null) :
      * appropriate installation tasks are run before resuming the normal game app boot-up.
      */
     private fun ensureProperInstallation() {
+        CacheDownloadStaging.recoverInterruptedPromotion(
+            vanillaCacheDir,
+            DirectoryConstants.CACHE_PATH.resolve("xteas.json"),
+        )
         val gameCacheDirExists = gameCacheDir.isDirectory()
         val vanillaCacheDirExists = vanillaCacheDir.isDirectory()
         val validRsaKey = rsaKey.isRegularFile()

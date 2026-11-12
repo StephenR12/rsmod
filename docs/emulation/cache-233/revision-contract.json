@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "game": "oldschool",
+  "environment": "live",
+  "language": "en",
+  "major": 233,
+  "finalSubrevision": "233.4",
+  "cache": {
+    "provider": "OpenRS2",
+    "archive": 2317,
+    "capturedAt": "2025-10-01T10:45:07.114859Z",
+    "catalogUrl": "https://archive.openrs2.org/caches/runescape/2317",
+    "diskUrl": "https://archive.openrs2.org/caches/runescape/2317/disk.zip",
+    "keysUrl": "https://archive.openrs2.org/caches/runescape/2317/keys.json",
+    "groups": 116016,
+    "fileIdentities": 640720,
+    "nonEmptyArchiveIndexes": 23,
+    "manifest": ".data/audit/cache-233.4-archive-index-manifest.json",
+    "manifestSha256": "26ef85c11abc5a056df60c9cbc264f031e442ae2d455d49e1a5fa33c295227ae",
+    "xteaRecords": 2266,
+    "xteaSha256": "78a4b5a47254c796aff994d1900d34c78a8486bb1cfdb3d5384b6b49b1c686db"
+  },
+  "protocol": {
+    "version": "1.0.0-ALPHA-20250909",
+    "apiModule": "net.rsprot:osrs-233-api",
+    "sharedModule": "net.rsprot:osrs-233-shared"
+  }
+}

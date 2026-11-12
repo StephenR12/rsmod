@@ -42,6 +42,21 @@ public fun ScriptContext.onAiOpPlayer5(
     action: suspend StandardNpcAccess.(AiPlayerEvents.Op5) -> Unit,
 ): Unit = onNpcAccessEvent(npc.id, action)
 
+public fun ScriptContext.onAiOpPlayer6(
+    npc: NpcType,
+    action: suspend StandardNpcAccess.(AiPlayerEvents.Op6) -> Unit,
+): Unit = onNpcAccessEvent(npc.id, action)
+
+public fun ScriptContext.onAiOpPlayer7(
+    npc: NpcType,
+    action: suspend StandardNpcAccess.(AiPlayerEvents.Op7) -> Unit,
+): Unit = onNpcAccessEvent(npc.id, action)
+
+public fun ScriptContext.onAiOpPlayer8(
+    npc: NpcType,
+    action: suspend StandardNpcAccess.(AiPlayerEvents.Op8) -> Unit,
+): Unit = onNpcAccessEvent(npc.id, action)
+
 /* Player ap functions */
 public fun ScriptContext.onAiApPlayer1(
     npc: NpcType,
@@ -66,4 +81,19 @@ public fun ScriptContext.onAiApPlayer4(
 public fun ScriptContext.onAiApPlayer5(
     npc: NpcType,
     action: suspend StandardNpcAccess.(AiPlayerEvents.Ap5) -> Unit,
+): Unit = onNpcAccessEvent(npc.id, action)
+
+public fun ScriptContext.onAiApPlayer6(
+    npc: NpcType,
+    action: suspend StandardNpcAccess.(AiPlayerEvents.Ap6) -> Unit,
+): Unit = onNpcAccessEvent(npc.id, action)
+
+public fun ScriptContext.onAiApPlayer7(
+    npc: NpcType,
+    action: suspend StandardNpcAccess.(AiPlayerEvents.Ap7) -> Unit,
+): Unit = onNpcAccessEvent(npc.id, action)
+
+public fun ScriptContext.onAiApPlayer8(
+    npc: NpcType,
+    action: suspend StandardNpcAccess.(AiPlayerEvents.Ap8) -> Unit,
 ): Unit = onNpcAccessEvent(npc.id, action)

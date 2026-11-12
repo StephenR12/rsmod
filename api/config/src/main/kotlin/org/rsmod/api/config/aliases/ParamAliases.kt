@@ -2,6 +2,7 @@ package org.rsmod.api.config.aliases
 
 import org.rsmod.game.type.category.CategoryType
 import org.rsmod.game.type.comp.ComponentType
+import org.rsmod.game.type.dbrow.DbRowType
 import org.rsmod.game.type.headbar.HeadbarType
 import org.rsmod.game.type.hitmark.HitmarkType
 import org.rsmod.game.type.loc.LocType
@@ -29,6 +30,8 @@ typealias ParamCategory = ParamType<CategoryType>
 typealias ParamComponent = ParamType<ComponentType>
 
 typealias ParamCoord = ParamType<CoordGrid>
+
+typealias ParamDbRow = ParamType<DbRowType>
 
 typealias ParamHeadbar = ParamType<HeadbarType>
 

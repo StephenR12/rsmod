@@ -4,17 +4,23 @@ import jakarta.inject.Inject
 import kotlin.math.max
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.categories
+import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
+import org.rsmod.api.config.refs.varobjs
 import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.back
+import org.rsmod.api.player.front
 import org.rsmod.api.player.hands
 import org.rsmod.api.player.hat
 import org.rsmod.api.player.legs
+import org.rsmod.api.player.quiver
 import org.rsmod.api.player.righthand
 import org.rsmod.api.player.torso
 import org.rsmod.api.player.worn.EquipmentChecks
 import org.rsmod.game.entity.Player
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.obj.Wearpos
+import org.rsmod.utils.bits.getBits
 
 public class WornBonuses @Inject constructor(private val objTypes: ObjTypeList) {
     public fun strengthBonus(player: Player): Int {
@@ -43,6 +49,18 @@ public class WornBonuses @Inject constructor(private val objTypes: ObjTypeList) 
         return bonuses.magicDmg
     }
 
+    /** Resolves conditional damage bonuses that apply only to Ancient Magicks combat spells. */
+    public fun magicDamageBonusForSpell(player: Player, ancientSpell: Boolean): Int {
+        var bonus = magicDamageBonusBase(player)
+        if (!ancientSpell) {
+            return bonus
+        }
+        if (EquipmentChecks.isVirtusMask(player.hat)) bonus += VIRTUS_ANCIENT_BONUS
+        if (EquipmentChecks.isVirtusRobeTop(player.torso)) bonus += VIRTUS_ANCIENT_BONUS
+        if (EquipmentChecks.isVirtusRobeBottom(player.legs)) bonus += VIRTUS_ANCIENT_BONUS
+        return bonus
+    }
+
     public fun offensiveStabBonus(player: Player): Int {
         val bonuses = calculate(player)
         return bonuses.offStab
@@ -63,8 +81,8 @@ public class WornBonuses @Inject constructor(private val objTypes: ObjTypeList) 
         return bonuses.offRange
     }
 
-    public fun offensiveMagicBonus(player: Player): Int {
-        val bonuses = calculate(player)
+    public fun offensiveMagicBonus(player: Player, shadowMultiplier: Int = 3): Int {
+        val bonuses = calculate(player, shadowMultiplier)
         return bonuses.offMagic
     }
 
@@ -98,7 +116,10 @@ public class WornBonuses @Inject constructor(private val objTypes: ObjTypeList) 
         return bonuses.prayer
     }
 
-    public fun calculate(player: Player): Bonuses {
+    public fun calculate(player: Player, shadowMultiplier: Int = 3): Bonuses {
+        require(shadowMultiplier == 3 || shadowMultiplier == 4) {
+            "Tumeken's shadow multiplier must be 3 or 4: $shadowMultiplier"
+        }
         var offStab = 0
         var offSlash = 0
         var offCrush = 0
@@ -151,16 +172,23 @@ public class WornBonuses @Inject constructor(private val objTypes: ObjTypeList) 
             prayer += type.param(params.item_prayer_bonus)
             undead += type.param(params.bonus_undead_buff)
             slayer += type.param(params.bonus_slayer_buff)
-            undeadMeleeOnly = type.param(params.bonus_undead_meleeonly)
-            slayerMeleeOnly = type.param(params.bonus_slayer_meleeonly)
+            undeadMeleeOnly = undeadMeleeOnly || type.param(params.bonus_undead_meleeonly)
+            slayerMeleeOnly = slayerMeleeOnly || type.param(params.bonus_slayer_meleeonly)
         }
 
-        // TODO: Apply toxic blowpipe dart bonuses.
+        if (weapon != null && EquipmentChecks.isToxicBlowpipe(player.righthand)) {
+            val dartCode = player.righthand?.vars?.getBits(varobjs.snakeboss_blowpipe_darttype.bits)
+            val dart = dartCode?.let(::blowpipeDart)
+            if (dart != null) {
+                val dartType = objTypes[dart]
+                offRange += dartType.param(params.attack_ranged)
+                rangedStr += dartType.param(params.ranged_strength)
+                rangedStr += dartType.param(params.additive_ranged_strength)
+            }
+        }
 
         if (EquipmentChecks.isTumekensShadow(player.righthand)) {
-            // TODO: 4.0 while in tombs of amascut. This is purely for the visual bonus, the actual
-            //  combat formula should use a separate resolved multiplier that matches.
-            val multiplier = 3.0
+            val multiplier = shadowMultiplier.toDouble()
             magicDmgMultiplier = multiplier
 
             // Note: Multiplying `offMagic` here means it will affect magic accuracy even in pvp.
@@ -196,9 +224,21 @@ public class WornBonuses @Inject constructor(private val objTypes: ObjTypeList) 
             magicDmg += 50
         }
 
-        // TODO: +10 off ranged and +1 ranged str with dizana's quiver.
-        //  Verify if this is visible in equipment bonus interface. If it's not then it can be
-        //  handled purely in combat formulae and not here.
+        if (
+            player.front?.id == objs.amulet_of_the_damned_full.id &&
+                EquipmentChecks.isVeracSet(player.hat, player.torso, player.legs, player.righthand)
+        ) {
+            prayer += 7
+        }
+
+        val ammunition = objTypes.getOrNull(player.quiver)
+        val firesArrowOrBolt =
+            ammunition?.isCategoryType(categories.arrows) == true ||
+                ammunition?.isCategoryType(categories.crossbow_bolt) == true
+        if (firesArrowOrBolt && EquipmentChecks.isDizanasQuiver(player.back)) {
+            offRange += 10
+            rangedStr += 1
+        }
 
         return Bonuses(
             offStab = offStab,
@@ -254,5 +294,24 @@ public class WornBonuses @Inject constructor(private val objTypes: ObjTypeList) 
     ) {
         val multipliedMagicDmg: Int
             get() = magicDmg * (magicDmgMultiplier / 10)
+    }
+
+    private companion object {
+        // Obj params already contribute each piece's visible 2%; Ancient spells gain 3% more.
+        const val VIRTUS_ANCIENT_BONUS = 30
+
+        fun blowpipeDart(storageCode: Int): org.rsmod.game.type.obj.ObjType? =
+            when (storageCode) {
+                1 -> objs.bronze_dart
+                2 -> objs.iron_dart
+                3 -> objs.steel_dart
+                4 -> objs.mithril_dart
+                5 -> objs.adamant_dart
+                6 -> objs.rune_dart
+                7 -> objs.dragon_dart
+                8 -> objs.black_dart
+                9 -> objs.amethyst_dart
+                else -> null
+            }
     }
 }

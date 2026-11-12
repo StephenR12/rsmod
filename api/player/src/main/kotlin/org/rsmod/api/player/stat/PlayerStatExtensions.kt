@@ -94,7 +94,10 @@ public fun Player.statAdd(stat: StatType, constant: Int, percent: Int) {
 
     val base = statBase(stat)
     val current = stat(stat)
-    val calculated = current + (constant + (base * percent) / 100)
+    val addition = constant + (base * percent) / 100
+    val modifiedAddition =
+        if (stat.isType(stats.hitpoints)) modifyIncomingHealing(addition) else addition
+    val calculated = current + modifiedAddition
     val cappedLevel = min(255, calculated)
 
     statMap.setCurrentLevel(stat, cappedLevel.toByte())
@@ -238,7 +241,10 @@ public fun Player.statHeal(stat: StatType, constant: Int, percent: Int) {
 
     val base = statBase(stat)
     val current = stat(stat)
-    val calculated = current + (constant + (base * percent) / 100)
+    val addition = constant + (base * percent) / 100
+    val modifiedAddition =
+        if (stat.isType(stats.hitpoints)) modifyIncomingHealing(addition) else addition
+    val calculated = current + modifiedAddition
     val cappedLevel = calculated.coerceIn(current, base)
 
     statMap.setCurrentLevel(stat, cappedLevel.toByte())

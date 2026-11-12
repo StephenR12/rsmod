@@ -33,6 +33,8 @@ import org.rsmod.api.player.cinematic.Cinematic
 import org.rsmod.api.player.cinematic.MinimapState
 import org.rsmod.api.player.combatClearQueue
 import org.rsmod.api.player.dialogue.Dialogue
+import org.rsmod.api.player.events.ObjTradeEvents
+import org.rsmod.api.player.events.PlayerActionEvent
 import org.rsmod.api.player.hit.modifier.NoopPlayerHitModifier
 import org.rsmod.api.player.hit.modifier.PlayerHitModifier
 import org.rsmod.api.player.hit.modifier.StandardPlayerHitModifier
@@ -110,6 +112,7 @@ import org.rsmod.api.player.ui.ifSetNpcHead
 import org.rsmod.api.player.ui.ifSetObj
 import org.rsmod.api.player.ui.ifSetPlayerHead
 import org.rsmod.api.player.ui.ifSetText
+import org.rsmod.api.player.ui.ifSkillMulti
 import org.rsmod.api.player.vars.VarPlayerIntMapDelegate
 import org.rsmod.api.player.vars.resyncVar
 import org.rsmod.api.player.vars.setActiveMoveSpeed
@@ -2030,6 +2033,47 @@ public class ProtectedAccess(
     public suspend fun pauseButton(): ResumePauseButtonInput = await(ResumePauseButtonInput::class)
 
     /**
+     * Opens the cache's generic multi-product quantity chooser and waits for a valid selection.
+     *
+     * The returned component identifies the selected product and
+     * [ResumePauseButtonInput.subcomponent] contains the selected quantity.
+     */
+    public suspend fun skillMulti(
+        title: String,
+        choices: List<ObjType>,
+        maxQuantity: Int,
+        initialQuantity: Int = 1,
+        actionMode: Int,
+    ): ResumePauseButtonInput {
+        player.ifSkillMulti(
+            title,
+            actionMode,
+            maxQuantity,
+            initialQuantity,
+            choices,
+            context.eventBus,
+        )
+        val expectedModal = player.ui.getModalOrNull(components.chatbox_chatmodal)
+        val input = coroutine.pause(ResumePauseButtonInput::class)
+        val expectedButtons = skillMultiButtons.take(choices.size)
+        if (expectedButtons.none { it.isType(input.component) }) {
+            logger.debug {
+                "Protected-access was lost due to unexpected skill-multi component: " +
+                    "player=$player, received=${input.component.internalName ?: input.component}"
+            }
+            throw ProtectedAccessLostException()
+        }
+        if (input.subcomponent !in 1..maxQuantity) {
+            logger.debug {
+                "Protected-access was lost due to unexpected skill-multi quantity: " +
+                    "player=$player, received=${input.subcomponent}, expected=1..$maxQuantity"
+            }
+            throw ProtectedAccessLostException()
+        }
+        return resumeWithModalProtectedAccess(input, expectedModal, components.chatbox_chatmodal)
+    }
+
+    /**
      * @throws ProtectedAccessLostException if the player could not retain protected access after
      *   the coroutine suspension.
      * @see [resumePauseButtonWithProtectedAccess]
@@ -2968,6 +3012,22 @@ public class ProtectedAccess(
         return returnWithProtectedAccess
     }
 
+    private companion object {
+        val skillMultiButtons =
+            listOf(
+                components.skillmulti_a,
+                components.skillmulti_b,
+                components.skillmulti_c,
+                components.skillmulti_d,
+                components.skillmulti_e,
+                components.skillmulti_f,
+                components.skillmulti_g,
+                components.skillmulti_h,
+                components.skillmulti_i,
+                components.skillmulti_j,
+            )
+    }
+
     /**
      * Helper function that calls [resumeWithModalProtectedAccess] with the `modalTarget` set to
      * `components.main_modal`.
@@ -3468,7 +3528,13 @@ public class ProtectedAccess(
     }
 
     public fun ocTradable(obj: InvObj): Boolean {
-        return context.objTypes[obj].tradeable
+        val type = context.objTypes[obj]
+        if (!type.tradeable) {
+            return false
+        }
+        val query = ObjTradeEvents.Query(player, obj, type)
+        context.eventBus.publish(query)
+        return !query.denied
     }
 
     public fun ocCategory(type: UnpackedObjType?, catTypes: CategoryTypeList): CategoryType? {
@@ -3583,6 +3649,7 @@ private fun UnpackedMesAnimType.splitGetAnim(lines: Int) =
  */
 public fun Player.clearPendingAction(eventBus: EventBus) {
     check(!isDelayed) { "`clearpendingaction` should never be called while player is delayed." }
+    eventBus.publish(PlayerActionEvent.Interrupt(this))
     ifClose(eventBus)
     cancelActiveCoroutine()
     clearInteraction()

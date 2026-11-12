@@ -7,11 +7,16 @@ import org.rsmod.api.db.DatabaseConnection
 import org.rsmod.api.db.util.getStringOrNull
 import org.rsmod.api.parsers.json.Json
 import org.rsmod.api.realm.RealmConfig
+import org.rsmod.api.server.config.ServerConfig
 import org.rsmod.map.CoordGrid
 
 public class RealmConfigLoader
 @Inject
-constructor(private val database: Database, @Json private val objectMapper: ObjectMapper) {
+constructor(
+    private val database: Database,
+    private val serverConfig: ServerConfig,
+    @Json private val objectMapper: ObjectMapper,
+) {
     public suspend fun load(realm: String): RealmConfig? {
         return database.withTransaction { connection -> loadRealm(connection, realm) }
     }
@@ -20,16 +25,19 @@ constructor(private val database: Database, @Json private val objectMapper: Obje
         val select =
             connection.prepareStatement(
                 """
-                    SELECT id, login_message, login_broadcast, spawn_coord, respawn_coord,
+                    SELECT realms.id, login_message, login_broadcast, spawn_coord, respawn_coord,
                         dev_mode, require_registration, ignore_passwords, auto_assign_display_names,
-                        player_xp_rate_in_hundreds, global_xp_rate_in_hundreds
-                        FROM realms WHERE name = ?
+                        player_xp_rate_in_hundreds, global_xp_rate_in_hundreds, worlds.flags
+                        FROM realms
+                        JOIN worlds ON worlds.id = ?
+                        WHERE realms.name = ?
                 """
                     .trimIndent()
             )
 
         select.use {
-            it.setString(1, name)
+            it.setInt(1, serverConfig.world)
+            it.setString(2, name)
             it.executeQuery().use { resultSet ->
                 if (resultSet.next()) {
                     val id = resultSet.getInt("id")
@@ -43,6 +51,7 @@ constructor(private val database: Database, @Json private val objectMapper: Obje
                     val requireRegistration = resultSet.getBoolean("require_registration")
                     val ignorePasswords = resultSet.getBoolean("ignore_passwords")
                     val autoAssignDisplayNames = resultSet.getBoolean("auto_assign_display_names")
+                    val worldFlags = resultSet.getInt("flags")
                     return RealmConfig(
                         id = id,
                         loginMessage = loginMessage,
@@ -55,6 +64,7 @@ constructor(private val database: Database, @Json private val objectMapper: Obje
                         requireRegistration = requireRegistration,
                         ignorePasswords = ignorePasswords,
                         autoAssignDisplayNames = autoAssignDisplayNames,
+                        worldFlags = worldFlags,
                     )
                 }
             }

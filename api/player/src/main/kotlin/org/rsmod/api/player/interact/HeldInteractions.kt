@@ -413,7 +413,12 @@ constructor(
         obj: InvObj,
         type: UnpackedObjType,
     ) {
-        val dropped = invDropSlot(objRepo, inventory, dropSlot)
+        val prepare = HeldDropEvents.Prepare(this, dropSlot, obj, type)
+        eventBus.publish(prepare)
+        require(prepare.groundObj.count == obj.count) {
+            "Prepared ground obj must preserve the selected count: selected=$obj, prepared=${prepare.groundObj}"
+        }
+        val dropped = invDropSlot(objRepo, inventory, dropSlot, groundObj = prepare.groundObj)
         if (!dropped) {
             return
         }
@@ -462,12 +467,14 @@ constructor(
         repo: ObjRepository,
         inventory: Inventory,
         slot: Int,
+        groundObj: InvObj? = null,
         count: Int = Int.MAX_VALUE,
         duration: Int = this.lootDropDuration ?: constants.lootdrop_duration,
         reveal: Int = ObjRepository.DEFAULT_REVEAL_DELAY,
         coords: CoordGrid = this.coords,
     ): Boolean {
         val invObj = inventory[slot] ?: return false
+        val prepared = groundObj ?: invObj
         val cappedCount = min(invObj.count, count)
         if (cappedCount <= 0) {
             return false
@@ -480,8 +487,12 @@ constructor(
 
         val observer = observerUUID ?: error("`observerUUID` not set for player: $this")
         val entity =
-            ObjEntity(id = invObj.id, count = transaction.completed(), scope = ObjScope.Private.id)
-        val obj = Obj(coords, entity, currentMapClock, observer)
+            ObjEntity(
+                id = prepared.id,
+                count = transaction.completed(),
+                scope = ObjScope.Private.id,
+            )
+        val obj = Obj(coords, entity, currentMapClock, observer, vars = prepared.vars)
         val dropped = repo.add(obj, duration, reveal)
         if (!dropped) {
             return false
