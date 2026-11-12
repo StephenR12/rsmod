@@ -21,8 +21,68 @@ import org.rsmod.game.inv.Inventory
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.Wearpos
 import org.rsmod.game.type.varbit.VarBitType
+import org.rsmod.game.type.varobjbit.UnpackedVarObjBitType
 
 class MagicRunesTest {
+    @Test
+    fun `stored worn runes are used before inventory and rune pouch`() {
+        val inv = invFactory.createInv()
+        val worn = invFactory.createWorn()
+        inv[4] = InvObj(nature_rune, 2)
+        val compact = createCompactRepo()
+        val pouch = createRunePouch(compact, Rune(nature_rune, 10))
+
+        val validation =
+            MagicRunes.validateRequirements(
+                inv = inv,
+                worn = worn,
+                pouch = pouch,
+                requirements = requirementsOf(requirement(nature_rune, 5)),
+                useFakeRunes = false,
+                runeFountain = false,
+                compact = compact,
+                unlimited = createUnlimitedRepo(),
+                combos = createComboRepo(),
+                fakes = createFakeRepo(),
+                runeSubs = createRuneSubRepo(),
+                staffSubs = createStaffSubRepo(),
+                storedRune = storedNatureRunes(2),
+            )
+
+        assertEquals(
+            listOf(
+                hasEnough(
+                    wornObjSource(bryophytas_staff, count = 2),
+                    invSource(nature_rune, slot = 4, count = 2),
+                    varBitSource(pouch_count1, count = 1),
+                )
+            ),
+            validation,
+        )
+    }
+
+    @Test
+    fun `stored worn runes satisfy a requirement without loose runes`() {
+        val validation =
+            MagicRunes.validateRequirements(
+                inv = invFactory.createInv(),
+                worn = invFactory.createWorn(),
+                pouch = null,
+                requirements = requirementsOf(requirement(nature_rune, 3)),
+                useFakeRunes = false,
+                runeFountain = false,
+                compact = createCompactRepo(),
+                unlimited = createUnlimitedRepo(),
+                combos = createComboRepo(),
+                fakes = createFakeRepo(),
+                runeSubs = createRuneSubRepo(),
+                staffSubs = createStaffSubRepo(),
+                storedRune = storedNatureRunes(20),
+            )
+
+        assertEquals(listOf(hasEnough(wornObjSource(bryophytas_staff, count = 3))), validation)
+    }
+
     @Test
     fun `cast spell with required rune in rune pouch`() {
         val inv = invFactory.createInv()
@@ -554,6 +614,8 @@ class MagicRunesTest {
         val mist_staff = createObjType(32, "Mist battlestaff")
 
         val saradomin_staff = createObjType(33, "Saradomin staff")
+        val bryophytas_staff = createObjType(34, "Bryophyta's staff")
+        val stored_charges = UnpackedVarObjBitType(0, 13, 1, "stored_charges")
 
         val air_rune_nz = createObjType(40, "Air rune (nz)")
         val water_rune_nz = createObjType(41, "Water rune (nz)")
@@ -703,6 +765,23 @@ class MagicRunesTest {
 
         fun varBitSource(type: VarBitType, count: Int = 1) =
             MagicRunes.Source.VarBitSource(type, count)
+
+        fun wornObjSource(type: ObjType, count: Int = 1) =
+            MagicRunes.Source.WornObjSource(
+                obj = type,
+                wearpos = Wearpos.RightHand,
+                varobj = stored_charges,
+                count = count,
+            )
+
+        fun storedNatureRunes(count: Int) =
+            MagicRunes.StoredRune(
+                rune = nature_rune,
+                obj = bryophytas_staff,
+                wearpos = Wearpos.RightHand,
+                varobj = stored_charges,
+                count = count,
+            )
 
         fun notWorn(staff: ObjType) = MagicRunes.Validation.Invalid.NotWearing(staff)
 

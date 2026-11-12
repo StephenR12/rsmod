@@ -12,6 +12,7 @@ import org.rsmod.api.spells.configs.spell_enums
 import org.rsmod.game.enums.EnumTypeMapResolver
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.ObjTypeList
+import org.rsmod.game.type.obj.isAnyType
 import org.rsmod.game.type.obj.isType
 
 public class MagicSpellRegistry
@@ -24,8 +25,46 @@ constructor(private val objTypes: ObjTypeList, private val enumResolver: EnumTyp
 
     public fun getAutocastSpell(autocastId: Int): MagicSpell? = autocastSpells[autocastId]
 
-    public fun combatSpells(): List<MagicSpell> =
-        objSpells.values.filter { it.type == MagicSpellType.Combat }
+    /**
+     * Spells that should be routed into the offensive player/NPC combat pipelines.
+     *
+     * Cache 233 classifies several Lunar support and sharing spells as `Combat`, but none attacks
+     * or damages a target. Their dedicated scripts own support-spell routing.
+     */
+    public fun offensiveCombatSpells(): List<MagicSpell> =
+        objSpells.values.filter {
+            it.type == MagicSpellType.Combat &&
+                !it.obj.isAnyType(
+                    objs.spell_stat_spy,
+                    objs.spell_monster_examine,
+                    objs.spell_cure_other,
+                    objs.spell_cure_me,
+                    objs.spell_cure_group,
+                    objs.spell_dream,
+                    objs.spell_res_pot_share,
+                    objs.spell_statboost_pot_share,
+                    objs.spell_energy_transfer,
+                    objs.spell_heal_other,
+                    objs.spell_vengeance_other,
+                    objs.spell_vengeance,
+                    objs.spell_heal_group,
+                    objs.spell_spellbook_swap,
+                    objs.spell_mark_of_darkness,
+                    objs.spell_ward_of_arceuus,
+                    objs.spell_lesser_corruption,
+                    objs.spell_greater_corruption,
+                    objs.spell_dark_lure,
+                    objs.spell_resurrect_lesser_ghost,
+                    objs.spell_resurrect_lesser_skeleton,
+                    objs.spell_resurrect_lesser_zombie,
+                    objs.spell_resurrect_superior_ghost,
+                    objs.spell_resurrect_superior_skeleton,
+                    objs.spell_resurrect_superior_zombie,
+                    objs.spell_resurrect_greater_ghost,
+                    objs.spell_resurrect_greater_skeleton,
+                    objs.spell_resurrect_greater_zombie,
+                )
+        }
 
     internal fun init() {
         check(!::objSpells.isInitialized) { "`init` already called for this repository." }
@@ -46,6 +85,15 @@ constructor(private val objTypes: ObjTypeList, private val enumResolver: EnumTyp
             for (spellObj in spellList.values) {
                 spells[spellObj.id] = spellObj.toMagicSpell()
             }
+        }
+
+        // Cache 233.4 exposes jewellery enchantments through the Standard spellbook's submenu
+        // opener rather than listing each child spell in `normal_spellbook`.
+        for (spellObj in jewelleryEnchantmentSpells) {
+            spells[spellObj.id] = spellObj.toMagicSpell()
+        }
+        for (spellObj in boltEnchantmentSpells) {
+            spells[spellObj.id] = spellObj.toMagicSpell()
         }
 
         return spells
@@ -88,7 +136,14 @@ constructor(private val objTypes: ObjTypeList, private val enumResolver: EnumTyp
             fun addRequirement(objParam: ParamObj, countParam: ParamInt) {
                 val paramObj = unpacked.paramOrNull(objParam) ?: return
                 val obj = paramObj.toRequirementObj()
-                val worn = objTypes[obj].wearpos1.takeIf { it != -1 }
+                val cacheWorn = objTypes[obj].wearpos1.takeIf { it != -1 }
+                // The cache's Ape Atoll spell uses the normal banana obj as its fourth
+                // requirement. That obj has a legacy wear position, but the spell consumes an
+                // unnoted banana from inventory rather than requiring one to be equipped.
+                val worn =
+                    cacheWorn.takeUnless {
+                        isType(objs.spell_apeatoll_teleport) && obj.isType(objs.banana)
+                    }
                 val count = unpacked.param(countParam)
                 check(worn == null || count == 1) {
                     "Count for worn objs expected to be 1: spell=$this, obj=$obj, count=$count"
@@ -135,4 +190,31 @@ constructor(private val objTypes: ObjTypeList, private val enumResolver: EnumTyp
         } else {
             this
         }
+
+    private companion object {
+        val jewelleryEnchantmentSpells =
+            listOf(
+                objs.spell_enchant_lvl_1,
+                objs.spell_enchant_lvl_2,
+                objs.spell_enchant_lvl_3,
+                objs.spell_enchant_lvl_4,
+                objs.spell_enchant_lvl_5,
+                objs.spell_enchant_lvl_6,
+                objs.spell_enchant_lvl_7,
+            )
+
+        val boltEnchantmentSpells =
+            listOf(
+                objs.spell_enchant_bolt_opal,
+                objs.spell_enchant_bolt_sapphire,
+                objs.spell_enchant_bolt_jade,
+                objs.spell_enchant_bolt_pearl,
+                objs.spell_enchant_bolt_emerald,
+                objs.spell_enchant_bolt_red_topaz,
+                objs.spell_enchant_bolt_ruby,
+                objs.spell_enchant_bolt_diamond,
+                objs.spell_enchant_bolt_dragonstone,
+                objs.spell_enchant_bolt_onyx,
+            )
+    }
 }

@@ -81,6 +81,38 @@ class MagicSpellAccuracyOperationsAttackRollTest {
                         NpcAttr.Demon,
                         NpcAttr.DemonbaneResistance,
                     ),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1200)
+                    .withSpellAttributes(SpellAttr.Demonbane)
+                    .withNpcAttributes(NpcAttr.Demon),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1400)
+                    .withSpellAttributes(SpellAttr.Demonbane, SpellAttr.MarkOfDarkness)
+                    .withNpcAttributes(NpcAttr.Demon),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1400)
+                    .withSpellAttributes(SpellAttr.Demonbane, SpellAttr.PurgingStaff)
+                    .withNpcAttributes(NpcAttr.Demon),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1800)
+                    .withSpellAttributes(
+                        SpellAttr.Demonbane,
+                        SpellAttr.MarkOfDarkness,
+                        SpellAttr.PurgingStaff,
+                    )
+                    .withNpcAttributes(NpcAttr.Demon),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1280)
+                    .withSpellAttributes(SpellAttr.Demonbane, SpellAttr.MarkOfDarkness)
+                    .withNpcAttributes(NpcAttr.Demon, NpcAttr.DemonbaneResistance),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1560)
+                    .withSpellAttributes(
+                        SpellAttr.Demonbane,
+                        SpellAttr.MarkOfDarkness,
+                        SpellAttr.PurgingStaff,
+                    )
+                    .withNpcAttributes(NpcAttr.Demon, NpcAttr.DemonbaneResistance),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1100)
+                    .withSpellAttributes(SpellAttr.WaterTome, SpellAttr.CurseSpell),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1100)
+                    .withSpellAttributes(SpellAttr.WaterTome, SpellAttr.BindSpell),
+                Loadout(baseAttackRoll = 1000, finalAttackRoll = 1000)
+                    .withSpellAttributes(SpellAttr.WaterTome),
             )
         }
     }

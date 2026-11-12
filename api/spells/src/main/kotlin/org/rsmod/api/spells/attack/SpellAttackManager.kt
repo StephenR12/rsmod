@@ -4,8 +4,9 @@ import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.CombatAttack
 import org.rsmod.api.combat.commons.magic.MagicSpell
 import org.rsmod.api.combat.manager.MagicRuneManager
-import org.rsmod.api.combat.manager.MagicRuneManager.Companion.consumedRune
 import org.rsmod.api.combat.manager.MagicRuneManager.Companion.isFailure
+import org.rsmod.api.combat.manager.MagicRuneManager.Companion.usedSunfireRune
+import org.rsmod.api.combat.manager.MagicRuneManager.Companion.usedTomeOfWater
 import org.rsmod.api.combat.manager.PlayerAttackManager
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.stats
@@ -47,9 +48,7 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
      *  // Combat is cleared inside `attemptCast`, so we can just return.
      *  return
      * }
-     * // `consumedRune` casts `castResult` to `CastResult.Success.Consumed` (via Kotlin contracts)
-     * // if applicable, allowing `usedSunfire` to be accessed safely.
-     * val usedSunfireRune = castResult.consumedRune() && castResult.usedSunfire
+     * val usedSunfireRune = castResult.usedSunfireRune()
      * ```
      *
      * @see [MagicRuneManager.attemptCast]
@@ -123,7 +122,8 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
         target: PathingEntity,
         attack: CombatAttack.Spell,
         castResult: MagicRuneManager.CastResult,
-    ): Boolean = !rollSpellAccuracy(source, target, attack, castResult)
+        accuracyPercent: Int = 100,
+    ): Boolean = !rollSpellAccuracy(source, target, attack, castResult, accuracyPercent)
 
     /** @see [PlayerAttackManager.rollSpellAccuracy] */
     public fun rollSpellAccuracy(
@@ -131,13 +131,16 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
         target: PathingEntity,
         attack: CombatAttack.Spell,
         castResult: MagicRuneManager.CastResult,
+        accuracyPercent: Int = 100,
     ): Boolean =
         manager.rollSpellAccuracy(
             source = source.player,
             target = target,
             spell = attack.spell.obj,
             spellbook = attack.spell.spellbook,
-            sunfireRune = castResult.consumedRune() && castResult.usedSunfire,
+            sunfireRune = castResult.usedSunfireRune(),
+            tomeOfWater = castResult.usedTomeOfWater(),
+            accuracyPercent = accuracyPercent,
         )
 
     /** @see [PlayerAttackManager.rollSpellMaxHit] */
@@ -156,7 +159,8 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
             spellbook = attack.spell.spellbook,
             baseMaxHit = baseMaxHit,
             attackRate = attackRate,
-            sunfireRune = castResult.consumedRune() && castResult.usedSunfire,
+            sunfireRune = castResult.usedSunfireRune(),
+            tomeOfWater = castResult.usedTomeOfWater(),
         )
 
     /** @see [PlayerAttackManager.calculateSpellMaxHit] */
@@ -175,7 +179,8 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
             spellbook = attack.spell.spellbook,
             baseMaxHit = baseMaxHit,
             attackRate = attackRate,
-            sunfireRune = cast.consumedRune() && cast.usedSunfire,
+            sunfireRune = cast.usedSunfireRune(),
+            tomeOfWater = cast.usedTomeOfWater(),
         )
 
     /**
@@ -219,6 +224,11 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
             clientDelay = clientDelay,
             hitDelay = hitDelay,
         )
+
+    /** @see [PlayerAttackManager.queueMagicEffectRetaliation] */
+    public fun queueEffectRetaliation(source: ProtectedAccess, target: PathingEntity, delay: Int) {
+        manager.queueMagicEffectRetaliation(source.player, target, delay)
+    }
 
     /** @see [PlayerAttackManager.playMagicHitFx] */
     public fun playHitFx(

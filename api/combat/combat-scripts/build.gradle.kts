@@ -32,4 +32,9 @@ dependencies {
     implementation(projects.engine.game)
     implementation(projects.engine.map)
     implementation(projects.engine.plugin)
+    testImplementation(projects.api.spellsRunes)
+    testImplementation(projects.api.testing)
+    testImplementation(projects.content.skills.magic.spellAttacks)
 }
+
+tasks.test { workingDir = rootDir }

@@ -24,6 +24,12 @@ constructor(private val enumResolver: EnumTypeMapResolver) {
 
     public fun getSpecialDescription(objType: ObjType): String? = descriptions[objType.id]
 
+    /** Returns every weapon state advertised by the cache's special-attack energy enum. */
+    public fun definitions(): List<Definition> =
+        energyRequirements.entries.sortedBy(Map.Entry<Int, Int>::key).map { (id, energy) ->
+            Definition(id, energy, descriptions[id])
+        }
+
     internal fun startup() {
         val energyRequirements = loadEnergyRequirements()
         this.energyRequirements = energyRequirements
@@ -60,4 +66,10 @@ constructor(private val enumResolver: EnumTypeMapResolver) {
     private companion object {
         private const val MAX_ENERGY = SpecialAttackEnergy.MAX_ENERGY
     }
+
+    public data class Definition(
+        public val objId: Int,
+        public val energyInHundreds: Int,
+        public val description: String?,
+    )
 }

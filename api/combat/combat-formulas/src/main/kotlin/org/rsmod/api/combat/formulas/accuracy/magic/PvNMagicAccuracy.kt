@@ -37,6 +37,8 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Int {
         val targetType = target.visType
         val elementalWeakness = targetType.param(params.elemental_weakness_percent)
@@ -51,6 +53,8 @@ constructor(
             targetWeaknessPercent = elementalWeakness,
             spellbook = spellbook,
             usedSunfireRune = usedSunfireRune,
+            usedTomeOfWater = usedTomeOfWater,
+            accuracyPercent = accuracyPercent,
         )
     }
 
@@ -65,20 +69,31 @@ constructor(
         targetWeaknessPercent: Int,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Int {
         val spellAttributes =
-            magicAttributes.spellCollect(source, spell, spellbook, usedSunfireRune, random)
+            magicAttributes.spellCollect(
+                source,
+                spell,
+                spellbook,
+                usedSunfireRune,
+                usedTomeOfWater,
+                random,
+            )
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
-        val attackRoll =
+        val baseAttackRoll =
             computeSpellAttackRoll(
                 source = source,
                 targetWeaknessPercent = targetWeaknessPercent,
                 spellAttributes = spellAttributes,
                 npcAttributes = npcAttributes,
             )
+        val attackRoll = scale(baseAttackRoll, accuracyPercent, divisor = 100)
 
         val amascutInvocationLvl = source.vars[varbits.toa_client_raid_level]
         val baseDefenceRoll =
@@ -101,7 +116,8 @@ constructor(
         npcAttributes: EnumSet<CombatNpcAttributes>,
     ): Int {
         val effectiveMagic = MagicAccuracyOperations.calculateEffectiveMagic(source, null)
-        val magicBonus = bonuses.offensiveMagicBonus(source)
+        val shadowMultiplier = if (CombatNpcAttributes.Amascut in npcAttributes) 4 else 3
+        val magicBonus = bonuses.offensiveMagicBonus(source, shadowMultiplier)
         val attackRoll = PlayerMagicAccuracy.calculateBaseAttackRoll(effectiveMagic, magicBonus)
         return MagicAccuracyOperations.modifySpellAttackRoll(
             attackRoll = attackRoll,
@@ -141,7 +157,8 @@ constructor(
         val staffAttributes = magicAttributes.staffCollect(source, random)
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val baseAttackRoll =
             computeStaffAttackRoll(source, attackStyle, staffAttributes, npcAttributes)
@@ -168,7 +185,8 @@ constructor(
         npcAttributes: EnumSet<CombatNpcAttributes>,
     ): Int {
         val effectiveMagic = MagicAccuracyOperations.calculateEffectiveMagic(source, attackStyle)
-        val magicBonus = bonuses.offensiveMagicBonus(source)
+        val shadowMultiplier = if (CombatNpcAttributes.Amascut in npcAttributes) 4 else 3
+        val magicBonus = bonuses.offensiveMagicBonus(source, shadowMultiplier)
         val attackRoll = PlayerMagicAccuracy.calculateBaseAttackRoll(effectiveMagic, magicBonus)
         return MagicAccuracyOperations.modifyStaffAttackRoll(
             attackRoll = attackRoll,

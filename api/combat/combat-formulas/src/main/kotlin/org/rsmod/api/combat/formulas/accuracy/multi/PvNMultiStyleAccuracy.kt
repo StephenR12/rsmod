@@ -67,7 +67,8 @@ constructor(
         val meleeAttributes = meleeAttributes.collect(source, attackType)
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val baseAttackRoll =
             melee.computeAttackRoll(source, attackType, attackStyle, meleeAttributes, npcAttributes)
@@ -121,7 +122,8 @@ constructor(
         val meleeAttributes = meleeAttributes.collect(source, attackType)
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val baseAttackRoll =
             melee.computeAttackRoll(source, attackType, attackStyle, meleeAttributes, npcAttributes)
@@ -170,7 +172,8 @@ constructor(
         specialMultiplier: Double,
     ): Int {
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         // TODO(combat): Should we use `computeSpellAttackRoll` instead to take elemental weakness
         // into account?
@@ -230,7 +233,8 @@ constructor(
         val rangeAttributes = rangedAttributes.collect(source, attackType, attackStyle)
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val baseAttackRoll =
             ranged.computeAttackRoll(

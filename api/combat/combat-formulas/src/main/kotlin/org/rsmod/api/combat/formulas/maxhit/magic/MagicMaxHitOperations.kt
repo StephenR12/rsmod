@@ -190,8 +190,12 @@ public object MagicMaxHitOperations {
                 SpellAttr.Demonbane in spellAttributes &&
                 NpcAttr.Demon in npcAttributes
         if (applyMarkOfDarknessMod) {
-            val multiplier = if (SpellAttr.PurgingStaff in spellAttributes) 50 else 25
-            modifiedMax = scale(modifiedMax, multiplier = 100 + multiplier, divisor = 100)
+            val percent = if (SpellAttr.PurgingStaff in spellAttributes) 50 else 25
+            var bonus = scale(modifiedMax, multiplier = percent, divisor = 100)
+            if (NpcAttr.DemonbaneResistance in npcAttributes) {
+                bonus = scale(bonus, multiplier = 70, divisor = 100)
+            }
+            modifiedMax += bonus
         }
 
         if (SpellAttr.AhrimPassive in spellAttributes) {

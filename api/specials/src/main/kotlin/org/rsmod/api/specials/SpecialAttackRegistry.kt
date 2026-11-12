@@ -4,6 +4,7 @@ import jakarta.inject.Inject
 import org.rsmod.api.specials.combat.MagicSpecialAttack
 import org.rsmod.api.specials.combat.MeleeSpecialAttack
 import org.rsmod.api.specials.combat.RangedSpecialAttack
+import org.rsmod.api.specials.combat.ShieldSpecialAttack
 import org.rsmod.api.specials.instant.InstantSpecialAttack
 import org.rsmod.api.specials.weapon.SpecialAttackWeapons
 import org.rsmod.game.inv.InvObj
@@ -13,6 +14,10 @@ public class SpecialAttackRegistry @Inject constructor(private val weapons: Spec
     private val specials = hashMapOf<Int, SpecialAttack>()
 
     public operator fun get(obj: InvObj): SpecialAttack? = specials[obj.id]
+
+    public fun contains(obj: ObjType): Boolean = obj.id in specials
+
+    public fun registeredIds(): Set<Int> = specials.keys.toSet()
 
     public fun add(obj: ObjType, spec: InstantSpecialAttack): Result.Add {
         if (obj.id in specials) {
@@ -51,6 +56,15 @@ public class SpecialAttackRegistry @Inject constructor(private val weapons: Spec
         val energy = weapons.getSpecialEnergy(obj) ?: return Result.Add.SpecialEnergyNotMapped
         val special = SpecialAttack.Magic(energy, spec)
         specials[obj.id] = special
+        return Result.Add.Success
+    }
+
+    public fun add(obj: ObjType, spec: ShieldSpecialAttack): Result.Add {
+        if (obj.id in specials) {
+            return Result.Add.AlreadyAdded
+        }
+        val energy = weapons.getSpecialEnergy(obj) ?: return Result.Add.SpecialEnergyNotMapped
+        specials[obj.id] = SpecialAttack.Shield(energy, spec)
         return Result.Add.Success
     }
 

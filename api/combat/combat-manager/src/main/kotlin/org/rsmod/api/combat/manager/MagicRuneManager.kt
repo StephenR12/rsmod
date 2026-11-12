@@ -5,15 +5,21 @@ import kotlin.collections.any
 import kotlin.contracts.contract
 import org.rsmod.api.combat.commons.magic.MagicSpell
 import org.rsmod.api.combat.commons.magic.Spellbook
+import org.rsmod.api.combat.commons.magic.TomeOfWater
 import org.rsmod.api.config.refs.categories
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.config.refs.varobjs
 import org.rsmod.api.invtx.invDelAll
+import org.rsmod.api.obj.charges.ObjChargeManager
+import org.rsmod.api.player.lefthand
 import org.rsmod.api.player.output.mes
+import org.rsmod.api.player.righthand
 import org.rsmod.api.player.stat.magicLvl
 import org.rsmod.api.player.vars.VarPlayerIntMapSetter
 import org.rsmod.api.player.vars.enumVarBit
+import org.rsmod.api.random.GameRandom
 import org.rsmod.api.spells.runes.MagicRunes
 import org.rsmod.api.spells.runes.combo.ComboRuneRepository
 import org.rsmod.api.spells.runes.compact.CompactRuneRepository
@@ -21,6 +27,7 @@ import org.rsmod.api.spells.runes.fake.FakeRuneRepository
 import org.rsmod.api.spells.runes.staves.StaffSubstituteRepository
 import org.rsmod.api.spells.runes.subs.RuneSubstituteRepository
 import org.rsmod.api.spells.runes.unlimited.UnlimitedRuneRepository
+import org.rsmod.events.EventBus
 import org.rsmod.game.entity.Player
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.isAnyType
@@ -28,6 +35,7 @@ import org.rsmod.game.inv.isType
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.obj.UnpackedObjType
+import org.rsmod.game.type.obj.Wearpos
 import org.rsmod.game.type.obj.isType
 import org.rsmod.game.type.varbit.VarBitType
 
@@ -41,6 +49,9 @@ constructor(
     private val unlimited: UnlimitedRuneRepository,
     private val staffSubs: StaffSubstituteRepository,
     private val runeSubs: RuneSubstituteRepository,
+    private val eventBus: EventBus,
+    private val objCharges: ObjChargeManager,
+    private val random: GameRandom,
 ) {
     private val Player.spellbook by enumVarBit<Spellbook>(varbits.spellbook)
 
@@ -67,7 +78,30 @@ constructor(
         if (accessFailure != null) {
             return accessFailure
         }
-        return delReqs(player, spell)
+        val tomeOfWaterCharged = TomeOfWater.isCharged(player.lefthand)
+        val resourceResult = delReqs(player, spell)
+        if (resourceResult is CastResult.Success) {
+            val result =
+                if (tomeOfWaterCharged && TomeOfWater.consumesCharge(spell, book)) {
+                    val uncharge =
+                        objCharges.reduceWornCharges(
+                            player = player,
+                            wearpos = Wearpos.LeftHand,
+                            varobj = varobjs.tome_of_water_charges,
+                            decrement = 1,
+                        )
+                    check(uncharge is ObjChargeManager.Uncharge.Success) {
+                        "Validated Tome of water charge could not be consumed: $uncharge"
+                    }
+                    player.lefthand = player.lefthand
+                    CastResult.Success.TomeOfWater(resourceResult.usedSunfireRune())
+                } else {
+                    resourceResult
+                }
+            eventBus.publish(MagicSpellEvents.Cast(player, spell, book))
+            return result
+        }
+        return resourceResult
     }
 
     /**
@@ -156,6 +190,27 @@ constructor(
             return CastResult.Failure.NotEnoughVarBit
         }
 
+        val wornObjSources =
+            sources
+                .filterIsInstance<MagicRunes.Source.WornObjSource>()
+                .groupBy { Triple(it.obj, it.wearpos, it.varobj) }
+                .map { (key, grouped) ->
+                    MagicRunes.Source.WornObjSource(
+                        obj = key.first,
+                        wearpos = key.second,
+                        varobj = key.third,
+                        count = grouped.sumOf { it.count },
+                    )
+                }
+        val enoughWornObjs =
+            wornObjSources.all { source ->
+                val obj = player.worn[source.wearpos.slot]
+                obj.isType(source.obj) && objCharges.getCharges(obj, source.varobj) >= source.count
+            }
+        if (!enoughWornObjs) {
+            return CastResult.Failure.NotEnoughWornObj
+        }
+
         val invSources = sources.filterIsInstance<MagicRunes.Source.InvSource>()
 
         val consume = ArrayList<InvObj>(invSources.size)
@@ -168,9 +223,11 @@ constructor(
             consume += invObj.copy(count = required)
         }
 
-        val transaction = player.invDelAll(player.inv, consume, strict = true)
-        if (!transaction.success) {
-            return CastResult.Failure.NotEnoughInvObj
+        if (consume.isNotEmpty()) {
+            val transaction = player.invDelAll(player.inv, consume, strict = true)
+            if (!transaction.success) {
+                return CastResult.Failure.NotEnoughInvObj
+            }
         }
 
         for (source in varbitSources) {
@@ -180,6 +237,30 @@ constructor(
                     "$result (source=$source, validations=$validations)"
             }
             VarPlayerIntMapSetter.set(player, source.varbit, result)
+        }
+
+        for (source in wornObjSources) {
+            var decrement = source.count
+            if (source.obj.isType(objs.bryophytas_staff) && random.randomBoolean(15)) {
+                decrement--
+                player.mes("Your staff saved you a nature rune.")
+            }
+            if (decrement == 0) {
+                continue
+            }
+            val result =
+                objCharges.reduceWornCharges(
+                    player = player,
+                    wearpos = source.wearpos,
+                    varobj = source.varobj,
+                    decrement = decrement,
+                )
+            check(result is ObjChargeManager.Uncharge.Success) {
+                "Validated worn rune source could not be consumed: $source (result=$result)"
+            }
+            if (result.fullyUncharged) {
+                player.righthand = player.righthand
+            }
         }
 
         val usedSunfire = consume.any { it.isType(objs.sunfire_rune) }
@@ -220,7 +301,28 @@ constructor(
             fakes = fakes,
             runeSubs = runeSubs,
             staffSubs = staffSubs,
+            storedRune = player.bryophytasStaffRunes(),
+            conditionalLowPriorityRunes =
+                if (TomeOfWater.isCharged(player.lefthand)) setOf(objs.water_rune) else emptySet(),
         )
+
+    private fun Player.bryophytasStaffRunes(): MagicRunes.StoredRune? {
+        val staff = righthand
+        if (!staff.isType(objs.bryophytas_staff)) {
+            return null
+        }
+        val charges = objCharges.getCharges(staff, varobjs.charges_16383)
+        if (charges == 0) {
+            return null
+        }
+        return MagicRunes.StoredRune(
+            rune = objs.nature_rune,
+            obj = objs.bryophytas_staff,
+            wearpos = org.rsmod.game.type.obj.Wearpos.RightHand,
+            varobj = varobjs.charges_16383,
+            count = charges,
+        )
+    }
 
     /**
      * Verifies that the player meets the magic level requirement to cast [spell], and that the
@@ -231,7 +333,9 @@ constructor(
         spell: MagicSpell,
         book: Spellbook,
     ): CastResult.Failure? {
-        if (spell.spellbook != book) {
+        // A null cache spellbook is the protocol contract for spells available on every book
+        // (for example, cache-233 Teleport to Target), not a book that can never match.
+        if (spell.spellbook != null && spell.spellbook != book) {
             // Official behavior: This does not send a message - it simply no-ops.
             return CastResult.Failure.IncorrectSpellbook
         }
@@ -352,12 +456,17 @@ constructor(
             public object AllUnlimited : Success()
 
             public data class Consumed(val usedSunfire: Boolean) : Success()
+
+            /** A standard combat cast that consumed one Tome of water charge. */
+            public data class TomeOfWater(val usedSunfire: Boolean) : Success()
         }
 
         public sealed class Failure : CastResult() {
             public object NotEnoughVarBit : Failure()
 
             public object NotEnoughInvObj : Failure()
+
+            public object NotEnoughWornObj : Failure()
 
             /**
              * Unlike [NotEnoughVarBit] and [NotEnoughInvObj], this failure occurs before any
@@ -387,5 +496,14 @@ constructor(
             contract { returns(true) implies (this@consumedRune is CastResult.Success.Consumed) }
             return this is CastResult.Success.Consumed
         }
+
+        public fun CastResult.usedSunfireRune(): Boolean =
+            when (this) {
+                is CastResult.Success.Consumed -> usedSunfire
+                is CastResult.Success.TomeOfWater -> usedSunfire
+                else -> false
+            }
+
+        public fun CastResult.usedTomeOfWater(): Boolean = this is CastResult.Success.TomeOfWater
     }
 }

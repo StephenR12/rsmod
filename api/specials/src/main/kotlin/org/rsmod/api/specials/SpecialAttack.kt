@@ -6,6 +6,7 @@ import org.rsmod.api.specials.combat.CombatSpecialAttack
 import org.rsmod.api.specials.combat.MagicSpecialAttack
 import org.rsmod.api.specials.combat.MeleeSpecialAttack
 import org.rsmod.api.specials.combat.RangedSpecialAttack
+import org.rsmod.api.specials.combat.ShieldSpecialAttack
 import org.rsmod.api.specials.instant.InstantSpecialAttack
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.entity.PathingEntity
@@ -99,6 +100,17 @@ public sealed class SpecialAttack {
                 is Player -> attack(access, target, attack)
             }
     }
+
+    public data class Shield(
+        public val energyInHundreds: Int,
+        public val special: ShieldSpecialAttack,
+    ) : Combat() {
+        public suspend fun attack(access: ProtectedAccess, target: PathingEntity): Boolean =
+            when (target) {
+                is Npc -> special.attack(access, target)
+                is Player -> special.attack(access, target)
+            }
+    }
 }
 
 private suspend fun InstantSpecialAttack.activate(access: ProtectedAccess) = access.activate()
@@ -108,6 +120,12 @@ private suspend fun <T : CombatAttack> CombatSpecialAttack<T>.attack(
     target: Npc,
     attack: T,
 ): Boolean = access.attack(target, attack)
+
+private suspend fun ShieldSpecialAttack.attack(access: ProtectedAccess, target: Npc): Boolean =
+    access.attack(target)
+
+private suspend fun ShieldSpecialAttack.attack(access: ProtectedAccess, target: Player): Boolean =
+    access.attack(target)
 
 private suspend fun <T : CombatAttack> CombatSpecialAttack<T>.attack(
     access: ProtectedAccess,

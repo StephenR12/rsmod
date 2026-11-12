@@ -5,6 +5,7 @@ import kotlin.math.min
 import org.rsmod.api.combat.commons.CombatAttack
 import org.rsmod.api.combat.commons.fx.MeleeAnimationAndSound
 import org.rsmod.api.combat.commons.magic.MagicSpell
+import org.rsmod.api.combat.commons.magic.MagicSpellChecks
 import org.rsmod.api.combat.commons.magic.Spellbook
 import org.rsmod.api.combat.commons.npc.combatPlayDefendAnim
 import org.rsmod.api.combat.commons.npc.combatPlayDefendSpot
@@ -21,21 +22,33 @@ import org.rsmod.api.combat.commons.types.MeleeAttackType
 import org.rsmod.api.combat.commons.types.RangedAttackType
 import org.rsmod.api.combat.formulas.AccuracyFormulae
 import org.rsmod.api.combat.formulas.MaxHitFormulae
+import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.npc.hit.modifier.NpcHitModifier
 import org.rsmod.api.npc.hit.queueHit
+import org.rsmod.api.player.events.PlayerCombatEvents
+import org.rsmod.api.player.front
+import org.rsmod.api.player.hat
 import org.rsmod.api.player.hit.queueHit
 import org.rsmod.api.player.interact.NpcInteractions
 import org.rsmod.api.player.interact.NpcTInteractions
 import org.rsmod.api.player.interact.PlayerInteractions
 import org.rsmod.api.player.interact.PlayerTInteractions
+import org.rsmod.api.player.legs
+import org.rsmod.api.player.output.UpdateRun
 import org.rsmod.api.player.output.soundSynth
 import org.rsmod.api.player.protect.clearPendingAction
+import org.rsmod.api.player.righthand
+import org.rsmod.api.player.stat.baseHitpointsLvl
 import org.rsmod.api.player.stat.hitpoints
+import org.rsmod.api.player.stat.statAdd
 import org.rsmod.api.player.stat.statAdvance
+import org.rsmod.api.player.stat.statSub
+import org.rsmod.api.player.torso
+import org.rsmod.api.player.worn.EquipmentChecks
 import org.rsmod.api.random.GameRandom
 import org.rsmod.api.repo.world.WorldRepository
 import org.rsmod.events.EventBus
@@ -68,6 +81,7 @@ constructor(
     private val npcTInteractions: NpcTInteractions,
     private val playerInteractions: PlayerInteractions,
     private val playerTInteractions: PlayerTInteractions,
+    private val nextMeleeAttack: NextMeleeAttackRepository,
 ) {
     /**
      * Determines if the player is still under an active attack delay.
@@ -476,19 +490,29 @@ constructor(
         attackStyle: MeleeAttackStyle? = attack.style,
         blockType: MeleeAttackType? = attack.type,
     ): Int {
+        val oneShotEffect = nextMeleeAttack.consume(source)
+        val veracProc =
+            EquipmentChecks.isVeracSet(source.hat, source.torso, source.legs, source.righthand) &&
+                random.randomBoolean(4)
         val successfulAccuracyRoll =
-            rollMeleeAccuracy(
-                source = source,
-                target = target,
-                multiplier = accuracyMultiplier,
-                attackType = attackType,
-                attackStyle = attackStyle,
-                blockType = blockType,
-            )
+            veracProc ||
+                oneShotEffect?.guaranteed == true ||
+                rollMeleeAccuracy(
+                    source = source,
+                    target = target,
+                    multiplier = accuracyMultiplier,
+                    attackType = attackType,
+                    attackStyle = attackStyle,
+                    blockType = blockType,
+                )
         if (!successfulAccuracyRoll) {
             return 0
         }
-        return rollMeleeMaxHit(source, target, attackType, attackStyle, maxHitMultiplier)
+        var damage = rollMeleeMaxHit(source, target, attackType, attackStyle, maxHitMultiplier)
+        if (veracProc && target is Npc) {
+            damage += 1
+        }
+        return maxOf(damage, oneShotEffect?.minimumDamage ?: 0)
     }
 
     /**
@@ -658,11 +682,59 @@ constructor(
         target: PathingEntity,
         damage: Int,
         delay: Int = 1,
-    ): Hit =
-        when (target) {
-            is Npc -> queueMeleeHit(source, target, damage, delay)
-            is Player -> queueMeleeHit(source, target, damage, delay)
+    ): Hit {
+        val hit =
+            when (target) {
+                is Npc -> queueMeleeHit(source, target, damage, delay)
+                is Player -> queueMeleeHit(source, target, damage, delay)
+            }
+        publishEngagement(source, target)
+        applyMeleeSetEffects(source, target, damage)
+        return hit
+    }
+
+    private fun applyMeleeSetEffects(source: Player, target: PathingEntity, damage: Int) {
+        if (damage <= 0) {
+            return
         }
+
+        if (
+            EquipmentChecks.isGuthanSet(source.hat, source.torso, source.legs, source.righthand) &&
+                random.randomBoolean(4)
+        ) {
+            val hasDamned = source.front?.id == objs.amulet_of_the_damned_full.id
+            val cap = source.baseHitpointsLvl + if (hasDamned) 10 else 0
+            val healing = minOf(damage, (cap - source.hitpoints).coerceAtLeast(0))
+            if (healing > 0) {
+                source.statAdd(stats.hitpoints, constant = healing, percent = 0)
+            }
+        }
+
+        if (
+            target is Player &&
+                EquipmentChecks.isToragSet(
+                    source.hat,
+                    source.torso,
+                    source.legs,
+                    source.righthand,
+                ) &&
+                random.randomBoolean(4)
+        ) {
+            target.runEnergy = (target.runEnergy - 2_000).coerceAtLeast(0)
+            UpdateRun.energy(target, target.runEnergy)
+        }
+
+        if (
+            EquipmentChecks.isBloodMoonSet(
+                source.hat,
+                source.torso,
+                source.legs,
+                source.righthand,
+            ) && random.of(3) == 0
+        ) {
+            source.actionDelay = maxOf(source.currentMapClock + 3, source.actionDelay - 1)
+        }
+    }
 
     private fun queueMeleeHit(source: Player, target: Npc, damage: Int, delay: Int): Hit {
         // Note: Retaliation must be queued _before_ the hit. If queued after, every hit would
@@ -964,11 +1036,70 @@ constructor(
         damage: Int,
         clientDelay: Int,
         hitDelay: Int,
-    ): Hit =
-        when (target) {
-            is Npc -> queueRangedHit(source, target, ammo, damage, clientDelay, hitDelay)
-            is Player -> queueRangedHit(source, target, ammo, damage, clientDelay, hitDelay)
+    ): Hit {
+        val hit =
+            when (target) {
+                is Npc -> queueRangedHit(source, target, ammo, damage, clientDelay, hitDelay)
+                is Player -> queueRangedHit(source, target, ammo, damage, clientDelay, hitDelay)
+            }
+        publishEngagement(source, target)
+        applyRangedSetEffects(source, target, ammo, damage, hitDelay)
+        return hit
+    }
+
+    private fun applyRangedSetEffects(
+        source: Player,
+        target: PathingEntity,
+        ammo: ObjType?,
+        damage: Int,
+        hitDelay: Int,
+    ) {
+        if (damage <= 0) {
+            return
         }
+
+        val karilSet =
+            EquipmentChecks.isKarilSet(source.hat, source.torso, source.legs, source.righthand)
+        if (karilSet && target is Player && random.randomBoolean(4)) {
+            target.statSub(stats.agility, constant = 0, percent = 20)
+        }
+        if (
+            karilSet &&
+                source.front?.id == objs.amulet_of_the_damned_full.id &&
+                random.randomBoolean(4)
+        ) {
+            queueRangedDamage(source, target, ammo, damage / 2, hitDelay)
+        }
+
+        val eclipseSet =
+            EquipmentChecks.isEclipseMoonSet(
+                source.hat,
+                source.torso,
+                source.legs,
+                source.righthand,
+            )
+        if (eclipseSet && random.randomBoolean(5)) {
+            for (delay in 4..40 step 4) {
+                when (target) {
+                    is Npc ->
+                        target.queueHit(
+                            source = source,
+                            delay = delay,
+                            type = HitType.Typeless,
+                            damage = 1,
+                            modifier = npcHitModifier,
+                        )
+                    is Player ->
+                        target.queueHit(
+                            source = source,
+                            delay = delay,
+                            type = HitType.Typeless,
+                            damage = 1,
+                        )
+                }
+            }
+        }
+    }
 
     private fun queueRangedHit(
         source: Player,
@@ -1108,10 +1239,30 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         sunfireRune: Boolean,
+        tomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Boolean =
         when (target) {
-            is Npc -> rollSpellAccuracy(source, target, spell, spellbook, sunfireRune)
-            is Player -> rollSpellAccuracy(source, target, spell, spellbook, sunfireRune)
+            is Npc ->
+                rollSpellAccuracy(
+                    source,
+                    target,
+                    spell,
+                    spellbook,
+                    sunfireRune,
+                    tomeOfWater,
+                    accuracyPercent,
+                )
+            is Player ->
+                rollSpellAccuracy(
+                    source,
+                    target,
+                    spell,
+                    spellbook,
+                    sunfireRune,
+                    tomeOfWater,
+                    accuracyPercent,
+                )
         }
 
     private fun rollSpellAccuracy(
@@ -1120,6 +1271,8 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         sunfireRune: Boolean,
+        tomeOfWater: Boolean,
+        accuracyPercent: Int,
     ): Boolean =
         accuracy.rollSpellAccuracy(
             player = source,
@@ -1128,6 +1281,8 @@ constructor(
             spellbook = spellbook,
             usedSunfireRune = sunfireRune,
             random = random,
+            usedTomeOfWater = tomeOfWater,
+            accuracyPercent = accuracyPercent,
         )
 
     private fun rollSpellAccuracy(
@@ -1136,6 +1291,8 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         sunfireRune: Boolean,
+        tomeOfWater: Boolean,
+        accuracyPercent: Int,
     ): Boolean =
         accuracy.rollSpellAccuracy(
             player = source,
@@ -1144,6 +1301,8 @@ constructor(
             spellbook = spellbook,
             usedSunfireRune = sunfireRune,
             random = random,
+            usedTomeOfWater = tomeOfWater,
+            accuracyPercent = accuracyPercent,
         )
 
     /**
@@ -1173,6 +1332,7 @@ constructor(
         baseMaxHit: Int,
         attackRate: Int,
         sunfireRune: Boolean,
+        tomeOfWater: Boolean = false,
     ): Int {
         val hitRange =
             calculateSpellMaxHit(
@@ -1183,6 +1343,7 @@ constructor(
                 baseMaxHit = baseMaxHit,
                 attackRate = attackRate,
                 sunfireRune = sunfireRune,
+                tomeOfWater = tomeOfWater,
             )
         return random.of(hitRange)
     }
@@ -1215,6 +1376,7 @@ constructor(
         baseMaxHit: Int,
         attackRate: Int,
         sunfireRune: Boolean,
+        tomeOfWater: Boolean = false,
     ): IntRange =
         when (target) {
             is Npc ->
@@ -1226,6 +1388,7 @@ constructor(
                     baseMaxHit = baseMaxHit,
                     attackRate = attackRate,
                     sunfireRune = sunfireRune,
+                    tomeOfWater = tomeOfWater,
                 )
             is Player ->
                 calculateSpellMaxHit(
@@ -1235,6 +1398,7 @@ constructor(
                     spellbook = spellbook,
                     baseMaxHit = baseMaxHit,
                     sunfireRune = sunfireRune,
+                    tomeOfWater = tomeOfWater,
                 )
         }
 
@@ -1246,6 +1410,7 @@ constructor(
         baseMaxHit: Int,
         attackRate: Int,
         sunfireRune: Boolean,
+        tomeOfWater: Boolean,
     ): IntRange =
         maxHits.getSpellMaxHitRange(
             player = source,
@@ -1255,6 +1420,7 @@ constructor(
             baseMaxHit = baseMaxHit,
             attackRate = attackRate,
             usedSunfireRune = sunfireRune,
+            usedTomeOfWater = tomeOfWater,
         )
 
     private fun calculateSpellMaxHit(
@@ -1264,6 +1430,7 @@ constructor(
         spellbook: Spellbook?,
         baseMaxHit: Int,
         sunfireRune: Boolean,
+        tomeOfWater: Boolean,
     ): IntRange =
         maxHits.getSpellMaxHitRange(
             player = source,
@@ -1272,6 +1439,7 @@ constructor(
             spellbook = spellbook,
             baseMaxHit = baseMaxHit,
             usedSunfireRune = sunfireRune,
+            usedTomeOfWater = tomeOfWater,
         )
 
     /**
@@ -1443,29 +1611,79 @@ constructor(
         clientDelay: Int,
         hitDelay: Int,
         retaliationDelay: Int = hitDelay,
-    ): Hit =
-        when (target) {
-            is Npc ->
-                queueMagicHit(
-                    source = source,
-                    target = target,
-                    spell = spell,
-                    damage = damage,
-                    clientDelay = clientDelay,
-                    hitDelay = hitDelay,
-                    retaliationDelay = retaliationDelay,
-                )
-            is Player ->
-                queueMagicHit(
-                    source = source,
-                    target = target,
-                    spell = spell,
-                    damage = damage,
-                    clientDelay = clientDelay,
-                    hitDelay = hitDelay,
-                    retaliationDelay = retaliationDelay,
-                )
+        successful: Boolean = true,
+    ): Hit {
+        val hit =
+            when (target) {
+                is Npc ->
+                    queueMagicHit(
+                        source = source,
+                        target = target,
+                        spell = spell,
+                        damage = damage,
+                        clientDelay = clientDelay,
+                        hitDelay = hitDelay,
+                        retaliationDelay = retaliationDelay,
+                        successful = successful,
+                    )
+                is Player ->
+                    queueMagicHit(
+                        source = source,
+                        target = target,
+                        spell = spell,
+                        damage = damage,
+                        clientDelay = clientDelay,
+                        hitDelay = hitDelay,
+                        retaliationDelay = retaliationDelay,
+                        successful = successful,
+                    )
+            }
+        publishEngagement(source, target)
+        applyMagicSetEffects(source, target, spell, damage, successful)
+        return hit
+    }
+
+    private fun applyMagicSetEffects(
+        source: Player,
+        target: PathingEntity,
+        spell: ObjType?,
+        damage: Int,
+        successful: Boolean,
+    ) {
+        if (!successful) {
+            return
         }
+
+        if (
+            damage > 0 &&
+                target is Player &&
+                EquipmentChecks.isAhrimSet(
+                    source.hat,
+                    source.torso,
+                    source.legs,
+                    source.righthand,
+                ) &&
+                random.randomBoolean(4)
+        ) {
+            target.statSub(stats.strength, constant = 5, percent = 0)
+        }
+
+        if (
+            spell != null &&
+                MagicSpellChecks.isBindSpell(spell) &&
+                EquipmentChecks.isBlueMoonSet(
+                    source.hat,
+                    source.torso,
+                    source.legs,
+                    source.righthand,
+                )
+        ) {
+            val denominator = if (MagicSpellChecks.isArceuusBindSpell(spell)) 2 else 5
+            if (random.randomBoolean(denominator)) {
+                source.actionDelay = source.currentMapClock
+            }
+        }
+    }
 
     private fun queueMagicHit(
         source: Player,
@@ -1475,6 +1693,7 @@ constructor(
         clientDelay: Int,
         hitDelay: Int,
         retaliationDelay: Int,
+        successful: Boolean,
     ): Hit {
         // Note: Retaliation must be queued _before_ the hit. If queued after, every hit would
         // trigger the "speed-up" death mechanic, since the hit queues would no longer be the
@@ -1487,6 +1706,7 @@ constructor(
                 delay = hitDelay,
                 type = HitType.Magic,
                 damage = damage,
+                successful = successful,
                 modifier = npcHitModifier,
                 sourceSecondary = spell,
             )
@@ -1503,6 +1723,7 @@ constructor(
         clientDelay: Int,
         hitDelay: Int,
         retaliationDelay: Int,
+        successful: Boolean,
     ): Hit {
         // Note: Retaliation must be queued _before_ the hit. If queued after, every hit would
         // trigger the "speed-up" death mechanic, since the hit queues would no longer be the
@@ -1515,11 +1736,31 @@ constructor(
                 delay = hitDelay,
                 type = HitType.Magic,
                 damage = damage,
+                successful = successful,
                 sourceSecondary = spell,
             )
         target.heroPoints(source, min(hit.damage, target.hitpoints))
         target.combatPlayDefendAnim(objTypes, clientDelay)
         return hit
+    }
+
+    /**
+     * Queues retaliation for a successful, non-damaging magic effect without creating a hitmark,
+     * headbar, defend animation, or damage event.
+     */
+    public fun queueMagicEffectRetaliation(source: Player, target: PathingEntity, delay: Int) {
+        when (target) {
+            is Npc -> target.queueCombatRetaliate(source, delay)
+            is Player -> target.queueCombatRetaliate(source, delay)
+        }
+        publishEngagement(source, target)
+    }
+
+    private fun publishEngagement(source: Player, target: PathingEntity) {
+        eventBus.publish(PlayerCombatEvents.Engage(source))
+        if (target is Player) {
+            eventBus.publish(PlayerCombatEvents.Engage(target))
+        }
     }
 
     /**
@@ -1548,6 +1789,7 @@ constructor(
             clientDelay = clientDelay,
             hitDelay = hitDelay,
             retaliationDelay = 1,
+            successful = false,
         )
 
     /**

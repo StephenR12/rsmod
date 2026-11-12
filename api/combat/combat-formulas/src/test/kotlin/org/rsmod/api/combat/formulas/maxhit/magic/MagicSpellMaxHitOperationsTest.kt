@@ -116,12 +116,44 @@ class MagicSpellMaxHitOperationsTest {
                     .withMysticVigour()
                     .withMagicDmgBonus(bonusPercent = 24.0)
                     .withSpellAttributes(SpellAttr.FireSpell, SpellAttr.FireTome),
+                Loadout(spellMaxHit = 1, magicLevel = 50, modifiedMaxHit = 15)
+                    .withSpellAttributes(SpellAttr.MagicDart),
+                Loadout(spellMaxHit = 1, magicLevel = 99, modifiedMaxHit = 19)
+                    .withSpellAttributes(SpellAttr.MagicDart),
+                Loadout(spellMaxHit = 1, magicLevel = 75, modifiedMaxHit = 17)
+                    .withSpellAttributes(SpellAttr.MagicDart, SpellAttr.SlayerStaffE),
+                Loadout(spellMaxHit = 1, magicLevel = 75, modifiedMaxHit = 25)
+                    .withSpellAttributes(SpellAttr.MagicDart, SpellAttr.SlayerStaffE)
+                    .withNpcAttributes(NpcAttr.SlayerTask),
                 Loadout(spellMaxHit = 0, modifiedMaxHit = 39)
                     .withSaturatedHeart()
                     .withAugury()
                     .withMagicDmgBonus(bonusPercent = 24.0)
                     .withSpellAttributes(SpellAttr.MagicDart, SpellAttr.SlayerStaffE)
                     .withNpcAttributes(NpcAttr.SlayerTask),
+                Loadout(spellMaxHit = 30, modifiedMaxHit = 30, finalMaxHit = 30)
+                    .withSpellAttributes(SpellAttr.Demonbane)
+                    .withNpcAttributes(NpcAttr.Demon),
+                Loadout(spellMaxHit = 30, modifiedMaxHit = 30, finalMaxHit = 37)
+                    .withSpellAttributes(SpellAttr.Demonbane, SpellAttr.MarkOfDarkness)
+                    .withNpcAttributes(NpcAttr.Demon),
+                Loadout(spellMaxHit = 30, modifiedMaxHit = 30, finalMaxHit = 45)
+                    .withSpellAttributes(
+                        SpellAttr.Demonbane,
+                        SpellAttr.MarkOfDarkness,
+                        SpellAttr.PurgingStaff,
+                    )
+                    .withNpcAttributes(NpcAttr.Demon),
+                Loadout(spellMaxHit = 30, modifiedMaxHit = 30, finalMaxHit = 34)
+                    .withSpellAttributes(SpellAttr.Demonbane, SpellAttr.MarkOfDarkness)
+                    .withNpcAttributes(NpcAttr.Demon, NpcAttr.DemonbaneResistance),
+                Loadout(spellMaxHit = 30, modifiedMaxHit = 30, finalMaxHit = 40)
+                    .withSpellAttributes(
+                        SpellAttr.Demonbane,
+                        SpellAttr.MarkOfDarkness,
+                        SpellAttr.PurgingStaff,
+                    )
+                    .withNpcAttributes(NpcAttr.Demon, NpcAttr.DemonbaneResistance),
             )
     }
 }

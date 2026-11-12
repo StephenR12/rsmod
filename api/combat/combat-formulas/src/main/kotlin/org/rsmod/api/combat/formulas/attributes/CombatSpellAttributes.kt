@@ -1,12 +1,14 @@
 package org.rsmod.api.combat.formulas.attributes
 
 public enum class CombatSpellAttributes {
+    AncientBook,
     StandardBook,
     WindSpell,
     WaterSpell,
     EarthSpell,
     FireSpell,
     BindSpell,
+    CurseSpell,
     MagicDart,
     SlayerStaffE,
     ChaosGauntlets,

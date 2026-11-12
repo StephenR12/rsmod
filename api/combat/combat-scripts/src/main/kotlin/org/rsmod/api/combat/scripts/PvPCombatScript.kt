@@ -41,7 +41,7 @@ constructor(
     override fun ScriptContext.startup() {
         onApPlayer2 { attemptCombatAp(it.target) }
         onOpPlayer2 { attemptCombatOp(it.target) }
-        for (spell in spells.combatSpells()) {
+        for (spell in spells.offensiveCombatSpells()) {
             onApPlayerT(spell.component) { attemptCombatSpell(it.target, spell) }
         }
     }

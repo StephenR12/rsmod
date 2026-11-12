@@ -56,6 +56,7 @@ constructor(
         baseMaxHit: Int,
         attackRate: Int,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
     ): IntRange {
         val targetType = target.visType
         val elementalWeakness = targetType.param(params.elemental_weakness_percent)
@@ -71,6 +72,7 @@ constructor(
                 attackRate = attackRate,
                 spellbook = spellbook,
                 usedSunfireRune = usedSunfireRune,
+                usedTomeOfWater = usedTomeOfWater,
             )
         player.maxHit = maxHit.last
         return maxHit
@@ -87,12 +89,21 @@ constructor(
         attackRate: Int,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
     ): IntRange {
         val spellAttributes =
-            magicAttributes.spellCollect(source, spell, spellbook, usedSunfireRune, random)
+            magicAttributes.spellCollect(
+                source,
+                spell,
+                spellbook,
+                usedSunfireRune,
+                usedTomeOfWater,
+                random,
+            )
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val modifiedDamage =
             computeSpellModifiedDamage(source, baseMaxHit, spellAttributes, npcAttributes)
@@ -112,7 +123,11 @@ constructor(
         spellAttributes: EnumSet<CombatSpellAttributes>,
         npcAttributes: EnumSet<CombatNpcAttributes>,
     ): Int {
-        val magicDmgBonus = bonuses.magicDamageBonusBase(source)
+        val magicDmgBonus =
+            bonuses.magicDamageBonusForSpell(
+                source,
+                CombatSpellAttributes.AncientBook in spellAttributes,
+            )
         val prayerDmgBonus = MagicMaxHitOperations.getMagicDamagePrayerBonus(source)
         return MagicMaxHitOperations.modifySpellBaseDamage(
             baseDamage = baseDamage,
@@ -167,7 +182,8 @@ constructor(
         val staffAttributes = magicAttributes.staffCollect(source, random)
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val modifiedDamage =
             computeStaffModifiedDamage(source, baseMaxHit, staffAttributes, npcAttributes)

@@ -8,6 +8,7 @@ import org.rsmod.plugin.module.PluginModule
 
 class SpecialAttackModule : PluginModule() {
     override fun bind() {
+        addSetBinding<SpecialAttackMap>(MetadataSpecialAttacks::class.java)
         addSetBinding<SpecialAttackMap>(StatBoostSpecialAttacks::class.java)
         addSetBinding<SpecialAttackMap>(DarkBowSpecialAttack::class.java)
         addSetBinding<SpecialAttackMap>(DragonLongswordSpecialAttack::class.java)

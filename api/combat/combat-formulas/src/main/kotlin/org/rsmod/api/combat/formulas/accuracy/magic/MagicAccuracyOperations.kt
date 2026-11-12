@@ -92,13 +92,12 @@ public object MagicAccuracyOperations {
             modified = scale(modified, multiplier = 3, divisor = 2)
         }
 
-        // Note: The wiki states that the Tome of water boosts water combat spell accuracy by 10%
-        // against npcs; however, the dps calculator uses 20% alongside bind spells. Since we have
-        // aligned all other values with the dps calculator, we are keeping it at 20% here.
         val applyWaterTomeMod =
-            SpellAttr.WaterSpell in spellAttributes || SpellAttr.BindSpell in spellAttributes
+            SpellAttr.WaterSpell in spellAttributes ||
+                SpellAttr.BindSpell in spellAttributes ||
+                SpellAttr.CurseSpell in spellAttributes
         if (SpellAttr.WaterTome in spellAttributes && applyWaterTomeMod) {
-            modified = scale(modified, multiplier = 6, divisor = 5)
+            modified = scale(modified, multiplier = 11, divisor = 10)
         }
 
         // Note: In the dps calculator, the code below appears **after** the special attack
@@ -137,7 +136,9 @@ public object MagicAccuracyOperations {
         modified = scale(modified, 100 + additiveBonus, 100)
 
         val applyWaterTomeMod =
-            SpellAttr.WaterSpell in spellAttributes || SpellAttr.BindSpell in spellAttributes
+            SpellAttr.WaterSpell in spellAttributes ||
+                SpellAttr.BindSpell in spellAttributes ||
+                SpellAttr.CurseSpell in spellAttributes
         if (SpellAttr.WaterTome in spellAttributes && applyWaterTomeMod) {
             modified = scale(modified, multiplier = 6, divisor = 5)
         }

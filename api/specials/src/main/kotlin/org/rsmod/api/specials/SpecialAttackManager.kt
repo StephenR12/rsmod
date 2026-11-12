@@ -36,6 +36,9 @@ constructor(
         energy.takeSpecialEnergy(source.player, energyInHundreds)
     }
 
+    public fun currentSpecialEnergy(source: ProtectedAccess): Int =
+        energy.currentSpecialEnergy(source.player)
+
     public fun getSpecialEnergyRequirement(obj: ObjType): Int? = weapons.getSpecialEnergy(obj)
 
     /**
@@ -73,6 +76,15 @@ constructor(
 
     /** @see [PlayerAttackManager.stopCombat] */
     public fun stopCombat(access: ProtectedAccess): Unit = manager.stopCombat(access.player)
+
+    /** Plays the equipped weapon's standard melee effects as a safe fallback for a special. */
+    public fun playWeaponFx(source: ProtectedAccess, attack: CombatAttack.Melee) {
+        manager.playWeaponFx(source.player, attack)
+    }
+
+    /** Plays the equipped weapon's standard ranged effects. */
+    public fun playWeaponFx(source: ProtectedAccess, attack: CombatAttack.Ranged): Boolean =
+        manager.playWeaponFx(source.player, attack)
 
     /** @see [PlayerAttackManager.giveCombatXp] */
     public fun giveCombatXp(

@@ -28,7 +28,31 @@ public object MagicSpellChecks {
         )
 
     public fun isBindSpell(spell: ObjType): Boolean =
-        spell.isAnyType(objs.spell_bind, objs.spell_snare, objs.spell_entangle)
+        spell.isAnyType(
+            objs.spell_bind,
+            objs.spell_snare,
+            objs.spell_entangle,
+            objs.spell_ghostly_grasp,
+            objs.spell_skeletal_grasp,
+            objs.spell_undead_grasp,
+        )
+
+    public fun isArceuusBindSpell(spell: ObjType): Boolean =
+        spell.isAnyType(
+            objs.spell_ghostly_grasp,
+            objs.spell_skeletal_grasp,
+            objs.spell_undead_grasp,
+        )
+
+    public fun isCurseSpell(spell: ObjType): Boolean =
+        spell.isAnyType(
+            objs.spell_confuse,
+            objs.spell_weaken,
+            objs.spell_curse,
+            objs.spell_vulnerability,
+            objs.spell_enfeeble,
+            objs.spell_stun,
+        )
 
     public fun isWindSpell(spell: ObjType): Boolean =
         spell.isAnyType(

@@ -1,9 +1,14 @@
 package org.rsmod.api.spells.configs
 
+import org.rsmod.api.combat.commons.magic.MagicSpellType
+import org.rsmod.api.config.refs.components
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
+import org.rsmod.api.config.refs.stats
 import org.rsmod.api.type.editors.obj.ObjEditor
+import org.rsmod.game.type.comp.ComponentType
 import org.rsmod.game.type.obj.ObjType
+import org.rsmod.game.type.stat.StatType
 import org.rsmod.map.CoordGrid
 
 internal object SpellObjEditor : ObjEditor() {
@@ -18,16 +23,88 @@ internal object SpellObjEditor : ObjEditor() {
         spell(objs.view_jewellery_enchantment_spells, 0.0)
         spell(objs.spell_hometeleport_lumbridge, 0.0)
         spell(objs.spell_wind_strike, 5.5)
-        spell(objs.spell_confuse, 13.0)
+        drainSpell(objs.spell_confuse, 13.0, stats.attack, 5)
         spell(objs.view_bolt_enchantment_spells, 0.0)
+        boltSpell(
+            objs.spell_enchant_bolt_opal,
+            "Enchant Opal Bolt",
+            4,
+            9.0,
+            components.skillmulti_a,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_sapphire,
+            "Enchant Sapphire Bolt",
+            7,
+            17.5,
+            components.skillmulti_b,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_jade,
+            "Enchant Jade Bolt",
+            14,
+            19.0,
+            components.skillmulti_c,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_pearl,
+            "Enchant Pearl Bolt",
+            24,
+            29.0,
+            components.skillmulti_d,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_emerald,
+            "Enchant Emerald Bolt",
+            27,
+            37.0,
+            components.skillmulti_e,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_red_topaz,
+            "Enchant Topaz Bolt",
+            29,
+            33.0,
+            components.skillmulti_f,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_ruby,
+            "Enchant Ruby Bolt",
+            49,
+            59.0,
+            components.skillmulti_g,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_diamond,
+            "Enchant Diamond Bolt",
+            57,
+            67.0,
+            components.skillmulti_h,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_dragonstone,
+            "Enchant Dragonstone Bolt",
+            68,
+            78.0,
+            components.skillmulti_i,
+        )
+        boltSpell(
+            objs.spell_enchant_bolt_onyx,
+            "Enchant Onyx Bolt",
+            87,
+            97.0,
+            components.skillmulti_j,
+        )
         spell(objs.spell_water_strike, 7.5)
         spell(objs.spell_enchant_lvl_1, 17.5)
         spell(objs.spell_earth_strike, 9.5)
-        spell(objs.spell_weaken, 21.0)
+        drainSpell(objs.spell_weaken, 21.0, stats.strength, 5)
         spell(objs.spell_fire_strike, 11.5)
         spell(objs.spell_bones_to_bananas, 25.0)
         spell(objs.spell_wind_bolt, 13.5)
-        spell(objs.spell_curse, 29.0)
+        drainSpell(objs.spell_curse, 29.0, stats.defence, 5)
+        // Binding spells have distinct splash and successful-cast XP. Store the splash XP here;
+        // their successful-hit bonus is awarded by the attack implementation.
         spell(objs.spell_bind, 30.0)
         spell(objs.spell_low_alchemy, 31.0)
         spell(objs.spell_water_bolt, 16.5)
@@ -37,7 +114,7 @@ internal object SpellObjEditor : ObjEditor() {
         tele(objs.spell_lumbridge_teleport, 41.0, CoordGrid(0, 50, 50, 21, 18))
         spell(objs.spell_tele_grab, 43.0)
         spell(objs.spell_fire_bolt, 22.5)
-        tele(objs.spell_falador_teleport, 47.0, CoordGrid(0, 46, 52, 21, 50))
+        tele(objs.spell_falador_teleport, 48.0, CoordGrid(0, 46, 52, 21, 50))
         spell(objs.spell_crumble_undead, 24.5)
         spell(objs.spell_poh_teleport, 30.0)
         spell(objs.spell_wind_blast, 25.5)
@@ -54,9 +131,9 @@ internal object SpellObjEditor : ObjEditor() {
         spell(objs.spell_earth_blast, 31.5)
         tele(objs.spell_civitas_fortis_teleport, 64.0, CoordGrid(0, 26, 48, 17, 61))
         spell(objs.spell_high_alchemy, 65.0)
-        spell(objs.spell_chargeorb_water, 56.0)
+        spell(objs.spell_chargeorb_water, 66.0)
         spell(objs.spell_enchant_lvl_4, 67.0)
-        tele(objs.spell_watchtower_teleport, 68.0, CoordGrid(0, 45, 73, 53, 40))
+        tele(objs.spell_watchtower_teleport, 68.0, CoordGrid(0, 39, 48, 50, 42))
         spell(objs.spell_fire_blast, 34.5)
         spell(objs.spell_chargeorb_earth, 70.0)
         spell(objs.spell_bones_to_peaches, 35.5)
@@ -69,19 +146,21 @@ internal object SpellObjEditor : ObjEditor() {
         tele(objs.spell_apeatoll_teleport, 74.0, CoordGrid(0, 43, 43, 45, 46))
         spell(objs.spell_water_wave, 37.5)
         spell(objs.spell_chargeorb_air, 76.0)
-        spell(objs.spell_vulnerability, 76.0)
+        drainSpell(objs.spell_vulnerability, 76.0, stats.defence, 10)
         spell(objs.spell_enchant_lvl_5, 78.0)
         spell(objs.spell_earth_wave, 40.0)
-        spell(objs.spell_enfeeble, 83.0)
+        drainSpell(objs.spell_enfeeble, 83.0, stats.strength, 10)
         spell(objs.spell_teleother_lumbridge, 84.0)
         spell(objs.spell_fire_wave, 42.5)
-        spell(objs.spell_entangle, 89.0)
-        spell(objs.spell_stun, 90.0)
+        spell(objs.spell_entangle, 70.0)
+        drainSpell(objs.spell_stun, 90.0, stats.attack, 10)
         spell(objs.spell_charge, 180.0)
         spell(objs.spell_wind_surge, 44.5)
         spell(objs.spell_teleother_falador, 92.0)
         spell(objs.spell_water_surge, 46.5)
-        spell(objs.spell_tele_block, 80.0)
+        // The cache spell still carries the pre-2017 value. Modern Tele Block awards 83.6 XP on
+        // splash and 95 XP on success; the attack implementation adds the successful-hit bonus.
+        spell(objs.spell_tele_block, 83.6)
         spell(objs.spell_teleport_to_target, 45.0)
         spell(objs.spell_enchant_lvl_6, 97.0)
         spell(objs.spell_teleother_camelot, 100.0)
@@ -167,7 +246,7 @@ internal object SpellObjEditor : ObjEditor() {
 
     private fun editArceuusSpells() {
         spell(objs.spell_hometeleport_arceuus, 0.0)
-        tele(objs.spell_arceuuslibrary_teleport, 10.0, CoordGrid(0, 25, 59, 33, 62))
+        tele(objs.spell_arceuuslibrary_teleport, 9.0, CoordGrid(0, 25, 59, 33, 62))
         spell(objs.spell_basic_reanimation, 32.0)
         tele(objs.spell_draynormanor_teleport, 16.0, CoordGrid(0, 48, 52, 36, 23))
         tele(objs.spell_battlefront_teleport, 19.0, CoordGrid(0, 21, 58, 4, 27))
@@ -216,10 +295,38 @@ internal object SpellObjEditor : ObjEditor() {
         edit(type) { param[params.spell_castxp] = (xp * 10).toInt() }
     }
 
+    private fun boltSpell(
+        type: ObjType,
+        name: String,
+        level: Int,
+        xp: Double,
+        button: ComponentType,
+    ) {
+        edit(type) {
+            param[params.spell_spellbook] = STANDARD_SPELLBOOK
+            param[params.spell_button] = button
+            param[params.spell_name] = name
+            param[params.spell_levelreq] = level
+            param[params.spell_type] = MagicSpellType.Utility.id
+            param[params.spell_membersonly] = true
+            param[params.spell_castxp] = (xp * 10).toInt()
+        }
+    }
+
+    private fun drainSpell(type: ObjType, xp: Double, stat: StatType, percent: Int) {
+        edit(type) {
+            param[params.spell_castxp] = (xp * 10).toInt()
+            param[params.spell_drain_stat] = stat
+            param[params.spell_drain_stat_amount] = percent
+        }
+    }
+
     private fun tele(type: ObjType, xp: Double, dest: CoordGrid) {
         edit(type) {
             param[params.spell_castxp] = (xp * 10).toInt()
             param[params.spell_telecoord] = dest
         }
     }
+
+    private const val STANDARD_SPELLBOOK = 0
 }

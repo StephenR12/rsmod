@@ -28,6 +28,8 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Int =
         computeSpellHitChance(
             source = player,
@@ -35,6 +37,8 @@ constructor(
             spell = spell,
             spellbook = spellbook,
             usedSunfireRune = usedSunfireRune,
+            usedTomeOfWater = usedTomeOfWater,
+            accuracyPercent = accuracyPercent,
         )
 
     public fun computeSpellHitChance(
@@ -43,10 +47,20 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Int {
         val spellAttributes =
-            magicAttributes.spellCollect(source, spell, spellbook, usedSunfireRune, random)
-        val attackRoll = computeSpellAttackRoll(source, spellAttributes)
+            magicAttributes.spellCollect(
+                source,
+                spell,
+                spellbook,
+                usedSunfireRune,
+                usedTomeOfWater,
+                random,
+            )
+        val baseAttackRoll = computeSpellAttackRoll(source, spellAttributes)
+        val attackRoll = baseAttackRoll * accuracyPercent / 100
         val defenceRoll = computeDefenceRoll(target)
         return AccuracyOperations.calculateHitChance(attackRoll, defenceRoll)
     }

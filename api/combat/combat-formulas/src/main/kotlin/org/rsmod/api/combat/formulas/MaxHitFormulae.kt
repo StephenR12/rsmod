@@ -129,6 +129,7 @@ constructor(
         baseMaxHit: Int,
         attackRate: Int,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
     ): IntRange =
         pvnMagicMaxHit.getSpellMaxHit(
             player = player,
@@ -138,6 +139,7 @@ constructor(
             baseMaxHit = baseMaxHit,
             attackRate = attackRate,
             usedSunfireRune = usedSunfireRune,
+            usedTomeOfWater = usedTomeOfWater,
         )
 
     /** @see [PvPMagicMaxHit.getSpellMaxHit] */
@@ -148,6 +150,7 @@ constructor(
         spellbook: Spellbook?,
         baseMaxHit: Int,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
     ): IntRange =
         pvpMagicMaxHit.getSpellMaxHit(
             player = player,
@@ -156,6 +159,7 @@ constructor(
             spell = spell,
             baseMaxHit = baseMaxHit,
             usedSunfireRune = usedSunfireRune,
+            usedTomeOfWater = usedTomeOfWater,
         )
 
     /** @see [PvNMagicMaxHit.getStaffMaxHit] */

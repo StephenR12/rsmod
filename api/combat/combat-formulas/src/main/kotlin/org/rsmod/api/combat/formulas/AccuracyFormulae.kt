@@ -458,8 +458,19 @@ constructor(
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
         random: GameRandom,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Boolean {
-        val hitChance = getSpellHitChance(player, target, spell, spellbook, usedSunfireRune)
+        val hitChance =
+            getSpellHitChance(
+                player,
+                target,
+                spell,
+                spellbook,
+                usedSunfireRune,
+                usedTomeOfWater,
+                accuracyPercent,
+            )
         return isSuccessfulHit(hitChance, random)
     }
 
@@ -481,6 +492,8 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Int =
         pvnMagicAccuracy.getSpellHitChance(
             player = player,
@@ -488,6 +501,8 @@ constructor(
             spell = spell,
             spellbook = spellbook,
             usedSunfireRune = usedSunfireRune,
+            usedTomeOfWater = usedTomeOfWater,
+            accuracyPercent = accuracyPercent,
         )
 
     /**
@@ -514,8 +529,19 @@ constructor(
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
         random: GameRandom,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Boolean {
-        val hitChance = getSpellHitChance(player, target, spell, spellbook, usedSunfireRune)
+        val hitChance =
+            getSpellHitChance(
+                player,
+                target,
+                spell,
+                spellbook,
+                usedSunfireRune,
+                usedTomeOfWater,
+                accuracyPercent,
+            )
         return isSuccessfulHit(hitChance, random)
     }
 
@@ -537,6 +563,8 @@ constructor(
         spell: ObjType,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
+        accuracyPercent: Int = 100,
     ): Int =
         pvpMagicAccuracy.getSpellHitChance(
             player = player,
@@ -544,6 +572,8 @@ constructor(
             spell = spell,
             spellbook = spellbook,
             usedSunfireRune = usedSunfireRune,
+            usedTomeOfWater = usedTomeOfWater,
+            accuracyPercent = accuracyPercent,
         )
 
     /**

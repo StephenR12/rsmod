@@ -1,7 +1,11 @@
 package org.rsmod.api.combat.formulas.accuracy.magic
 
 import com.google.inject.Inject
+import org.junit.jupiter.api.Test
+import org.rsmod.api.combat.commons.magic.MarkOfDarknessStateRepository
 import org.rsmod.api.combat.commons.magic.Spellbook
+import org.rsmod.api.combat.formulas.attributes.CombatSpellAttributes
+import org.rsmod.api.combat.formulas.attributes.collector.CombatMagicAttributeCollector
 import org.rsmod.api.combat.formulas.test_npcs
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
@@ -29,6 +33,48 @@ import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.varbit.VarBitType
 
 class PvNMagicSpellAccuracyTest {
+    @Test
+    fun GameTestState.`mark attributes use active duration rather than the recast varbit`() =
+        runInjectedGameTest(SpellAccuracyTestDependencies::class) { deps ->
+            player.setVarBit(varbits.buff_mark_of_darkness_disabled, 1)
+            val cooldownOnly = deps.collectAttributes(player, objs.spell_inferior_demonbane)
+            assertFalse(CombatSpellAttributes.MarkOfDarkness in cooldownOnly)
+
+            player.setVarBit(varbits.buff_mark_of_darkness_disabled, 0)
+            deps.markStates.activate(player, 300)
+            val active = deps.collectAttributes(player, objs.spell_inferior_demonbane)
+            assertTrue(CombatSpellAttributes.MarkOfDarkness in active)
+            assertTrue(CombatSpellAttributes.Demonbane in active)
+        }
+
+    @Test
+    fun GameTestState.`explicit spell accuracy multiplier scales attack roll before hit chance`() =
+        runInjectedGameTest(SpellAccuracyTestDependencies::class) { deps ->
+            player.stats[stats.magic] = 99
+            val npc = Npc(test_npcs.corporeal_beast)
+            npc.hitpoints = 2_000
+            npc.baseHitpointsLvl = 2_000
+            val base =
+                deps.accuracy.getSpellHitChance(
+                    player,
+                    npc,
+                    objs.spell_ice_barrage,
+                    Spellbook.Ancients,
+                    usedSunfireRune = false,
+                )
+            val boosted =
+                deps.accuracy.getSpellHitChance(
+                    player,
+                    npc,
+                    objs.spell_ice_barrage,
+                    Spellbook.Ancients,
+                    usedSunfireRune = false,
+                    accuracyPercent = 110,
+                )
+
+            assertTrue(boosted > base)
+        }
+
     @TestWithArgs(MatchupProvider::class)
     fun `calculate matchup hit chance`(matchup: Matchup, state: GameTestState) =
         state.runInjectedGameTest(SpellAccuracyTestDependencies::class) {
@@ -240,5 +286,22 @@ class PvNMagicSpellAccuracyTest {
         }
     }
 
-    private class SpellAccuracyTestDependencies @Inject constructor(val accuracy: PvNMagicAccuracy)
+    private class SpellAccuracyTestDependencies
+    @Inject
+    constructor(
+        val accuracy: PvNMagicAccuracy,
+        val attributes: CombatMagicAttributeCollector,
+        val markStates: MarkOfDarknessStateRepository,
+        val random: org.rsmod.api.random.GameRandom,
+    ) {
+        fun collectAttributes(player: org.rsmod.game.entity.Player, spell: ObjType) =
+            attributes.spellCollect(
+                player = player,
+                spell = spell,
+                spellbook = Spellbook.Arceuus,
+                usedSunfireRune = false,
+                usedTomeOfWater = false,
+                random = random,
+            )
+    }
 }

@@ -19,6 +19,7 @@ import org.rsmod.game.type.obj.Wearpos
 import org.rsmod.game.type.obj.isAnyType
 import org.rsmod.game.type.obj.isType
 import org.rsmod.game.type.varbit.VarBitType
+import org.rsmod.game.type.varobjbit.UnpackedVarObjBitType
 
 public object MagicRunes {
     /*
@@ -47,6 +48,8 @@ public object MagicRunes {
         fakes: FakeRuneRepository,
         runeSubs: RuneSubstituteRepository,
         staffSubs: StaffSubstituteRepository,
+        storedRune: StoredRune? = null,
+        conditionalLowPriorityRunes: Set<ObjType> = emptySet(),
     ): List<Validation> {
         val validationList = mutableListOf<Validation>()
 
@@ -62,12 +65,16 @@ public object MagicRunes {
             // are required. If the player has an unlimited source for either rune, that
             // rune is no longer required, and the combo rune is no longer prioritized.
 
-            val hasUnlimited1 = unlimited.isSource(rune1, righthand, lefthand)
+            val hasUnlimited1 =
+                rune1 in conditionalLowPriorityRunes ||
+                    unlimited.isSource(rune1, righthand, lefthand)
             if (hasUnlimited1) {
                 continue
             }
 
-            val hasUnlimited2 = unlimited.isSource(rune2, righthand, lefthand)
+            val hasUnlimited2 =
+                rune2 in conditionalLowPriorityRunes ||
+                    unlimited.isSource(rune2, righthand, lefthand)
             if (hasUnlimited2) {
                 continue
             }
@@ -87,6 +94,8 @@ public object MagicRunes {
                     unlimited = unlimited,
                     subs = runeSubs,
                     fakes = fakes,
+                    storedRune = storedRune,
+                    conditionalLowPriorityRunes = conditionalLowPriorityRunes,
                 )
             if (validation.isValid) {
                 validationList += validation
@@ -123,6 +132,8 @@ public object MagicRunes {
                     unlimited = unlimited,
                     subs = runeSubs,
                     fakes = fakes,
+                    storedRune = storedRune,
+                    conditionalLowPriorityRunes = conditionalLowPriorityRunes,
                 )
 
             // If this rune result is invalid, we defer handling it in case a combo rune can still
@@ -165,6 +176,8 @@ public object MagicRunes {
                     unlimited = unlimited,
                     subs = runeSubs,
                     fakes = fakes,
+                    storedRune = storedRune,
+                    conditionalLowPriorityRunes = conditionalLowPriorityRunes,
                 )
 
             // Only include the combo rune if its validation is successful.
@@ -218,6 +231,8 @@ public object MagicRunes {
         unlimited: UnlimitedRuneRepository,
         subs: RuneSubstituteRepository,
         fakes: FakeRuneRepository,
+        storedRune: StoredRune? = null,
+        conditionalLowPriorityRunes: Set<ObjType> = emptySet(),
     ): Validation {
         require(required > 0) { "`required` must be greater than 0. (required=$required)" }
 
@@ -249,21 +264,39 @@ public object MagicRunes {
             }
         }
 
-        if (unlimited.isLowPrioritySource(rune, righthand, lefthand)) {
+        if (
+            rune in conditionalLowPriorityRunes ||
+                unlimited.isLowPrioritySource(rune, righthand, lefthand)
+        ) {
             return Validation.Valid.Unlimited
+        }
+
+        val sources = mutableListOf<Source>()
+        var remaining = required
+
+        if (storedRune != null && storedRune.rune.isType(rune) && storedRune.count > 0) {
+            val count = min(remaining, storedRune.count)
+            sources +=
+                Source.WornObjSource(
+                    obj = storedRune.obj,
+                    wearpos = storedRune.wearpos,
+                    varobj = storedRune.varobj,
+                    count = count,
+                )
+            remaining -= count
+            if (remaining == 0) {
+                return Validation.Valid.HasEnough(sources)
+            }
         }
 
         val invRuneSlot = inv.indexOfFirst { it.isType(rune) }
         val invRuneObj = inv[invRuneSlot]
 
         // Fast-path: return single-list `HasEnough` validation when inv has enough runes.
-        if (invRuneObj != null && invRuneObj.count >= required) {
-            val sources = listOf(Source.InvSource(rune, invRuneSlot, required))
+        if (invRuneObj != null && invRuneObj.count >= remaining) {
+            sources += Source.InvSource(rune, invRuneSlot, remaining)
             return Validation.Valid.HasEnough(sources)
         }
-
-        val sources = mutableListOf<Source>()
-        var remaining = required
 
         // Reduce remaining count from existing inv rune (if available).
         if (invRuneObj != null) {
@@ -329,6 +362,8 @@ public object MagicRunes {
                         unlimited = unlimited,
                         subs = subs,
                         fakes = fakes,
+                        storedRune = storedRune,
+                        conditionalLowPriorityRunes = conditionalLowPriorityRunes,
                     )
                 val validResult = validate as? Validation.Valid ?: continue
                 return when (validResult) {
@@ -495,7 +530,22 @@ public object MagicRunes {
         public data class InvSource(val obj: ObjType, val slot: Int, val count: Int) : Source()
 
         public data class VarBitSource(val varbit: VarBitType, val count: Int) : Source()
+
+        public data class WornObjSource(
+            val obj: ObjType,
+            val wearpos: Wearpos,
+            val varobj: UnpackedVarObjBitType,
+            val count: Int,
+        ) : Source()
     }
+
+    public data class StoredRune(
+        val rune: ObjType,
+        val obj: ObjType,
+        val wearpos: Wearpos,
+        val varobj: UnpackedVarObjBitType,
+        val count: Int,
+    )
 
     public class RequirementList internal constructor(internal val reqs: List<Requirement>) {
         internal val size: Int

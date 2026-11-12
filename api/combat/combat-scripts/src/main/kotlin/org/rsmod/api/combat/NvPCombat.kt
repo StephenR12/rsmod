@@ -14,21 +14,24 @@ import org.rsmod.api.combat.player.lastCombat
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.npc.access.StandardNpcAccess
 import org.rsmod.api.npc.isInCombat
+import org.rsmod.api.player.events.PlayerCombatEvents
 import org.rsmod.api.player.hit.queueHit
 import org.rsmod.api.player.isValidTarget
 import org.rsmod.api.player.output.soundSynth
+import org.rsmod.events.EventBus
 import org.rsmod.game.entity.Player
 import org.rsmod.game.hit.HitType
 import org.rsmod.game.type.obj.ObjTypeList
 
-internal class NvPCombat
+public class NvPCombat
 @Inject
 constructor(
     private val accuracy: AccuracyFormulae,
     private val maxHits: MaxHitFormulae,
     private val objTypes: ObjTypeList,
+    private val eventBus: EventBus,
 ) {
-    fun attack(access: StandardNpcAccess, target: Player, attack: CombatAttack.NpcMelee) {
+    public fun attack(access: StandardNpcAccess, target: Player, attack: CombatAttack.NpcMelee) {
         access.attackMelee(target, attack)
     }
 
@@ -69,6 +72,7 @@ constructor(
             }
 
         setAttackVars(target)
+        eventBus.publish(PlayerCombatEvents.Engage(target))
 
         // Note: Retaliation must be queued _before_ the hit. If queued after, every hit would
         // trigger the "speed-up" death mechanic, since the hit queues would no longer be the

@@ -4,13 +4,15 @@ import jakarta.inject.Inject
 import java.util.EnumSet
 import kotlin.collections.plusAssign
 import org.rsmod.api.combat.commons.magic.MagicSpellChecks
+import org.rsmod.api.combat.commons.magic.MarkOfDarknessStateRepository
 import org.rsmod.api.combat.commons.magic.Spellbook
 import org.rsmod.api.combat.formulas.attributes.CombatSpellAttributes
 import org.rsmod.api.combat.formulas.attributes.CombatStaffAttributes
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
-import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.back
 import org.rsmod.api.player.front
 import org.rsmod.api.player.hands
 import org.rsmod.api.player.hat
@@ -29,7 +31,12 @@ import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.obj.UnpackedObjType
 import org.rsmod.game.type.obj.isType
 
-public class CombatMagicAttributeCollector @Inject constructor(private val objTypes: ObjTypeList) {
+public class CombatMagicAttributeCollector
+@Inject
+constructor(
+    private val objTypes: ObjTypeList,
+    private val markOfDarkness: MarkOfDarknessStateRepository,
+) {
     // `random` is an explicit parameter to indicate that this function relies on randomness
     // for certain effects, such as the Brimstone ring proc.
     public fun spellCollect(
@@ -37,12 +44,15 @@ public class CombatMagicAttributeCollector @Inject constructor(private val objTy
         spell: ObjType,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean,
         random: GameRandom,
     ): EnumSet<CombatSpellAttributes> {
         val attributes = EnumSet.noneOf(CombatSpellAttributes::class.java)
 
         if (spellbook == Spellbook.Standard) {
             attributes += CombatSpellAttributes.StandardBook
+        } else if (spellbook == Spellbook.Ancients) {
+            attributes += CombatSpellAttributes.AncientBook
         }
 
         val spellAttribute =
@@ -52,6 +62,7 @@ public class CombatMagicAttributeCollector @Inject constructor(private val objTy
                 MagicSpellChecks.isEarthSpell(spell) -> CombatSpellAttributes.EarthSpell
                 MagicSpellChecks.isFireSpell(spell) -> CombatSpellAttributes.FireSpell
                 MagicSpellChecks.isBindSpell(spell) -> CombatSpellAttributes.BindSpell
+                MagicSpellChecks.isCurseSpell(spell) -> CombatSpellAttributes.CurseSpell
                 spell.isType(objs.spell_magic_dart) -> CombatSpellAttributes.MagicDart
                 else -> null
             }
@@ -79,7 +90,7 @@ public class CombatMagicAttributeCollector @Inject constructor(private val objTy
             attributes += CombatSpellAttributes.BrimstonePassive
         }
 
-        if (player.vars[varbits.buff_mark_of_darkness_disabled] == 1) {
+        if (markOfDarkness.isActive(player)) {
             attributes += CombatSpellAttributes.MarkOfDarkness
         }
 
@@ -96,8 +107,8 @@ public class CombatMagicAttributeCollector @Inject constructor(private val objTy
             attributes += CombatSpellAttributes.BoltSpell
         }
 
-        val chargeBuffCooldown = player.vars[varbits.buff_charge_spell_disabled]
-        if (MagicSpellChecks.isGodSpell(spell) && chargeBuffCooldown > 0) {
+        val chargeActive = player.vars[varps.magearena_charge] > 0
+        if (chargeActive && player.back.isMatchingGodCape(spell)) {
             attributes += CombatSpellAttributes.ChargeSpell
         }
 
@@ -164,7 +175,7 @@ public class CombatMagicAttributeCollector @Inject constructor(private val objTy
 
         val shieldAttribute =
             when {
-                shield.isType(objs.tome_of_water) -> CombatSpellAttributes.WaterTome
+                usedTomeOfWater -> CombatSpellAttributes.WaterTome
                 shield.isType(objs.tome_of_earth) -> CombatSpellAttributes.EarthTome
                 shield.isType(objs.tome_of_fire) -> CombatSpellAttributes.FireTome
                 else -> null
@@ -243,4 +254,36 @@ public class CombatMagicAttributeCollector @Inject constructor(private val objTy
     private fun UnpackedObjType.hasImbuedBlackMaskAttribute(): Boolean {
         return param(params.blackmask_imbued) != 0 || param(params.slayer_helm_imbued) != 0
     }
+
+    private fun org.rsmod.game.inv.InvObj?.isMatchingGodCape(spell: ObjType): Boolean =
+        when {
+            spell.isType(objs.spell_saradomin_strike) ->
+                isAnyType(
+                    objs.saradomin_cape,
+                    objs.imbued_saradomin_cape,
+                    objs.imbued_saradomin_cape_trouver,
+                    objs.saradomin_max_cape,
+                    objs.imbued_saradomin_max_cape,
+                    objs.imbued_saradomin_max_cape_trouver,
+                )
+            spell.isType(objs.spell_claws_of_guthix) ->
+                isAnyType(
+                    objs.guthix_cape,
+                    objs.imbued_guthix_cape,
+                    objs.imbued_guthix_cape_trouver,
+                    objs.guthix_max_cape,
+                    objs.imbued_guthix_max_cape,
+                    objs.imbued_guthix_max_cape_trouver,
+                )
+            spell.isType(objs.spell_flames_of_zamorak) ->
+                isAnyType(
+                    objs.zamorak_cape,
+                    objs.imbued_zamorak_cape,
+                    objs.imbued_zamorak_cape_trouver,
+                    objs.zamorak_max_cape,
+                    objs.imbued_zamorak_max_cape,
+                    objs.imbued_zamorak_max_cape_trouver,
+                )
+            else -> false
+        }
 }

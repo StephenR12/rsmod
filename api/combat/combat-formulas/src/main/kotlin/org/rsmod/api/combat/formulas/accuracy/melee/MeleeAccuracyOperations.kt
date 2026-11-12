@@ -85,7 +85,15 @@ public object MeleeAccuracyOperations {
             }
         }
 
-        // TODO(combat): Vampyre mods
+        if (NpcAttr.Vampyre in npcAttributes) {
+            modified =
+                when {
+                    MeleeAttr.BlisterwoodSickle in meleeAttributes ||
+                        MeleeAttr.BlisterwoodFlail in meleeAttributes ->
+                        scale(modified, multiplier = 21, divisor = 20)
+                    else -> modified
+                }
+        }
 
         if (MeleeAttr.Crush in meleeAttributes) {
             var inquisitorPieces = 0

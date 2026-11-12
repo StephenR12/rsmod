@@ -1,5 +1,6 @@
 package org.rsmod.api.combat.formulas
 
+import org.rsmod.api.config.refs.varps
 import org.rsmod.game.entity.Player
 import org.rsmod.game.type.npc.UnpackedNpcType
 
@@ -13,6 +14,6 @@ internal const val HIT_CHANCE_SCALE: Int = 10_000
 internal fun scale(base: Int, multiplier: Int, divisor: Int): Int = (base * multiplier) / divisor
 
 internal fun UnpackedNpcType.isSlayerTask(player: Player): Boolean {
-    // TODO(combat): Resolve if type is slayer task.
-    return false
+    val assignment = player.vars[varps.slayer_target]
+    return assignment > 0 && player.vars[varps.slayer_count] > 0 && assignment == id
 }

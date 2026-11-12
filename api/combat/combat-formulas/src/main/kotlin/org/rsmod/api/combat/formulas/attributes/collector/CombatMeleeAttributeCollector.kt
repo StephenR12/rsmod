@@ -144,6 +144,18 @@ public class CombatMeleeAttributeCollector @Inject constructor(private val objTy
                     CombatMeleeAttributes.Gadderhammer
                 }
 
+                weapon.isType(objs.ivandis_flail) -> {
+                    CombatMeleeAttributes.IvandisFlail
+                }
+
+                weapon.isType(objs.blisterwood_sickle) -> {
+                    CombatMeleeAttributes.BlisterwoodSickle
+                }
+
+                weapon.isType(objs.blisterwood_flail) -> {
+                    CombatMeleeAttributes.BlisterwoodFlail
+                }
+
                 else -> null
             }
 

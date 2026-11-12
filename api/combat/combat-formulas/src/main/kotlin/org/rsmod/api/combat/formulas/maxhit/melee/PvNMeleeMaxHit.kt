@@ -75,7 +75,8 @@ constructor(
         addProcAttributes(meleeAttributes)
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val modifiedDamage =
             computeModifiedDamage(source, attackStyle, meleeAttributes, npcAttributes)

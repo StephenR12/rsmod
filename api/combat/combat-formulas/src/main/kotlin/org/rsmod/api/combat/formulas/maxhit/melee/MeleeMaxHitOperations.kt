@@ -189,7 +189,18 @@ public object MeleeMaxHitOperations {
             modified = scale(modified, multiplier = 6, divisor = 5)
         }
 
-        // TODO(combat): Vampyre mods
+        if (NpcAttr.Vampyre in npcAttributes) {
+            modified =
+                when {
+                    MeleeAttr.BlisterwoodFlail in meleeAttributes ->
+                        scale(modified, multiplier = 5, divisor = 4)
+                    MeleeAttr.IvandisFlail in meleeAttributes ->
+                        scale(modified, multiplier = 6, divisor = 5)
+                    MeleeAttr.BlisterwoodSickle in meleeAttributes ->
+                        scale(modified, multiplier = 23, divisor = 20)
+                    else -> modified
+                }
+        }
 
         // Corporeal beast damage reduction is applied _after_ bolt proc multipliers. This is why we
         // handle it here instead of in a specialized `onModifyNpcHit(corp_beast)` script. Though

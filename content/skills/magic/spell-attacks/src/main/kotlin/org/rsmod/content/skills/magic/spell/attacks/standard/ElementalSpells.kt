@@ -34,13 +34,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
     }
 
     private fun SpellAttackRepository.registerStrikes(manager: SpellAttackManager) {
-        fun getMaxHit(magicLvl: Int): Int =
-            when {
-                magicLvl >= 13 -> 8
-                magicLvl >= 9 -> 6
-                magicLvl >= 5 -> 4
-                else -> 2
-            }
+        val getMaxHit = ElementalSpellTier.Strike::baseMaxHit
 
         register(
             spell = objs.spell_wind_strike,
@@ -55,7 +49,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.windstrike_impact,
                     castSound = synths.windstrike_cast_and_fire,
                     hitSound = synths.windstrike_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -72,7 +66,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.waterstrike_impact,
                     castSound = synths.waterstrike_cast_and_fire,
                     hitSound = synths.waterstrike_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -89,7 +83,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.earthstrike_impact,
                     castSound = synths.earthstrike_cast_and_fire,
                     hitSound = synths.earthstrike_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -106,19 +100,13 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.firestrike_impact,
                     castSound = synths.firestrike_cast_and_fire,
                     hitSound = synths.firestrike_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
     }
 
     private fun SpellAttackRepository.registerBolts(manager: SpellAttackManager) {
-        fun getMaxHit(magicLvl: Int): Int =
-            when {
-                magicLvl >= 35 -> 12
-                magicLvl >= 29 -> 11
-                magicLvl >= 23 -> 10
-                else -> 9
-            }
+        val getMaxHit = ElementalSpellTier.Bolt::baseMaxHit
 
         register(
             spell = objs.spell_wind_bolt,
@@ -133,7 +121,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.windbolt_impact,
                     castSound = synths.windbolt_cast_and_fire,
                     hitSound = synths.windbolt_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -150,7 +138,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.waterbolt_impact,
                     castSound = synths.waterbolt_cast_and_fire,
                     hitSound = synths.waterbolt_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -167,7 +155,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.earthbolt_impact,
                     castSound = synths.earthbolt_cast_and_fire,
                     hitSound = synths.earthbolt_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -184,19 +172,13 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.firebolt_impact,
                     castSound = synths.firebolt_cast_and_fire,
                     hitSound = synths.firebolt_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
     }
 
     private fun SpellAttackRepository.registerBlasts(manager: SpellAttackManager) {
-        fun getMaxHit(magicLvl: Int): Int =
-            when {
-                magicLvl >= 59 -> 16
-                magicLvl >= 53 -> 15
-                magicLvl >= 47 -> 14
-                else -> 13
-            }
+        val getMaxHit = ElementalSpellTier.Blast::baseMaxHit
 
         register(
             spell = objs.spell_wind_blast,
@@ -211,7 +193,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.windblast_impact,
                     castSound = synths.windblast_cast_and_fire,
                     hitSound = synths.windblast_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -228,7 +210,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.waterblast_impact,
                     castSound = synths.waterblast_cast_and_fire,
                     hitSound = synths.waterblast_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -245,7 +227,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.earthblast_impact,
                     castSound = synths.earthblast_cast_and_fire,
                     hitSound = synths.earthblast_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -262,19 +244,13 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.fireblast_impact,
                     castSound = synths.fireblast_cast_and_fire,
                     hitSound = synths.fireblast_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
     }
 
     private fun SpellAttackRepository.registerWaves(manager: SpellAttackManager) {
-        fun getMaxHit(magicLvl: Int): Int =
-            when {
-                magicLvl >= 75 -> 20
-                magicLvl >= 70 -> 19
-                magicLvl >= 65 -> 18
-                else -> 17
-            }
+        val getMaxHit = ElementalSpellTier.Wave::baseMaxHit
 
         register(
             spell = objs.spell_wind_wave,
@@ -289,7 +265,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.windwave_impact,
                     castSound = synths.windwave_cast_and_fire,
                     hitSound = synths.windwave_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -306,7 +282,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.waterwave_impact,
                     castSound = synths.waterwave_cast_and_fire,
                     hitSound = synths.waterwave_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -323,7 +299,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.earthwave_impact,
                     castSound = synths.earthwave_cast_and_fire,
                     hitSound = synths.earthwave_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -340,19 +316,13 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.firewave_impact,
                     castSound = synths.firewave_cast_and_fire,
                     hitSound = synths.firewave_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
     }
 
     private fun SpellAttackRepository.registerSurges(manager: SpellAttackManager) {
-        fun getMaxHit(magicLvl: Int): Int =
-            when {
-                magicLvl >= 95 -> 24
-                magicLvl >= 90 -> 23
-                magicLvl >= 85 -> 22
-                else -> 21
-            }
+        val getMaxHit = ElementalSpellTier.Surge::baseMaxHit
 
         register(
             spell = objs.spell_wind_surge,
@@ -367,7 +337,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.windsurge_impact,
                     castSound = synths.windsurge_cast_and_fire,
                     hitSound = synths.windsurge_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -384,7 +354,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.watersurge_impact,
                     castSound = synths.watersurge_cast_and_fire,
                     hitSound = synths.watersurge_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -401,7 +371,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.earthsurge_impact,
                     castSound = synths.earthsurge_cast_and_fire,
                     hitSound = synths.earthsurge_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
 
@@ -418,7 +388,7 @@ class ElementalSpells @Inject constructor(private val objTypes: ObjTypeList) : S
                     impact = spotanims.firesurge_impact,
                     castSound = synths.firesurge_cast_and_fire,
                     hitSound = synths.firesurge_hit,
-                    getMaxHit = ::getMaxHit,
+                    getMaxHit = getMaxHit,
                 ),
         )
     }

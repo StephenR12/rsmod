@@ -49,6 +49,7 @@ constructor(
         spellbook: Spellbook?,
         baseMaxHit: Int,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
     ): IntRange {
         val maxHit =
             computeSpellMaxHit(
@@ -58,6 +59,7 @@ constructor(
                 baseMaxHit = baseMaxHit,
                 spellbook = spellbook,
                 usedSunfireRune = usedSunfireRune,
+                usedTomeOfWater = usedTomeOfWater,
             )
         player.maxHit = maxHit.last
         return maxHit
@@ -70,9 +72,17 @@ constructor(
         baseMaxHit: Int,
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
+        usedTomeOfWater: Boolean = false,
     ): IntRange {
         val spellAttributes =
-            magicAttributes.spellCollect(source, spell, spellbook, usedSunfireRune, random)
+            magicAttributes.spellCollect(
+                source,
+                spell,
+                spellbook,
+                usedSunfireRune,
+                usedTomeOfWater,
+                random,
+            )
 
         val modifiedDamage = computeSpellModifiedDamage(source, baseMaxHit, spellAttributes)
         val modifiedDamageRange =
@@ -108,7 +118,11 @@ constructor(
         baseDamage: Int,
         spellAttributes: EnumSet<CombatSpellAttributes>,
     ): Int {
-        val magicDmgBonus = bonuses.magicDamageBonusBase(source)
+        val magicDmgBonus =
+            bonuses.magicDamageBonusForSpell(
+                source,
+                CombatSpellAttributes.AncientBook in spellAttributes,
+            )
         val prayerDmgBonus = MagicMaxHitOperations.getMagicDamagePrayerBonus(source)
         return MagicMaxHitOperations.modifySpellBaseDamage(
             baseDamage = baseDamage,

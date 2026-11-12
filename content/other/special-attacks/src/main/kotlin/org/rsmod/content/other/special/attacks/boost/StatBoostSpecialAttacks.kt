@@ -21,28 +21,52 @@ class StatBoostSpecialAttacks @Inject constructor(private val worldRepo: WorldRe
     override fun SpecialAttackRepository.register(manager: SpecialAttackManager) {
         registerInstant(objs.dragon_axe, ::lumberUpRed)
         registerInstant(objs.dragon_axe_or, ::lumberUpRed)
+        registerInstant(objs.dragon_axe_or_reloaded, ::lumberUpRed)
         registerInstant(objs.third_age_axe, ::lumberUpSilver)
         registerInstant(objs.infernal_axe, ::lumberUpRed)
+        registerInstant(objs.infernal_axe_uncharged, ::lumberUpRed)
         registerInstant(objs.infernal_axe_or, ::lumberUpRed)
+        registerInstant(objs.infernal_axe_or_uncharged, ::lumberUpRed)
+        registerInstant(objs.infernal_axe_or_reloaded, ::lumberUpRed)
+        registerInstant(objs.infernal_axe_or_reloaded_uncharged, ::lumberUpRed)
         registerInstant(objs.crystal_axe, ::lumberUpSilver)
+        registerInstant(objs.crystal_axe_inactive, ::lumberUpSilver)
 
         registerInstant(objs.dragon_harpoon, ::fishstabberDragonHarpoon)
         registerInstant(objs.dragon_harpoon_or, ::fishstabberDragonHarpoonOr)
+        registerInstant(objs.dragon_harpoon_or_reloaded, ::fishstabberDragonHarpoonOrReloaded)
         registerInstant(objs.infernal_harpoon, ::fishstabberInfernalHarpoon)
+        registerInstant(objs.infernal_harpoon_uncharged, ::fishstabberInfernalHarpoon)
         registerInstant(objs.infernal_harpoon_or, ::fishstabberInfernalHarpoonOr)
         registerInstant(objs.infernal_harpoon_or_uncharged, ::fishstabberInfernalHarpoonOr)
+        registerInstant(objs.infernal_harpoon_or_reloaded, ::fishstabberInfernalHarpoonOrReloaded)
+        registerInstant(
+            objs.infernal_harpoon_or_reloaded_uncharged,
+            ::fishstabberInfernalHarpoonOrReloaded,
+        )
         registerInstant(objs.crystal_harpoon, ::fishstabberCrystalHarpoon)
+        registerInstant(objs.crystal_harpoon_inactive, ::fishstabberCrystalHarpoon)
 
         registerInstant(objs.dragon_pickaxe, ::rockKnockerDragonPickaxe)
         registerInstant(objs.dragon_pickaxe_or_zalcano, ::rockKnockerDragonPickaxeOrZalcano)
         registerInstant(objs.dragon_pickaxe_or_trailblazer, ::rockKnockerDragonPickaxeOrTrailblazer)
+        registerInstant(
+            objs.dragon_pickaxe_or_trailblazer_reloaded,
+            ::rockKnockerDragonPickaxeOrTrailblazerReloaded,
+        )
         registerInstant(objs.dragon_pickaxe_upgraded, ::rockKnockerDragonPickaxeUpgraded)
         registerInstant(objs.infernal_pickaxe, ::rockKnockerInfernalPickaxe)
         registerInstant(objs.infernal_pickaxe_uncharged, ::rockKnockerInfernalPickaxe)
         registerInstant(objs.infernal_pickaxe_or, ::rockKnockerInfernalPickaxeOr)
         registerInstant(objs.infernal_pickaxe_or_uncharged, ::rockKnockerInfernalPickaxeOr)
+        registerInstant(objs.infernal_pickaxe_or_reloaded, ::rockKnockerInfernalPickaxeOrReloaded)
+        registerInstant(
+            objs.infernal_pickaxe_or_reloaded_uncharged,
+            ::rockKnockerInfernalPickaxeOrReloaded,
+        )
         registerInstant(objs.third_age_pickaxe, ::rockKnockerThirdAgePickaxe)
         registerInstant(objs.crystal_pickaxe, ::rockKnockerCrystalPickaxe)
+        registerInstant(objs.crystal_pickaxe_inactive, ::rockKnockerCrystalPickaxe)
     }
 
     private fun lumberUpRed(access: ProtectedAccess): Boolean {
@@ -70,9 +94,15 @@ class StatBoostSpecialAttacks @Inject constructor(private val worldRepo: WorldRe
     }
 
     private fun fishstabberDragonHarpoonOr(access: ProtectedAccess): Boolean {
-        // Uses the same seq as Infernal harpoon (or).
         return access.fishstabber(
             special_seqs.fishstabber_infernal_harpoon_or,
+            spotanims.sp_attackglow_red,
+        )
+    }
+
+    private fun fishstabberDragonHarpoonOrReloaded(access: ProtectedAccess): Boolean {
+        return access.fishstabber(
+            special_seqs.fishstabber_infernal_harpoon_or_reloaded,
             spotanims.sp_attackglow_red,
         )
     }
@@ -87,6 +117,13 @@ class StatBoostSpecialAttacks @Inject constructor(private val worldRepo: WorldRe
     private fun fishstabberInfernalHarpoonOr(access: ProtectedAccess): Boolean {
         return access.fishstabber(
             special_seqs.fishstabber_infernal_harpoon_or,
+            spotanims.sp_attackglow_red,
+        )
+    }
+
+    private fun fishstabberInfernalHarpoonOrReloaded(access: ProtectedAccess): Boolean {
+        return access.fishstabber(
+            special_seqs.fishstabber_infernal_harpoon_or_reloaded,
             spotanims.sp_attackglow_red,
         )
     }
@@ -115,6 +152,10 @@ class StatBoostSpecialAttacks @Inject constructor(private val worldRepo: WorldRe
         return access.rockKnocker(special_seqs.rock_knocker_dragon_pickaxe_or_trailblazer)
     }
 
+    private fun rockKnockerDragonPickaxeOrTrailblazerReloaded(access: ProtectedAccess): Boolean {
+        return access.rockKnocker(special_seqs.rock_knocker_dragon_pickaxe_or_trailblazer_reloaded)
+    }
+
     private fun rockKnockerDragonPickaxeOrZalcano(access: ProtectedAccess): Boolean {
         return access.rockKnocker(special_seqs.rock_knocker_dragon_pickaxe_or_zalcano)
     }
@@ -130,6 +171,11 @@ class StatBoostSpecialAttacks @Inject constructor(private val worldRepo: WorldRe
     private fun rockKnockerInfernalPickaxeOr(access: ProtectedAccess): Boolean {
         // Uses same seq as Dragon pickaxe (or).
         return access.rockKnocker(special_seqs.rock_knocker_dragon_pickaxe_or_trailblazer)
+    }
+
+    private fun rockKnockerInfernalPickaxeOrReloaded(access: ProtectedAccess): Boolean {
+        // Uses the same seq as Dragon pickaxe (or) (Trailblazer Reloaded).
+        return access.rockKnocker(special_seqs.rock_knocker_dragon_pickaxe_or_trailblazer_reloaded)
     }
 
     private fun rockKnockerThirdAgePickaxe(access: ProtectedAccess): Boolean {

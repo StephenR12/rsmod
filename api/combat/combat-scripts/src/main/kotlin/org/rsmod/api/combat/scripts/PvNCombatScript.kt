@@ -42,7 +42,7 @@ constructor(
     override fun ScriptContext.startup() {
         onDefaultApNpc2 { attemptCombatAp(it.npc) }
         onDefaultOpNpc2 { attemptCombatOp(it.npc) }
-        for (spell in spells.combatSpells()) {
+        for (spell in spells.offensiveCombatSpells()) {
             onApNpcT(spell.component) { attemptCombatSpell(it.npc, spell) }
         }
     }

@@ -60,7 +60,8 @@ constructor(
         val meleeAttributes = meleeAttributes.collect(source, attackType)
 
         val slayerTask = target.isSlayerTask(source)
-        val npcAttributes = npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask)
+        val npcAttributes =
+            npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
         val baseAttackRoll =
             computeAttackRoll(source, attackType, attackStyle, meleeAttributes, npcAttributes)

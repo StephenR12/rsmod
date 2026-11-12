@@ -11,11 +11,19 @@ public class SpecialAttackEnergy {
         return player.specialEnergy >= energyInHundreds
     }
 
+    public fun currentSpecialEnergy(player: Player): Int = player.specialEnergy
+
     public fun takeSpecialEnergy(player: Player, energyInHundreds: Int) {
         require(player.specialEnergy >= energyInHundreds) {
             "Not enough special energy to take. Use `hasSpecialEnergy` first for validation."
         }
         player.specialEnergy -= energyInHundreds
+    }
+
+    /** Restores [energyInHundreds], capped at a full special-attack bar. */
+    public fun restoreSpecialEnergy(player: Player, energyInHundreds: Int) {
+        require(energyInHundreds >= 0) { "Energy to restore must not be negative." }
+        player.specialEnergy = (player.specialEnergy + energyInHundreds).coerceAtMost(MAX_ENERGY)
     }
 
     public fun isSpecializedRequirement(energyInHundreds: Int): Boolean {

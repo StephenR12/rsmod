@@ -5,6 +5,7 @@ import org.rsmod.api.combat.commons.CombatAttack
 import org.rsmod.api.specials.combat.MagicSpecialAttack
 import org.rsmod.api.specials.combat.MeleeSpecialAttack
 import org.rsmod.api.specials.combat.RangedSpecialAttack
+import org.rsmod.api.specials.combat.ShieldSpecialAttack
 import org.rsmod.api.specials.configs.SpecialAttackEnergyEnums
 import org.rsmod.api.specials.instant.InstantSpecialAttack
 import org.rsmod.api.specials.weapon.SpecialAttackWeapons
@@ -13,6 +14,8 @@ import org.rsmod.game.type.obj.ObjType
 public class SpecialAttackRepository
 @Inject
 constructor(private val registry: SpecialAttackRegistry) {
+    public fun isRegistered(specWeapon: ObjType): Boolean = registry.contains(specWeapon)
+
     /**
      * Registers the [specWeapon] special attack ([special]) as an [InstantSpecialAttack], which
      * triggers immediately when the player enables it.
@@ -149,6 +152,12 @@ constructor(private val registry: SpecialAttackRegistry) {
      * @see [SpecialAttackManager.takeSpecialEnergy]
      */
     public fun registerMagic(specWeapon: ObjType, special: MagicSpecialAttack) {
+        val result = registry.add(specWeapon, special)
+        assertValidResult(specWeapon, result)
+    }
+
+    /** Registers an off-hand shield special, activated by the shield's inventory operation. */
+    public fun registerShield(specWeapon: ObjType, special: ShieldSpecialAttack) {
         val result = registry.add(specWeapon, special)
         assertValidResult(specWeapon, result)
     }

@@ -22,10 +22,8 @@ internal object UnlimitedRuneEnums : EnumReferences() {
     val fire_high_priority: EnumType<Int, ObjType> = find("fire_unlimited_runes_hiprio")
 
     val low_priority: EnumType<ObjType, EnumType<Int, ObjType>> = find("unlimited_runes_loprio")
-    val water_low_priority: EnumType<Int, ObjType> = find("water_unlimited_runes_loprio")
     val earth_low_priority: EnumType<Int, ObjType> = find("earth_unlimited_runes_loprio")
     val fire_low_priority: EnumType<Int, ObjType> = find("fire_unlimited_runes_loprio")
-    val nature_low_priority: EnumType<Int, ObjType> = find("nature_unlimited_runes_loprio")
 }
 
 internal object UnlimitedRuneEnumBuilder : EnumBuilder() {
@@ -50,15 +48,11 @@ internal object UnlimitedRuneEnumBuilder : EnumBuilder() {
         buildAutoInt<ObjType>("fire_unlimited_runes_hiprio") { this += objs.devils_element }
 
         build<ObjType, EnumType<Int, ObjType>>("unlimited_runes_loprio") {
-            this[objs.water_rune] = unlimited_enums.water_low_priority
             this[objs.earth_rune] = unlimited_enums.earth_low_priority
             this[objs.fire_rune] = unlimited_enums.fire_low_priority
-            this[objs.nature_rune] = unlimited_enums.nature_low_priority
         }
 
-        buildAutoInt<ObjType>("water_unlimited_runes_loprio") { this += objs.tome_of_water }
         buildAutoInt<ObjType>("earth_unlimited_runes_loprio") { this += objs.tome_of_earth }
         buildAutoInt<ObjType>("fire_unlimited_runes_loprio") { this += objs.tome_of_fire }
-        buildAutoInt<ObjType>("nature_unlimited_runes_loprio") { this += objs.bryophytas_staff }
     }
 }

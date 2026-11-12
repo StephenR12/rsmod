@@ -1,5 +1,6 @@
 plugins {
     id("base-conventions")
+    id("integration-test-suite")
 }
 
 kotlin {
@@ -22,4 +23,10 @@ dependencies {
     implementation(projects.engine.game)
     implementation(projects.engine.map)
     implementation(projects.engine.plugin)
+    testImplementation(projects.api.testing)
+    testImplementation(projects.content.other.specialAttacks)
+    integrationImplementation(libs.fastutil)
+    integrationImplementation(projects.content.other.specialAttacks)
 }
+
+tasks.test { workingDir = rootDir }
