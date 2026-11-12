@@ -29,7 +29,7 @@ constructor(
 ) : PluginScript() {
     override fun ScriptContext.startup() {
         onAiTimer(content.sheep) { npc.sheepTimer() }
-        onOpNpc1(content.sheep) { shearSheep(it.npc) }
+        SheepNpcs.ordinaryUnsheared.forEach { type -> onOpNpc1(type) { shearSheep(it.npc) } }
         onOpNpcU(content.sheep, objs.shears) { shearSheep(it.npc) }
 
         onAiTimer(content.sheared_sheep) { npc.sheepTimer() }
@@ -55,6 +55,10 @@ constructor(
             mes("You need a set of shears to do this.")
             return
         }
+        if (SheepNpcs.isZanaris(npc.type) && random.randomBoolean(ZANARIS_FAILURE_DENOMINATOR)) {
+            mes(ZANARIS_FAILURE_MESSAGE)
+            return
+        }
         val sheared = npcParam(npc, params.next_npc_stage)
         anim(seqs.human_shearing)
         soundSynth(synths.shear_sheep, delay = 10)
@@ -62,7 +66,9 @@ constructor(
         delay(1)
         npcPlayerFaceClose(npc)
         delay(1)
-        npcChangeType(npc, sheared, duration = 50)
+        val regrowCycles =
+            if (SheepNpcs.isZanaris(npc.type)) ZANARIS_REGROW_CYCLES else ORDINARY_REGROW_CYCLES
+        npcChangeType(npc, sheared, duration = regrowCycles)
         mes("You get some wool.")
         invAddOrDrop(objRepo, objs.wool)
         npc.queue(queues.generic_queue1, cycles = 1)
@@ -71,5 +77,12 @@ constructor(
     private fun StandardNpcAccess.queueTransmogReset() {
         resetMode()
         npc.sayFlavourText()
+    }
+
+    companion object {
+        const val ORDINARY_REGROW_CYCLES = 50
+        const val ZANARIS_REGROW_CYCLES = 100
+        const val ZANARIS_FAILURE_DENOMINATOR = 4
+        const val ZANARIS_FAILURE_MESSAGE = "The sheep manages to get away from you!"
     }
 }

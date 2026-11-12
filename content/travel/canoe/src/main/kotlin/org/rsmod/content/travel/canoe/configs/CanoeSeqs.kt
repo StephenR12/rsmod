@@ -11,6 +11,8 @@ object CanoeSeqs : SeqReferences() {
 
     val shape_dragon_axe_or =
         find("human_canoeing_carve_trailblazer_axe_no_infernal", 6519373399330397515)
+    val shape_dragon_axe_or_reloaded =
+        find("brut_human_canoeing_carve_trailblazer_reloaded_axe_no_infernal")
     val shape_infernal_axe = find("human_canoeing_carve_infernal_axe", 6519363148465094371)
     val shape_rune_axe = find("human_canoeing_carve_rune_axe", 6519353112971847058)
     val shape_adamant_axe = find("human_canoeing_carve_adamant_axe", 6519353111282654457)
@@ -25,4 +27,5 @@ object CanoeSeqs : SeqReferences() {
     val shape_crystal_axe = find("human_canoeing_carve_crystal_axe", 6519371959293712610)
     val shape_infernal_axe_or =
         find("human_canoeing_carve_league_trailblazer_axe", 6519373172978597601)
+    val shape_infernal_axe_or_reloaded = find("brut_human_canoeing_carve_trailblazer_reloaded_axe")
 }

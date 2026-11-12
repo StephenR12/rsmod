@@ -2,7 +2,9 @@ package org.rsmod.content.travel.canoe.scripts
 
 import org.rsmod.api.config.objParam
 import org.rsmod.api.config.refs.content
+import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
+import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.righthand
 import org.rsmod.api.player.stat.woodcuttingLvl
@@ -154,11 +156,11 @@ internal fun axeSuccessRates(
 
 internal val UnpackedObjType.axeWoodcuttingReq: Int by objParam(params.levelrequire)
 
-internal fun findAxe(player: Player, objTypes: ObjTypeList): InvObj? {
+public fun findAxe(player: Player, objTypes: ObjTypeList): InvObj? {
     val worn = player.wornAxe(objTypes)
     val carried = player.carriedAxe(objTypes)
     if (worn != null && carried != null) {
-        if (objTypes[worn].axeWoodcuttingReq >= objTypes[carried].axeWoodcuttingReq) {
+        if (objTypes[worn].axePriority >= objTypes[carried].axePriority) {
             return worn
         }
         return carried
@@ -168,15 +170,39 @@ internal fun findAxe(player: Player, objTypes: ObjTypeList): InvObj? {
 
 private fun Player.wornAxe(objTypes: ObjTypeList): InvObj? {
     val righthand = righthand ?: return null
-    return righthand.takeIf { objTypes[it].isUsableAxe(woodcuttingLvl) }
+    return righthand.takeIf { objTypes[it].isUsableAxe(this) }
 }
 
 private fun Player.carriedAxe(objTypes: ObjTypeList): InvObj? {
-    return inv.filterNotNull { objTypes[it].isUsableAxe(woodcuttingLvl) }
-        .maxByOrNull { objTypes[it].axeWoodcuttingReq }
+    return inv.filterNotNull { objTypes[it].isUsableAxe(this) }
+        .maxByOrNull { objTypes[it].axePriority }
 }
 
-private fun UnpackedObjType.isUsableAxe(woodcuttingLevel: Int): Boolean =
-    isContentType(content.woodcutting_axe) && woodcuttingLevel >= axeWoodcuttingReq
+private fun UnpackedObjType.isUsableAxe(player: Player): Boolean =
+    isContentType(content.woodcutting_axe) &&
+        player.woodcuttingLvl >= axeWoodcuttingReq &&
+        (!members || player.members) &&
+        (!requiresSongOfTheElves ||
+            player.vars[varbits.song_of_the_elves] >= SONG_OF_THE_ELVES_COMPLETE)
+
+private val UnpackedObjType.requiresSongOfTheElves: Boolean
+    get() = id == objs.crystal_axe.id || id == objs.crystal_axe_inactive.id
+
+private val UnpackedObjType.axePriority: Int
+    get() =
+        when (id) {
+            objs.bronze_axe.id -> 1
+            objs.iron_axe.id -> 2
+            objs.steel_axe.id -> 3
+            objs.black_axe.id -> 4
+            objs.mithril_axe.id -> 5
+            objs.adamant_axe.id -> 6
+            objs.rune_axe.id,
+            objs.gilded_axe.id -> 7
+            objs.crystal_axe.id -> 9
+            else -> 8
+        }
+
+private const val SONG_OF_THE_ELVES_COMPLETE: Int = 194
 
 internal val UnpackedObjType.axeWoodcuttingAnim: SeqType by objParam(params.skill_anim)

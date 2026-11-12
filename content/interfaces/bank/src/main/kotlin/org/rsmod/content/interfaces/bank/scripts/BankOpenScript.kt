@@ -97,6 +97,7 @@ constructor(
             IfEvent.Op8,
             IfEvent.Op9,
             IfEvent.Op10,
+            IfEvent.Op11,
             IfEvent.Depth2,
             IfEvent.DragTarget,
         )

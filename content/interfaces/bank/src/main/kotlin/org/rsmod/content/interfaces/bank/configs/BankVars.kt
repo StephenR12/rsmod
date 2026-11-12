@@ -18,6 +18,7 @@ object BankVarBits : VarBitReferences() {
     val incinerator = find("bank_showincinerator", 54200306011118)
     val tutorial_button = find("bank_hidebanktut", 58785619319353)
     val inventory_item_options = find("bank_hidesideops", 58785619281276)
+    val bank_item_options = find("bank_bankops_toggle_on")
     val deposit_inventory_button = find("bank_hidedepositinv", 58785619245511)
     val deposit_worn_items_button = find("bank_hidedepositworn", 54251826381959)
     val always_deposit_to_potion_store = find("bank_depositpotion", 92376903411390)

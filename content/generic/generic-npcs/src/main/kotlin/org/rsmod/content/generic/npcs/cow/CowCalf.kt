@@ -21,6 +21,9 @@ constructor(private val worldRepo: WorldRepository, private val random: GameRand
         onAiTimer(content.cow_calf) { npc.calfTimer() }
         onOpNpcU(content.cow_calf) { mes("The calf doesn't want that.") }
         onOpNpcU(content.cow_calf, objs.bucket_empty) { mes("Calves are too young to be milked.") }
+        onOpNpcU(content.cow_calf, objs.bucket_of_milk) {
+            mes("Calves aren't really used to drinking milk from buckets!")
+        }
     }
 
     private fun Npc.calfTimer() {

@@ -142,7 +142,8 @@ constructor(
             return
         }
 
-        // TODO(content): Degrade axe charges when applicable.
+        // Canoe cutting yields no item. Crystal charges are item-obtained charges and Infernal
+        // charges are burn-success charges, so neither special effect activates here.
 
         val station = path.station
         this[station] = StationState.StationFalling

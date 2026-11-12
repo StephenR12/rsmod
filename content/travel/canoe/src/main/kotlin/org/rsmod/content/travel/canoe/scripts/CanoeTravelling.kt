@@ -142,36 +142,36 @@ class CanoeTravelling @Inject private constructor(private val cutscene: CanoeCut
         val cutsceneType = if (wilderness) CutsceneType.Wilderness else CutsceneType.Grass
         cutscene.start(this, destination, cutsceneType)
     }
-
-    private fun resolveValidDestinations(station: Station, canoe: Canoe): List<CanoeDestination> {
-        val standard = CanoeDestination.standard
-        val currentIndex = station.currentLocation().index
-        val previous = standard.take(currentIndex).takeLast(canoe.maxStopCount())
-        val next = standard.drop(currentIndex + 1).take(canoe.maxStopCount())
-        val extra = if (canoe == Canoe.Waka) CanoeDestination.wilderness else emptyList()
-        val filtered = (previous + next + extra) - station.currentLocation()
-        return filtered.sortedBy(CanoeDestination::index)
-    }
-
-    private fun Station.currentLocation(): CanoeDestination =
-        when (this) {
-            Station.Lumbridge -> CanoeDestination.Lumbridge
-            Station.ChampionsGuild -> CanoeDestination.ChampionsGuild
-            Station.BarbarianVillage -> CanoeDestination.BarbarianVillage
-            Station.Edgeville -> CanoeDestination.Edgeville
-            Station.FeroxEnclave -> CanoeDestination.FeroxEnclave
-        }
-
-    private fun Canoe.maxStopCount(): Int =
-        when (this) {
-            Canoe.Log -> 1
-            Canoe.Dugout -> 2
-            Canoe.StableDugout -> 3
-            Canoe.Waka -> 4
-        }
 }
 
-private enum class CanoeDestination(val index: Int, val component: ComponentType) {
+public fun resolveValidDestinations(station: Station, canoe: Canoe): List<CanoeDestination> {
+    val standard = CanoeDestination.standard
+    val currentIndex = station.currentLocation().index
+    val previous = standard.take(currentIndex).takeLast(canoe.maxStopCount())
+    val next = standard.drop(currentIndex + 1).take(canoe.maxStopCount())
+    val extra = if (canoe == Canoe.Waka) CanoeDestination.wilderness else emptyList()
+    val filtered = (previous + next + extra) - station.currentLocation()
+    return filtered.sortedBy(CanoeDestination::index)
+}
+
+private fun Station.currentLocation(): CanoeDestination =
+    when (this) {
+        Station.Lumbridge -> CanoeDestination.Lumbridge
+        Station.ChampionsGuild -> CanoeDestination.ChampionsGuild
+        Station.BarbarianVillage -> CanoeDestination.BarbarianVillage
+        Station.Edgeville -> CanoeDestination.Edgeville
+        Station.FeroxEnclave -> CanoeDestination.FeroxEnclave
+    }
+
+private fun Canoe.maxStopCount(): Int =
+    when (this) {
+        Canoe.Log -> 1
+        Canoe.Dugout -> 2
+        Canoe.StableDugout -> 3
+        Canoe.Waka -> 4
+    }
+
+public enum class CanoeDestination(public val index: Int, public val component: ComponentType) {
     Lumbridge(0, canoe_components.destination_lumbridge),
     ChampionsGuild(1, canoe_components.destination_champs_guild),
     BarbarianVillage(2, canoe_components.destination_barb_village),
@@ -180,8 +180,8 @@ private enum class CanoeDestination(val index: Int, val component: ComponentType
     WildernessPond(5, canoe_components.destination_wild_pond);
 
     companion object {
-        val wilderness = listOf(WildernessPond, FeroxEnclave)
-        val standard = entries - wilderness
+        internal val wilderness: List<CanoeDestination> = listOf(WildernessPond, FeroxEnclave)
+        internal val standard: List<CanoeDestination> = entries - wilderness
     }
 }
 

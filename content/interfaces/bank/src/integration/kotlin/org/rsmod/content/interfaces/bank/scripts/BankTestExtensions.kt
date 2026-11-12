@@ -29,6 +29,9 @@ val MAIN_INV_WITHDRAW_1 = IfButtonOp.Op2
 val MAIN_INV_WITHDRAW_5 = IfButtonOp.Op3
 val MAIN_INV_WITHDRAW_X = IfButtonOp.Op6
 val MAIN_INV_WITHDRAW_ALL = IfButtonOp.Op7
+val MAIN_INV_CONFIGURE_CHARGES = IfButtonOp.Op9
+val MAIN_INV_PLACEHOLDER = IfButtonOp.Op10
+val MAIN_INV_EXAMINE = IfButtonOp.Op11
 
 var Player.bankTabSizeMain by intVarBit(BankTab.Main.sizeVarBit)
 var Player.bankTabSize1 by intVarBit(BankTab.Tab1.sizeVarBit)

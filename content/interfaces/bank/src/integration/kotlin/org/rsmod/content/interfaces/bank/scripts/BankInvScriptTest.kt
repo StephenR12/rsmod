@@ -1,13 +1,20 @@
 package org.rsmod.content.interfaces.bank.scripts
 
+import net.rsprot.protocol.game.outgoing.misc.player.RunClientScript
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
+import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
+import org.rsmod.api.player.events.interact.BankedObjEvents
+import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.content.interfaces.bank.BankTab
+import org.rsmod.content.interfaces.bank.bankCapacity
+import org.rsmod.game.inv.FreshDropOrigin
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.type.util.UncheckedType
+import org.rsmod.map.CoordGrid
 
 /* Obj transaction system is not thread-safe. */
 @Execution(ExecutionMode.SAME_THREAD)
@@ -18,6 +25,88 @@ import org.rsmod.game.type.util.UncheckedType
  * objs being used as input.
  */
 class BankInvScriptTest {
+    @Test
+    fun GameTestState.`bank round trip preserves independent exact item vars`() =
+        runGameTest(BankInvScript::class) {
+            val bank = openBank(player)
+            val first = InvObj(objs.dharoks_helm_100, vars = 733)
+            val second = InvObj(objs.dharoks_helm_100, vars = 612)
+            player.inv[3] = first
+            player.inv[7] = second
+
+            player.ifButton(bank_components.deposit_inventory)
+            advance()
+
+            assertTrue(player.inv.isEmpty())
+            assertEquals(first, bank[0])
+            assertEquals(second, bank[1])
+
+            player.ifButton(bank_components.main_inventory, comsub = 0, op = MAIN_INV_WITHDRAW_1)
+            advance()
+            player.ifButton(bank_components.main_inventory, comsub = 0, op = MAIN_INV_WITHDRAW_1)
+            advance()
+
+            assertEquals(first, player.inv[0])
+            assertEquals(second, player.inv[1])
+            assertTrue(bank.isEmpty())
+        }
+
+    @Test
+    fun GameTestState.`banking a fresh ensouled head expires its drop provenance`() =
+        runGameTest(BankInvScript::class) {
+            val bank = openBank(player)
+            val origin = CoordGrid(3_140, 3_209)
+            player.inv[3] =
+                InvObj(objs.ensouled_unicorn_head_initial, vars = FreshDropOrigin.pack(origin))
+
+            player.ifButton(bank_components.side_inventory, comsub = 3, op = SIDE_INV_DEPOSIT_1)
+            advance()
+
+            assertNull(player.inv[3])
+            assertEquals(InvObj(objs.ensouled_unicorn_head), bank[0])
+        }
+
+    @Test
+    fun GameTestState.`failed fresh head deposit preserves its identity and origin`() =
+        runGameTest(BankInvScript::class) {
+            val bank = openBank(player)
+            player.bankCapacity = 1
+            player.bankTabSizeMain = 1
+            bank[0] = InvObj(objs.coins)
+            val original =
+                InvObj(
+                    objs.ensouled_unicorn_head_initial,
+                    vars = FreshDropOrigin.pack(CoordGrid(3_140, 3_209)),
+                )
+            player.inv[3] = original
+
+            player.ifButton(bank_components.side_inventory, comsub = 3, op = SIDE_INV_DEPOSIT_1)
+            advance()
+
+            assertEquals(original, player.inv[3])
+            assertEquals(InvObj(objs.coins), bank[0])
+            assertEquals(1, bank.occupiedSpace())
+        }
+
+    @Test
+    fun GameTestState.`bulk banking expires fresh heads and preserves ordinary items`() =
+        runGameTest(BankInvScript::class) {
+            val bank = openBank(player)
+            player.inv[3] =
+                InvObj(
+                    objs.ensouled_unicorn_head_initial,
+                    vars = FreshDropOrigin.pack(CoordGrid(3_140, 3_209)),
+                )
+            player.inv[4] = InvObj(objs.bones)
+
+            player.ifButton(bank_components.deposit_inventory)
+            advance()
+
+            assertTrue(player.inv.isEmpty())
+            assertEquals(InvObj(objs.ensouled_unicorn_head), bank[0])
+            assertEquals(InvObj(objs.bones), bank[1])
+        }
+
     @Test
     fun GameTestState.`withdraw single obj`() =
         runGameTest(BankInvScript::class) {
@@ -142,6 +231,76 @@ class BankInvScriptTest {
 
             assertEquals(InvObj(stackable, Int.MAX_VALUE), player.inv[0])
             assertEquals(InvObj(stackable, 1000), bank[0])
+        }
+
+    @Test
+    fun GameTestState.`cache 233 bank item operations route configure placeholder and examine`() =
+        runGameTest(BankInvScript::class) {
+            assertEquals(12, bank_components.bank_item_options_toggle.interfaceId)
+            assertEquals(61, bank_components.bank_item_options_toggle.component)
+            assertEquals(16_125, cacheTypes.varbits[bank_varbits.bank_item_options].id)
+
+            val bank = openBank(player)
+            val configureType = firstObjType { it.hasParam(params.bank_autocharge) }
+            val configureObj = InvObj(configureType, 1)
+            bank[0] = configureObj
+            player.bankTabSizeMain = 1
+
+            var configured: BankedObjEvents.ConfigureCharges? = null
+            eventBus.subscribeSuspend<ProtectedAccess, BankedObjEvents.ConfigureCharges>(
+                BankedObjEvents.ConfigureCharges::class.java,
+                configureType.id.toLong(),
+            ) {
+                configured = it
+            }
+
+            player.ifButton(
+                bank_components.main_inventory,
+                comsub = 0,
+                op = MAIN_INV_CONFIGURE_CHARGES,
+            )
+            advance()
+            assertNull(configured)
+            assertEquals(configureObj, bank[0])
+
+            player.setVarBit(bank_varbits.bank_item_options, 1)
+            player.ifButton(
+                bank_components.main_inventory,
+                comsub = 0,
+                op = MAIN_INV_CONFIGURE_CHARGES,
+            )
+            advance()
+            assertEquals(0, configured?.slot)
+            assertEquals(configureObj, configured?.obj)
+            assertEquals(configureType, configured?.type)
+            assertEquals(configureObj, bank[0])
+
+            bank[0] = InvObj(objs.coins, 25)
+            player.ifButton(bank_components.main_inventory, comsub = 0, op = MAIN_INV_PLACEHOLDER)
+            advance()
+            assertEquals(25, player.count(objs.coins))
+            assertTrue(objTypes[bank[0]!!].isPlaceholder)
+
+            client.clear()
+            player.ifButton(bank_components.main_inventory, comsub = 0, op = MAIN_INV_EXAMINE)
+            advance()
+            assertTrue(client.filterIsInstance<RunClientScript>().any { it.id == 6003 })
+            assertTrue(objTypes[bank[0]!!].isPlaceholder)
+        }
+
+    @Test
+    fun GameTestState.`bank item options setting toggles the cache 233 varbit`() =
+        runGameTest(BankInvScript::class, BankSettingsScript::class) {
+            openBank(player)
+            assertEquals(0, player.vars[bank_varbits.bank_item_options])
+
+            player.ifButton(bank_components.bank_item_options_toggle)
+            advance()
+            assertEquals(1, player.vars[bank_varbits.bank_item_options])
+
+            player.ifButton(bank_components.bank_item_options_toggle)
+            advance()
+            assertEquals(0, player.vars[bank_varbits.bank_item_options])
         }
 
     @Test

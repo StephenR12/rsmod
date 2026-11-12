@@ -27,10 +27,16 @@ object CanoeEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(112, 350)
             this[objs.dragon_axe] = rate(112, 350)
             this[objs.dragon_axe_or] = rate(112, 350)
+            this[objs.dragon_axe_or_reloaded] = rate(112, 350)
             this[objs.third_age_axe] = rate(112, 350)
             this[objs.infernal_axe] = rate(112, 350)
+            this[objs.infernal_axe_uncharged] = rate(112, 350)
             this[objs.infernal_axe_or] = rate(112, 350)
+            this[objs.infernal_axe_or_uncharged] = rate(112, 350)
+            this[objs.infernal_axe_or_reloaded] = rate(112, 350)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(112, 350)
             this[objs.crystal_axe] = rate(112, 350)
+            this[objs.crystal_axe_inactive] = rate(112, 350)
         }
 
         build<ObjType, Int>("canoe_shaping_axe_rates") {
@@ -44,10 +50,16 @@ object CanoeEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(112, 350)
             this[objs.dragon_axe] = rate(112, 350)
             this[objs.dragon_axe_or] = rate(112, 350)
+            this[objs.dragon_axe_or_reloaded] = rate(112, 350)
             this[objs.third_age_axe] = rate(112, 350)
             this[objs.infernal_axe] = rate(112, 350)
+            this[objs.infernal_axe_uncharged] = rate(112, 350)
             this[objs.infernal_axe_or] = rate(112, 350)
+            this[objs.infernal_axe_or_uncharged] = rate(112, 350)
+            this[objs.infernal_axe_or_reloaded] = rate(112, 350)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(112, 350)
             this[objs.crystal_axe] = rate(112, 350)
+            this[objs.crystal_axe_inactive] = rate(112, 350)
         }
 
         build<ObjType, SeqType>("canoe_shaping_axe_anims") {
@@ -61,10 +73,17 @@ object CanoeEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = canoe_seqs.shape_gilded_axe
             this[objs.dragon_axe] = canoe_seqs.shape_dragon_axe
             this[objs.dragon_axe_or] = canoe_seqs.shape_dragon_axe_or
+            this[objs.dragon_axe_or_reloaded] = canoe_seqs.shape_dragon_axe_or_reloaded
             this[objs.third_age_axe] = canoe_seqs.shape_3a_axe
             this[objs.infernal_axe] = canoe_seqs.shape_infernal_axe
+            this[objs.infernal_axe_uncharged] = canoe_seqs.shape_infernal_axe
             this[objs.infernal_axe_or] = canoe_seqs.shape_infernal_axe_or
+            this[objs.infernal_axe_or_uncharged] = canoe_seqs.shape_infernal_axe_or
+            this[objs.infernal_axe_or_reloaded] = canoe_seqs.shape_infernal_axe_or_reloaded
+            this[objs.infernal_axe_or_reloaded_uncharged] =
+                canoe_seqs.shape_infernal_axe_or_reloaded
             this[objs.crystal_axe] = canoe_seqs.shape_crystal_axe
+            this[objs.crystal_axe_inactive] = canoe_seqs.shape_crystal_axe
         }
     }
 

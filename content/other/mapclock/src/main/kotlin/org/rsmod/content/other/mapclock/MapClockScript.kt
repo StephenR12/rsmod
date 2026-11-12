@@ -7,6 +7,7 @@ import org.rsmod.api.player.vars.intVarBit
 import org.rsmod.api.player.vars.intVarp
 import org.rsmod.api.script.onPlayerLogin
 import org.rsmod.api.script.onPlayerSoftTimer
+import org.rsmod.api.utils.time.epochMinute
 import org.rsmod.game.MapClock
 import org.rsmod.game.entity.Player
 import org.rsmod.plugin.scripts.PluginScript
@@ -15,6 +16,7 @@ import org.rsmod.plugin.scripts.ScriptContext
 class MapClockScript @Inject constructor(private val clock: MapClock) : PluginScript() {
     private var Player.playtime by intVarp(varps.playtime)
     private var Player.mapClock by intVarp(varps.map_clock)
+    private var Player.dateMinutes by intVarp(varps.date_minutes)
     private var Player.msPastMinute by intVarBit(varbits.date_ms_past_minute)
     private var Player.secsPastMinute by intVarBit(varbits.date_secs_past_minute)
 
@@ -24,6 +26,7 @@ class MapClockScript @Inject constructor(private val clock: MapClock) : PluginSc
     }
 
     private fun Player.initClockTimer() {
+        dateMinutes = epochMinute()
         softTimer(clock_timers.map_clock, 1)
     }
 
@@ -31,6 +34,7 @@ class MapClockScript @Inject constructor(private val clock: MapClock) : PluginSc
         val now = System.currentTimeMillis()
         msPastMinute = (now % 1000).toInt()
         secsPastMinute = ((now / 1000) % 60).toInt()
+        dateMinutes = epochMinute()
         mapClock = clock.cycle
         playtime++
     }

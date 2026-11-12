@@ -1,6 +1,8 @@
 package org.rsmod.content.generic.npcs.person
 
+import org.rsmod.api.config.refs.categories
 import org.rsmod.api.config.refs.content
+import org.rsmod.api.config.refs.params
 import org.rsmod.api.type.editors.npc.NpcEditor
 import org.rsmod.api.type.refs.npc.NpcReferences
 import org.rsmod.game.type.npc.NpcType
@@ -33,6 +35,11 @@ internal object PersonNpcEdits : NpcEditor() {
     }
 
     private fun person(type: NpcType) {
-        edit(type) { contentGroup = content.person }
+        edit(type) {
+            contentGroup = content.person
+            respawnRate = 25
+            param[params.attackrate] = 4
+            param[params.npc_attack_type] = categories.attacktype_crush
+        }
     }
 }

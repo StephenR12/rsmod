@@ -10,11 +10,13 @@ import org.rsmod.game.type.obj.ObjType
 
 object WoodcuttingParams : ParamReferences() {
     val success_rates = find<EnumType<ObjType, Int>>("woodcutting_axe_success_rates")
+    val clue_nest_base_chance = find<Int>("woodcutting_clue_nest_base_chance")
 }
 
 internal object WoodcuttingParamBuilder : ParamBuilder() {
     init {
         build<EnumType<ObjType, Int>>("woodcutting_axe_success_rates")
+        build<Int>("woodcutting_clue_nest_base_chance")
     }
 }
 
@@ -45,10 +47,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(224, 700)
             this[objs.dragon_axe] = rate(240, 750)
             this[objs.dragon_axe_or] = rate(240, 750)
+            this[objs.dragon_axe_or_reloaded] = rate(240, 750)
             this[objs.third_age_axe] = rate(240, 750)
             this[objs.infernal_axe] = rate(240, 750)
+            this[objs.infernal_axe_uncharged] = rate(240, 750)
             this[objs.infernal_axe_or] = rate(240, 750)
+            this[objs.infernal_axe_or_uncharged] = rate(240, 750)
+            this[objs.infernal_axe_or_reloaded] = rate(240, 750)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(240, 750)
             this[objs.crystal_axe] = rate(250, 800)
+            this[objs.crystal_axe_inactive] = rate(240, 750)
         }
 
         build<ObjType, Int>("oak_tree_axes") {
@@ -62,10 +70,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(112, 350)
             this[objs.dragon_axe] = rate(120, 375)
             this[objs.dragon_axe_or] = rate(120, 375)
+            this[objs.dragon_axe_or_reloaded] = rate(120, 375)
             this[objs.third_age_axe] = rate(120, 375)
             this[objs.infernal_axe] = rate(120, 375)
+            this[objs.infernal_axe_uncharged] = rate(120, 375)
             this[objs.infernal_axe_or] = rate(120, 375)
+            this[objs.infernal_axe_or_uncharged] = rate(120, 375)
+            this[objs.infernal_axe_or_reloaded] = rate(120, 375)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(120, 375)
             this[objs.crystal_axe] = rate(120, 375)
+            this[objs.crystal_axe_inactive] = rate(120, 375)
         }
 
         build<ObjType, Int>("willow_tree_axes") {
@@ -79,10 +93,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(56, 175)
             this[objs.dragon_axe] = rate(60, 187)
             this[objs.dragon_axe_or] = rate(60, 187)
+            this[objs.dragon_axe_or_reloaded] = rate(60, 187)
             this[objs.third_age_axe] = rate(60, 187)
             this[objs.infernal_axe] = rate(60, 187)
+            this[objs.infernal_axe_uncharged] = rate(60, 187)
             this[objs.infernal_axe_or] = rate(60, 187)
+            this[objs.infernal_axe_or_uncharged] = rate(60, 187)
+            this[objs.infernal_axe_or_reloaded] = rate(60, 187)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(60, 187)
             this[objs.crystal_axe] = rate(60, 187)
+            this[objs.crystal_axe_inactive] = rate(60, 187)
         }
 
         build<ObjType, Int>("teak_tree_axes") {
@@ -96,10 +116,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(55, 164)
             this[objs.dragon_axe] = rate(60, 190)
             this[objs.dragon_axe_or] = rate(60, 190)
+            this[objs.dragon_axe_or_reloaded] = rate(60, 190)
             this[objs.third_age_axe] = rate(60, 190)
             this[objs.infernal_axe] = rate(60, 190)
+            this[objs.infernal_axe_uncharged] = rate(60, 190)
             this[objs.infernal_axe_or] = rate(60, 190)
+            this[objs.infernal_axe_or_uncharged] = rate(60, 190)
+            this[objs.infernal_axe_or_reloaded] = rate(60, 190)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(60, 190)
             this[objs.crystal_axe] = rate(60, 200)
+            this[objs.crystal_axe_inactive] = rate(60, 190)
         }
 
         build<ObjType, Int>("maple_tree_axes") {
@@ -113,10 +139,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(28, 87)
             this[objs.dragon_axe] = rate(30, 93)
             this[objs.dragon_axe_or] = rate(30, 93)
+            this[objs.dragon_axe_or_reloaded] = rate(30, 93)
             this[objs.third_age_axe] = rate(30, 93)
             this[objs.infernal_axe] = rate(30, 93)
+            this[objs.infernal_axe_uncharged] = rate(30, 93)
             this[objs.infernal_axe_or] = rate(30, 93)
+            this[objs.infernal_axe_or_uncharged] = rate(30, 93)
+            this[objs.infernal_axe_or_reloaded] = rate(30, 93)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(30, 93)
             this[objs.crystal_axe] = rate(30, 93)
+            this[objs.crystal_axe_inactive] = rate(30, 93)
         }
 
         build<ObjType, Int>("arctic_tree_axes") {
@@ -130,10 +162,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(20, 104)
             this[objs.dragon_axe] = rate(21, 112)
             this[objs.dragon_axe_or] = rate(21, 112)
+            this[objs.dragon_axe_or_reloaded] = rate(21, 112)
             this[objs.third_age_axe] = rate(21, 112)
             this[objs.infernal_axe] = rate(21, 112)
+            this[objs.infernal_axe_uncharged] = rate(21, 112)
             this[objs.infernal_axe_or] = rate(21, 112)
+            this[objs.infernal_axe_or_uncharged] = rate(21, 112)
+            this[objs.infernal_axe_or_reloaded] = rate(21, 112)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(21, 112)
             this[objs.crystal_axe] = rate(21, 112)
+            this[objs.crystal_axe_inactive] = rate(21, 112)
         }
 
         build<ObjType, Int>("mahogany_tree_axes") {
@@ -147,10 +185,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(29, 88)
             this[objs.dragon_axe] = rate(34, 94)
             this[objs.dragon_axe_or] = rate(34, 94)
+            this[objs.dragon_axe_or_reloaded] = rate(34, 94)
             this[objs.third_age_axe] = rate(34, 94)
             this[objs.infernal_axe] = rate(34, 94)
+            this[objs.infernal_axe_uncharged] = rate(34, 94)
             this[objs.infernal_axe_or] = rate(34, 94)
+            this[objs.infernal_axe_or_uncharged] = rate(34, 94)
+            this[objs.infernal_axe_or_reloaded] = rate(34, 94)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(34, 94)
             this[objs.crystal_axe] = rate(36, 97)
+            this[objs.crystal_axe_inactive] = rate(34, 94)
         }
 
         build<ObjType, Int>("yew_tree_axes") {
@@ -164,10 +208,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(14, 44)
             this[objs.dragon_axe] = rate(15, 47)
             this[objs.dragon_axe_or] = rate(15, 47)
+            this[objs.dragon_axe_or_reloaded] = rate(15, 47)
             this[objs.third_age_axe] = rate(15, 47)
             this[objs.infernal_axe] = rate(15, 47)
+            this[objs.infernal_axe_uncharged] = rate(15, 47)
             this[objs.infernal_axe_or] = rate(15, 47)
+            this[objs.infernal_axe_or_uncharged] = rate(15, 47)
+            this[objs.infernal_axe_or_reloaded] = rate(15, 47)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(15, 47)
             this[objs.crystal_axe] = rate(15, 47)
+            this[objs.crystal_axe_inactive] = rate(15, 47)
         }
 
         build<ObjType, Int>("magic_tree_axes") {
@@ -181,10 +231,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(7, 21)
             this[objs.dragon_axe] = rate(7, 22)
             this[objs.dragon_axe_or] = rate(7, 22)
+            this[objs.dragon_axe_or_reloaded] = rate(7, 22)
             this[objs.third_age_axe] = rate(7, 22)
             this[objs.infernal_axe] = rate(7, 22)
+            this[objs.infernal_axe_uncharged] = rate(7, 22)
             this[objs.infernal_axe_or] = rate(7, 22)
+            this[objs.infernal_axe_or_uncharged] = rate(7, 22)
+            this[objs.infernal_axe_or_reloaded] = rate(7, 22)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(7, 22)
             this[objs.crystal_axe] = rate(7, 22)
+            this[objs.crystal_axe_inactive] = rate(7, 22)
         }
 
         build<ObjType, Int>("redwood_tree_axes") {
@@ -198,10 +254,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(7, 21)
             this[objs.dragon_axe] = rate(7, 30)
             this[objs.dragon_axe_or] = rate(7, 30)
+            this[objs.dragon_axe_or_reloaded] = rate(7, 30)
             this[objs.third_age_axe] = rate(7, 30)
             this[objs.infernal_axe] = rate(7, 30)
+            this[objs.infernal_axe_uncharged] = rate(7, 30)
             this[objs.infernal_axe_or] = rate(7, 30)
+            this[objs.infernal_axe_or_uncharged] = rate(7, 30)
+            this[objs.infernal_axe_or_reloaded] = rate(7, 30)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(7, 30)
             this[objs.crystal_axe] = rate(8, 35)
+            this[objs.crystal_axe_inactive] = rate(7, 30)
         }
 
         build<ObjType, Int>("hollow_tree_axes") {
@@ -215,10 +277,16 @@ internal object WoodcuttingEnumBuilder : EnumBuilder() {
             this[objs.gilded_axe] = rate(64, 94)
             this[objs.dragon_axe] = rate(67, 101)
             this[objs.dragon_axe_or] = rate(67, 101)
+            this[objs.dragon_axe_or_reloaded] = rate(67, 101)
             this[objs.third_age_axe] = rate(67, 101)
             this[objs.infernal_axe] = rate(67, 101)
+            this[objs.infernal_axe_uncharged] = rate(67, 101)
             this[objs.infernal_axe_or] = rate(67, 101)
+            this[objs.infernal_axe_or_uncharged] = rate(67, 101)
+            this[objs.infernal_axe_or_reloaded] = rate(67, 101)
+            this[objs.infernal_axe_or_reloaded_uncharged] = rate(67, 101)
             this[objs.crystal_axe] = rate(67, 101)
+            this[objs.crystal_axe_inactive] = rate(67, 101)
         }
     }
 

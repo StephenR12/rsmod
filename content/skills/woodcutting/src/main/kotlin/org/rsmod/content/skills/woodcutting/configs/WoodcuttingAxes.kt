@@ -5,38 +5,17 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.type.editors.obj.ObjEditor
+import org.rsmod.game.type.obj.ObjType
+import org.rsmod.game.type.seq.SeqType
 
 internal object WoodcuttingAxes : ObjEditor() {
     init {
-        edit(objs.bronze_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_bronze_axe
-        }
-
-        edit(objs.iron_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_iron_axe
-        }
-
-        edit(objs.steel_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_steel_axe
-        }
-
-        edit(objs.black_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_black_axe
-        }
-
-        edit(objs.mithril_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_mithril_axe
-        }
-
-        edit(objs.adamant_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_adamant_axe
-        }
+        axe(objs.bronze_axe, level = 1, animation = seqs.human_woodcutting_bronze_axe)
+        axe(objs.iron_axe, level = 1, animation = seqs.human_woodcutting_iron_axe)
+        axe(objs.steel_axe, level = 6, animation = seqs.human_woodcutting_steel_axe)
+        axe(objs.black_axe, level = 11, animation = seqs.human_woodcutting_black_axe)
+        axe(objs.mithril_axe, level = 21, animation = seqs.human_woodcutting_mithril_axe)
+        axe(objs.adamant_axe, level = 31, animation = seqs.human_woodcutting_adamant_axe)
 
         edit(objs.blessed_axe) {
             param[params.skill_anim] = seqs.human_woodcutting_blessed_axe
@@ -44,44 +23,51 @@ internal object WoodcuttingAxes : ObjEditor() {
             param[params.levelrequire] = 35
         }
 
-        edit(objs.rune_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_rune_axe
-        }
+        axe(objs.rune_axe, level = 41, animation = seqs.human_woodcutting_rune_axe)
+        axe(objs.gilded_axe, level = 41, animation = seqs.human_woodcutting_gilded_axe)
+        axe(objs.dragon_axe, level = 61, animation = seqs.human_woodcutting_dragon_axe)
+        axe(
+            objs.dragon_axe_or,
+            level = 61,
+            animation = seqs.human_woodcutting_trailblazer_axe_no_infernal,
+        )
+        axe(
+            objs.dragon_axe_or_reloaded,
+            level = 61,
+            animation = seqs.human_woodcutting_trailblazer_reloaded_axe_no_infernal,
+        )
+        axe(objs.third_age_axe, level = 61, animation = seqs.human_woodcutting_3a_axe)
+        axe(objs.infernal_axe, level = 61, animation = seqs.human_woodcutting_infernal_axe)
+        axe(
+            objs.infernal_axe_uncharged,
+            level = 61,
+            animation = seqs.human_woodcutting_infernal_axe,
+        )
+        axe(objs.infernal_axe_or, level = 61, animation = seqs.human_woodcutting_trailblazer_axe)
+        axe(
+            objs.infernal_axe_or_uncharged,
+            level = 61,
+            animation = seqs.human_woodcutting_trailblazer_axe,
+        )
+        axe(
+            objs.infernal_axe_or_reloaded,
+            level = 61,
+            animation = seqs.human_woodcutting_trailblazer_reloaded_axe,
+        )
+        axe(
+            objs.infernal_axe_or_reloaded_uncharged,
+            level = 61,
+            animation = seqs.human_woodcutting_trailblazer_reloaded_axe,
+        )
+        axe(objs.crystal_axe, level = 71, animation = seqs.human_woodcutting_crystal_axe)
+        axe(objs.crystal_axe_inactive, level = 71, animation = seqs.human_woodcutting_dragon_axe)
+    }
 
-        edit(objs.gilded_axe) {
+    private fun axe(type: ObjType, level: Int, animation: SeqType) {
+        edit(type) {
             contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_gilded_axe
-        }
-
-        edit(objs.dragon_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_dragon_axe
-        }
-
-        edit(objs.dragon_axe_or) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_trailblazer_axe_no_infernal
-        }
-
-        edit(objs.third_age_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_3a_axe
-        }
-
-        edit(objs.infernal_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_infernal_axe
-        }
-
-        edit(objs.infernal_axe_or) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_trailblazer_axe
-        }
-
-        edit(objs.crystal_axe) {
-            contentGroup = content.woodcutting_axe
-            param[params.skill_anim] = seqs.human_woodcutting_crystal_axe
+            param[params.levelrequire] = level
+            param[params.skill_anim] = animation
         }
     }
 }

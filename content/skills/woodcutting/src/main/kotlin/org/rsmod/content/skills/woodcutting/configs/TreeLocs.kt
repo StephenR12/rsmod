@@ -106,6 +106,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.regular_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 317_647
         }
     }
 
@@ -135,6 +136,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.oak_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.oak_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 361_146
         }
     }
 
@@ -148,6 +150,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.willow_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.willow_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 289_286
         }
     }
 
@@ -161,6 +164,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.teak_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.teak_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 264_336
         }
     }
 
@@ -175,6 +179,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.juniper_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.regular_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 360_000
         }
     }
 
@@ -188,6 +193,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.maple_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.maple_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 221_918
         }
     }
 
@@ -202,6 +208,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.arctic_pine_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.arctic_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 145_758
         }
     }
 
@@ -215,6 +222,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.mahogany_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.mahogany_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 220_623
         }
     }
 
@@ -228,6 +236,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.yew_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.yew_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 145_013
         }
     }
 
@@ -242,6 +251,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.magic_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.magic_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 72_321
         }
     }
 
@@ -255,6 +265,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.redwood_logs
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.redwood_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 72_321
         }
     }
 
@@ -268,6 +279,7 @@ internal object WoodcuttingTrees : LocEditor() {
             param[params.skill_productitem] = objs.bark
             param[params.next_loc_stage] = stump
             param[success_rates] = axe_enums.hollow_tree_axes
+            param[WoodcuttingParams.clue_nest_base_chance] = 214_367
         }
     }
 }

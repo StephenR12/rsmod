@@ -5,6 +5,7 @@ import org.rsmod.api.config.refs.content
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.stats
+import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.righthand
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.content.skills.woodcutting.scripts.Woodcutting.Companion.treeLevelReq
@@ -69,6 +70,8 @@ class WoodcuttingScriptTest {
             val tree = placeMapLoc(CoordGrid(0, 50, 50, 34, 31), type)
             val logs = type.treeLogs
             player.teleport(tree.coords.translateX(-1))
+            player.members = true
+            player.setVarBit(varbits.vesseled_clues_disabled, 1)
 
             player.righthand = InvObj(objs.bronze_axe)
             player.stats[stats.woodcutting] = type.treeLevelReq
@@ -85,6 +88,7 @@ class WoodcuttingScriptTest {
 
             random.next = 0 // Set random roll to guarantee log success rate.
             random.then = 0 // Set random roll to avoid tree turning into stump.
+            random.then = 255 // Set bird-nest roll to miss.
             advance(ticks = 1)
             assertMessageNotSent("You swing your axe at the tree.")
             assertMessageSent("You get some logs.")
@@ -110,6 +114,7 @@ class WoodcuttingScriptTest {
 
             random.next = 0 // Set random roll to guarantee log success rate.
             random.then = 256 // Set random roll to guarantee tree turning into stump.
+            random.then = 255 // Set bird-nest roll to miss.
             advance(ticks = 1)
             assertMessageNotSent("You swing your axe at the tree.")
             assertMessageSent("You get some logs.")
@@ -128,6 +133,8 @@ class WoodcuttingScriptTest {
             val tree = placeMapLoc(CoordGrid(0, 50, 50, 34, 31), type)
             val logs = type.treeLogs
             player.teleport(tree.coords.translateX(-1))
+            player.members = true
+            player.setVarBit(varbits.vesseled_clues_disabled, 1)
 
             player.righthand = InvObj(objs.bronze_axe)
             player.stats[stats.woodcutting] = type.treeLevelReq
@@ -135,6 +142,7 @@ class WoodcuttingScriptTest {
             advance(ticks = 3)
 
             random.next = 0 // Set random roll to guarantee log success rate.
+            random.then = 255 // Set bird-nest roll to miss.
             advance(ticks = 1)
             assertContains(player.inv, logs)
             val controller = conRepo.findExact(tree.coords)
@@ -147,6 +155,7 @@ class WoodcuttingScriptTest {
             assertEquals(controller, conRepo.findExact(tree.coords))
 
             random.next = 0 // Set random roll to guarantee log success rate.
+            random.then = 255 // Set bird-nest roll to miss.
             player.actionDelay = mapClock.cycle // Set player action delay to force log cut.
             advance(ticks = 1)
             assertExists(tree.coords, type.treeStump)

@@ -1,20 +1,22 @@
 package org.rsmod.content.areas.city.lumbridge.npcs
 
+import jakarta.inject.Inject
 import org.rsmod.api.config.refs.content
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.invtx.invAdd
 import org.rsmod.api.player.dialogue.Dialogue
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.baseWoodcuttingLvl
-import org.rsmod.api.script.advanced.onUnimplementedOpNpc1
+import org.rsmod.api.script.onOpNpc1
 import org.rsmod.content.areas.city.lumbridge.configs.lumbridge_npcs
 import org.rsmod.game.entity.Npc
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
-class WoodsmanTutor : PluginScript() {
+class WoodsmanTutor @Inject constructor(private val skillcapes: WoodcuttingSkillcapePurchase) :
+    PluginScript() {
     override fun ScriptContext.startup() {
-        onUnimplementedOpNpc1(lumbridge_npcs.woodsman_tutor) { startDialogue(it.npc) }
+        onOpNpc1(lumbridge_npcs.woodsman_tutor) { startDialogue(it.npc) }
     }
 
     private suspend fun ProtectedAccess.startDialogue(npc: Npc) {
@@ -23,10 +25,75 @@ class WoodsmanTutor : PluginScript() {
 
     private suspend fun Dialogue.woodsmanDialogue() {
         when {
-            player.baseWoodcuttingLvl >= 99 -> TODO("Mastery dialogue")
+            player.baseWoodcuttingLvl >= WoodcuttingSkillcapePurchase.REQUIRED_LEVEL ->
+                masteryDialogue()
             player.baseWoodcuttingLvl in 29..98 -> highLevelMenu()
             player.baseWoodcuttingLvl in 20..28 -> intermediateLevelMenu()
+            player.baseWoodcuttingLvl == 19 -> levelNineteenMenu()
             else -> lowLevelMenu()
+        }
+    }
+
+    private suspend fun Dialogue.masteryDialogue() {
+        chatNpc(
+            happy,
+            "Wow! It's not often I meet somebody as accomplished as you in Woodcutting! " +
+                "Perhaps you should become the tutor, instead of me! Seeing as you're so " +
+                "skilled, maybe you are interested in buying a Skillcape of",
+        )
+        chatNpc(happy, "Woodcutting?")
+        when (choice2("No, thanks.", 1, "Yes, please", 2)) {
+            1 -> {
+                chatPlayer(neutral, "No, thanks.")
+                chatNpc(neutral, "Ok, come back to me if you change your mind.")
+            }
+            2 -> offerSkillcape()
+        }
+    }
+
+    private suspend fun Dialogue.offerSkillcape() {
+        chatPlayer(happy, "Yes, please.")
+        if (!player.members) {
+            chatNpc(neutral, "I can't sell you one here. Try talking to me later.")
+            return
+        }
+        chatNpc(
+            happy,
+            "Anybody who has spent as much time cutting trees as you deserves the right to own " +
+                "one. Wearing this cape will increase your chance of finding bird's nests. " +
+                "That'll be 99000 coins, please.",
+        )
+        when (choice2("99000! That's too rich for me.", 1, "No problem.", 2)) {
+            1 -> {
+                chatPlayer(sad, "99000! That's too rich for me.")
+                chatNpc(
+                    neutral,
+                    "Well go chop down a few mahogany trees and sell the timber; then you'll " +
+                        "be able to afford one.",
+                )
+            }
+            2 -> buySkillcape()
+        }
+    }
+
+    private suspend fun Dialogue.buySkillcape() {
+        chatPlayer(happy, "No problem.")
+        when (skillcapes.purchase(access)) {
+            WoodcuttingSkillcapePurchaseResult.Purchased ->
+                chatNpc(happy, "Excellent! Wear that cape with pride my friend.")
+            WoodcuttingSkillcapePurchaseResult.InsufficientCoins -> {
+                chatPlayer(sad, "But, unfortunately, I don't have enough money with me.")
+                chatNpc(neutral, "Well come back and see me when you do.")
+            }
+            WoodcuttingSkillcapePurchaseResult.NoInventorySpace ->
+                chatNpc(
+                    neutral,
+                    "Unfortunately all Skillcapes are only available with a free hood, it's " +
+                        "part of a skill promotion deal; buy one get one free, you know. So " +
+                        "you'll need to free up some inventory space before I can sell you one.",
+                )
+            WoodcuttingSkillcapePurchaseResult.NotEligible,
+            WoodcuttingSkillcapePurchaseResult.MembersOnly -> Unit
         }
     }
 
@@ -108,7 +175,8 @@ class WoodsmanTutor : PluginScript() {
     }
 
     private suspend fun Dialogue.intermediateAdvice() {
-        chatPlayer(quiz, "I already know about the basics of woodcutting, got any tips?")
+        chatPlayer(quiz, "I already know a bit about Woodcutting and Firemaking, any tips?")
+        giveAxeIfRequired()
         chatNpc(
             happy,
             "Choose carefully where and what you chop, you can get " +
@@ -126,6 +194,13 @@ class WoodsmanTutor : PluginScript() {
                 "chopping trees, they can really do some damage if " +
                 "you're not paying attention...",
         )
+        chatNpc(happy, "Don't forget you can always use logs for fletching experience too.")
+        chatNpc(
+            happy,
+            "Yes, you'll need lots of logs if you want to be a good fletcher. Talk to the " +
+                "ranging tutor for more information.",
+        )
+        intermediateLevelMenu()
     }
 
     private suspend fun Dialogue.highLevelMenu() {
@@ -157,13 +232,30 @@ class WoodsmanTutor : PluginScript() {
                 "chop trees such as Maple and Yew! These are very " +
                 "good for firemaking.",
         )
+        chatNpc(happy, "Of course, they're also very useful for fletching.")
         chatNpc(
             happy,
-            "Also, look out for birds' nests, you never know what our " +
-                "feathered friends have been collecting. Clue scrolls " +
-                "maybe?",
+            "Also, look out for birds' nests, you never know what our feathered friends have " +
+                "been collecting. Jewellery and Clue scrolls maybe?",
         )
         highLevelMenu()
+    }
+
+    private suspend fun Dialogue.levelNineteenMenu() {
+        when (
+            choice3(
+                "Tell me about different trees and axes.",
+                1,
+                "What is that cape you're wearing?",
+                2,
+                "Goodbye.",
+                3,
+            )
+        ) {
+            1 -> treeAndAxeInquiry()
+            2 -> capeExplanationNonMastery()
+            3 -> goodbye()
+        }
     }
 
     private suspend fun Dialogue.treeAndAxeInquiry() {
@@ -172,24 +264,65 @@ class WoodsmanTutor : PluginScript() {
     }
 
     private suspend fun Dialogue.treeAndAxeMenu() {
-        val choice =
-            choice4(
-                "Oak and Willow",
-                1,
-                "Maple and Yew",
-                2,
-                "Axes",
-                3,
-                "Go back to teaching",
-                4,
-                title = "Trees",
-            )
-        when (choice) {
-            1 -> oakAndWillowExplanation()
-            2 -> mapleAndYewExplanation()
-            3 -> axesExplanation()
-            4 -> highLevelMenu()
+        if (player.baseWoodcuttingLvl >= 29) {
+            when (
+                choice5(
+                    "Oak and Willow",
+                    1,
+                    "Maple and Yew",
+                    2,
+                    "Magic and other trees",
+                    3,
+                    "Axes",
+                    4,
+                    "Go back to teaching",
+                    5,
+                    title = "Trees",
+                )
+            ) {
+                1 -> oakAndWillowExplanation()
+                2 -> mapleAndYewExplanation()
+                3 -> magicAndOtherTreesExplanation()
+                4 -> axesExplanation()
+                5 -> highLevelMenu()
+            }
+        } else {
+            when (
+                choice4(
+                    "Oak and Willow",
+                    1,
+                    "Maple and Yew",
+                    2,
+                    "Axes",
+                    3,
+                    "Go back to teaching",
+                    4,
+                    title = "Trees",
+                )
+            ) {
+                1 -> oakAndWillowExplanation()
+                2 -> mapleAndYewExplanation()
+                3 -> axesExplanation()
+                4 ->
+                    if (player.baseWoodcuttingLvl >= 20) intermediateLevelMenu()
+                    else levelNineteenMenu()
+            }
         }
+    }
+
+    private suspend fun Dialogue.magicAndOtherTreesExplanation() {
+        objbox(
+            objs.magic_logs,
+            "Magic trees are... magic. A difficult wood to work with, but worth it for the " +
+                "rewards. Find them in the areas south of Seers village or on the East side of " +
+                "the Mage Arena.",
+        )
+        chatNpc(
+            neutral,
+            "Hollow trees can be found in the Haunted Woods east of Canifis, but be careful " +
+                "of the leeches.",
+        )
+        treeAndAxeMenu()
     }
 
     private suspend fun Dialogue.oakAndWillowExplanation() {

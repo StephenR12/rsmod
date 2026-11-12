@@ -7,11 +7,14 @@ import org.rsmod.api.config.locXpParam
 import org.rsmod.api.config.objParam
 import org.rsmod.api.config.refs.content
 import org.rsmod.api.config.refs.controllers
+import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
+import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varcons
 import org.rsmod.api.controller.vars.intVarCon
+import org.rsmod.api.player.events.interact.BankedObjEvents
 import org.rsmod.api.player.output.ClientScripts
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.righthand
@@ -21,11 +24,28 @@ import org.rsmod.api.repo.controller.ControllerRepository
 import org.rsmod.api.repo.loc.LocRepository
 import org.rsmod.api.repo.player.PlayerRepository
 import org.rsmod.api.script.onAiConTimer
+import org.rsmod.api.script.onOpHeld1
+import org.rsmod.api.script.onOpHeld2
+import org.rsmod.api.script.onOpHeld3
+import org.rsmod.api.script.onOpHeld4
+import org.rsmod.api.script.onOpHeldU
 import org.rsmod.api.script.onOpLoc1
 import org.rsmod.api.script.onOpLoc3
 import org.rsmod.api.script.onOpLocU
+import org.rsmod.api.script.onOpNpc3
+import org.rsmod.api.script.onOpWorn2
+import org.rsmod.api.script.onOpWorn3
+import org.rsmod.api.script.onProtectedEvent
 import org.rsmod.api.stats.levelmod.InvisibleLevels
 import org.rsmod.api.stats.xpmod.XpModifiers
+import org.rsmod.content.skills.woodcutting.CrystalAxeLifecycle
+import org.rsmod.content.skills.woodcutting.CrystalAxeSinging
+import org.rsmod.content.skills.woodcutting.CrystalSingingLocs
+import org.rsmod.content.skills.woodcutting.CrystalSingingNpcs
+import org.rsmod.content.skills.woodcutting.InfernalAxeLifecycle
+import org.rsmod.content.skills.woodcutting.WoodcuttingAxeEffects
+import org.rsmod.content.skills.woodcutting.WoodcuttingBirdNests
+import org.rsmod.content.skills.woodcutting.WoodcuttingClueNests
 import org.rsmod.content.skills.woodcutting.configs.WoodcuttingParams
 import org.rsmod.events.UnboundEvent
 import org.rsmod.game.MapClock
@@ -46,9 +66,6 @@ import org.rsmod.map.zone.ZoneKey
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
-// TODO:
-// - bird nests
-// - axe effects/charges
 class Woodcutting
 @Inject
 constructor(
@@ -61,8 +78,68 @@ constructor(
     private val xpMods: XpModifiers,
     private val invisibleLvls: InvisibleLevels,
     private val mapClock: MapClock,
+    private val birdNests: WoodcuttingBirdNests,
+    private val clueNests: WoodcuttingClueNests,
+    private val axeEffects: WoodcuttingAxeEffects,
+    private val infernalAxe: InfernalAxeLifecycle,
+    private val crystalAxe: CrystalAxeLifecycle,
+    private val crystalAxeSinging: CrystalAxeSinging,
 ) : PluginScript() {
     override fun ScriptContext.startup() {
+        onOpHeldU(objs.dragon_axe, objs.smouldering_stone) {
+            infernalAxe.create(this, it.firstSlot, it.secondSlot)
+        }
+        for (recharge in infernalAxe.rechargePairs) {
+            for (material in listOf(objs.smouldering_stone, objs.dragon_axe)) {
+                onOpHeldU(recharge.depleted, material) {
+                    infernalAxe.recharge(this, it.firstSlot, it.secondSlot, recharge, material)
+                }
+            }
+            onOpWorn2(recharge.charged) { infernalAxe.checkCharges(this, player.worn[it.slot]) }
+        }
+        onOpHeld3(objs.infernal_axe) { infernalAxe.checkCharges(this, it.inventory[it.slot]) }
+        for (ornament in infernalAxe.ornamentPairs) {
+            onOpHeldU(ornament.plain, objs.trailblazer_tool_ornament_kit) {
+                infernalAxe.applyOrnament(this, it.firstSlot, it.secondSlot, ornament)
+            }
+        }
+        for (style in infernalAxe.ornamentStyles) {
+            for (ornamented in listOf(style.trailblazer, style.reloaded)) {
+                onOpHeld1(ornamented) { infernalAxe.wieldOrnamented(this, it.inventory, it.slot) }
+                if (style.plain == objs.infernal_axe) {
+                    onOpHeld2(ornamented) { infernalAxe.checkCharges(this, it.inventory[it.slot]) }
+                }
+                onOpHeld3(ornamented) {
+                    infernalAxe.revertOrnament(this, it.slot, ornamented, style.plain)
+                }
+                onOpHeld4(ornamented) {
+                    infernalAxe.changeStyle(this, it.inventory, it.slot, style)
+                }
+                onOpWorn3(ornamented) { infernalAxe.changeStyle(this, player.worn, it.slot, style) }
+            }
+        }
+        onOpHeldU(objs.crystal_axe, objs.crystal_shard) {
+            crystalAxe.charge(this, it.firstSlot, it.secondSlot)
+        }
+        onOpHeldU(objs.crystal_axe_inactive, objs.crystal_shard) {
+            crystalAxe.charge(this, it.firstSlot, it.secondSlot)
+        }
+        onOpHeld3(objs.crystal_axe) { crystalAxe.checkCharges(this, it.inventory[it.slot]) }
+        onOpWorn2(objs.crystal_axe) { crystalAxe.checkCharges(this, player.worn[it.slot]) }
+        onOpHeld4(objs.crystal_axe) { crystalAxe.revert(this, it.slot, objs.crystal_axe) }
+        onOpHeld4(objs.crystal_axe_inactive) {
+            crystalAxe.revert(this, it.slot, objs.crystal_axe_inactive)
+        }
+        onProtectedEvent<BankedObjEvents.ConfigureCharges>(objs.crystal_axe.id) {
+            crystalAxe.configureCharges(this)
+        }
+        onProtectedEvent<BankedObjEvents.ConfigureCharges>(objs.crystal_axe_inactive.id) {
+            crystalAxe.configureCharges(this)
+        }
+        onOpLoc1(CrystalSingingLocs.bowl) { crystalAxeSinging.selectAtBowl(this) }
+        for (singer in CrystalSingingNpcs.assistants) {
+            onOpNpc3(singer) { crystalAxeSinging.selectWithSinger(this) }
+        }
         onOpLoc1(content.tree) { attempt(it.loc, it.type) }
         onOpLoc3(content.tree) { cut(it.loc, it.type) }
         onOpLocU(content.tree, content.woodcutting_axe) { cut(it.loc, it.type) }
@@ -143,11 +220,17 @@ constructor(
 
         if (cutLogs) {
             val product = objTypes[type.treeLogs]
-            val xp = type.treeXp * xpMods.get(player, stats.woodcutting)
-            spam("You get some ${product.name.lowercase()}.")
-            statAdvance(stats.woodcutting, xp)
-            invAdd(inv, product)
-            publish(CutLogs(player, tree, product))
+            clueNests.tryDrops(this, type)
+            if (!birdNests.tryDrop(this, product)) {
+                val xp = type.treeXp * xpMods.get(player, stats.woodcutting)
+                val axeResult = axeEffects.apply(this, axe, product)
+                spam("You get some ${product.name.lowercase()}.")
+                statAdvance(stats.woodcutting, xp)
+                if (!axeResult.logConsumed) {
+                    invAdd(inv, product)
+                }
+                publish(CutLogs(player, tree, product))
+            }
         }
 
         if (despawn) {
@@ -244,6 +327,23 @@ constructor(
 
         val UnpackedObjType.axeWoodcuttingReq: Int by objParam(params.levelrequire)
         val UnpackedObjType.axeWoodcuttingAnim: SeqType by objParam(params.skill_anim)
+        val UnpackedObjType.axePriority: Int
+            get() =
+                when (id) {
+                    objs.bronze_axe.id -> 1
+                    objs.iron_axe.id -> 2
+                    objs.steel_axe.id -> 3
+                    objs.black_axe.id -> 4
+                    objs.mithril_axe.id -> 5
+                    objs.adamant_axe.id -> 6
+                    objs.rune_axe.id,
+                    objs.gilded_axe.id -> 7
+                    objs.crystal_axe.id -> 9
+                    else -> 8
+                }
+
+        val UnpackedObjType.axeSoteRequired: Boolean
+            get() = id == objs.crystal_axe.id || id == objs.crystal_axe_inactive.id
 
         val UnpackedLocType.treeLevelReq: Int by locParam(params.levelrequire)
         val UnpackedLocType.treeLogs: ObjType by locParam(params.skill_productitem)
@@ -262,7 +362,7 @@ constructor(
             val worn = player.wornAxe(objTypes)
             val carried = player.carriedAxe(objTypes)
             if (worn != null && carried != null) {
-                if (objTypes[worn].axeWoodcuttingReq >= objTypes[carried].axeWoodcuttingReq) {
+                if (objTypes[worn].axePriority >= objTypes[carried].axePriority) {
                     return worn
                 }
                 return carried
@@ -272,16 +372,20 @@ constructor(
 
         private fun Player.wornAxe(objTypes: ObjTypeList): InvObj? {
             val righthand = righthand ?: return null
-            return righthand.takeIf { objTypes[it].isUsableAxe(woodcuttingLvl) }
+            return righthand.takeIf { objTypes[it].isUsableAxe(this) }
         }
 
         private fun Player.carriedAxe(objTypes: ObjTypeList): InvObj? {
-            return inv.filterNotNull { objTypes[it].isUsableAxe(woodcuttingLvl) }
-                .maxByOrNull { objTypes[it].axeWoodcuttingReq }
+            return inv.filterNotNull { objTypes[it].isUsableAxe(this) }
+                .maxByOrNull { objTypes[it].axePriority }
         }
 
-        private fun UnpackedObjType.isUsableAxe(woodcuttingLevel: Int): Boolean =
-            isContentType(content.woodcutting_axe) && woodcuttingLevel >= axeWoodcuttingReq
+        private fun UnpackedObjType.isUsableAxe(player: Player): Boolean =
+            isContentType(content.woodcutting_axe) &&
+                player.woodcuttingLvl >= axeWoodcuttingReq &&
+                (!members || player.members) &&
+                (!axeSoteRequired ||
+                    player.vars[varbits.song_of_the_elves] >= SONG_OF_THE_ELVES_COMPLETE)
 
         private fun UnpackedLocType.resolveRespawnTime(random: GameRandom): Int {
             val fixed = treeRespawnTime
@@ -302,5 +406,7 @@ constructor(
             val high = rates and 0xFFFF
             return low to high
         }
+
+        private const val SONG_OF_THE_ELVES_COMPLETE: Int = 194
     }
 }

@@ -1,15 +1,22 @@
 package org.rsmod.content.areas.city.lumbridge.npcs
 
+import java.time.Duration
+import java.time.LocalDateTime
+import org.rsmod.api.config.refs.varps
 import org.rsmod.api.player.dialogue.Dialogue
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.player.vars.intVarp
 import org.rsmod.api.script.onOpNpc1
 import org.rsmod.api.script.onOpNpc3
 import org.rsmod.content.areas.city.lumbridge.configs.lumbridge_npcs
 import org.rsmod.game.entity.Npc
+import org.rsmod.game.entity.Player
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
 class Hans : PluginScript() {
+    private var Player.playtime by intVarp(varps.playtime)
+
     override fun ScriptContext.startup() {
         onOpNpc1(lumbridge_npcs.hans) { hansDialogue(it.npc) }
         onOpNpc3(lumbridge_npcs.hans) { hansAgeDialogue(it.npc) }
@@ -60,7 +67,7 @@ class Hans : PluginScript() {
                     "Ahh, I see all the newcomers arriving in Lumbridge, " +
                         "fresh-faced and eager for adventure. I remember you...",
                 )
-                playtimeDialogue()
+                playtimeDialogue(player)
             }
             5 -> {
                 chatPlayer(shifty, "Nothing.")
@@ -69,14 +76,30 @@ class Hans : PluginScript() {
     }
 
     private suspend fun ProtectedAccess.hansAgeDialogue(npc: Npc) =
-        startDialogue(npc) { playtimeDialogue() }
+        startDialogue(npc) { playtimeDialogue(player) }
 
-    private suspend fun Dialogue.playtimeDialogue() {
-        // TODO(content): playtime
-        chatNpc(
-            happy,
-            "You've spent 0 days, 0 hours, 0 minutes in the " +
-                "world since you arrived 0 days ago.",
-        )
+    private suspend fun Dialogue.playtimeDialogue(player: Player) {
+        chatNpc(happy, ageMessage(player.playtime, player.createdAt))
+    }
+
+    companion object {
+        public const val CLIENT_CYCLES_PER_MINUTE: Int = 100
+        private const val MINUTES_PER_HOUR = 60
+        private const val HOURS_PER_DAY = 24
+
+        public fun ageMessage(
+            playtimeCycles: Int,
+            createdAt: LocalDateTime,
+            now: LocalDateTime = LocalDateTime.now(),
+        ): String {
+            val totalMinutes = (playtimeCycles / CLIENT_CYCLES_PER_MINUTE).coerceAtLeast(0)
+            val minutes = totalMinutes % MINUTES_PER_HOUR
+            val totalHours = totalMinutes / MINUTES_PER_HOUR
+            val hours = totalHours % HOURS_PER_DAY
+            val days = totalHours / HOURS_PER_DAY
+            val accountDays = Duration.between(createdAt, now).toDays().coerceAtLeast(0)
+            return "You've spent $days days, $hours hours, $minutes minutes in the " +
+                "world since you arrived $accountDays days ago."
+        }
     }
 }

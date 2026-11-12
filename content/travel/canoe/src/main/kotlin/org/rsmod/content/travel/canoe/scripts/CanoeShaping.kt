@@ -160,7 +160,7 @@ constructor(
             resetAnim()
             statAdvance(stats.woodcutting, xp)
 
-            // TODO(content): Degrade axe charges when applicable.
+            // Shaping yields no item or burn roll, so Crystal and Infernal axe charges are kept.
 
             return
         }

@@ -5,4 +5,5 @@ plugins {
 
 dependencies {
     implementation(projects.api.pluginCommons)
+    integrationImplementation(libs.fastutil)
 }

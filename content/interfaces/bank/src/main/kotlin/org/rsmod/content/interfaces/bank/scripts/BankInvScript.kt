@@ -14,6 +14,7 @@ import org.rsmod.api.invtx.invCompress
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
 import org.rsmod.api.player.bonus.WornBonuses
+import org.rsmod.api.player.events.interact.BankedObjEvents
 import org.rsmod.api.player.events.interact.HeldBanksideEvents
 import org.rsmod.api.player.events.interact.HeldDropEvents
 import org.rsmod.api.player.output.ClientScripts.mesLayerClose
@@ -30,6 +31,7 @@ import org.rsmod.content.interfaces.bank.BankTab
 import org.rsmod.content.interfaces.bank.QuantityMode
 import org.rsmod.content.interfaces.bank.alwaysPlacehold
 import org.rsmod.content.interfaces.bank.bankCapacity
+import org.rsmod.content.interfaces.bank.bankItemOptions
 import org.rsmod.content.interfaces.bank.configs.bank_components
 import org.rsmod.content.interfaces.bank.configs.bank_comsubs
 import org.rsmod.content.interfaces.bank.configs.bank_constants
@@ -111,8 +113,12 @@ constructor(
     }
 
     private suspend fun ProtectedAccess.mainInvOp(slot: Int, op: IfButtonOp) {
-        if (op == IfButtonOp.Op10) {
+        if (op == IfButtonOp.Op11) {
             objExamine(bank, slot)
+            return
+        }
+        if (op == IfButtonOp.Op9) {
+            configureCharges(slot)
             return
         }
         mainInvWithdraw(slot, op)
@@ -149,7 +155,7 @@ constructor(
                 }
                 IfButtonOp.Op7 -> obj.count
                 IfButtonOp.Op8 -> obj.count - 1
-                IfButtonOp.Op9 -> obj.count
+                IfButtonOp.Op10 -> obj.count
                 else -> throw IllegalStateException("Invalid main inv op: $op")
             }
         val transaction =
@@ -160,7 +166,7 @@ constructor(
                 count = count,
                 strict = false,
                 cert = withdrawCert,
-                placehold = alwaysPlacehold || op == IfButtonOp.Op9,
+                placehold = alwaysPlacehold || op == IfButtonOp.Op10,
             )
         val result = transaction[0]
 
@@ -215,19 +221,35 @@ constructor(
         invDeposit(slot, count, inv)
     }
 
+    private suspend fun ProtectedAccess.configureCharges(slot: Int) {
+        if (!bankItemOptions) {
+            return
+        }
+        val obj = bank[slot] ?: return resendSlot(bank, 0)
+        val type = objTypes[obj]
+        if (!type.hasParam(params.bank_autocharge)) {
+            return
+        }
+        publish(BankedObjEvents.ConfigureCharges(slot, obj, type))
+    }
+
     private fun ProtectedAccess.invDeposit(slot: Int, count: Int, inventory: Inventory): Boolean {
-        val obj = inventory[slot]
-        if (obj == null) {
+        val original = inventory[slot]
+        if (original == null) {
             resendSlot(inventory, 0)
             return false
         }
 
-        val objType = objTypes[obj]
+        val originalType = objTypes[original]
 
-        if (objType.param(params.no_bank) != 0) {
+        if (originalType.param(params.no_bank) != 0) {
             mes("A magical force prevents you from banking this item!")
             return false
         }
+
+        val expirations = inventory.expireFreshEnsouledHeads(objTypes, listOf(slot))
+        val obj = checkNotNull(inventory[slot])
+        val objType = objTypes[obj]
 
         val tab = selectedTab
 
@@ -278,18 +300,23 @@ constructor(
 
         // TODO(content): This message may be incorrect.
         if (result == TransactionResult.NotEnoughSpace && bank.occupiedSpace() >= bankCapacity) {
+            inventory.restoreUndepositedFreshHeads(expirations)
             mes("You don't have enough space in your bank account.")
             return false
         }
 
         if (result == TransactionResult.NotEnoughSpace) {
+            inventory.restoreUndepositedFreshHeads(expirations)
             mes("You already have a full stack of that item in the bank.")
             return false
         }
 
         if (!result.isOk()) {
+            inventory.restoreUndepositedFreshHeads(expirations)
             return false
         }
+
+        inventory.restoreUndepositedFreshHeads(expirations)
 
         // Cheap way of checking if obj has taken a new slot in bank.
         val expectedSlot = tabSlots.last + 1
@@ -366,6 +393,8 @@ constructor(
                 }
                 .toHashSet()
 
+        val freshHeadExpirations = from.expireFreshEnsouledHeads(objTypes)
+
         val tab = selectedTab
         if (tab.isMainTab) {
             val startLastOccupiedSpace = bank.lastOccupiedSlot()
@@ -381,6 +410,7 @@ constructor(
             val result = transaction[0]
 
             if (result == TransactionResult.NotEnoughSpace) {
+                from.restoreUndepositedFreshHeads(freshHeadExpirations)
                 mes("Your bank cannot hold your items.")
                 return
             }
@@ -403,6 +433,7 @@ constructor(
                 tab.increaseSize(this, lastOccupiedSlotDiff)
             }
 
+            from.restoreUndepositedFreshHeads(freshHeadExpirations)
             setBanksideExtraOps()
             return
         }
@@ -460,6 +491,7 @@ constructor(
                 }
 
             if (shiftQuery.failure) {
+                from.restoreUndepositedFreshHeads(freshHeadExpirations)
                 mes("Your bank cannot hold your items.")
                 return
             }
@@ -491,11 +523,13 @@ constructor(
         val noneCompleted = transferQuery.noneCompleted()
 
         if (noneCompleted && filteredFromSlots.isEmpty()) {
+            from.restoreUndepositedFreshHeads(freshHeadExpirations)
             mes("Your items cannot be stored in the bank.")
             return
         }
 
         if (noneCompleted) {
+            from.restoreUndepositedFreshHeads(freshHeadExpirations)
             mes("Your bank cannot hold your items.")
             return
         }
@@ -507,6 +541,7 @@ constructor(
         if (newInsertSlots > 0) {
             tab.increaseSize(this, newInsertSlots)
         }
+        from.restoreUndepositedFreshHeads(freshHeadExpirations)
     }
 
     private fun ProtectedAccess.dragTab(drag: IfModalDrag) {

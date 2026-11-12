@@ -613,7 +613,7 @@ constructor(private val enumResolver: EnumTypeMapResolver) {
     }
 
     operator fun contains(stat: StatType): Boolean =
-        stat in skillCapeAnims && stat in skillCapeAnims
+        stat in skillCapeAnims && stat in skillCapeSpots
 
     operator fun get(stat: StatType): Pair<SeqType, SpotanimType> {
         val anim = checkNotNull(skillCapeAnims[stat]) { "Skill cape anim not defined for: $stat" }

@@ -8,19 +8,19 @@ import org.rsmod.game.type.npc.NpcType
 
 internal object SheepNpcEditor : NpcEditor() {
     init {
-        sheep(sheep_npcs.unsheared_2693, sheep_npcs.sheared_1178)
-        sheep(sheep_npcs.unsheared_2696, sheep_npcs.sheared_1301)
-        sheep(sheep_npcs.unsheared_2699, sheep_npcs.sheared_1304)
-        sheep(sheep_npcs.unsheared_2694, sheep_npcs.sheared_1299)
-        sheep(sheep_npcs.unsheared_2697, sheep_npcs.sheared_1302)
-        sheep(sheep_npcs.unsheared_2786, sheep_npcs.sheared_1308)
-        sheep(sheep_npcs.unsheared_2695, sheep_npcs.sheared_1300)
-        sheep(sheep_npcs.unsheared_2698, sheep_npcs.sheared_1303)
-        sheep(sheep_npcs.unsheared_2787, sheep_npcs.sheared_1309)
-        sheep(sheep_npcs.unsheared_2788, sheep_npcs.sheared_2691)
-        sheep(sheep_npcs.unsheared_2789, sheep_npcs.sheared_2692)
-        sheep(sheep_npcs.unsheared_5843, sheep_npcs.sheared_5845)
-        sheep(sheep_npcs.unsheared_5844, sheep_npcs.sheared_5846)
+        SheepNpcs.ordinaryPairs.forEach { (unsheared, sheared) -> sheep(unsheared, sheared) }
+
+        SheepNpcs.zanarisUnsheared.forEach { unsheared ->
+            edit(unsheared) {
+                contentGroup = content.sheep
+                param[params.next_npc_stage] = SheepNpcs.sheared_5845
+                timer = 1
+            }
+        }
+        edit(SheepNpcs.sheared_5845) {
+            contentGroup = content.sheared_sheep
+            timer = 1
+        }
     }
 
     private fun sheep(unsheared: NpcType, sheared: NpcType) {
@@ -66,4 +66,25 @@ object SheepNpcs : NpcReferences() {
     val sheared_2692 = find("sheepsheeredshaggy2")
     val sheared_5845 = find("fairy_sheepsheered")
     val sheared_5846 = find("fairy_sheepsheered2")
+
+    val ordinaryPairs =
+        listOf(
+            unsheared_2693 to sheared_1178,
+            unsheared_2696 to sheared_1301,
+            unsheared_2699 to sheared_1304,
+            unsheared_2694 to sheared_1299,
+            unsheared_2697 to sheared_1302,
+            unsheared_2786 to sheared_1308,
+            unsheared_2695 to sheared_1300,
+            unsheared_2698 to sheared_1303,
+            unsheared_2787 to sheared_1309,
+            unsheared_2788 to sheared_2691,
+            unsheared_2789 to sheared_2692,
+        )
+
+    val ordinaryUnsheared = ordinaryPairs.map { it.first }
+    val ordinarySheared = ordinaryPairs.map { it.second }
+    val zanarisUnsheared = listOf(unsheared_5843, unsheared_5844)
+
+    fun isZanaris(type: NpcType): Boolean = zanarisUnsheared.any { it.id == type.id }
 }
