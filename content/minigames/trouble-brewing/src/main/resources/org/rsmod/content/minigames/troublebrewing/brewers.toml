@@ -1,0 +1,8 @@
+spawn = [
+    { npc = "san_fan", coords = "0_59_47_48_7" },
+    { npc = "fancy_dan", coords = "0_59_47_25_7" },
+    { npc = "honest_jimmy", coords = "0_59_47_36_13" },
+    { npc = "brew_monkey", coords = "0_59_46_8_28" },
+    { npc = "brew_monkey", coords = "0_59_46_29_30" },
+    { npc = "brew_monkey", coords = "0_59_46_57_30" },
+]

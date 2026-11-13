@@ -5,6 +5,11 @@ import org.rsmod.api.config.refs.components
 import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.config.refs.invs
 import org.rsmod.api.config.refs.npcs
+import org.rsmod.api.config.refs.objs
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.player.events.interact.HeldEquipEvents
+import org.rsmod.api.script.onEvent
 import org.rsmod.api.player.dialogue.Dialogue
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.script.onIfClose
@@ -21,6 +26,11 @@ public class CustomFurClothingScript
 @Inject
 constructor(private val service: CustomFurClothing, private val shops: Shops) : PluginScript() {
     override fun ScriptContext.startup() {
+        onEvent<HeldEquipEvents.WearposChange> {
+            if (objType.id == objs.spottier_cape.id && player.worn[wearpos.slot]?.id == FurWorn.spottier.id && player.vars[FurDiaryVars.made] != 0) {
+                player.completeDiaryTask(DiaryTask.EquipCustomSpottierCape)
+            }
+        }
         onOpNpc1(npcs.asyff) { talk(it.npc) }
         onOpNpc3(npcs.asyff) { openShopOrClosed(it.npc) }
         onOpNpc4(npcs.asyff) { openOrClosed(it.npc) }

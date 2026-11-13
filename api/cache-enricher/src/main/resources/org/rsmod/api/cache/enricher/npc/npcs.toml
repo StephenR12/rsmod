@@ -5,34 +5,42 @@ examine = 'Looks after your farming tools.'
 [[config]]
 npc = 'molanisk'
 examine = 'A strange mole-like being.'
+slayer_req = 39
 
 [[config]]
 npc = 'slayer_abberant_spectre_1'
 examine = 'A very smelly ghost.'
+slayer_req = 60
 
 [[config]]
 npc = 'slayer_abberant_spectre_2'
 examine = 'A very smelly ghost.'
+slayer_req = 60
 
 [[config]]
 npc = 'slayer_abberant_spectre_3'
 examine = 'A very smelly ghost.'
+slayer_req = 60
 
 [[config]]
 npc = 'slayer_abberant_spectre_4'
 examine = 'A very smelly ghost.'
+slayer_req = 60
 
 [[config]]
 npc = 'slayer_aberrantspectre_1_strongholdcave'
 examine = 'A very smelly ghost.'
+slayer_req = 60
 
 [[config]]
 npc = 'slayer_aberrantspectre_2_strongholdcave'
 examine = 'A very smelly ghost.'
+slayer_req = 60
 
 [[config]]
 npc = 'slayer_nechryael'
 examine = 'An evil death demon.'
+slayer_req = 80
 
 [[config]]
 npc = 'floatingtwig_broken1'
@@ -45,6 +53,7 @@ examine = 'An evil death spawn.'
 [[config]]
 npc = 'slayer_nechryael_strongholdcave'
 examine = 'An evil death demon.'
+slayer_req = 80
 
 [[config]]
 npc = 'gnome_hudo'
@@ -1557,74 +1566,92 @@ examine = 'She looks dangerous!'
 [[config]]
 npc = 'slayer_cave_crawler_1'
 examine = 'A spiky crawling critter.'
+slayer_req = 10
 
 [[config]]
 npc = 'slayer_cave_crawler_2'
 examine = 'A spiky crawling critter.'
+slayer_req = 10
 
 [[config]]
 npc = 'slayer_cave_crawler_3'
 examine = 'A spiky crawling critter.'
+slayer_req = 10
 
 [[config]]
 npc = 'slayer_cave_crawler_4'
 examine = 'A spiky crawling critter.'
+slayer_req = 10
 
 [[config]]
 npc = 'slayer_kursk_1'
 examine = 'Large, heavy, with sharp things attached to its head.'
+slayer_req = 70
 
 [[config]]
 npc = 'slayer_kursk_2'
 examine = 'Larger, heavier, with sharper things attached to its head.'
+slayer_req = 70
 
 [[config]]
 npc = 'slayer_gargoyle_1'
 examine = 'Flies like a rock.'
+slayer_req = 75
 
 [[config]]
 npc = 'slayer_gargoyle_dead'
 examine = 'Flies like a rock.'
+slayer_req = 75
 
 [[config]]
 npc = 'slayer_banshee_1'
 examine = 'A tortured screaming soul.'
+slayer_req = 15
 
 [[config]]
 npc = 'slayer_abyssal'
 examine = 'A denizen of the Abyss!'
+slayer_req = 85
 
 [[config]]
 npc = 'slayer_abyssal_strongholdcave'
 examine = 'A denizen of the Abyss!'
+slayer_req = 85
 
 [[config]]
 npc = 'slayer_basilisk'
 examine = 'The eyes of evil.'
+slayer_req = 40
 
 [[config]]
 npc = 'slayer_basilisk_baby'
 examine = 'The eyes of evil.'
+slayer_req = 40
 
 [[config]]
 npc = 'slayer_cockatrice'
 examine = 'The winged reptile.'
+slayer_req = 25
 
 [[config]]
 npc = 'slayer_cockatrice_daddy'
 examine = 'The winged reptile.'
+slayer_req = 25
 
 [[config]]
 npc = 'slayer_rockslug'
 examine = 'The slime of evil.'
+slayer_req = 20
 
 [[config]]
 npc = 'slayer_rockslug_baby'
 examine = 'The slime of evil.'
+slayer_req = 20
 
 [[config]]
 npc = 'slayer_dustdevil'
 examine = 'The vacuumed face of evil.'
+slayer_req = 65
 
 [[config]]
 npc = 'poh_skotizo_pet'
@@ -1637,18 +1664,22 @@ examine = "He's one leg short!"
 [[config]]
 npc = 'slayer_turoth_dad'
 examine = "He's one big leg short!"
+slayer_req = 55
 
 [[config]]
 npc = 'slayer_turoth_mum'
 examine = "She's one leg short!"
+slayer_req = 55
 
 [[config]]
 npc = 'slayer_turoth_child'
 examine = "It's one leg short!"
+slayer_req = 55
 
 [[config]]
 npc = 'slayer_turoth_baby'
 examine = "It's one small leg short!"
+slayer_req = 55
 
 [[config]]
 npc = 'slayer_turoth_dad2'
@@ -1661,102 +1692,127 @@ examine = "He's one big leg short!"
 [[config]]
 npc = 'slayer_pyrefiend_1'
 examine = 'A small fire demon.'
+slayer_req = 30
 
 [[config]]
 npc = 'slayer_pyrefiend_2'
 examine = 'A small fire demon.'
+slayer_req = 30
 
 [[config]]
 npc = 'slayer_pyrefiend_3'
 examine = 'A small fire demon.'
+slayer_req = 30
 
 [[config]]
 npc = 'slayer_pyrefiend_4'
 examine = 'A small fire demon.'
+slayer_req = 30
 
 [[config]]
 npc = 'slayer_jelly_1'
 examine = 'Looks scared to see me.'
+slayer_req = 52
 
 [[config]]
 npc = 'slayer_jelly_2'
 examine = "Doesn't look so tough..."
+slayer_req = 52
 
 [[config]]
 npc = 'slayer_jelly_3'
 examine = 'Wibbly.'
+slayer_req = 52
 
 [[config]]
 npc = 'slayer_jelly_4'
 examine = "There's always room for jelly."
+slayer_req = 52
 
 [[config]]
 npc = 'slayer_jelly_5'
 examine = 'Needs cream.....'
+slayer_req = 52
 
 [[config]]
 npc = 'slayer_jelly_6'
 examine = 'Wobbly...'
+slayer_req = 52
 
 [[config]]
 npc = 'slayer_infernal_mage_1'
 examine = 'An evil magic user.'
+slayer_req = 45
 
 [[config]]
 npc = 'slayer_infernal_mage_2'
 examine = 'An evil magic user.'
+slayer_req = 45
 
 [[config]]
 npc = 'slayer_infernal_mage_3'
 examine = 'An evil magic user.'
+slayer_req = 45
 
 [[config]]
 npc = 'slayer_infernal_mage_4'
 examine = 'An evil magic user.'
+slayer_req = 45
 
 [[config]]
 npc = 'slayer_infernal_mage_5'
 examine = 'An evil magic user.'
+slayer_req = 45
 
 [[config]]
 npc = 'slayer_crawling_hand_1'
 examine = "Gimmie five.  Actually, don't."
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_2'
 examine = "Gimmie five.  Actually, don't."
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_3'
 examine = "Gimmie five.  Actually, don't."
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_4'
 examine = "Gimmie five.  Actually, don't."
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_5'
 examine = "Gimmie five.  Actually, don't."
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_big_1'
 examine = "Now THAT's handy."
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_big_2'
 examine = "I'm glad its just the hand I can see..."
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_big_3'
 examine = 'A big severed hand.'
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_big_4'
 examine = 'Give the guy a big hand.....'
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_crawling_hand_big_5'
 examine = 'A big severed hand.'
+slayer_req = 5
 
 [[config]]
 npc = 'slayer_lizard_massive'
@@ -1765,14 +1821,17 @@ examine = "Run away, it's massive!"
 [[config]]
 npc = 'slayer_lizard_large1_green'
 examine = 'A cold-blooded creature, partial to warmth.'
+slayer_req = 22
 
 [[config]]
 npc = 'slayer_lizard_large2_sandy'
 examine = 'A cold-blooded creature, partial to warmth.'
+slayer_req = 22
 
 [[config]]
 npc = 'slayer_lizard_large3_sandy'
 examine = 'A cold-blooded creature, partial to warmth.'
+slayer_req = 22
 
 [[config]]
 npc = 'slayer_lizard_small1_green'
@@ -1785,30 +1844,37 @@ examine = 'A small cold-blooded creature, partial to warmth.'
 [[config]]
 npc = 'slayer_harpiebugswarm'
 examine = 'A swarm of bugs.'
+slayer_req = 33
 
 [[config]]
 npc = 'skeletal_wyvern1'
 examine = 'A very dangerous pile of animated wyvern bones.'
+slayer_req = 72
 
 [[config]]
 npc = 'skeletal_wyvern2'
 examine = 'A very dangerous pile of animated wyvern bones.'
+slayer_req = 72
 
 [[config]]
 npc = 'skeletal_wyvern3'
 examine = 'A very dangerous pile of animated wyvern bones.'
+slayer_req = 72
 
 [[config]]
 npc = 'skeletal_wyvern4'
 examine = 'A very dangerous pile of animated wyvern bones.'
+slayer_req = 72
 
 [[config]]
 npc = 'slayer_killerwatt'
 examine = 'An angry electrical shock!'
+slayer_req = 37
 
 [[config]]
 npc = 'slayer_killerwatt_ball'
 examine = 'A ball of electrical energy.'
+slayer_req = 37
 
 [[config]]
 npc = 'ghost8_unaggressive'
@@ -1825,10 +1891,12 @@ examine = 'Eeek! A ghost!'
 [[config]]
 npc = 'swamp_wallbeast'
 examine = 'What could be hiding in that crack in the wall?'
+slayer_req = 35
 
 [[config]]
 npc = 'swamp_wallbeast_combat'
 examine = 'A big, scary hand!'
+slayer_req = 35
 
 [[config]]
 npc = 'giant_frog'
@@ -1845,10 +1913,12 @@ examine = 'It eats flies.'
 [[config]]
 npc = 'swamp_cave_slime'
 examine = 'A foul-smelling blob of protoplasm.'
+slayer_req = 17
 
 [[config]]
 npc = 'swamp_cave_bug'
 examine = 'A nasty crawling critter.'
+slayer_req = 7
 
 [[config]]
 npc = 'cave_littlebug'
@@ -1857,22 +1927,27 @@ examine = 'A little, slimy beetle-thing.'
 [[config]]
 npc = 'molanisk_giant_cave_bug'
 examine = 'A big, smelly cave dweller.'
+slayer_req = 7
 
 [[config]]
 npc = 'slayer_bloodveld'
 examine = 'The tongue of evil.'
+slayer_req = 50
 
 [[config]]
 npc = 'slayer_bloodveld_baby'
 examine = 'The tongue of evil.'
+slayer_req = 50
 
 [[config]]
 npc = 'slayer_bloodveld_strongholdcave'
 examine = 'The tongue of evil.'
+slayer_req = 50
 
 [[config]]
 npc = 'slayer_bloodveld_baby_strongholdcave'
 examine = 'The tongue of evil.'
+slayer_req = 50
 
 [[config]]
 npc = 'stormcloud_non_attacking'
@@ -1889,14 +1964,17 @@ examine = 'Looks like a zoo keeper who got overwhelmed by his work.'
 [[config]]
 npc = 'slayer_kraken'
 examine = "Kraken' good time!"
+slayer_req = 87
 
 [[config]]
 npc = 'slayer_kraken_sub'
 examine = "Something's lurking beneath the water."
+slayer_req = 87
 
 [[config]]
 npc = 'slayer_kraken_boss'
 examine = "We'll fight, until world's end."
+slayer_req = 87
 
 [[config]]
 npc = 'poh_venenatis_pet'
@@ -1905,6 +1983,7 @@ examine = 'Vacuum proof.'
 [[config]]
 npc = 'slayer_kraken_boss_whirlpool'
 examine = 'Something big lurking beneath the water.'
+slayer_req = 87
 
 [[config]]
 npc = 'poh_callisto_pet'
@@ -1913,10 +1992,12 @@ examine = 'Bear-ly smaller than his father.'
 [[config]]
 npc = 'smoke_devil'
 examine = 'Stay away from smoke, kids.'
+slayer_req = 93
 
 [[config]]
 npc = 'smoke_devil_boss'
 examine = 'Woah.'
+slayer_req = 93
 
 [[config]]
 npc = 'seed_merchant'
@@ -2072,6 +2153,7 @@ examine = "A fun guy. No wait, that's awful. Plus it doesn't even make sense."
 [[config]]
 npc = 'slayer_mutated_zygomite_adolescent'
 examine = 'A bouncy fungus.'
+slayer_req = 57
 
 [[config]]
 npc = 'slayer_mutated_zygomite_adult_cap_withop'
@@ -2428,6 +2510,7 @@ examine = 'The pun was intended.'
 [[config]]
 npc = 'deal_fever_spiders1'
 examine = 'A bunch of legs, eyes and teeth.'
+slayer_req = 42
 
 [[config]]
 npc = 'deal_brewer_1'
@@ -3932,6 +4015,7 @@ examine = 'A popular dwarven delicacy.'
 [[config]]
 npc = 'slayer_mutated_zygomite_adult'
 examine = "A fun guy. No wait, that's awful.."
+slayer_req = 57
 
 [[config]]
 npc = 'necromancer'
@@ -4008,22 +4092,27 @@ examine = 'A horrible, emaciated ape like creature with beady pink eyes.'
 [[config]]
 npc = 'harmless_island_cave_horror_worker'
 examine = 'A horrible, emaciated ape like creature with beady red eyes.'
+slayer_req = 58
 
 [[config]]
 npc = 'harmless_island_cave_horror_young_worker'
 examine = 'A horrible, emaciated ape like creature with beady red eyes.'
+slayer_req = 58
 
 [[config]]
 npc = 'harmless_island_cave_horror_guard'
 examine = 'A horrible, emaciated ape like creature with beady red eyes.'
+slayer_req = 58
 
 [[config]]
 npc = 'harmless_island_cave_horror_small_guard'
 examine = 'A horrible, emaciated ape like creature with beady red eyes.'
+slayer_req = 58
 
 [[config]]
 npc = 'harmless_island_cave_horror_alpha'
 examine = 'A horrible, emaciated ape like creature with beady red eyes.'
+slayer_req = 58
 
 [[config]]
 npc = 'harmless_island_cave_pirate'
@@ -5806,6 +5895,7 @@ examine = 'I can see fish swimming in the water.'
 [[config]]
 npc = 'slayer_cave_gargoyle'
 examine = 'Flies like a rock.'
+slayer_req = 75
 
 [[config]]
 npc = '0_39_55_saltfish'
@@ -8271,14 +8361,17 @@ examine = 'A holy man wearing ancient clothing.'
 [[config]]
 npc = 'godwars_spiritual_saradomin_warrior'
 examine = "Saradomin's chosen warrior."
+slayer_req = 68
 
 [[config]]
 npc = 'godwars_spiritual_saradomin_ranger'
 examine = 'A ranger spirit dedicated to Saradomin.'
+slayer_req = 63
 
 [[config]]
 npc = 'godwars_spiritual_saradomin_mage'
 examine = "Saradomin's holy mage."
+slayer_req = 83
 
 [[config]]
 npc = 'godwars_saradomin_knight_1'
@@ -8399,14 +8492,17 @@ examine = 'An ugly, smelly creature.'
 [[config]]
 npc = 'godwars_spiritual_bandos_ranger'
 examine = 'The spirit of a ranger, serving Bandos beyond death.'
+slayer_req = 63
 
 [[config]]
 npc = 'godwars_spiritual_bandos_warrior'
 examine = 'A true servant of Bandos.'
+slayer_req = 68
 
 [[config]]
 npc = 'godwars_spiritual_bandos_mage'
 examine = "One of Bandos's chosen."
+slayer_req = 83
 
 [[config]]
 npc = 'godwars_goblin1'
@@ -9771,6 +9867,7 @@ examine = 'It looks like some broken bottles'
 [[config]]
 npc = 'mudskipper_ogre'
 examine = 'An angry Ogre in a funny hat.'
+slayer_req = 32
 
 [[config]]
 npc = 'canafis_werewolf_man1'
@@ -12210,10 +12307,12 @@ examine = 'A feral vampyre. It looks really hungry!'
 [[config]]
 npc = 'godwars_bloodveld'
 examine = 'The tongue of evil.'
+slayer_req = 50
 
 [[config]]
 npc = 'godwars_pyrefiend_1'
 examine = 'A small fire demon.'
+slayer_req = 30
 
 [[config]]
 npc = 'godwars_icefiend_1'
@@ -12294,14 +12393,17 @@ examine = 'Cheerleading is a real sport!'
 [[config]]
 npc = 'godwars_spiritual_zamorak_warrior'
 examine = 'Warrior of Zamorak.'
+slayer_req = 68
 
 [[config]]
 npc = 'godwars_spiritual_zamorak_ranger'
 examine = 'Defender of Zamorak.'
+slayer_req = 63
 
 [[config]]
 npc = 'godwars_spiritual_zamorak_mage'
 examine = 'A deadly servant of Zamorak.'
+slayer_req = 83
 
 [[config]]
 npc = 'godwars_armadyl_avatar'
@@ -12322,14 +12424,17 @@ examine = 'Graceful, bird-like creature.'
 [[config]]
 npc = 'godwars_spiritual_armadyl_warrior'
 examine = 'A servant of Armadyl.'
+slayer_req = 68
 
 [[config]]
 npc = 'godwars_spiritual_armadyl_ranger'
 examine = "Armadyl's favourite servant."
+slayer_req = 63
 
 [[config]]
 npc = 'godwars_spiritual_armadyl_mage'
 examine = 'A mage who serves Armadyl above all else - even death.'
+slayer_req = 83
 
 [[config]]
 npc = 'godwars_armadyl_male_armor01_blue'
@@ -15540,6 +15645,7 @@ examine = 'A shadow.'
 [[config]]
 npc = 'mourning_dark_beast'
 examine = 'From a darker dimension.'
+slayer_req = 90
 
 [[config]]
 npc = 'mourning_deathalter_dwarf_vis'
@@ -17396,6 +17502,7 @@ examine = 'What could be worse than an angry, undead fremennik?'
 [[config]]
 npc = 'olaf2_brine_rats'
 examine = 'Eww, a bald rat!'
+slayer_req = 47
 
 [[config]]
 npc = 'olaf2_cave_boulder'
@@ -22474,10 +22581,12 @@ examine = 'This ghost looks quite rebellious.'
 [[config]]
 npc = 'cerberus_attacking'
 examine = 'A three-headed gigantic hound. Guardian of the River of Souls.'
+slayer_req = 91
 
 [[config]]
 npc = 'cerberus_sitting'
 examine = 'A three-headed gigantic hound. Guardian of the River of Souls.'
+slayer_req = 91
 
 [[config]]
 npc = 'ned_1op'
@@ -22486,6 +22595,7 @@ examine = 'An old sailor.'
 [[config]]
 npc = 'cerberus_resetting'
 examine = 'A three-headed gigantic hound. Guardian of the River of Souls.'
+slayer_req = 91
 
 [[config]]
 npc = 'cerberus_spectre_ranged'
@@ -22562,26 +22672,32 @@ examine = 'Born in the death throes of an Abyssal Sire.'
 [[config]]
 npc = 'abyssalsire_sire_stasis_sleeping'
 examine = 'A higher order of abyssal demon.'
+slayer_req = 85
 
 [[config]]
 npc = 'abyssalsire_sire_stasis_awake'
 examine = 'A higher order of abyssal demon.'
+slayer_req = 85
 
 [[config]]
 npc = 'abyssalsire_sire_stasis_stunned'
 examine = "It's disorientated... for now."
+slayer_req = 85
 
 [[config]]
 npc = 'abyssalsire_sire_puppet'
 examine = 'The Sire walks.'
+slayer_req = 85
 
 [[config]]
 npc = 'abyssalsire_sire_wandering'
 examine = 'A higher order of abyssal demon.'
+slayer_req = 85
 
 [[config]]
 npc = 'abyssalsire_sire_panicking'
 examine = "It's manipulating the Nexus for its own protection."
+slayer_req = 85
 
 [[config]]
 npc = 'poh_jadpet'
@@ -22626,6 +22742,7 @@ examine = "D'aw look at the liddle..."
 [[config]]
 npc = 'abyssalsire_sire_apocalypse'
 examine = "It's desperate."
+slayer_req = 85
 
 [[config]]
 npc = 'abyssalsire_tentacle_sleeping_north'
@@ -24294,10 +24411,12 @@ examine = 'A terrifying statue.'
 [[config]]
 npc = 'lotr_terror_dog_large'
 examine = 'A terrifying dog beast.'
+slayer_req = 40
 
 [[config]]
 npc = 'lotr_terror_dog_small'
 examine = 'A terrifying dog beast.'
+slayer_req = 40
 
 [[config]]
 npc = 'lotr_tran_razorlor'
@@ -26893,6 +27012,7 @@ examine = 'She likes other people to cut down trees.'
 [[config]]
 npc = 'kourend_abyssal'
 examine = 'A denizen of the Abyss!'
+slayer_req = 85
 
 [[config]]
 npc = 'kourend_black_demon_1'
@@ -26925,10 +27045,12 @@ examine = 'Lesser, but still pretty big.'
 [[config]]
 npc = 'kourend_dustdevil'
 examine = 'The vacuumed face of evil.'
+slayer_req = 65
 
 [[config]]
 npc = 'kourend_dark_beast'
 examine = 'From a darker dimension.'
+slayer_req = 90
 
 [[config]]
 npc = 'kourend_firegiant1'
@@ -27029,10 +27151,12 @@ examine = 'It appears intelligent and savage.'
 [[config]]
 npc = 'kourend_black_dragon'
 examine = 'It appears intelligent and savage.'
+slayer_req = 77
 
 [[config]]
 npc = 'kourend_bloodveld'
 examine = 'The twisted tongue of evil.'
+slayer_req = 50
 
 [[config]]
 npc = 'kourend_jelly'
@@ -27433,98 +27557,145 @@ examine = "Conveniently, he's big enough to stoke the boiler."
 [[config]]
 npc = 'superior_crawling_hand'
 examine = 'That is quite some-thing.'
+slayer_req = 5
+slayer_xp = 550.0
 
 [[config]]
 npc = 'superior_cave_crawler'
 examine = 'A dangerous looking beast.'
+slayer_req = 10
+slayer_xp = 600.0
 
 [[config]]
 npc = 'superior_banshee'
 examine = 'Scream if you want to go faster.'
+slayer_req = 15
+slayer_xp = 610.0
 
 [[config]]
 npc = 'superior_kourend_banshee'
 examine = 'A tortured, twisted and screaming soul.'
+slayer_req = 15
+slayer_xp = 2200.0
 
 [[config]]
 npc = 'superior_rockslug'
 examine = 'The slime of greater evil.'
+slayer_req = 20
+slayer_xp = 770.0
 
 [[config]]
 npc = 'superior_cockatrice'
 examine = 'Careful where he puts that beak!'
+slayer_req = 25
+slayer_xp = 950.0
 
 [[config]]
 npc = 'superior_pyrefiend'
 examine = 'A large demonic being of fire.'
+slayer_req = 30
+slayer_xp = 1250.0
 
 [[config]]
 npc = 'superior_basilisk'
 examine = "Let's hope I have some phoenix tears."
+slayer_req = 40
+slayer_xp = 1700.0
 
 [[config]]
 npc = 'superior_infernal_mage'
 examine = 'The evil that men do lives on and on.'
+slayer_req = 45
+slayer_xp = 1750.0
 
 [[config]]
 npc = 'superior_bloodveld'
 examine = "I wouldn't want to get near that tongue."
+slayer_req = 50
+slayer_xp = 2900.0
 
 [[config]]
 npc = 'superior_kourend_bloodveld'
 examine = "I wouldn't want to get near that tongue."
+slayer_req = 50
+slayer_xp = 4100.0
 
 [[config]]
 npc = 'superior_jelly'
 examine = "I don't think you're ready for this jelly."
+slayer_req = 52
+slayer_xp = 1900.0
 
 [[config]]
 npc = 'superior_kourend_jelly'
 examine = "I don't think you're ready for this jelly."
+slayer_req = 52
+slayer_xp = 2200.0
 
 [[config]]
 npc = 'superior_cave_horror'
 examine = 'An extremely dangerous, emaciated ape like creature with beady red eyes.'
+slayer_req = 58
+slayer_xp = 1300.0
 
 [[config]]
 npc = 'superior_abberant_spectre'
 examine = "I'd smell better after completing 3145 laps of an agility course dressed as a monkey."
+slayer_req = 60
+slayer_xp = 2500.0
 
 [[config]]
 npc = 'superior_kourend_spectre'
 examine = "I'd smell better after completing 3145 laps of an agility course dressed as a monkey."
+slayer_req = 60
+slayer_xp = 4085.0
 
 [[config]]
 npc = 'superior_dustdevil'
 examine = 'Hold your breath!'
+slayer_req = 65
+slayer_xp = 3000.0
 
 [[config]]
 npc = 'superior_kurask'
 examine = 'Head honcho for the Kurask.'
+slayer_req = 70
+slayer_xp = 2767.4
 
 [[config]]
 npc = 'superior_smoke_devil'
 examine = "I don't think he is good for my lungs."
+slayer_req = 93
+slayer_xp = 2400.0
 
 [[config]]
 npc = 'superior_gargoyle'
 examine = 'Am I losing my marbles?'
+slayer_req = 75
+slayer_xp = 2768.0
 
 [[config]]
 npc = 'superior_gargoyle_dead'
 examine = 'Am I losing my marbles?'
+slayer_req = 75
 
 [[config]]
 npc = 'superior_dark_beast'
 examine = "I don't want to ever visit that darker dimension..."
+slayer_req = 90
+slayer_xp = 6462.0
 
 [[config]]
 npc = 'superior_abyssal_demon'
 examine = 'A greater denizen of the Abyss.'
+slayer_req = 85
+slayer_xp = 4200.0
 
 [[config]]
 npc = 'superior_nechryael'
 examine = 'The arch demon of death.'
+slayer_req = 80
+slayer_xp = 3280.0
 
 [[config]]
 npc = 'slayer_kraken_cove_lieve'
@@ -28885,6 +29056,7 @@ examine = 'An extremely vicious lobster type thing.'
 [[config]]
 npc = 'fossil_zygomite'
 examine = 'Not in the ground anymore! It looks a little wobbly.'
+slayer_req = 57
 
 [[config]]
 npc = 'gaius'
@@ -29925,6 +30097,7 @@ examine = 'It appears intelligent and savage.'
 [[config]]
 npc = 'ds2_brut_black_dragon'
 examine = 'It appears intelligent and savage.'
+slayer_req = 77
 
 [[config]]
 npc = 'galvek_waves'
@@ -31657,14 +31830,17 @@ examine = 'A hunter of the Kahlith.'
 [[config]]
 npc = 'hydra'
 examine = 'A ferocious Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'wyrm_dark'
 examine = "Don't let it wyrm its way in."
+slayer_req = 62
 
 [[config]]
 npc = 'wyrm_light'
 examine = "Don't let it wyrm its way in."
+slayer_req = 62
 
 [[config]]
 npc = 'drake'
@@ -31681,34 +31857,42 @@ examine = 'A cold-blooded creature, partial to warmth.'
 [[config]]
 npc = 'hydraboss'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'hydraboss_p1_transition'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'hydraboss_p2_transition'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'hydraboss_p3_transition'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'hydraboss_4'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'hydraboss_3'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'hydraboss_2'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'hydraboss_finaldeath'
 examine = 'A ferocious Alchemical Hydra!'
+slayer_req = 95
 
 [[config]]
 npc = 'slayer_master_8'
@@ -33825,6 +34009,8 @@ examine = 'A clockwork penguin.'
 [[config]]
 npc = 'superior_basilisk_knight'
 examine = "Even phoenix tears won't help here."
+slayer_req = 60
+slayer_xp = 5590.0
 
 [[config]]
 npc = 'viking_heckler_noop'
@@ -33961,6 +34147,7 @@ examine = 'The dead serpent king.'
 [[config]]
 npc = 'basilisk_knight'
 examine = 'The greater eyes of evil.'
+slayer_req = 60
 
 [[config]]
 npc = 'bakuna'
@@ -34569,6 +34756,8 @@ examine = 'Sweet dreams are most definitely not made of this.'
 [[config]]
 npc = 'superior_pyrelord'
 examine = 'A huge demonic being of fire.'
+slayer_req = 30
+slayer_xp = 1840.0
 
 [[config]]
 npc = 'nightmare_challenge_husk_magic'
@@ -35941,18 +36130,26 @@ examine = 'An ancient warrior.'
 [[config]]
 npc = 'superior_turoth'
 examine = "He's one huge leg short!"
+slayer_req = 55
+slayer_xp = 1998.0
 
 [[config]]
 npc = 'superior_wyrm_dark'
 examine = 'Is it wyrm in here or is it just me?'
+slayer_req = 62
+slayer_xp = 3520.0
 
 [[config]]
 npc = 'superior_wyrm_light'
 examine = 'Is it wyrm in here or is it just me?'
+slayer_req = 62
+slayer_xp = 3520.0
 
 [[config]]
 npc = 'superior_drake'
 examine = "It's really winging the whole dragon thing, isn't it?"
+slayer_req = 84
+slayer_xp = 7087.0
 
 [[config]]
 npc = 'superior_drake_death'
@@ -35961,6 +36158,8 @@ examine = "It's really winging the whole dragon thing, isn't it?"
 [[config]]
 npc = 'superior_hydra'
 examine = "Don't forget to hydra-te."
+slayer_req = 95
+slayer_xp = 8625.0
 
 [[config]]
 npc = 'torfinn_travel_rellekka'
@@ -38629,10 +38828,12 @@ examine = 'A small odd-looking spider.'
 [[config]]
 npc = 'araxyte_normal'
 examine = 'A large odd-looking spider.'
+slayer_req = 92
 
 [[config]]
 npc = 'araxyte_large'
 examine = 'A very large odd-looking spider.'
+slayer_req = 92
 
 [[config]]
 npc = 'tobquest_ranis'
@@ -38817,10 +39018,12 @@ examine = "He's a disciple of the Sage"
 [[config]]
 npc = 'wild_cave_dustdevil'
 examine = 'The vacuumed face of evil.'
+slayer_req = 65
 
 [[config]]
 npc = 'wild_cave_abyssal'
 examine = 'A denizen of the Abyss!'
+slayer_req = 85
 
 [[config]]
 npc = 'wild_cave_nechryael'
@@ -38829,22 +39032,27 @@ examine = 'An evil death demon.'
 [[config]]
 npc = 'wild_cave_jelly_1'
 examine = 'Looks scared to see me.'
+slayer_req = 52
 
 [[config]]
 npc = 'wild_cave_jelly_2'
 examine = "Doesn't look so tough..."
+slayer_req = 52
 
 [[config]]
 npc = 'wild_cave_jelly_3'
 examine = 'Wibbly.'
+slayer_req = 52
 
 [[config]]
 npc = 'wild_cave_jelly_4'
 examine = "There's always room for jelly."
+slayer_req = 52
 
 [[config]]
 npc = 'wild_cave_jelly_5'
 examine = 'Needs cream.....'
+slayer_req = 52
 
 [[config]]
 npc = 'wild_cave_superior'
@@ -39013,14 +39221,17 @@ examine = 'She looks to have been down here a long time.'
 [[config]]
 npc = 'nex_prison_warrior'
 examine = 'A dangerous looking spirit.'
+slayer_req = 68
 
 [[config]]
 npc = 'nex_prison_ranger'
 examine = 'A dangerous looking spirit.'
+slayer_req = 63
 
 [[config]]
 npc = 'nex_prison_mage'
 examine = 'A dangerous looking spirit.'
+slayer_req = 83
 
 [[config]]
 npc = 'nex_prison_blood_reaver'
@@ -41361,6 +41572,7 @@ examine = 'Only the true lord & king of the lands can lift his burden.'
 [[config]]
 npc = 'slayer_lizard_large1_green_lowrange'
 examine = 'A cold-blooded creature, partial to warmth.'
+slayer_req = 22
 
 [[config]]
 npc = 'slayer_lizard_small1_green_lowrange'
@@ -43042,10 +43254,14 @@ examine = 'Keeps the peace... kind of.'
 [[config]]
 npc = 'superior_warped_terrorbird'
 examine = 'Looks even nastier than the normal ones.'
+slayer_req = 56
+slayer_xp = 3200.0
 
 [[config]]
 npc = 'superior_warped_tortoise'
 examine = 'Looks even nastier than the normal ones.'
+slayer_req = 56
+slayer_xp = 4510.0
 
 [[config]]
 npc = 'pog_gnome_longramble_vis'
@@ -43142,62 +43358,77 @@ examine = 'No one ever puts these in the right place.'
 [[config]]
 npc = 'pog_mutated_tortoise'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_1'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_2'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_3'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_4'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_5'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_6'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_7'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_8'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_boss_1'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_boss_2'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_boss_3'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_boss_1_background_vis'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_boss_2_background_vis'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'pog_mutated_terrorbird_boss_3_background_vis'
 examine = 'What a horrible looking thing.'
+slayer_req = 56
 
 [[config]]
 npc = 'hagus'
@@ -45218,10 +45449,12 @@ examine = 'The moonlit winged reptile.'
 [[config]]
 npc = 'varlamore_wyrm_dark01'
 examine = "Don't let it wyrm its way in."
+slayer_req = 62
 
 [[config]]
 npc = 'varlamore_wyrm_light01'
 examine = "Don't let it wyrm its way in."
+slayer_req = 62
 
 [[config]]
 npc = 'pmoon_sulphur_nagua'
@@ -47350,14 +47583,17 @@ examine = 'A Mort Myre mushroom-muncher.'
 [[config]]
 npc = 'araxyte_normal_bigwander'
 examine = 'A large odd-looking spider.'
+slayer_req = 92
 
 [[config]]
 npc = 'araxyte_large_bigwander'
 examine = 'A very large odd-looking spider.'
+slayer_req = 92
 
 [[config]]
 npc = 'araxxor'
 examine = 'A seriously scary spider.'
+slayer_req = 92
 
 [[config]]
 npc = 'araxxor_dead'
@@ -47406,6 +47642,8 @@ examine = 'Looks a tad disheveled'
 [[config]]
 npc = 'superior_araxyte'
 examine = 'A very large odd-looking spider.'
+slayer_req = 92
+slayer_xp = 4658.0
 
 [[config]]
 npc = 'poh_araxxor_pet'
@@ -47886,10 +48124,12 @@ examine = 'Needs cream...'
 [[config]]
 npc = 'cave_crawler_ice_1'
 examine = 'A spiky crawling critter.'
+slayer_req = 10
 
 [[config]]
 npc = 'cave_crawler_ice_2'
 examine = 'A spiky crawling critter.'
+slayer_req = 10
 
 [[config]]
 npc = 'ice_warrior_tapoyauik'
@@ -48782,6 +49022,8 @@ examine = 'Perhaps this gardener might look after your crops for you.'
 [[config]]
 npc = 'superior_cave_crawler_ice'
 examine = 'A dangerous looking beast.'
+slayer_req = 10
+slayer_xp = 600.0
 
 [[config]]
 npc = 'poh_skillpet_agility_bone'
@@ -50014,6 +50256,7 @@ examine = 'His beard seems to have a life of its own.'
 [[config]]
 npc = 'slayer_rockslug_crypt_of_tonali'
 examine = 'The slime of evil.'
+slayer_req = 20
 
 [[config]]
 npc = 'giant_rockcrab_crypt_of_tonali'
@@ -50338,6 +50581,8 @@ examine = 'Doom on a small scale.'
 [[config]]
 npc = 'superior_custodian'
 examine = 'Old as...'
+slayer_req = 76
+slayer_xp = 3382.0
 
 [[config]]
 npc = '0_19_48_freshfish'
@@ -50834,14 +51079,53 @@ examine = "She's here to guard the border."
 [[config]]
 npc = 'juvenile_custodian_stalker'
 examine = 'Not fully grown.'
+attack_type = 'Crush'
+slayer_req = 54
+slayer_xp = 135.0
+respawn_rate = 10
+attack_anim = 12369
+death_anim = 12368
+defence_light = -10
+defence_standard = 5
+defence_heavy = 30
+poison_immunity = true
+venom_immunity = 'Immune'
+elemental_weakness_type = 'Fire'
+elemental_weakness_percent = 30
 
 [[config]]
 npc = 'mature_custodian_stalker'
 examine = 'Grown just enough.'
+attack_type = 'Crush'
+slayer_req = 67
+slayer_xp = 190.0
+respawn_rate = 10
+attack_anim = 12375
+death_anim = 12371
+defence_light = -10
+defence_standard = 5
+defence_heavy = 30
+poison_immunity = true
+venom_immunity = 'Immune'
+elemental_weakness_type = 'Fire'
+elemental_weakness_percent = 30
 
 [[config]]
 npc = 'elder_custodian_stalker'
 examine = 'Overgrown.'
+attack_type = 'Crush'
+slayer_req = 76
+slayer_xp = 250.0
+respawn_rate = 10
+attack_anim = 12380
+death_anim = 12383
+defence_light = 30
+defence_standard = 5
+defence_heavy = -10
+poison_immunity = true
+venom_immunity = 'Immune'
+elemental_weakness_type = 'Fire'
+elemental_weakness_percent = 30
 
 [[config]]
 npc = 'baby_custodian_stalker'

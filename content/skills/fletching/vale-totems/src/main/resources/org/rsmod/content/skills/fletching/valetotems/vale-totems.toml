@@ -1,0 +1,199 @@
+[[spawn]]
+npc = "ent_totems_intro_ranulph"
+coords = "0_21_52_22_39"
+
+[[spawn]]
+npc = "ent_totems_intro_child"
+coords = "0_21_52_22_40"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_1"
+coords = "0_21_52_24_47"
+
+[[spawn]]
+npc = "ent_totems_site_1_animal_a_1"
+coords = "0_21_52_29_48"
+
+[[spawn]]
+npc = "ent_totems_site_1_animal_b_1"
+coords = "0_21_52_23_50"
+
+[[spawn]]
+npc = "ent_totems_site_1_animal_c_1"
+coords = "0_21_52_27_51"
+
+[[spawn]]
+npc = "ent_totems_site_1_animal_d_1"
+coords = "0_21_52_30_45"
+
+[[spawn]]
+npc = "ent_totems_site_1_animal_e_1"
+coords = "0_21_52_22_46"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_2"
+coords = "0_21_51_2_53"
+
+[[spawn]]
+npc = "ent_totems_site_2_animal_a_1"
+coords = "0_21_51_5_56"
+
+[[spawn]]
+npc = "ent_totems_site_2_animal_b_1"
+coords = "0_20_51_63_58"
+
+[[spawn]]
+npc = "ent_totems_site_2_animal_c_1"
+coords = "0_21_51_3_59"
+
+[[spawn]]
+npc = "ent_totems_site_2_animal_d_1"
+coords = "0_21_51_6_53"
+
+[[spawn]]
+npc = "ent_totems_site_2_animal_e_1"
+coords = "0_20_51_62_54"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_3"
+coords = "0_21_51_42_10"
+
+[[spawn]]
+npc = "ent_totems_site_3_animal_a_1"
+coords = "0_21_51_44_11"
+
+[[spawn]]
+npc = "ent_totems_site_3_animal_b_1"
+coords = "0_21_51_38_13"
+
+[[spawn]]
+npc = "ent_totems_site_3_animal_c_1"
+coords = "0_21_51_42_14"
+
+[[spawn]]
+npc = "ent_totems_site_3_animal_d_1"
+coords = "0_21_51_45_8"
+
+[[spawn]]
+npc = "ent_totems_site_3_animal_e_1"
+coords = "0_21_51_37_9"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_4"
+coords = "0_22_51_4_23"
+
+[[spawn]]
+npc = "ent_totems_site_4_animal_a_1"
+coords = "0_22_51_8_23"
+
+[[spawn]]
+npc = "ent_totems_site_4_animal_b_1"
+coords = "0_22_51_2_25"
+
+[[spawn]]
+npc = "ent_totems_site_4_animal_c_1"
+coords = "0_22_51_6_26"
+
+[[spawn]]
+npc = "ent_totems_site_4_animal_d_1"
+coords = "0_22_51_9_20"
+
+[[spawn]]
+npc = "ent_totems_site_4_animal_e_1"
+coords = "0_22_51_1_21"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_5"
+coords = "0_22_51_31_41"
+
+[[spawn]]
+npc = "ent_totems_site_5_animal_a_1"
+coords = "0_22_51_33_42"
+
+[[spawn]]
+npc = "ent_totems_site_5_animal_b_1"
+coords = "0_22_51_27_44"
+
+[[spawn]]
+npc = "ent_totems_site_5_animal_c_1"
+coords = "0_22_51_31_45"
+
+[[spawn]]
+npc = "ent_totems_site_5_animal_d_1"
+coords = "0_22_51_34_39"
+
+[[spawn]]
+npc = "ent_totems_site_5_animal_e_1"
+coords = "0_22_51_26_40"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_6"
+coords = "0_23_52_5_2"
+
+[[spawn]]
+npc = "ent_totems_site_6_animal_a_1"
+coords = "0_23_52_8_5"
+
+[[spawn]]
+npc = "ent_totems_site_6_animal_b_1"
+coords = "0_23_52_2_7"
+
+[[spawn]]
+npc = "ent_totems_site_6_animal_c_1"
+coords = "0_23_52_6_8"
+
+[[spawn]]
+npc = "ent_totems_site_6_animal_d_1"
+coords = "0_23_52_9_2"
+
+[[spawn]]
+npc = "ent_totems_site_6_animal_e_1"
+coords = "0_23_52_1_3"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_7"
+coords = "0_22_52_45_14"
+
+[[spawn]]
+npc = "ent_totems_site_7_animal_a_1"
+coords = "0_22_52_48_14"
+
+[[spawn]]
+npc = "ent_totems_site_7_animal_b_1"
+coords = "0_22_52_42_16"
+
+[[spawn]]
+npc = "ent_totems_site_7_animal_c_1"
+coords = "0_22_52_46_17"
+
+[[spawn]]
+npc = "ent_totems_site_7_animal_d_1"
+coords = "0_22_52_49_11"
+
+[[spawn]]
+npc = "ent_totems_site_7_animal_e_1"
+coords = "0_22_52_41_12"
+
+[[spawn]]
+npc = "ent_totems_ent_destination_8"
+coords = "0_21_52_52_1"
+
+[[spawn]]
+npc = "ent_totems_site_8_animal_a_1"
+coords = "0_21_52_57_2"
+
+[[spawn]]
+npc = "ent_totems_site_8_animal_b_1"
+coords = "0_21_52_51_4"
+
+[[spawn]]
+npc = "ent_totems_site_8_animal_c_1"
+coords = "0_21_52_55_5"
+
+[[spawn]]
+npc = "ent_totems_site_8_animal_d_1"
+coords = "0_21_51_58_63"
+
+[[spawn]]
+npc = "ent_totems_site_8_animal_e_1"
+coords = "0_21_52_50_0"

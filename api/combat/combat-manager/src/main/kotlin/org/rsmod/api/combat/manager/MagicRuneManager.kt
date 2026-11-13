@@ -4,6 +4,8 @@ import jakarta.inject.Inject
 import kotlin.collections.any
 import kotlin.contracts.contract
 import org.rsmod.api.combat.commons.magic.MagicSpell
+import org.rsmod.api.combat.commons.magic.MagicSpellChecks
+import org.rsmod.api.combat.commons.magic.MagicSpellType
 import org.rsmod.api.combat.commons.magic.Spellbook
 import org.rsmod.api.combat.commons.magic.TomeOfWater
 import org.rsmod.api.config.refs.categories
@@ -53,6 +55,16 @@ constructor(
     private val objCharges: ObjChargeManager,
     private val random: GameRandom,
 ) {
+    private val runeSavingStaves by lazy {
+        setOf(
+            objs.staff_of_the_dead.id,
+            objs.toxic_staff_of_the_dead.id,
+            objs.toxic_staff_uncharged.id,
+            objs.staff_of_light.id,
+            objs.staff_of_balance.id,
+        )
+    }
+
     private val Player.spellbook by enumVarBit<Spellbook>(varbits.spellbook)
 
     /**
@@ -78,11 +90,18 @@ constructor(
         if (accessFailure != null) {
             return accessFailure
         }
-        val tomeOfWaterCharged = TomeOfWater.isCharged(player.lefthand)
+        val tome = player.lefthand
+        val element = TomeOfWater.chargedElement(tome)
+        val useTome = book == Spellbook.Standard && when (element) {
+            objs.water_rune -> TomeOfWater.consumesCharge(spell, book)
+            objs.fire_rune -> MagicSpellChecks.isFireSpell(spell.obj)
+            objs.earth_rune -> MagicSpellChecks.isEarthSpell(spell.obj)
+            else -> false
+        }
         val resourceResult = delReqs(player, spell)
         if (resourceResult is CastResult.Success) {
             val result =
-                if (tomeOfWaterCharged && TomeOfWater.consumesCharge(spell, book)) {
+                if (useTome) {
                     val uncharge =
                         objCharges.reduceWornCharges(
                             player = player,
@@ -91,10 +110,13 @@ constructor(
                             decrement = 1,
                         )
                     check(uncharge is ObjChargeManager.Uncharge.Success) {
-                        "Validated Tome of water charge could not be consumed: $uncharge"
+                        "Validated tome charge could not be consumed: $uncharge"
                     }
-                    player.lefthand = player.lefthand
-                    CastResult.Success.TomeOfWater(resourceResult.usedSunfireRune())
+                    val searing = tome!!.vars and TomeOfWater.SEARING_PAGES != 0
+                    val withdrawn = player.lefthand!!
+                    player.lefthand = if (uncharge.chargesLeft == 0) withdrawn.copy(vars = withdrawn.vars and TomeOfWater.SEARING_PAGES.inv()) else withdrawn
+                    if (element == objs.water_rune) CastResult.Success.TomeOfWater(resourceResult.usedSunfireRune())
+                    else CastResult.Success.ElementalTome(element!!, resourceResult.usedSunfireRune() || searing)
                 } else {
                     resourceResult
                 }
@@ -165,10 +187,16 @@ constructor(
             return CastResult.Failure.MissingObjRequirements
         }
 
-        return delAll(player, valid)
+        val canSaveRunes =
+            spell.type == MagicSpellType.Combat && player.righthand?.id in runeSavingStaves
+        return delAll(player, valid, canSaveRunes)
     }
 
-    private fun delAll(player: Player, validations: List<MagicRunes.Validation.Valid>): CastResult {
+    private fun delAll(
+        player: Player,
+        validations: List<MagicRunes.Validation.Valid>,
+        canSaveRunes: Boolean,
+    ): CastResult {
         require(validations.isNotEmpty()) { "`validations` should not be empty." }
 
         val sourced = validations.filterIsInstance<MagicRunes.Validation.Valid.HasEnough>()
@@ -223,6 +251,13 @@ constructor(
             consume += invObj.copy(count = required)
         }
 
+        val usedSunfire =
+            consume.any { it.isType(objs.sunfire_rune) } ||
+                varbitSources.any { it.rune.isType(objs.sunfire_rune) }
+        if (canSaveRunes && random.of(7) == 0) {
+            return CastResult.Success.StaffSaved(usedSunfire)
+        }
+
         if (consume.isNotEmpty()) {
             val transaction = player.invDelAll(player.inv, consume, strict = true)
             if (!transaction.success) {
@@ -263,7 +298,6 @@ constructor(
             }
         }
 
-        val usedSunfire = consume.any { it.isType(objs.sunfire_rune) }
         return CastResult.Success.Consumed(usedSunfire)
     }
 
@@ -303,7 +337,7 @@ constructor(
             staffSubs = staffSubs,
             storedRune = player.bryophytasStaffRunes(),
             conditionalLowPriorityRunes =
-                if (TomeOfWater.isCharged(player.lefthand)) setOf(objs.water_rune) else emptySet(),
+                TomeOfWater.chargedElement(player.lefthand)?.let { setOf(it) } ?: emptySet(),
         )
 
     private fun Player.bryophytasStaffRunes(): MagicRunes.StoredRune? {
@@ -328,6 +362,10 @@ constructor(
      * Verifies that the player meets the magic level requirement to cast [spell], and that the
      * provided [book] matches the spell's [MagicSpell.spellbook].
      */
+    /** Checks the spellbook and skill requirement for casts paid for by an activity. */
+    public fun canAccessSpell(player: Player, spell: MagicSpell): Boolean =
+        validateAccess(player, spell, player.spellbook) == null
+
     private fun validateAccess(
         player: Player,
         spell: MagicSpell,
@@ -455,7 +493,11 @@ constructor(
         public sealed class Success : CastResult() {
             public object AllUnlimited : Success()
 
+            public data class StaffSaved(val usedSunfire: Boolean) : Success()
+
             public data class Consumed(val usedSunfire: Boolean) : Success()
+
+            public data class ElementalTome(val element: ObjType, val usedSunfire: Boolean) : Success()
 
             /** A standard combat cast that consumed one Tome of water charge. */
             public data class TomeOfWater(val usedSunfire: Boolean) : Success()
@@ -501,8 +543,12 @@ constructor(
             when (this) {
                 is CastResult.Success.Consumed -> usedSunfire
                 is CastResult.Success.TomeOfWater -> usedSunfire
+                is CastResult.Success.ElementalTome -> usedSunfire
+                is CastResult.Success.StaffSaved -> usedSunfire
                 else -> false
             }
+
+        public fun CastResult.usedTomeElement(): ObjType? = (this as? CastResult.Success.ElementalTome)?.element
 
         public fun CastResult.usedTomeOfWater(): Boolean = this is CastResult.Success.TomeOfWater
     }

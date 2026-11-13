@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.engine.utilsBits)
     implementation(projects.api.combat.combatManager)
     implementation(projects.api.invtx)
     implementation(projects.api.objCharges)

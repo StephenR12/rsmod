@@ -7,6 +7,13 @@ import org.rsmod.game.type.loc.UnpackedLocType
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.UnpackedObjType
 
+/** First operation on a specific placed loc, keyed by the resolved type and its world tile. */
+public class LocTileOp1(
+    public val loc: BoundLocInfo,
+    public val vis: BoundLocInfo,
+    public val type: UnpackedLocType,
+) : OpEvent(EventBus.composeLongKey(type.id, loc.coords.packed))
+
 public sealed class LocEvents {
     /**
      * @param loc The _base_ loc target of the event.

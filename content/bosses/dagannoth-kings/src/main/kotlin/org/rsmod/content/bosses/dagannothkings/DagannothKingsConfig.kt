@@ -1,5 +1,6 @@
 package org.rsmod.content.bosses.dagannothkings
 
+import org.rsmod.api.type.editors.npc.NpcEditor
 import org.rsmod.api.type.refs.npc.NpcReferences
 import org.rsmod.api.type.refs.obj.ObjReferences
 import org.rsmod.game.hit.HitType
@@ -66,4 +67,13 @@ public object DagannothKings {
         )
 
     public val byId: Map<Int, DagannothKingDefinition> = definitions.associateBy { it.npc.id }
+}
+
+internal object DagannothKingsAttackRanges : NpcEditor() {
+    init {
+        with(DagannothKingNpcs) {
+            edit(prime) { attackRange = 5 }
+            edit(supreme) { attackRange = 5 }
+        }
+    }
 }

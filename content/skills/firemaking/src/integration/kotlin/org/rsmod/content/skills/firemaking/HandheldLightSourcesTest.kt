@@ -2,8 +2,12 @@ package org.rsmod.content.skills.firemaking
 
 import com.google.inject.AbstractModule
 import jakarta.inject.Inject
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
+import org.rsmod.map.CoordGrid
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
@@ -22,6 +26,27 @@ import org.rsmod.game.type.obj.Wearpos
 
 @Execution(ExecutionMode.SAME_THREAD)
 class HandheldLightSourcesTest {
+    @Test
+    fun GameTestState.`native light-source results credit only the chemist house and Lumbridge basement`() = runLightSourceTest { deps ->
+        val bullseye = LightSourceRecipes.all.first { it.unlit == objs.unlit_bullseye_lantern }
+        preparePlayer(99)
+        player.placeAt(CoordGrid(2932, 3209))
+        addLightingKit(bullseye)
+        useTogether(deps, objs.tinderbox.id, TOOL_SLOT, bullseye.unlit.id, SOURCE_SLOT)
+        assertTrue(player.hasCompletedDiaryTask(DiaryTask.LightChemistBullseye))
+        val helmet = LightSourceRecipes.all.first { it.unlit == objs.unlit_mining_helmet }
+        preparePlayer(99)
+        player.placeAt(CoordGrid(3208, 3218))
+        addLightingKit(helmet)
+        useTogether(deps, objs.tinderbox.id, TOOL_SLOT, helmet.unlit.id, SOURCE_SLOT)
+        assertFalse(player.hasCompletedDiaryTask(DiaryTask.LightLumbridgeMiningHelmet))
+        preparePlayer(99)
+        player.placeAt(CoordGrid(3210, 9620))
+        addLightingKit(helmet)
+        useTogether(deps, objs.tinderbox.id, TOOL_SLOT, helmet.unlit.id, SOURCE_SLOT)
+        assertTrue(player.hasCompletedDiaryTask(DiaryTask.LightLumbridgeMiningHelmet))
+    }
+
     @Test
     fun GameTestState.`cache 233 light-source identities levels and operations are pinned`() =
         runLightSourceTest { deps ->

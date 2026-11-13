@@ -1,0 +1,4 @@
+spawn = [
+    { obj = "wilderness_fishing_bait", coords = "0_46_57_54_57" },
+    { obj = "wilderness_fishing_bait", coords = "0_46_57_44_35" },
+]

@@ -1,15 +1,18 @@
 package org.rsmod.content.skills.fishing
 
 import jakarta.inject.Inject
+import org.rsmod.api.clue.ClueVessels
+import org.rsmod.content.skills.pets.SkillPetRates
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
-import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
 import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.stat
 import org.rsmod.game.entity.Npc
@@ -17,7 +20,7 @@ import org.rsmod.game.type.obj.ObjTypeList
 
 public class KarambwanFishing
 @Inject
-constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarrelStorage) {
+constructor(private val vessels: ClueVessels, private val petRates: SkillPetRates, private val objTypes: ObjTypeList, private val fishBarrel: FishBarrelStorage) {
     public fun loadVessel(access: ProtectedAccess, vesselSlot: Int, baitSlot: Int) {
         with(access) {
             if (!player.members) {
@@ -52,7 +55,7 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
             mes(LOWER_VESSEL_MESSAGE)
             while (true) {
                 anim(seqs.human_karambwan)
-                delay(ROLL_INTERVAL)
+                gatheringDelay(ROLL_INTERVAL)
                 if (!isWithinDistance(npc, distance = 1) || !canFish(sendFailure = false)) {
                     resetAnim()
                     return
@@ -60,13 +63,16 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
 
                 val success = statRandom(stats.fishing, CATCH_LOW, CATCH_HIGH, invisibleBoost = 0)
                 val multiplier = if (success) catchMultiplier() else CatchMultiplier.Single
+                val occupied = petRates.occupiedBy(player,objs.raw_karambwan.id)
                 if (!resolveAttempt(success, multiplier)) {
                     resetAnim()
                     return
                 }
                 if (success) {
-                    statAdvance(stats.fishing, CATCH_XP)
-                    vars[varbits.karamja_diary_medium_karambwan] = 1
+                    petRates.roll(player,stats.fishing,13320,170_874,petRates.newResourceSlot(player,objs.raw_karambwan.id,occupied))
+                    vessels.bottles(player,player.stat(stats.fishing),170_874)
+                    FishingXp.advance(this, CATCH_XP)
+                    player.completeDiaryTask(DiaryTask.KARAMJA_MEDIUM_CATCH_KARAMBWAN)
                     mes(CATCH_MESSAGE)
                     if (multiplier.barrelCount > 0 && fishBarrel.remainingCapacity(player) == 0) {
                         mes(FishBarrelStorage.BARREL_FULL_MESSAGE)

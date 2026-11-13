@@ -147,12 +147,8 @@ constructor(
 
                         val absX = baseX + x
                         val absZ = baseZ + z
-                        val resolvedLevel =
-                            if ((flags and MapTileSimpleDefinition.LINK_BELOW) != 0) {
-                                level - 1
-                            } else {
-                                level
-                            }
+                        val resolvedLevel = mapDef.sceneLevel(x, z, level)
+                        if (resolvedLevel < 0) continue
                         collision[absX, absZ, resolvedLevel] = mask
                     }
                 }
@@ -170,35 +166,9 @@ constructor(
             with(mapBuilder) {
                 for (packedLoc in locDef.spawns.longIterator()) {
                     val loc = MapLocDefinition(packedLoc)
-                    val local = MapSquareGrid(loc.localX, loc.localZ, loc.level)
-                    val tileFlags = mapDef[local.x, local.z, local.level].toInt()
-                    val tileAboveFlags =
-                        if (local.level >= CoordGrid.LEVEL_COUNT - 1) {
-                            tileFlags
-                        } else {
-                            mapDef[local.x, local.z, local.level + 1].toInt()
-                        }
-                    val resolvedTileFlags =
-                        if ((tileAboveFlags and MapTileSimpleDefinition.LINK_BELOW) != 0) {
-                            tileAboveFlags
-                        } else {
-                            tileFlags
-                        }
-                    // Take into account that any tile that has this bit flag will cause locs below
-                    // it to "visually" go one level down.
-                    val visualLevel =
-                        if ((resolvedTileFlags and MapTileSimpleDefinition.LINK_BELOW) != 0) {
-                            loc.level - 1
-                        } else {
-                            loc.level
-                        }
-                    if (visualLevel < 0) {
-                        continue
-                    }
-                    val coords =
-                        square
-                            .toCoords(0.coerceAtLeast(visualLevel))
-                            .translate(loc.localX, loc.localZ)
+                    val visualLevel = mapDef.sceneLevel(loc.localX, loc.localZ, loc.level)
+                    if (visualLevel < 0) continue
+                    val coords = square.toCoords(visualLevel).translate(loc.localX, loc.localZ)
                     val zoneGridX = coords.x and ZoneGrid.X_BIT_MASK
                     val zoneGridZ = coords.z and ZoneGrid.Z_BIT_MASK
                     val zone = computeIfAbsent(ZoneKey.from(coords)) { ZoneBuilder() }

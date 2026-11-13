@@ -10,6 +10,8 @@ dependencies {
     implementation(projects.api.npc)
     implementation(projects.api.invtx)
     implementation(projects.api.repo)
+    implementation(projects.api.shops)
+    implementation(projects.api.scriptAdvanced)
     implementation(projects.content.generic.genericLocs)
     integrationImplementation(projects.content.generic.genericLocs)
     integrationImplementation(projects.api.death)

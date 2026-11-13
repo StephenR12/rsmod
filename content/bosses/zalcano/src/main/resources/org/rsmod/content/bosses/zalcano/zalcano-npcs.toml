@@ -1,0 +1,4 @@
+spawn = [
+    { npc = "zalcano", coords = "0_47_94_23_32" },
+    { npc = "zalcano_instructor", coords = "0_47_94_26_52" },
+]

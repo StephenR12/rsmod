@@ -14,6 +14,9 @@ public data class Region(
     public val uid: Int,
     public var slot: Int,
 ) {
+    /** The first cycle on which an empty region can be reclaimed after an incoming teleport. */
+    public var reclaimFromCycle: Int = 0
+
     private var remappedLocCoords: RemappedRegionLocMap? = null
     private val normalZones: NormalRegionZoneMap = NormalRegionZoneMap()
 

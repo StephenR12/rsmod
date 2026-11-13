@@ -5,6 +5,7 @@ import org.rsmod.api.player.events.interact.ApEvent
 import org.rsmod.api.player.events.interact.LocContentEvents
 import org.rsmod.api.player.events.interact.LocDefaultEvents
 import org.rsmod.api.player.events.interact.LocEvents
+import org.rsmod.api.player.events.interact.LocTileOp1
 import org.rsmod.api.player.events.interact.LocUnimplementedEvents
 import org.rsmod.api.player.events.interact.OpEvent
 import org.rsmod.api.route.BoundValidator
@@ -66,6 +67,10 @@ constructor(
         type: UnpackedLocType = locTypes[loc],
         base: BoundLocInfo = loc,
     ): OpEvent? {
+        if (op == InteractionOp.Op1) {
+            val key = EventBus.composeLongKey(type.id, base.coords.packed)
+            if (eventBus.contains(LocTileOp1::class.java, key)) return LocTileOp1(base, loc, type)
+        }
         val multiLoc = multiLoc(loc, type, player.vars)
         if (multiLoc != null) {
             val multiLocType = locTypes[multiLoc]

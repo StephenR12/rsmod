@@ -74,6 +74,7 @@ public class LogFletchingRecipeRegistry @Inject constructor() {
                 216.0,
                 logCount = 2,
             ),
+            recipe("Atlatl dart shafts", 74, objs.ent_branch, objs.atlatl_dart_shaft, 30.0, outputCount = 100),
         )
 
     private val byLog: Map<ObjType, List<LogFletchingRecipe>> = recipes.groupBy { it.log }

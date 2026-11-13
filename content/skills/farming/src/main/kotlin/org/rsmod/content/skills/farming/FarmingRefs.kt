@@ -4,7 +4,19 @@ import org.rsmod.api.type.refs.obj.ObjReferences
 import org.rsmod.api.type.refs.seq.SeqReferences
 import org.rsmod.api.type.refs.timer.TimerReferences
 
+internal object SpiritPatchLocs : org.rsmod.api.type.refs.loc.LocReferences() {
+    val grownPlots = (1..5).map { find("farming_spirit_tree_patch_$it") }
+}
+
 internal object FarmingObjs : ObjReferences() {
+    val hesporiSeed = find("hespori_seed")
+    val animaSeeds = listOf("attas", "iasor", "kronos").associateWith { find("${it}_seed") }
+    val numulite = find("fossil_numulite")
+    val grapeSeed = find("grape_seed")
+    val grapes = find("grapes")
+    val zamorakGrapes = find("zamorak_grapes")
+    val bologaBlessing = find("grape_blessing")
+    val saltpetre = find("hosidius_saltpetre")
     val rake = find("rake")
     val spade = find("spade")
     val dibber = find("dibber")
@@ -145,8 +157,8 @@ internal object FarmingObjs : ObjReferences() {
     val calquatSapling = find("plantpot_calquat_sapling")
     val spiritSapling = find("plantpot_spirit_tree_sapling")
     val celastrusSapling = find("plantpot_celastrus_tree_sapling")
-    val redwoodSeed = find("redwood_tree_seed")
-    val crystalAcorn = find("crystal_tree_seed")
+    val redwoodSapling = find("plantpot_redwood_tree_sapling")
+    val crystalSapling = find("plantpot_crystal_tree_sapling")
     val logs = find("logs")
     val oakLogs = find("oak_logs")
     val willowLogs = find("willow_logs")
@@ -215,4 +227,11 @@ internal object FarmingSeqs : SeqReferences() {
 
 internal object FarmingTimers : TimerReferences() {
     val sync = find("farming_patch_sync")
+}
+
+internal object BarbarianFarmingBits : org.rsmod.api.type.refs.varbit.VarBitReferences() {
+    val planting = find("brut_farming_planting")
+    val smashing = find("brut_farming_smashing")
+    val automatic = find("brut_smash_pots_automatically")
+    val failures = find("brut_dibber_failed_attempts")
 }

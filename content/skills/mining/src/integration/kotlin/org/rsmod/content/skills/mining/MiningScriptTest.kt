@@ -2,11 +2,14 @@ package org.rsmod.content.skills.mining
 
 import net.rsprot.protocol.game.outgoing.sound.SynthSound
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.rsmod.api.config.refs.invs
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.player.front
 import org.rsmod.api.player.righthand
 import org.rsmod.api.testing.GameTestState
@@ -19,6 +22,23 @@ import org.rsmod.game.inv.InvObj
 import org.rsmod.map.CoordGrid
 
 class MiningScriptTest {
+    @Test
+    fun GameTestState.`successful Al Kharid iron mining credits the Lumbridge easy task`() =
+        runGameTest(Mining::class) {
+            player.members = true
+            val rock = placeMapLoc(CoordGrid(3297, 3311), MiningLocs.iron1)
+            player.placeAt(rock.coords.translateX(-1))
+            player.righthand = InvObj(MiningObjs.runePickaxe)
+            player.stats[stats.mining] = 99
+            random.next = 128
+            player.opLoc1(rock)
+            advance()
+            random.next = 128
+            random.then = 0
+            advance(8)
+            assertTrue(player.hasCompletedDiaryTask(DiaryTask.MineAlKharidIron))
+        }
+
     @Test
     fun GameTestState.`requires a usable pickaxe`() =
         runGameTest(Mining::class) {

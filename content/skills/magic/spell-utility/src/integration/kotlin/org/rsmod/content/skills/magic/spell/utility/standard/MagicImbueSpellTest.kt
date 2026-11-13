@@ -19,6 +19,7 @@ import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.righthand
+import org.rsmod.api.spells.MagicImbueStateRepository
 import org.rsmod.api.spells.MagicSpellModule
 import org.rsmod.api.spells.MagicSpellRegistry
 import org.rsmod.api.spells.runes.combo.ComboRuneRepository

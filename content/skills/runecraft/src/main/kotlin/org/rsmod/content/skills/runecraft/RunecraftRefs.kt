@@ -9,6 +9,8 @@ import org.rsmod.api.type.refs.varbit.VarBitReferences
 import org.rsmod.api.type.refs.varp.VarpReferences
 
 public object RunecraftLocs : LocReferences() {
+    val ouraniaAltar = find("rc_zmi_dungeon_cracked_center_altar")
+    val ralosShrines = listOf(find("ralos_shrine"), find("ralos_shrine_taur01"))
     val airAltar = find("air_altar")
     val mindAltar = find("mind_altar")
     val waterAltar = find("water_altar")
@@ -29,11 +31,16 @@ public object RunecraftLocs : LocReferences() {
 }
 
 public object RunecraftObjs : ObjReferences() {
+    val sunfireRune = find("sunfirerune")
+    val sunfireSplinters = find("sunfiresplinter")
     val airTalisman = find("air_talisman")
     val waterTalisman = find("water_talisman")
     val earthTalisman = find("earth_talisman")
     val fireTalisman = find("fire_talisman")
     val runeEssence = find("blankrune")
+    val mindCore = find("camdozaal_golem_core_mind")
+    val bodyCore = find("camdozaal_golem_core_body")
+    val chaosCore = find("camdozaal_golem_core_chaos")
     val pureEssence = find("blankrune_high")
     val daeyaltEssence = find("blankrune_daeyalt")
     val guardianEssence = find("gotr_guardian_essence")

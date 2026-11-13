@@ -8,8 +8,10 @@ import org.rsmod.api.combat.weapon.WeaponSpeeds
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.content
 import org.rsmod.api.config.refs.invs
+import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.synths
+import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invCompress
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
@@ -21,10 +23,12 @@ import org.rsmod.api.player.output.ClientScripts.mesLayerClose
 import org.rsmod.api.player.output.UpdateInventory.resendSlot
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.ui.IfModalDrag
+import org.rsmod.api.player.ui.ifSetEvents
 import org.rsmod.api.player.worn.WornUnequipOp
 import org.rsmod.api.player.worn.WornUnequipResult
 import org.rsmod.api.script.onIfModalButton
 import org.rsmod.api.script.onIfModalDrag
+import org.rsmod.api.script.onIfOpen
 import org.rsmod.api.script.onPlayerLogin
 import org.rsmod.api.script.onPlayerQueue
 import org.rsmod.content.interfaces.bank.BankTab
@@ -58,6 +62,8 @@ import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.Inventory
 import org.rsmod.game.inv.isType
 import org.rsmod.game.type.interf.IfButtonOp
+import org.rsmod.game.type.interf.IfEvent
+import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.obj.UnpackedObjType
 import org.rsmod.game.type.obj.Wearpos
@@ -89,6 +95,7 @@ constructor(
     private val enumResolver: EnumTypeMapResolver,
 ) : PluginScript() {
     override fun ScriptContext.startup() {
+        registerDepositBox()
         onPlayerLogin { player.setDefaultCapacity() }
 
         onIfModalButton(bank_components.side_inventory) { sideInvOp(it.comsub, it.op) }
@@ -110,6 +117,118 @@ constructor(
         }
 
         onPlayerQueue(bank_queues.bank_compress) { compressBank() }
+    }
+
+    private fun ScriptContext.registerDepositBox() {
+        val box = DepositBoxComponents
+        onIfOpen(DepositBoxInterfaces.box) {
+            player.setDefaultCapacity()
+            player.ifSetEvents(
+                box.inventory,
+                player.inv.indices,
+                IfEvent.Op1,
+                IfEvent.Op2,
+                IfEvent.Op3,
+                IfEvent.Op4,
+                IfEvent.Op5,
+                IfEvent.Op6,
+                IfEvent.Op9,
+                IfEvent.Op10,
+            )
+            for (button in
+                box.quantities + listOf(box.backpack, box.worn, box.looting, box.settings)) {
+                player.ifSetEvents(button, -1..-1, IfEvent.Op1)
+            }
+        }
+        onIfModalButton(box.backpack) { depositMatching(this) { true } }
+        onIfModalButton(box.worn) { depositWorn() }
+        onIfModalButton(box.looting) {
+            if (objs.looting_bag in inv || objs.looting_bag_open in inv) {
+                val storage = inv(DepositBoxInvs.looting)
+                for (slot in storage.indices) storage[slot]?.let { obj ->
+                    invDeposit(slot, obj.count, storage)
+                }
+            }
+        }
+        for ((index, button) in box.quantities.withIndex()) onIfModalButton(button) {
+            val mode = QuantityMode.entries[index]
+            if (mode == QuantityMode.X) {
+                val n = countDialog()
+                if (n <= 0) return@onIfModalButton
+                lastQtyInput = n
+            }
+            leftClickQtyMode = mode
+        }
+        onIfModalButton(box.settings) {
+            vars[DepositBoxBits.showLocks] =
+                if (
+                    choice2(
+                        "Show lock and unlock options on slots.",
+                        true,
+                        "Show Examine on slots.",
+                        false,
+                    )
+                )
+                    1
+                else 0
+        }
+        onIfModalButton(box.inventory) { clickDepositSlot(it.comsub, it.op) }
+    }
+
+    /** Deposits an item through the regular bank tab, placeholder and fresh-head rules. */
+    public fun depositInventorySlot(access: ProtectedAccess, slot: Int, count: Int): Boolean =
+        with(access) { count > 0 && slot in inv.indices && invDeposit(slot, count, inv) }
+
+    /** Deposit only matching, unlocked slots using the ordinary bank capacity and tab rules. */
+    public fun depositMatching(access: ProtectedAccess, accept: (UnpackedObjType) -> Boolean): Int =
+        with(access) {
+            var moved = 0
+            for (slot in inv.indices) {
+                val held = inv[slot] ?: continue
+                if (
+                    !depositLocked(slot) &&
+                        accept(objTypes[held]) &&
+                        invDeposit(slot, held.count, inv)
+                )
+                    moved++
+            }
+            moved
+        }
+
+    private fun ProtectedAccess.depositLocked(slot: Int): Boolean =
+        vars[DepositBoxBits.ignoreLocks] == 0 && vars[DepositBoxVars.locked] and (1 shl slot) != 0
+
+    private suspend fun ProtectedAccess.clickDepositSlot(slot: Int, op: IfButtonOp) {
+        if (slot !in inv.indices) return
+        if (op == IfButtonOp.Op10) {
+            if (vars[DepositBoxBits.showLocks] != 0 && vars[DepositBoxBits.ignoreLocks] == 0)
+                vars[DepositBoxVars.locked] = vars[DepositBoxVars.locked] xor (1 shl slot)
+            else objExamine(inv, slot)
+            return
+        }
+        val held = inv[slot] ?: return
+        if (depositLocked(slot)) return
+        if (op == IfButtonOp.Op9) {
+            clickBanksideExtraOp(slot)
+            return
+        }
+        var remaining =
+            when (op) {
+                IfButtonOp.Op1 -> resolveLeftClickQty()
+                IfButtonOp.Op2 -> 1
+                IfButtonOp.Op3 -> 5
+                IfButtonOp.Op4 -> 10
+                IfButtonOp.Op5 -> countDialog().also { if (it > 0) lastQtyInput = it }
+                IfButtonOp.Op6 -> Int.MAX_VALUE
+                else -> return
+            }
+        for (candidate in listOf(slot) + inv.indices.filter { it != slot }) {
+            val obj = inv[candidate] ?: continue
+            if (obj.id != held.id || depositLocked(candidate) || remaining <= 0) continue
+            val n = min(remaining, obj.count)
+            if (!invDeposit(candidate, n, inv)) break
+            remaining -= n
+        }
     }
 
     private suspend fun ProtectedAccess.mainInvOp(slot: Int, op: IfButtonOp) {
@@ -158,6 +277,9 @@ constructor(
                 IfButtonOp.Op10 -> obj.count
                 else -> throw IllegalStateException("Invalid main inv op: $op")
             }
+        // Empty forms can share the charged form's withdrawal setting without its bank menu.
+        val autocharge = eventBus.contains(BankedObjEvents.Autocharge::class.java, obj.id.toLong())
+        val chargeSlots = if (autocharge) inv.indices.filter { inv[it] == null } else emptyList()
         val transaction =
             invMoveFromSlot(
                 from = bank,
@@ -191,8 +313,84 @@ constructor(
             notifySlotUpdate(slot)
         }
 
+        for (heldSlot in chargeSlots) {
+            val item = inv[heldSlot] ?: continue
+            if (item.id == obj.id)
+                publish(
+                    BankedObjEvents.Autocharge(heldSlot, item) { type, quantity ->
+                        takeBankMaterial(type, quantity)
+                    }
+                )
+        }
         setBanksideExtraOps()
     }
+
+    private fun ProtectedAccess.takeBankMaterial(type: ObjType, requested: Int): Int {
+        val slot = bank.indexOfFirst { it?.id == type.id }
+        val material = bank[slot] ?: return 0
+        val count = minOf(material.count, requested)
+        if (count <= 0) return 0
+        val removal =
+            player.invTransaction(bank) {
+                delete(select(bank), type.id, count, slot = slot, placehold = alwaysPlacehold)
+            }
+        if (!removal.success) return 0
+        if (bank[slot] == null) notifySlotUpdate(slot)
+        return count
+    }
+
+    /**
+     * Removes complete sets of charge materials in one transaction, preserving bank tabs and
+     * placeholders.
+     */
+    public fun takeBankChargeMaterials(
+        access: ProtectedAccess,
+        costs: List<Pair<ObjType, Int>>,
+        requested: Int,
+    ): Int =
+        with(access) {
+            require(
+                costs.isNotEmpty() &&
+                    costs.all { it.second > 0 } &&
+                    costs.distinctBy { it.first.id }.size == costs.size
+            )
+            val slots = costs.map { (type, _) -> bank.indexOfFirst { it?.id == type.id } }
+            if (slots.any { it < 0 }) return 0
+            val sets =
+                costs.indices
+                    .minOf { (bank[slots[it]]?.count ?: 0) / costs[it].second }
+                    .coerceAtMost(requested)
+            if (sets <= 0) return 0
+            val tabs = slots.map { checkNotNull(BankTab.forSlot(this, it)) }
+            val result =
+                player.invTransaction(bank) {
+                    val inventory = select(bank)
+                    costs.forEachIndexed { index, (type, cost) ->
+                        delete(
+                            inventory,
+                            type.id,
+                            sets * cost,
+                            slot = slots[index],
+                            placehold = alwaysPlacehold,
+                        )
+                    }
+                }
+            if (!result.success) return 0
+            slots.indices
+                .filter { bank[slots[it]] == null }
+                .map { tabs[it] }
+                .distinct()
+                .sortedByDescending { it.index }
+                .forEach { notifySlotUpdate(it) }
+            sets
+        }
+
+    public fun takeBankRunePairs(
+        access: ProtectedAccess,
+        first: ObjType,
+        second: ObjType,
+        requested: Int,
+    ): Int = takeBankChargeMaterials(access, listOf(first to 1, second to 1), requested)
 
     private suspend fun ProtectedAccess.sideInvOp(slot: Int, op: IfButtonOp) {
         if (op == IfButtonOp.Op10) {
@@ -246,6 +444,11 @@ constructor(
             mes("A magical force prevents you from banking this item!")
             return false
         }
+
+        val potionStore =
+            org.rsmod.api.player.events.BankPotionStoreDeposit(player, inventory, slot, count)
+        publish(potionStore)
+        if (potionStore.handled) return potionStore.deposited > 0
 
         val expirations = inventory.expireFreshEnsouledHeads(objTypes, listOf(slot))
         val obj = checkNotNull(inventory[slot])
@@ -385,6 +588,13 @@ constructor(
     }
 
     private fun ProtectedAccess.depositInventory(from: Inventory) {
+        for (slot in from.indices) {
+            val obj = from[slot] ?: continue
+            if (from === inv && depositLocked(slot)) continue
+            publish(
+                org.rsmod.api.player.events.BankPotionStoreDeposit(player, from, slot, obj.count)
+            )
+        }
         val unbankableSlots =
             from.indices
                 .filter {

@@ -1,5 +1,7 @@
 package org.rsmod.content.skills.firemaking
 
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.npcs
 import org.rsmod.api.config.refs.objs
@@ -184,8 +186,7 @@ constructor(
             vars[varbits.brut_craft_ship] = TRAINING_SACRIFICED
         }
         if (log.log == objs.magic_logs) {
-            val current = player.vars[varps.kandarin_achievement_diary2]
-            vars[varps.kandarin_achievement_diary2] = current or KANDARIN_ELITE_PYRE_BIT
+            player.completeDiaryTask(DiaryTask.ConstructMagicPyreShip)
         }
 
         val reward = rollChewedReward()

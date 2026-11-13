@@ -50,6 +50,7 @@ constructor(
         baseMaxHit: Int,
         usedSunfireRune: Boolean,
         usedTomeOfWater: Boolean = false,
+        tomeElement: ObjType? = null,
     ): IntRange {
         val maxHit =
             computeSpellMaxHit(
@@ -60,6 +61,7 @@ constructor(
                 spellbook = spellbook,
                 usedSunfireRune = usedSunfireRune,
                 usedTomeOfWater = usedTomeOfWater,
+            tomeElement = tomeElement,
             )
         player.maxHit = maxHit.last
         return maxHit
@@ -73,6 +75,7 @@ constructor(
         spellbook: Spellbook?,
         usedSunfireRune: Boolean,
         usedTomeOfWater: Boolean = false,
+        tomeElement: ObjType? = null,
     ): IntRange {
         val spellAttributes =
             magicAttributes.spellCollect(
@@ -82,6 +85,7 @@ constructor(
                 usedSunfireRune,
                 usedTomeOfWater,
                 random,
+                tomeElement,
             )
 
         val modifiedDamage = computeSpellModifiedDamage(source, baseMaxHit, spellAttributes)

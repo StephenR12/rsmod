@@ -1,0 +1,13 @@
+# Dondakan14913206; ore hauler14923820; ferries14768113.
+[[spawn]]
+npc='dwarfrock_dondakan'
+coords='0_44_158_8_56'
+[[spawn]]
+npc='dwarfrock_gold_boatman'
+coords='0_44_158_57_54'
+[[spawn]]
+npc='dwarfrock_ferryman1'
+coords='0_44_158_23_16'
+[[spawn]]
+npc='dwarfrock_ferryman2'
+coords='0_44_158_39_32'

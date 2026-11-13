@@ -1,0 +1,8 @@
+spawn = [
+    { obj = "magictraining_dragonstone", coords = "0_52_150_25_35" },
+    { obj = "magictraining_dragonstone", coords = "0_52_150_26_46" },
+    { obj = "magictraining_dragonstone", coords = "0_52_150_31_32" },
+    { obj = "magictraining_dragonstone", coords = "0_52_150_45_51" },
+    { obj = "magictraining_dragonstone", coords = "0_52_150_46_43" },
+    { obj = "magictraining_dragonstone", coords = "0_52_150_47_33" },
+]

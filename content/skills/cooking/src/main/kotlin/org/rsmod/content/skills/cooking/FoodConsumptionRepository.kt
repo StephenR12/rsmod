@@ -8,6 +8,7 @@ import org.rsmod.game.entity.Player
 @Singleton
 public class FoodConsumptionRepository {
     private val nextFoodAt = WeakHashMap<Player, Int>()
+    private val nextComboAt = WeakHashMap<Player, Int>()
 
     public fun isReady(player: Player): Boolean =
         (nextFoodAt[player] ?: Int.MIN_VALUE) <= player.currentMapClock
@@ -21,7 +22,16 @@ public class FoodConsumptionRepository {
         }
     }
 
+    public fun isComboReady(player: Player): Boolean =
+        (nextComboAt[player] ?: Int.MIN_VALUE) <= player.currentMapClock
+
+    public fun consumeCombo(player: Player) {
+        nextComboAt[player] = player.currentMapClock + 3
+        consume(player, eatDelay = 3, attackDelay = 2)
+    }
+
     public fun clear(player: Player) {
+        nextComboAt.remove(player)
         nextFoodAt.remove(player)
     }
 

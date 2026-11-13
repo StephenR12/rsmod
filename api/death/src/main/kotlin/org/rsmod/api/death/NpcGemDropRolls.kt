@@ -9,6 +9,9 @@ import org.rsmod.game.type.obj.ObjType
 
 /** Cache-233 object references used by the standard gem and mega-rare drop tables. */
 public object NpcGemDropObjs : ObjReferences() {
+    internal val wealth = listOf("ring_of_wealth","ring_of_wealth_i").flatMap { name ->
+        listOf(name) + (1..5).map { if (name.endsWith("_i")) "$name$it" else "${name}_$it" }
+    }.map { find(it) }
     public val runeJavelin: ObjType = find("rune_javelin")
     public val loopHalfOfKey: ObjType = find("keyhalf2")
     public val toothHalfOfKey: ObjType = find("keyhalf1")
@@ -19,18 +22,11 @@ public object NpcGemDropObjs : ObjReferences() {
 
 /** Shared cache-233 standard gem table, including its nested mega-rare table. */
 public object NpcGemDropRolls {
-    /**
-     * Builds the standard table for a caller-supplied map talisman.
-     *
-     * A Ring of Wealth removes the 63-weight main-table nothing entry and the 113-weight mega-table
-     * nothing entry. Before Legends' Quest completion, selecting the mega-table slot awards the map
-     * talisman instead of entering the mega-rare table.
-     */
-    public fun standard(
-        talisman: ObjType,
-        hasRingOfWealth: (NpcDropContext) -> Boolean,
-        legendsQuestComplete: (NpcDropContext) -> Boolean,
-    ): NpcDropRoll {
+    public fun wearingWealth(context: NpcDropContext): Boolean =
+        NpcGemDropObjs.wealth.any(context.hero.worn::contains)
+
+    /** Direct access to the mega-rare table does not require Legends' Quest. */
+    public fun megaRare(hasRingOfWealth: (NpcDropContext) -> Boolean): NpcDropRoll {
         val ordinaryMega =
             weighted(
                 NpcWeightedDrop(113, nothing()),
@@ -44,14 +40,30 @@ public object NpcGemDropRolls {
                 NpcWeightedDrop(4, item(NpcGemDropObjs.shieldLeftHalf)),
                 NpcWeightedDrop(3, item(NpcGemDropObjs.dragonSpear)),
             )
-        val mega = NpcDropRoll { context ->
-            if (!legendsQuestComplete(context)) {
-                item(talisman).roll(context)
-            } else if (hasRingOfWealth(context)) {
+        return NpcDropRoll { context ->
+            if (hasRingOfWealth(context)) {
                 luckyMega.roll(context)
             } else {
                 ordinaryMega.roll(context)
             }
+        }
+    }
+
+    /**
+     * Builds the standard table for a caller-supplied map talisman.
+     *
+     * A Ring of Wealth removes the 63-weight main-table nothing entry and the 113-weight mega-table
+     * nothing entry. Before Legends' Quest completion, selecting the mega-table slot awards the map
+     * talisman instead of entering the mega-rare table.
+     */
+    public fun standard(
+        talisman: ObjType,
+        hasRingOfWealth: (NpcDropContext) -> Boolean,
+        legendsQuestComplete: (NpcDropContext) -> Boolean,
+    ): NpcDropRoll {
+        val megaRare = megaRare(hasRingOfWealth)
+        val mega = NpcDropRoll { context ->
+            (if (legendsQuestComplete(context)) megaRare else item(talisman)).roll(context)
         }
         val commonEntries =
             listOf(

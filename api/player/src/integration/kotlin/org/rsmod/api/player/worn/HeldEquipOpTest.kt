@@ -19,6 +19,21 @@ import org.rsmod.game.type.obj.Wearpos
 @Execution(ExecutionMode.SAME_THREAD)
 class HeldEquipOpTest {
     @Test
+    fun GameTestState.`hasta wielding requires completed Otto training before moving any items`() = runBasicGameTest {
+        withPlayerInit {
+            setMaxLevels(this)
+            val hasta = cacheTypes.objs.getValue(11889)
+            inv[2] = InvObj(hasta)
+            val operations = HeldEquipOp(cacheTypes.objs, EventBus())
+            assertInstanceOf<HeldEquipResult.Fail.TrainingRequired>(operations.equip(this,2,inv))
+            assertEquals(InvObj(hasta),inv[2])
+            org.rsmod.api.player.vars.VarPlayerIntMapSetter.set(this, cacheTypes.varbits.getValue(3763), 3)
+            assertInstanceOf<HeldEquipResult.Success>(operations.equip(this,2,inv))
+            assertEquals(InvObj(hasta),righthand)
+        }
+    }
+
+    @Test
     fun GameTestState.`equip standard obj into empty wearpos`() = runBasicGameTest {
         withPlayerInit {
             inv[4] = InvObj(objs.rune_axe)

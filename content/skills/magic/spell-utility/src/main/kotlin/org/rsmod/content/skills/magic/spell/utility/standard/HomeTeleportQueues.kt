@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
+import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.type.refs.queue.QueueReferences
 import org.rsmod.map.CoordGrid
 
@@ -12,6 +13,7 @@ public object HomeTeleportQueues : QueueReferences() {
 internal data class HomeTeleportChannel(
     val token: Int,
     val origin: CoordGrid,
-    val destination: HomeTeleportDestination,
+    val destination: CoordGrid,
+    val onArrival: ProtectedAccess.() -> Unit,
     val elapsedTicks: Int,
 )

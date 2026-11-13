@@ -5,6 +5,7 @@ import org.rsmod.api.config.Constants
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.invtx.invAdd
+import org.rsmod.api.player.events.GroundItemTaken
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.repo.obj.ObjRepository
@@ -70,6 +71,7 @@ constructor(
         }
         take.result.commitAll()
         take.destination?.onTake(this, obj)
+        publish(GroundItemTaken(player,obj))
     }
 
     private fun Player.hasDestinationSpace(obj: Obj): Boolean = transaction(obj).result.success

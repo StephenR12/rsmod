@@ -3,6 +3,7 @@ package org.rsmod.api.combat.formulas.maxhit.magic
 import java.util.EnumSet
 import kotlin.math.round
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.rsmod.api.combat.formulas.attributes.CombatSpellAttributes
 import org.rsmod.api.testing.params.TestArgs
 import org.rsmod.api.testing.params.TestArgsProvider
@@ -12,6 +13,16 @@ import org.rsmod.api.testing.params.testArgsOfSingleParam
 private typealias SpellAttr = CombatSpellAttributes
 
 class MagicSpellMaxHitOperationsTest {
+    @Test
+    fun `pvp fire water and earth tomes use independent multipliers`() {
+        val fire = EnumSet.of(SpellAttr.FireTome, SpellAttr.FireSpell, SpellAttr.SunfireRunePassive)
+        val water = EnumSet.of(SpellAttr.WaterTome, SpellAttr.WaterSpell)
+        val earth = EnumSet.of(SpellAttr.EarthTome, SpellAttr.EarthSpell)
+        assertEquals(2..30, MagicMaxHitOperations.modifySpellDamageRange(20, fire))
+        assertEquals(0..24, MagicMaxHitOperations.modifySpellDamageRange(20, water))
+        assertEquals(0..22, MagicMaxHitOperations.modifySpellDamageRange(20, earth))
+    }
+
     @TestWithArgs(LoadoutProvider::class)
     fun `calculate max hit with loadout`(loadout: Loadout) {
         val expectedModifiedMaxHit = loadout.modifiedMaxHit

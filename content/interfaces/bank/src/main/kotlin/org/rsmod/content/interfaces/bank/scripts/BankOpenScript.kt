@@ -37,6 +37,7 @@ import org.rsmod.plugin.scripts.ScriptContext
 class BankOpenScript
 @Inject
 constructor(
+    private val eventBus: org.rsmod.events.EventBus,
     private val invTypes: InvTypeList,
     private val objTypes: ObjTypeList,
     private val wornBonuses: WornBonuses,
@@ -71,6 +72,7 @@ constructor(
         }
 
         startInvTransmit(bank)
+        eventBus.publish(org.rsmod.api.player.events.BankOpened(this))
     }
 
     private fun Player.onBankClose() {

@@ -1,0 +1,4 @@
+spawn = [
+    { npc = "jailer", coords = "0_45_151_53_29" },
+    { npc = "velrak_the_explorer", coords = "0_45_151_51_22" },
+]

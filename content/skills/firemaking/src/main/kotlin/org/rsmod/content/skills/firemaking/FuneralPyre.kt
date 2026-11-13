@@ -1,5 +1,7 @@
 package org.rsmod.content.skills.firemaking
 
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
@@ -207,6 +209,7 @@ constructor(
                 if (player.vars[varbits.morytania_diary_hard_complete] != 0) 1.5 else 1.0
             statAdvance(stats.firemaking, log.firemakingXp * firemakingMultiplier)
             statAdvance(stats.prayer, prayerXp * prayerMultiplier)
+            if (log.obj == objs.magic_pyre_logs || log.obj == objs.redwood_pyre_logs) player.completeDiaryTask(DiaryTask.CremateMagicShade)
 
             val reward = rollReward(remains)
             objRepo.add(

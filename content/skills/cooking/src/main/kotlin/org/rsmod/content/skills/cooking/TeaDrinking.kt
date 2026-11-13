@@ -43,7 +43,7 @@ public class TeaDrinking @Inject constructor(private val food: FoodConsumptionRe
             statHeal(stats.hitpoints, constant = HEAL, percent = 0)
             statBoost(stats.attack, constant = ATTACK_CONSTANT, percent = ATTACK_PERCENT)
             food.consume(player, eatDelay = FOOD_DELAY_CYCLES, attackDelay = ATTACK_DELAY_CYCLES)
-            publish(PlayerConsumableEvent.Consumed(player, objs.cup_of_tea))
+            publish(PlayerConsumableEvent.Consumed(player, objs.cup_of_tea, foodHealing = 2))
         }
     }
 

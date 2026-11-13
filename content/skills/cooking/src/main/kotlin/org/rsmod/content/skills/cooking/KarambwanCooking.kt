@@ -11,6 +11,8 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.game.entity.Player
 import org.rsmod.game.loc.BoundLocInfo
@@ -172,7 +174,7 @@ public class KarambwanCooking @Inject constructor(private val objTypes: ObjTypeL
         statAdvance(stats.cooking, product.xp)
         mes(product.successMessage)
         if (product == KarambwanProduct.Thorough) {
-            vars[varbits.karamja_diary_hard_karambwan] = 1
+            player.completeDiaryTask(DiaryTask.KARAMJA_HARD_COOK_KARAMBWAN)
         }
     }
 

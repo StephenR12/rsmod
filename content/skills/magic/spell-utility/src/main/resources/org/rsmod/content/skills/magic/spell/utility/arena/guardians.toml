@@ -1,0 +1,6 @@
+spawn = [
+    { npc = "magictraining_guard_rewards", coords = "1_52_51_35_54" },
+    { npc = "magictraining_guard_alchem", coords = "2_52_150_36_26" },
+    { npc = "magictraining_guard_encha", coords = "0_52_150_36_47" },
+    { npc = "magictraining_guard_grave", coords = "1_52_150_37_43" },
+]

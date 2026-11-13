@@ -23,10 +23,10 @@ constructor(private val playerList: PlayerList, private val eventBus: EventBus) 
         // TODO(combat): Show ironman_blocked hitmark if source is an ironman and target has been
         // damaged by other sources.
 
-        var changedDamage: Int? = null
-        if (hit.damage > npc.hitpoints) {
-            changedDamage = npc.hitpoints
-        }
+        val resolve = NpcHitEvents.ResolveDamage(npc, hit, hit.damage)
+        eventBus.publish(resolve)
+        val damage = resolve.damage.coerceIn(0, npc.hitpoints)
+        val changedDamage = damage.takeIf { it != hit.damage }
 
         if (changedDamage == 0) {
             val zeroDamageHitmark = hitmark_groups.zero_damage
@@ -62,9 +62,11 @@ constructor(private val playerList: PlayerList, private val eventBus: EventBus) 
 
         playDefendSound(hit)
 
+        val playerSource = if (hit.isFromPlayer) hit.resolvePlayerSource(playerList) else null
+        if (playerSource != null && hit.damage > 0) npc.heroPoints(playerSource, hit.damage)
+
         val queueDeath = npc.hitpoints == 0 && queues.death !in npc.queueList
-        val creditedPlayer =
-            if (queueDeath && hit.isFromPlayer) hit.resolvePlayerSource(playerList) else null
+        val creditedPlayer = playerSource.takeIf { queueDeath }
         if (queueDeath) {
             queueDeath()
         }
@@ -76,8 +78,12 @@ constructor(private val playerList: PlayerList, private val eventBus: EventBus) 
         npc.showHeadbar(headbar)
 
         npc.publishHitEvent(hit)
+        hit.secondaryObj?.let { eventBus.publish(NpcHitEvents.SecondaryImpact(npc, hit, it.toLong())) }
+        if (playerSource != null && hit.damage > 0 && npc.hitpoints > 0) {
+            hit.righthandObj?.let { eventBus.publish(NpcHitEvents.WeaponImpact(npc, hit, playerSource, it.toLong())) }
+        }
         if (creditedPlayer != null) {
-            eventBus.publish(NpcKillEvents.Credited(creditedPlayer, npc))
+            eventBus.publish(NpcKillEvents.Credited(creditedPlayer, npc, hit))
         }
     }
 

@@ -18,7 +18,7 @@ public class CrystalHarpoonLifecycle @Inject constructor() {
                 mes("You need to be on a members' world to configure a crystal harpoon.")
                 return
             }
-            val requested = countDialog("How many charges should be added on withdrawal?")
+            val requested = countDialog("How many charges should the tool hold on withdrawal?")
             player.crystalToolAutochargeQuantity =
                 requested.coerceIn(0, CrystalHarpoonState.MAX_CHARGES)
         }

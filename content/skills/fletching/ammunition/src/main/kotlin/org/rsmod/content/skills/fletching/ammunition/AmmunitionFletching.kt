@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.fletching.ammunition
 
+import org.rsmod.api.player.diary.recordDiaryFletch
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
@@ -120,6 +121,7 @@ constructor(
             "Ammunition Fletching transaction failed after validation: $recipe"
         }
         statAdvance(stats.fletching, recipe.xpPerItem * amount)
+        player.recordDiaryFletch(recipe.output.id, amount, player.coords)
     }
 
     private fun ProtectedAccess.canMake(

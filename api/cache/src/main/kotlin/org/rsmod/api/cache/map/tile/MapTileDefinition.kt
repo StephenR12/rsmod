@@ -29,6 +29,10 @@ public class MapTileSimpleDefinition(private val packed: ByteArray = ByteArray(T
         return packed[index]
     }
 
+    /** Only the bridge flag on plane one lowers the scene column, including its upper floors. */
+    internal fun sceneLevel(x: Int, z: Int, level: Int): Int =
+        if ((this[x, z, 1].toInt() and LINK_BELOW) != 0) level - 1 else level
+
     public companion object {
         public const val BLOCK_MAP_SQUARE: Int = 0x1
         public const val LINK_BELOW: Int = 0x2

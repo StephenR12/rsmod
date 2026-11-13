@@ -6,13 +6,15 @@ import java.util.Collections
 import java.util.IdentityHashMap
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.random.Random
+import org.rsmod.api.random.GameRandom
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.timers
 import org.rsmod.api.invtx.invAddOrDrop
 import org.rsmod.api.npc.access.StandardNpcAccess
 import org.rsmod.api.npc.interact.AiPlayerInteractions
-import org.rsmod.api.npc.opPlayer2
+import org.rsmod.api.combat.commons.npc.engagePlayer
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.events.CombatAchievementEvents
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -38,6 +40,7 @@ import org.rsmod.map.CoordGrid
 public class CoxController
 @Inject
 constructor(
+    private val lootRandom:GameRandom,
     private val regions: RegionRepository,
     private val npcs: NpcRepository,
     private val npcTypes: NpcTypeList,
@@ -143,6 +146,9 @@ constructor(
 
     public fun onHit(npc: Npc, hit: Hit) {
         val session = owners[npc] ?: return
+        if (hit.isFromPlayer && npc.id == CoxNpcs.vespulaPortal.id) {
+            npc.engagePlayer(session.player, interactions)
+        }
         if (hit.isFromPlayer && hit.damage > 0) {
             session.points += hit.damage
             syncHud(session)
@@ -275,7 +281,7 @@ constructor(
         npcs.add(npc, NPC_LIFETIME)
         owners[npc] = session
         if (support) session.support += npc else session.alive += npc
-        if (attack) npc.opPlayer2(session.player, interactions)
+        if (attack) npc.engagePlayer(session.player, interactions)
         return npc
     }
 
@@ -427,11 +433,10 @@ constructor(
 
     private fun complete(session: CoxSession) {
         session.points += 10_000
+        session.player.completeDiaryTask(DiaryTask.CompleteChambers)
         session.player.completions++
         if (session.challenge) session.player.challengeCompletions++
         val unique = rollUnique(session)
-        val reward = unique ?: commonReward(session)
-        val count = if (unique != null) 1 else max(1, session.points / 250)
         protectedAccess.launch(session.player) {
             delay(5)
             if (sessions[player] !== session) return@launch
@@ -439,7 +444,21 @@ constructor(
             destroy(session)
             clearHud(player)
             telejump(OUTSIDE)
-            player.invAddOrDrop(objRepo, reward, count)
+            if(unique!=null)player.invAddOrDrop(objRepo,unique,1)
+            else {
+                val tablet = vars[CoxVarps.honour]==0 && CoxObjs.ancientTablet !in inv && CoxObjs.ancientTablet !in bank && random.of(10)==0
+                val available=CoxObjs.common.toMutableList()
+                repeat(2){ roll ->
+                    if(roll==0 && tablet)player.invAddOrDrop(objRepo,CoxObjs.ancientTablet,1)
+                    else {
+                        val drop=available.removeAt(random.of(available.size))
+                        val count=if(drop.divisor==0)1 else (session.points.coerceAtMost(131071)/drop.divisor).coerceAtLeast(1)
+                        val seed=drop.seed
+                        if(seed!=null && random.of(3)==0)player.invAddOrDrop(objRepo,seed,max(1,count/drop.herbsPerSeed))
+                        else player.invAddOrDrop(objRepo,drop.item,count)
+                    }
+                }
+            }
             mes("Chambers of Xeric complete! Personal points: ${session.points}.")
             if (unique != null) mes("<col=ff00ff>You receive a unique reward!</col>")
             publish(
@@ -456,16 +475,11 @@ constructor(
 
     private fun rollUnique(session: CoxSession): ObjType? {
         val capped = min(session.points, 570_000)
-        if (Random.nextInt(867_600) >= capped) return null
-        return UNIQUES[Random.nextInt(UNIQUES.size)]
+        if (lootRandom.of(867_600) >= capped) return null
+        var roll=lootRandom.of(69)
+        for((reward,weight) in UNIQUES){if(roll<weight)return reward;roll-=weight}
+        error("Invalid Chambers unique roll")
     }
-
-    private fun commonReward(session: CoxSession): ObjType =
-        when (Math.floorMod(session.points, 3)) {
-            0 -> objs.runite_ore
-            1 -> objs.coal
-            else -> objs.coins
-        }
 
     private fun removeSupport(session: CoxSession, type: NpcType) {
         session.support
@@ -515,16 +529,18 @@ constructor(
         private const val OLM_HAND_PHASES = 3
         private val UNIQUES =
             listOf(
-                CoxObjs.dexterousScroll,
-                CoxObjs.arcaneScroll,
-                CoxObjs.dragonClaws,
-                CoxObjs.ancestralHat,
-                CoxObjs.ancestralTop,
-                CoxObjs.ancestralBottom,
-                CoxObjs.bulwark,
-                CoxObjs.kodaiInsignia,
-                CoxObjs.elderMaul,
-                CoxObjs.twistedBow,
+                CoxObjs.dexterousScroll to 20,
+                CoxObjs.arcaneScroll to 20,
+                CoxObjs.buckler to 4,
+                CoxObjs.hunterCrossbow to 4,
+                CoxObjs.dragonClaws to 3,
+                CoxObjs.ancestralHat to 3,
+                CoxObjs.ancestralTop to 3,
+                CoxObjs.ancestralBottom to 3,
+                CoxObjs.bulwark to 3,
+                CoxObjs.kodaiInsignia to 2,
+                CoxObjs.elderMaul to 2,
+                CoxObjs.twistedBow to 2,
             )
     }
 }

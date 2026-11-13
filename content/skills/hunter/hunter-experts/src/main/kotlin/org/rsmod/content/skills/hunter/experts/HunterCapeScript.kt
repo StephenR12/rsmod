@@ -7,10 +7,10 @@ import org.rsmod.api.config.refs.stats
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.script.onOpHeld3
 import org.rsmod.api.script.onOpNpc1
-import org.rsmod.api.script.onOpWorn1
 import org.rsmod.api.script.onOpWorn2
 import org.rsmod.api.script.onOpWorn3
 import org.rsmod.api.script.onOpWorn4
+import org.rsmod.api.script.onOpWorn5
 import org.rsmod.plugin.scripts.ScriptContext
 
 public class HunterCapeScript
@@ -23,10 +23,10 @@ constructor(
         with(context) {
             for (cape in listOf(objs.hunter_skillcape, objs.hunter_skillcape_t)) {
                 onOpHeld3(cape) { teleport.select(this) }
-                onOpWorn1(cape) { boost(this) }
-                onOpWorn2(cape) { teleport.teleport(this, HunterCapeDestination.HunterGuild) }
-                onOpWorn3(cape) { teleport.teleport(this, HunterCapeDestination.FeldipHunterArea) }
-                onOpWorn4(cape) {
+                onOpWorn2(cape) { boost(this) }
+                onOpWorn3(cape) { teleport.teleport(this, HunterCapeDestination.HunterGuild) }
+                onOpWorn4(cape) { teleport.teleport(this, HunterCapeDestination.FeldipHunterArea) }
+                onOpWorn5(cape) {
                     teleport.teleport(this, HunterCapeDestination.WildernessHunterArea)
                 }
             }

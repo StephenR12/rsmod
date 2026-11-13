@@ -1,7 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.arceuus
 
 import jakarta.inject.Inject
-import kotlin.math.min
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.projanims
 import org.rsmod.api.config.refs.timers
@@ -100,8 +99,7 @@ constructor(
                 random.of(active.recipe.maxHit + 1)
             }
         val delay = projectileDelay(style, target)
-        val hit =
-            target.queueHit(
+        target.queueHit(
                 source = owner,
                 delay = delay,
                 type = style.hitType,
@@ -110,7 +108,6 @@ constructor(
                 sourceSecondary = active.recipe.spell,
                 successful = true,
             )
-        target.heroPoints(owner, min(hit.damage, target.hitpoints))
         npc.timer(timers.magic_arceuus_thrall_attack, ATTACK_RATE_CYCLES)
     }
 

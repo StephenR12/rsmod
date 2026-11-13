@@ -99,6 +99,19 @@ constructor(
                 mes("You have ${dose.dosesRemaining} $doseWord of potion left.")
             }
             potions.consume(player, POTION_DELAY_CYCLES)
+            applyStoredEffect(this, dose.potion)
+        }
+    }
+
+    /** Shared direct and chugging-barrel eligibility; potion delay is managed by the caller. */
+    public fun canConsumeStored(player: Player): Boolean =
+        player.members &&
+            !cooldown.isActive(player) &&
+            !specialEnergy.hasSpecialEnergy(player, SpecialAttackEnergy.MAX_ENERGY)
+
+    public fun applyStoredEffect(access: ProtectedAccess, potion: ObjType) {
+        with(access) {
+            if (!canConsumeStored(player)) return
             cooldown.start(player)
             if (isPvpArea(player)) {
                 softQueue(
@@ -106,10 +119,8 @@ constructor(
                     PVP_RESTORE_DELAY_CYCLES,
                     SurgePotionRestore(coords),
                 )
-            } else {
-                restore(player)
-            }
-            publish(PlayerConsumableEvent.Consumed(player, dose.potion))
+            } else restore(player)
+            publish(PlayerConsumableEvent.Consumed(player, potion))
         }
     }
 

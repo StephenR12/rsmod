@@ -16,6 +16,9 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
+import org.rsmod.api.player.diary.recordLumbridgeOakCut
 import org.rsmod.api.player.interact.HeldUInteractions
 import org.rsmod.api.player.interact.ObjInteractions
 import org.rsmod.api.player.interact.ObjTInteractions
@@ -40,6 +43,23 @@ import org.rsmod.routefinder.flag.CollisionFlag
 
 @Execution(ExecutionMode.SAME_THREAD)
 class FiremakingTest {
+    @Test
+    fun GameTestState
+        .`successful local oak fire completes the previously recorded local cut step`() =
+        runFiremakingTest { deps ->
+            preparePlayer(xOffset = 0, level = 99)
+            player.placeAt(CoordGrid(3203, 3225))
+            allocZoneCollision(player.coords)
+            player.recordLumbridgeOakCut(CoordGrid(3205, 3245))
+            assertFalse(player.hasCompletedDiaryTask(DiaryTask.ChopAndBurnLumbridgeOak))
+            addLightingKit(objs.oak_logs)
+            random.next = 0
+            random.then = Firemaking.MIN_FIRE_TICKS
+            lightInventory(deps, objs.oak_logs.id)
+            advance(Firemaking.ATTEMPT_TICKS)
+            assertTrue(player.hasCompletedDiaryTask(DiaryTask.ChopAndBurnLumbridgeOak))
+        }
+
     @Test
     fun GameTestState.`cache 233 ordinary log and audiovisual contracts are pinned`() =
         runFiremakingTest { deps ->

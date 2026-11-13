@@ -97,6 +97,7 @@ import org.rsmod.api.testing.util.TestRealmConfig
 import org.rsmod.api.utils.logging.GameExceptionHandler
 import org.rsmod.events.EventBus
 import org.rsmod.game.GameUpdate
+import org.rsmod.game.queue.WorldQueueList
 import org.rsmod.game.MapClock
 import org.rsmod.game.area.AreaIndex
 import org.rsmod.game.cheat.CheatCommandMap
@@ -901,6 +902,7 @@ constructor(
             bind(RegionRepository::class.java).`in`(Scopes.SINGLETON)
             bind(ObjRegistry::class.java).`in`(Scopes.SINGLETON)
             bind(ObjRepository::class.java).`in`(Scopes.SINGLETON)
+            bind(WorldQueueList::class.java).`in`(Scopes.SINGLETON)
             bind(WorldRepository::class.java).`in`(Scopes.SINGLETON)
 
             // These type lists can be modified by tests to ensure interactions pass

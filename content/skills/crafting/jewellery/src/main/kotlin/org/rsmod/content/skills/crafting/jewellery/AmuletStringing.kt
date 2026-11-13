@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.crafting.jewellery
 
+import org.rsmod.api.player.diary.recordDiaryCraft
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
@@ -56,6 +57,7 @@ constructor(private val recipes: AmuletStringingRecipeRegistry, private val objT
                 add(inventory, recipe.output.id, 1)
             }
         check(result.success) { "Amulet-stringing transaction failed after validation: $recipe" }
+        player.recordDiaryCraft(recipe.output.id, player.coords)
         if (recipe.xp > 0.0) {
             statAdvance(stats.crafting, recipe.xp)
         }

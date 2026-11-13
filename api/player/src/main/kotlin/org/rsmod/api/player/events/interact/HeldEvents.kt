@@ -10,6 +10,7 @@ import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.Inventory
 import org.rsmod.game.type.droptrig.DropTriggerType
 import org.rsmod.game.type.inv.InvType
+import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.UnpackedObjType
 import org.rsmod.game.type.obj.Wearpos
 
@@ -23,6 +24,15 @@ public class HeldBanksideEvents {
 }
 
 public class BankedObjEvents {
+    /** Fired for each newly withdrawn equipment item with the cache bank-autocharge option. */
+    public class Autocharge(
+        public val slot: Int,
+        public val obj: InvObj,
+        public val takeMaterial: (ObjType, Int) -> Int,
+    ) : SuspendEvent<ProtectedAccess> {
+        override val id: Long = obj.id.toLong()
+    }
+
     public class ConfigureCharges(
         public val slot: Int,
         public val obj: InvObj,

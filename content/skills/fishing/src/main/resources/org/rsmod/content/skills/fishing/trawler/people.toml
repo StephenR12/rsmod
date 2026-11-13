@@ -1,0 +1,16 @@
+# Murphy14930722; Khazard General Store14993208. Cache-native boats.
+[[spawn]]
+npc='murphy'
+coords='0_41_49_44_27'
+[[spawn]]
+npc='murphy_lobby'
+coords='0_41_49_47_44'
+[[spawn]]
+npc='murphy_normal'
+coords='1_31_75_31_26'
+[[spawn]]
+npc='khazard_shopkeeper'
+coords='0_41_49_32_16'
+[[spawn]]
+npc='khazard_shopkeeper'
+coords='0_41_49_17_36'

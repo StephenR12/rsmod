@@ -1,6 +1,9 @@
 package org.rsmod.api.combat.commons.ranged
 
 import org.rsmod.api.config.refs.categories
+import org.rsmod.api.config.refs.objs
+import org.rsmod.api.type.refs.varp.VarpReferences
+import org.rsmod.api.type.builders.varp.VarpBuilder
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.player.back
 import org.rsmod.api.player.output.mes
@@ -20,6 +23,16 @@ import org.rsmod.game.type.obj.UnpackedObjType
 import org.rsmod.game.type.obj.Wearpos
 import org.rsmod.map.CoordGrid
 import org.rsmod.routefinder.collision.CollisionFlagMap
+
+public object RangingCapeVars : VarpReferences() {
+    public val head: org.rsmod.game.type.varp.VarpType = find("ranging_cape_vorkath")
+}
+
+internal object RangingCapeBuild : VarpBuilder() {
+    init {
+        build("ranging_cape_vorkath") { permanent = true; transmitNever = true }
+    }
+}
 
 public object RangedAmmunition {
     /** The default chance for standard ammunition to drop on the ground instead of disappearing. */
@@ -113,20 +126,20 @@ public object RangedAmmunition {
         return true
     }
 
-    public fun conserveAmmo(player: Player, objTypes: ObjTypeList, random: GameRandom): Boolean {
-        val cape = objTypes.getOrNull(player.back)
-        if (cape != null) {
-            val recoveryRate = cape.paramOrNull(params.ammo_recovery_rate) ?: return false
-
-            val body = objTypes.getOrNull(player.torso)
-            if (body != null && body.param(params.metallic_interference)) {
-                return false
-            }
-
-            return recoveryRate > random.of(maxExclusive = 100)
+    public fun recoveryRate(player: Player, objTypes: ObjTypeList): Int {
+        if (!player.members) return 0
+        val cape = objTypes.getOrNull(player.back) ?: return 0
+        val rate = when (cape.id) {
+            objs.ranged_skillcape.id, objs.ranged_skillcape_t.id, objs.max_cape_worn.id ->
+                if (player.vars[RangingCapeVars.head] != 0) 80 else 72
+            else -> cape.paramOrNull(params.ammo_recovery_rate) ?: return 0
         }
-        return false
+        val body = objTypes.getOrNull(player.torso)
+        return if (body?.param(params.metallic_interference) == true) 0 else rate
     }
+
+    public fun conserveAmmo(player: Player, objTypes: ObjTypeList, random: GameRandom): Boolean =
+        random.of(100) < recoveryRate(player, objTypes)
 
     public fun detractAmmo(
         player: Player,
@@ -187,6 +200,9 @@ public object RangedAmmunition {
     }
 
     public fun validateArrows(weapon: UnpackedObjType, ammo: UnpackedObjType): Validation {
+        if (OgreBows.isBow(weapon.id) || OgreBows.isHuntingArrow(ammo.id)) {
+            return if (OgreBows.canFire(weapon.id, ammo.id)) Validation.Valid else Validation.Invalid.IncorrectAmmo
+        }
         val requiredAmmo = weapon.paramOrNull(params.required_ammo) ?: categories.arrows
 
         // Dragon arrows have a separate category from standard arrows, but any bow that accepts

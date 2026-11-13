@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.thieving
 
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.random.GameRandom
 import org.rsmod.api.type.refs.loc.LocReferences
 import org.rsmod.api.type.refs.npc.NpcReferences
@@ -366,6 +367,7 @@ public object ThievingLocs : LocReferences() {
 }
 
 public object ThievingVarbits : VarBitReferences() {
+    val silentGlovesDamage = find("hunting_silent_gloves")
     val wealthyCitizenHouseKeyDryStreak = find("varlamore_thieving_house_key_drystreak")
 }
 
@@ -622,6 +624,8 @@ public data class PickpocketDefinition(
     val guaranteedRewards: List<PickpocketReward> = emptyList(),
     val clueDrop: PickpocketClueDrop? = null,
     val tertiaryDrop: PickpocketTertiaryDrop? = null,
+    val requiresFreeInventorySlot: Boolean = false,
+    val rewardSelector: ((ProtectedAccess) -> PickpocketReward)? = null,
 ) {
     public val totalRewardWeight: Int = rewards.sumOf { it.weight }
     public val allRewards: List<PickpocketReward> = rewards + guaranteedRewards

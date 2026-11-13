@@ -2,6 +2,8 @@ package org.rsmod.content.travel.canoe.scripts
 
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.params
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.output.ClientScripts.highlightingOff
 import org.rsmod.api.player.output.ClientScripts.highlightingOn
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -140,7 +142,15 @@ class CanoeTravelling @Inject private constructor(private val cutscene: CanoeCut
         val wilderness = destinationInWilderness || startingInWilderness
 
         val cutsceneType = if (wilderness) CutsceneType.Wilderness else CutsceneType.Grass
-        cutscene.start(this, destination, cutsceneType)
+        val arrived = cutscene.start(this, destination, cutsceneType)
+        if (
+            arrived &&
+                station == Station.Lumbridge &&
+                destination == CanoeDestination.Edgeville &&
+                canoe == Canoe.Waka
+        ) {
+            player.completeDiaryTask(DiaryTask.WakaLumbridgeToEdgeville)
+        }
     }
 }
 
@@ -208,15 +218,20 @@ constructor(
         ctx.onAiTimer(canoe_npcs.bullrush_scenery_2) { npc.onSceneryTimer() }
     }
 
-    suspend fun start(access: ProtectedAccess, dest: CanoeDestination, type: CutsceneType) {
+    suspend fun start(
+        access: ProtectedAccess,
+        dest: CanoeDestination,
+        type: CutsceneType,
+    ): Boolean {
         access.setUpCutscene()
         val region = createRegion(type)
         if (region == null) {
             access.closeCutscene()
             access.mes("Could not create region. Try again in a few seconds.")
-            return
+            return false
         }
         access.startCutscene(region, type, dest)
+        return true
     }
 
     private fun Npc.onSceneryTimer() {

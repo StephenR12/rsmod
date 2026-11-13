@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.fletching.battlestafffletching
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.diary.recordDiaryFletch
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
@@ -63,6 +64,7 @@ public class BattlestaffFletching @Inject constructor(private val objTypes: ObjT
                 add(inventory, objs.battlestaff.id, 1)
             }
         check(result.success) { "Battlestaff-fletching transaction failed after validation." }
+        player.recordDiaryFletch(objs.battlestaff.id,1,player.coords)
         statAdvance(stats.fletching, XP)
     }
 

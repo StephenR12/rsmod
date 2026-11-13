@@ -1,0 +1,363 @@
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_4_18'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_4_19'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_5_15'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_5_17'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_5_20'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_6_14'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_6_41'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_6_44'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_6_45'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_7_21'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_7_46'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_7_47'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_8_20'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_8_41'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_10_19'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_29_39'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_31_34'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_32_4'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_33_23'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_35_23'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_36_50'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_44_53'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_46_53'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_50_51'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_56_45'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_57_39'
+
+[[spawn]]
+obj = 'snape_grass'
+coords = '0_39_58_57_42'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_39_60'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_56_58'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_41_58'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_43_56'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_44_63'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_45_55'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_47_62'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_49_52'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_53_53'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_60_54'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_48_56'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_49_56'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_49_59'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_49_60'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_50_55'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_50_61'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_53_63'
+
+[[spawn]]
+obj = 'swamp_toad'
+coords = '0_37_54_56_61'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '0_54_148_11_21'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '0_54_148_14_28'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '0_54_148_18_37'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '0_54_148_23_11'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '0_54_148_30_45'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '2_54_148_4_12'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '2_54_148_5_8'
+
+[[spawn]]
+obj = 'cactus_potato'
+coords = '2_54_148_9_5'
+
+[[spawn]]
+obj = 'nightshade'
+coords = '0_40_149_10_46'
+
+[[spawn]]
+obj = 'red_spiders_eggs'
+coords = '0_48_155_56_36'
+
+[[spawn]]
+obj = 'red_spiders_eggs'
+coords = '0_48_155_54_38'
+
+[[spawn]]
+obj = 'red_spiders_eggs'
+coords = '0_48_155_46_28'
+
+[[spawn]]
+obj = 'red_spiders_eggs'
+coords = '0_48_155_57_34'
+
+[[spawn]]
+obj = 'red_spiders_eggs'
+coords = '0_48_155_45_31'
+
+[[spawn]]
+obj = 'red_spiders_eggs'
+coords = '0_48_155_47_29'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_48_1_47'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_46_3_8'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_47_3_9'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_47_3_41'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_47_3_63'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_47_4_0'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_48_4_3'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_48_4_53'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_46_5_3'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_48_5_37'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_46_10_57'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_46_19_51'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_46_30_43'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_46_34_16'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_43_48_55_57'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_44_46_24_30'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_44_46_38_33'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_44_49_48_59'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_44_46_50_32'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_45_48_16_47'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_45_48_33_39'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_45_48_46_38'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_45_48_59_1'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_45_48_60_30'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_46_47_3_59'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_46_46_8_7'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_46_47_11_2'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_46_46_16_15'
+
+[[spawn]]
+obj = 'seaweed'
+coords = '0_46_47_31_5'
+
+[[spawn]]
+obj = 'wine_of_zamorak'
+coords = '0_45_54_50_59'
+
+[[spawn]]
+obj = 'wine_of_zamorak'
+coords = '1_45_54_58_61'

@@ -53,6 +53,7 @@ public enum class FarmingCompost(public val diseaseDenominator: Int, public val 
     Compost(2, 1),
     Supercompost(5, 2),
     Ultracompost(10, 3),
+    Saltpetre(1, 0),
 }
 
 public data class FarmingCrop(

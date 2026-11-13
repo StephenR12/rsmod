@@ -53,17 +53,8 @@ public class SporadicBossDrops @Inject constructor(private val registry: NpcDrop
         )
         registry.register(
             SporadicBossNpcs.hespori,
-            NpcDropTable(
-                sequence(
-                    item(SporadicBossObjs.attasSeed),
-                    item(SporadicBossObjs.iasorSeed),
-                    item(SporadicBossObjs.kronosSeed),
-                    independent(
-                        denominator = HESPORI_BUCKET_RATE,
-                        roll = item(SporadicBossObjs.bottomlessCompostBucket),
-                    ),
-                )
-            ),
+            // Cultivated Hespori is harvested with a spade after the fight.
+            NpcDropTable(org.rsmod.api.death.NpcDropRolls.nothing()),
         )
         registry.register(
             SporadicBossNpcs.skotizo,

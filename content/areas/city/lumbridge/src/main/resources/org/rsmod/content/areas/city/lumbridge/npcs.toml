@@ -2338,3 +2338,115 @@ coords = '0_50_51_29_16'
 npc = 'duck_update_on_land_drake'
 coords = '0_50_51_28_18'
 
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_13_42'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_14_35'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_16_40'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_20_22'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_28_6'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_33_10'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_36_22'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_42_22'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_45_49'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_46_20'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_48_14'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_51_25'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_51_41'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_53_14'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_55_35'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_49_149_55_46'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_50_149_7_53'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_50_149_9_49'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_50_149_20_39'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_50_149_27_47'
+
+[[spawn]]
+npc = 'swamp_cave_bug'
+coords = '0_50_149_29_39'
+
+[[spawn]]
+npc = 'zombie_armed_sewer1'
+coords = '0_48_150_47_47'
+
+[[spawn]]
+npc = 'zombie_armed_sewer2'
+coords = '0_48_150_50_58'
+
+[[spawn]]
+npc = 'zombie_armed_sewer3'
+coords = '0_48_150_52_51'
+
+[[spawn]]
+npc = 'zombie_armed_sewer4'
+coords = '0_48_150_52_62'
+
+[[spawn]]
+npc = 'zombie_unarmed_sewer1'
+coords = '0_48_151_14_10'
+
+[[spawn]]
+npc = 'zombie_unarmed_sewer2'
+coords = '0_48_151_16_8'
+
+[[spawn]]
+npc = 'zombie_unarmed_sewer3'
+coords = '0_48_151_24_8'

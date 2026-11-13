@@ -8,6 +8,7 @@ import org.rsmod.api.script.onIfOverlayButton
 import org.rsmod.api.script.onPlayerLogin
 import org.rsmod.api.script.onPlayerLogout
 import org.rsmod.api.script.onPlayerSoftTimer
+import org.rsmod.api.spells.MagicImbueStateRepository
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 

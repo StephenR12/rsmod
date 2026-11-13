@@ -511,8 +511,14 @@ constructor(
 
     public fun triggerOp(player: Player, interaction: InteractionNpcOp) {
         val op = npcInteractions.opTrigger(player, interaction.target, interaction.op)
-        if (op != null) {
-            protectedAccess.launch(player) { eventBus.publish(this, op) }
+        val conversation = npcInteractions.conversation(player, interaction.target, interaction.op)
+        if (op == null && conversation == null) return
+        protectedAccess.launch(player) {
+            if (conversation != null) {
+                eventBus.publish(this, conversation)
+                if (conversation.handled) return@launch
+            }
+            if (op != null) eventBus.publish(this, op)
         }
     }
 

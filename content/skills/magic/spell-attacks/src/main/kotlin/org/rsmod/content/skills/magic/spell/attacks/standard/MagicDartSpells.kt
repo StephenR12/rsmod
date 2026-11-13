@@ -2,6 +2,7 @@ package org.rsmod.content.skills.magic.spell.attacks.standard
 
 import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.CombatAttack
+import org.rsmod.api.combat.commons.npc.isAssignedSlayerTarget
 import org.rsmod.api.combat.manager.MagicRuneManager.Companion.isFailure
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.projanims
@@ -14,17 +15,21 @@ import org.rsmod.api.spells.attack.SpellAttack
 import org.rsmod.api.spells.attack.SpellAttackManager
 import org.rsmod.api.spells.attack.SpellAttackMap
 import org.rsmod.api.spells.attack.SpellAttackRepository
+import org.rsmod.content.skills.slayer.SlayerStaff
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.entity.PathingEntity
 import org.rsmod.game.entity.Player
 import org.rsmod.game.inv.isType
 
-public class MagicDartSpells @Inject constructor() : SpellAttackMap {
+public class MagicDartSpells @Inject constructor(private val staff: SlayerStaff) : SpellAttackMap {
     override fun SpellAttackRepository.register(manager: SpellAttackManager) {
-        register(objs.spell_magic_dart, MagicDartSpellAttack(manager))
+        register(objs.spell_magic_dart, MagicDartSpellAttack(manager, staff))
     }
 
-    private class MagicDartSpellAttack(private val manager: SpellAttackManager) : SpellAttack {
+    private class MagicDartSpellAttack(
+        private val manager: SpellAttackManager,
+        private val staff: SlayerStaff,
+    ) : SpellAttack {
         override suspend fun ProtectedAccess.attack(target: Npc, attack: CombatAttack.Spell) {
             cast(target, attack)
         }
@@ -91,6 +96,8 @@ public class MagicDartSpells @Inject constructor() : SpellAttackMap {
                 hitSpotHeight = 124,
                 hitSound = synths.magic_dart_hit,
             )
+            if (enchantedHit && target is Npc && target.isAssignedSlayerTarget(player))
+                staff.consume(this)
             manager.giveCombatXp(this, target, attack, damage)
             manager.queueMagicHit(this, target, spell, damage, clientDelay, serverDelay)
             manager.continueCombatIfAutocast(this, target)

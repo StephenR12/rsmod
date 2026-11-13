@@ -47,6 +47,7 @@ object BaseVarBits : VarBitReferences() {
     val scroll_case_master_major = find("scroll_case_master_major")
     val scroll_case_mimic = find("scroll_case_mimic")
 
+    val vm_necklace = find("vm_necklace")
     val vm_digsite_talisman = find("vm_digsite_talisman")
     val magictraining_bonespeaches = find("magictraining_bonespeaches")
     val lunar_quest_main = find("lunar_quest_main")
@@ -99,6 +100,8 @@ object BaseVarBits : VarBitReferences() {
     val rune_pouch_quantity_4 = find("rune_pouch_quantity_4", 184134690064987)
     val charges_bryophytas_staff_quantity = find("charges_bryophytas_staff_quantity")
     val charges_crystal_tools_quantity = find("charges_crystal_tools_quantity")
+    val charges_tome_of_earth_quantity = find("charges_tome_of_earth_quantity")
+    val charges_tome_of_fire_quantity = find("charges_tome_of_fire_quantity")
     val charges_tome_of_water_quantity = find("charges_tome_of_water_quantity")
     val vesseled_clues_disabled = find("vesseled_clues_disabled")
     val ca_tier_status_easy = find("ca_tier_status_easy")

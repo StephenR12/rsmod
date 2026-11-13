@@ -1,0 +1,75 @@
+# Matthias and all17 kebbits from pre-cutoff source tables.
+[[spawn]]
+npc = 'hunting_npc_falconer'
+coords = '0_37_56_6_20'
+
+# Spotted kebbit oldid14967823, 2025-08-17T02:18:08Z.
+[[spawn]]
+npc = 'huntingbeast_speedy'
+coords = '0_37_56_23_8'
+
+[[spawn]]
+npc = 'huntingbeast_speedy'
+coords = '0_37_56_2_7'
+
+[[spawn]]
+npc = 'huntingbeast_speedy'
+coords = '0_37_56_2_3'
+
+[[spawn]]
+npc = 'huntingbeast_speedy'
+coords = '0_37_56_16_2'
+
+[[spawn]]
+npc = 'huntingbeast_speedy'
+coords = '0_37_56_11_1'
+
+[[spawn]]
+npc = 'huntingbeast_speedy'
+coords = '0_37_56_4_0'
+
+[[spawn]]
+npc = 'huntingbeast_speedy'
+coords = '0_37_56_14_0'
+
+# Dark kebbit oldid14797040, 2024-11-11T11:59:23Z.
+[[spawn]]
+npc = 'huntingbeast_silent'
+coords = '0_37_56_21_14'
+
+[[spawn]]
+npc = 'huntingbeast_silent'
+coords = '0_37_56_0_10'
+
+[[spawn]]
+npc = 'huntingbeast_silent'
+coords = '0_37_56_20_6'
+
+[[spawn]]
+npc = 'huntingbeast_silent'
+coords = '0_37_56_0_5'
+
+[[spawn]]
+npc = 'huntingbeast_silent'
+coords = '0_37_55_12_61'
+
+[[spawn]]
+npc = 'huntingbeast_silent'
+coords = '0_36_55_61_59'
+
+[[spawn]]
+npc = 'huntingbeast_silent'
+coords = '0_37_55_6_55'
+
+# Dashing kebbit oldid14799013, 2024-11-14T05:27:06Z.
+[[spawn]]
+npc = 'huntingbeast_speedy2'
+coords = '0_37_56_22_4'
+
+[[spawn]]
+npc = 'huntingbeast_speedy2'
+coords = '0_37_55_7_58'
+
+[[spawn]]
+npc = 'huntingbeast_speedy2'
+coords = '0_36_55_63_56'

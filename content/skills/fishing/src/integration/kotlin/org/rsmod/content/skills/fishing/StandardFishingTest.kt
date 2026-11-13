@@ -15,6 +15,8 @@ import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varobjs
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.player.events.interact.BankedObjEvents
 import org.rsmod.api.player.events.interact.HeldBanksideEvents
 import org.rsmod.api.player.events.interact.HeldDropEvents
@@ -41,9 +43,42 @@ import org.rsmod.game.type.obj.Wearpos
 import org.rsmod.game.type.seq.SeqTypeList
 import org.rsmod.game.type.varbit.VarBitTypeList
 import org.rsmod.game.type.varp.VarpLifetime
+import org.rsmod.map.CoordGrid
 
 @Execution(ExecutionMode.SAME_THREAD)
 class StandardFishingTest {
+    @Test
+    fun GameTestState.walkingAwayCancelsFishingBeforeTheNextCatchRoll() = runFishingTest { d ->
+        prepare(level = 99)
+        player.inv[0] = InvObj(objs.small_fishing_net)
+        val npc = spawnSpot(d)
+        val origin = player.coords
+        player.opNpc1(npc)
+        advance()
+        player.moveGameClick(origin.translate(-1, 0))
+        advance(2)
+        assertTrue(player.coords != origin)
+        advance(8)
+        assertEquals(0, player.count(objs.raw_shrimps) + player.count(objs.raw_anchovies))
+    }
+
+    @Test
+    fun GameTestState.`Al Kharid anchovies award the local diary task on a successful catch`() =
+        runFishingTest { deps ->
+            prepare(level = 15)
+            player.placeAt(CoordGrid(3266, 3148))
+            add(objs.small_fishing_net)
+            random.next = 0
+            val npc =
+                spawnNpc(CoordGrid(3267, 3148), deps.npcs[SmallNetBaitFishingNpcs.saltfish_51_49])
+            player.withProtectedAccess {
+                deps.fishing.fish(this, npc, StandardFishingMethods.smallNet)
+            }
+            advance(5)
+            assertEquals(1, player.count(objs.raw_anchovies))
+            assertTrue(player.hasCompletedDiaryTask(DiaryTask.CatchAlKharidAnchovies))
+        }
+
     @Test
     fun GameTestState.`cache 233 pins fish sack barrel identities and operations`() =
         runFishingTest { deps ->

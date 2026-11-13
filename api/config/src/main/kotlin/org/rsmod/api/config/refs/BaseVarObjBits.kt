@@ -7,6 +7,12 @@ import org.rsmod.api.type.builders.varobjbit.VarObjBitBuilder
 typealias varobjs = BaseVarObjBits
 
 object BaseVarObjBits : VarObjBitBuilder() {
+    val mixology_potion_state =
+        build("mixology_potion_state") {
+            startBit = 0
+            endBit = 2
+        }
+
     val blood_essence_charges =
         build("blood_essence_charges") {
             startBit = 0

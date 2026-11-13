@@ -16,6 +16,8 @@ testing.suites {
                 implementation(project(":api:testing"))
             }
             testTask.configure {
+                // A requested pack replaces files that the integration game server reads at startup.
+                mustRunAfter(":packCache")
                 workingDir = rootDir
                 systemProperty("junit.jupiter.extensions.autodetection.enabled", true)
                 systemProperty("junit.jupiter.execution.parallel.enabled", true)

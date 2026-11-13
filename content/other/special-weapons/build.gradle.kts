@@ -1,9 +1,29 @@
 plugins {
     id("base-conventions")
+    id("integration-test-suite")
 }
 
 dependencies {
+    integrationImplementation(projects.content.interfaces.bank)
+    integrationImplementation(projects.engine.annotations)
+    integrationImplementation(projects.api.combat.combatWeapon)
+    integrationImplementation(projects.api.combat.combatCommons)
+    integrationImplementation(projects.content.skills.woodcutting)
+    integrationImplementation(projects.api.hitPlugin)
+    integrationImplementation(projects.api.combat.combatManager)
+    integrationImplementation(projects.api.weapons)
+    integrationImplementation(projects.api.specials)
+    integrationImplementation(projects.content.skills.fletching.toxicBlowpipe)
+    integrationImplementation(projects.content.skills.magic.spellAttacks)
+    implementation(projects.api.combat.combatFormulas)
     implementation(projects.api.combat.combatManager)
+    implementation(projects.content.interfaces.bank)
     implementation(projects.api.pluginCommons)
+    implementation(projects.api.invtx)
+    implementation(projects.content.skills.woodcutting)
     implementation(projects.api.weapons)
+    implementation(projects.api.specials)
+    implementation(projects.content.skills.fletching.toxicBlowpipe)
+    implementation(projects.content.skills.magic.spellAttacks)
+    implementation(projects.content.skills.magic.spellUtility)
 }

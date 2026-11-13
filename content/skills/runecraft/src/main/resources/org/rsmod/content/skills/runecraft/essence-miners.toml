@@ -1,0 +1,5 @@
+spawn = [
+    { npc = "dmine_daeyalt_converter", coords = "2_57_152_44_36" },
+    { npc = "dt2_catalytic_guardian", coords = "0_56_148_27_0" },
+    { npc = "hagus", coords = "0_30_99_32_29" },
+]

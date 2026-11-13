@@ -5,7 +5,7 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.script.advanced.onAdvanceStat
 import org.rsmod.api.script.advanced.onWearposChange
-import org.rsmod.api.script.onOpWorn1
+import org.rsmod.api.script.onOpWorn2
 import org.rsmod.game.type.obj.Wearpos
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
@@ -20,16 +20,10 @@ constructor(private val trimming: SkillcapeTrimming, private val boosts: Skillca
         for (definition in SkillcapeTrimming.definitions) {
             if (definition.stat != stats.hunter && definition.stat != stats.agility) {
                 for (cape in listOf(definition.untrimmed, definition.trimmed)) {
-                    onOpWorn1(cape) { boosts.activate(player, definition.stat) }
+                    onOpWorn2(cape) { boosts.activate(player, definition.stat) }
                 }
             }
         }
-        onOpWorn1(objs.max_cape_worn) {
-            for (definition in SkillcapeTrimming.definitions) {
-                boosts.activate(player, definition.stat)
-            }
-        }
-
         val statByCape =
             SkillcapeTrimming.definitions
                 .flatMap { definition ->
@@ -50,7 +44,14 @@ constructor(private val trimming: SkillcapeTrimming, private val boosts: Skillca
                 }
                 return@onWearposChange
             }
-            statByCape[wornCape.id]?.let { boosts.activate(player, it) }
+            val stat =
+                if (
+                    wornCape.id == WornAgilityCapes.plain.id ||
+                        wornCape.id == WornAgilityCapes.trimmed.id
+                )
+                    stats.agility
+                else statByCape[wornCape.id]
+            stat?.let { boosts.activate(player, it) }
         }
     }
 }

@@ -6,6 +6,8 @@ import org.rsmod.game.type.loc.LocType
 public typealias prayer_altar_locs = PrayerAltarLocs
 
 public object PrayerAltarLocs : LocReferences() {
+    val natureAltar = find("druidic_spirit_grotto_naturealtar")
+    val sophanemHighPriest = find("contact_high_priest_temple_altar")
     val chaos = find("chaosaltar")
 
     private val saradomin =
@@ -72,7 +74,7 @@ public object PrayerAltarLocs : LocReferences() {
                 find("regicide_voyage_temple_altar"),
                 find("hosidius_altar"),
                 find("clan_medieval_altar"),
-                find("contact_high_priest_temple_altar"),
+                sophanemHighPriest,
                 find("castlewars_altar_zamorak"),
                 find("altar_twilight_default01"),
                 find("fai_varrock_church_altar"),
@@ -103,7 +105,7 @@ public object PrayerAltarLocs : LocReferences() {
             )
 
     /** The two cache-233 altars documented to restore Prayer to two above the base level. */
-    val boostedRestoration = listOf(find("monks_altar"), find("druidic_spirit_grotto_naturealtar"))
+    val boostedRestoration = listOf(find("monks_altar"), natureAltar)
 
     val godWarsZamorak = find("godwars_dungeon_zamorak_altar01")
     val godWarsSaradomin = find("godwars_dungeon_saradomin_altar01")

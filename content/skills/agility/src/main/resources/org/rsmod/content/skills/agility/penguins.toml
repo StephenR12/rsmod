@@ -1,0 +1,36 @@
+[[spawn]]
+npc = 'peng_larry_zoo'
+coords = '0_40_51_37_2'
+[[spawn]]
+npc = 'peng_larry_rell'
+coords = '0_42_58_19_22'
+[[spawn]]
+npc = 'peng_larry_ice'
+coords = '1_41_62_37_22'
+[[spawn]]
+npc = 'peng_agility_instructor'
+coords = '1_41_63_32_8'
+
+[[spawn]]
+npc = 'peng_agility_crushcourse_crushblock01_npc'
+coords = '0_41_63_5_21'
+
+[[spawn]]
+npc = 'peng_agility_crushcourse_crushblock02_npc'
+coords = '0_41_63_6_24'
+
+[[spawn]]
+npc = 'peng_agility_crushcourse_crushblock03_npc'
+coords = '0_41_63_7_21'
+
+[[spawn]]
+npc = 'peng_agility_crushcourse_crushblock04_npc'
+coords = '0_41_63_8_24'
+
+[[spawn]]
+npc = 'peng_agility_crushcourse_crushblock01_npc'
+coords = '0_41_63_9_21'
+
+[[spawn]]
+npc = 'peng_agility_crushcourse_crushblock02_npc'
+coords = '0_41_63_10_24'

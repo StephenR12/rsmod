@@ -7,8 +7,9 @@ import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.game.entity.Npc
 
 /** Guildmaster Apatura's cache-era Hunter-cape teleport unlock route. */
-public class HunterCapeGuildmasterDialogue @Inject constructor(private val state: HunterCapeState) {
+public class HunterCapeGuildmasterDialogue @Inject constructor(private val state: HunterCapeState, private val lore: GuildLore) {
     public suspend fun talk(access: ProtectedAccess, npc: Npc) {
+        if (lore.award(access)) return
         access.startDialogue(npc) {
             chatNpc(neutral, "Nilsal, hunter.")
             chatPlayer(neutral, "Nilsal, Apatura.")

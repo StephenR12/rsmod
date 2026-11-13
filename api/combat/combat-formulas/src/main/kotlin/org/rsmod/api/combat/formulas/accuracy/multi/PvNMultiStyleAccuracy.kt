@@ -16,6 +16,7 @@ import org.rsmod.api.combat.formulas.attributes.CombatStaffAttributes
 import org.rsmod.api.combat.formulas.attributes.collector.CombatMeleeAttributeCollector
 import org.rsmod.api.combat.formulas.attributes.collector.CombatNpcAttributeCollector
 import org.rsmod.api.combat.formulas.attributes.collector.CombatRangedAttributeCollector
+import org.rsmod.api.combat.commons.npc.isAssignedSlayerTarget
 import org.rsmod.api.combat.formulas.isSlayerTask
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.varbits
@@ -43,6 +44,7 @@ constructor(
         return computeMagicalMeleeHitChance(
             source = player,
             target = target.visType,
+            slayerTask = target.isAssignedSlayerTarget(player),
             targetDefence = target.defenceLvl,
             targetCurrHp = target.hitpoints,
             targetMaxHp = target.baseHitpointsLvl,
@@ -63,10 +65,10 @@ constructor(
         attackType: MeleeAttackType?,
         attackStyle: MeleeAttackStyle?,
         specialMultiplier: Double,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
         val meleeAttributes = meleeAttributes.collect(source, attackType)
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
@@ -98,6 +100,7 @@ constructor(
         return computeRangedMeleeHitChance(
             source = player,
             target = target.visType,
+            slayerTask = target.isAssignedSlayerTarget(player),
             targetDefence = target.defenceLvl,
             targetCurrHp = target.hitpoints,
             targetMaxHp = target.baseHitpointsLvl,
@@ -118,10 +121,10 @@ constructor(
         attackStyle: MeleeAttackStyle?,
         blockType: RangedAttackType?,
         specialMultiplier: Double,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
         val meleeAttributes = meleeAttributes.collect(source, attackType)
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
@@ -152,6 +155,7 @@ constructor(
         return computeRangedMagicHitChance(
             source = player,
             target = target.visType,
+            slayerTask = target.isAssignedSlayerTarget(player),
             targetDefence = target.defenceLvl,
             targetCurrHp = target.hitpoints,
             targetMaxHp = target.baseHitpointsLvl,
@@ -170,8 +174,8 @@ constructor(
         attackStyle: MagicAttackStyle?,
         blockType: RangedAttackType?,
         specialMultiplier: Double,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
@@ -207,6 +211,7 @@ constructor(
         return computeMagicalRangedHitChance(
             source = player,
             target = targetType,
+            slayerTask = target.isAssignedSlayerTarget(player),
             targetDefence = target.defenceLvl,
             targetCurrHp = target.hitpoints,
             targetMaxHp = target.baseHitpointsLvl,
@@ -229,10 +234,10 @@ constructor(
         attackType: RangedAttackType?,
         attackStyle: RangedAttackStyle?,
         specialMultiplier: Double,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
         val rangeAttributes = rangedAttributes.collect(source, attackType, attackStyle)
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 

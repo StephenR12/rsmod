@@ -1,5 +1,6 @@
 package org.rsmod.content.travel.canoe.scripts
 
+import org.rsmod.api.config.FellingAxes
 import org.rsmod.api.config.objParam
 import org.rsmod.api.config.refs.content
 import org.rsmod.api.config.refs.objs
@@ -186,11 +187,11 @@ private fun UnpackedObjType.isUsableAxe(player: Player): Boolean =
             player.vars[varbits.song_of_the_elves] >= SONG_OF_THE_ELVES_COMPLETE)
 
 private val UnpackedObjType.requiresSongOfTheElves: Boolean
-    get() = id == objs.crystal_axe.id || id == objs.crystal_axe_inactive.id
+    get() = FellingAxes.ordinaryId(id) in listOf(objs.crystal_axe.id, objs.crystal_axe_inactive.id)
 
 private val UnpackedObjType.axePriority: Int
     get() =
-        when (id) {
+        when (FellingAxes.ordinaryId(id)) {
             objs.bronze_axe.id -> 1
             objs.iron_axe.id -> 2
             objs.steel_axe.id -> 3

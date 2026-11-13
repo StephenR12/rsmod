@@ -10,5 +10,6 @@ public class PlayerConsumableEvent {
         public val player: Player,
         public val obj: ObjType,
         public val effectObj: ObjType = obj,
+        public val foodHealing: Int = 0,
     ) : UnboundEvent
 }

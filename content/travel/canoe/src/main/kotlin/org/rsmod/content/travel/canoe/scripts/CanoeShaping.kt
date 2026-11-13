@@ -3,6 +3,8 @@ package org.rsmod.content.travel.canoe.scripts
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.stats
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.woodcuttingLvl
 import org.rsmod.api.repo.loc.LocRepository
@@ -159,6 +161,8 @@ constructor(
             val xp = lcParam(canoe.loc, params.skill_xp) * xpMods.get(player, stats.woodcutting)
             resetAnim()
             statAdvance(stats.woodcutting, xp)
+            if (station == Station.Edgeville && canoe == Canoe.Waka)
+                player.completeDiaryTask(DiaryTask.MakeEdgevilleWaka)
 
             // Shaping yields no item or burn roll, so Crystal and Infernal axe charges are kept.
 

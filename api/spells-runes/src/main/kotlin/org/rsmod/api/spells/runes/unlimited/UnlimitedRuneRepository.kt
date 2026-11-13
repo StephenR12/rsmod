@@ -1,6 +1,9 @@
 package org.rsmod.api.spells.runes.unlimited
 
 import org.rsmod.api.spells.runes.unlimited.configs.unlimited_enums
+import org.rsmod.api.combat.commons.magic.TomeOfWater
+import org.rsmod.api.config.refs.objs
+import org.rsmod.game.inv.isAnyType
 import org.rsmod.game.enums.EnumTypeMapResolver
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.type.obj.ObjType
@@ -21,7 +24,10 @@ public class UnlimitedRuneRepository {
 
     public fun isLowPrioritySource(rune: ObjType, righthand: InvObj?, lefthand: InvObj?): Boolean {
         val sources = lowPriority[rune.id] ?: return false
-        return righthand?.id in sources || lefthand?.id in sources
+        fun active(item: InvObj?): Boolean =
+            item != null && item.id in sources &&
+                (!item.isAnyType(objs.tome_of_fire, objs.tome_of_earth) || TomeOfWater.isCharged(item))
+        return active(righthand) || active(lefthand)
     }
 
     public fun isSource(rune: ObjType, righthand: InvObj?, lefthand: InvObj?): Boolean =

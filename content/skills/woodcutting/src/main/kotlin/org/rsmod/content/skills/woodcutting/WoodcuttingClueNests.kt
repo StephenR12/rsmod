@@ -86,15 +86,16 @@ constructor(
     public fun denominator(player: Player, tree: UnpackedLocType, tier: WoodcuttingClueTier): Int {
         val combatTierComplete = tier.caStatus?.let { player.vars[it] == COMPLETE_STATUS } ?: false
         val wildernessRing =
-            player.vars[varbits.inside_wilderness] != 0 &&
+            tier != WoodcuttingClueTier.Beginner && player.vars[varbits.inside_wilderness] != 0 &&
                 RING_OF_WEALTH_I_TYPES.any { player.worn.contains(it) }
-        return denominator(
+        val chance=denominator(
             baseChance = tree.clueNestBaseChance,
             visibleLevel = player.woodcuttingLvl,
             tierModifierTenths = tier.modifierTenths,
             combatTierComplete = combatTierComplete,
             wildernessRing = wildernessRing,
         )
+        return if(org.rsmod.content.skills.woodcutting.forestry.TwitchersGloves.preference(player)==4)(chance*5/6).coerceAtLeast(1) else chance
     }
 
     public companion object {
@@ -110,17 +111,9 @@ constructor(
             combatTierComplete: Boolean,
             wildernessRing: Boolean,
         ): Int {
-            require(baseChance > 0) { "Base chance must be positive: $baseChance" }
-            require(visibleLevel >= 0) {
-                "Visible Woodcutting level cannot be negative: $visibleLevel"
-            }
-            require(tierModifierTenths > 0) {
-                "Clue-tier modifier must be positive: $tierModifierTenths"
-            }
-            val adjustedBase =
-                if (combatTierComplete) baseChance.toLong() * 95 / 100 else baseChance.toLong()
-            val denominator = adjustedBase * tierModifierTenths / ((100L + visibleLevel) * 10)
-            return (if (wildernessRing) denominator / 2 else denominator).coerceAtLeast(1).toInt()
+            return org.rsmod.api.clue.SkillingClue.denominator(
+                baseChance, visibleLevel, tierModifierTenths, combatTierComplete, wildernessRing
+            )
         }
 
         private val RING_OF_WEALTH_I_TYPES =

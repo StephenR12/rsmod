@@ -24,6 +24,23 @@ class MeleeAccuracyOperationsAttackRollTest {
         assertEquals(finalAttackRoll, modifiedAttackRoll)
     }
 
+    @org.junit.jupiter.api.Test
+    fun `barronite mace boosts accuracy by fifteen percent only against golems`() {
+        val weapon = EnumSet.of(MeleeAttr.BarroniteMaceWeapon)
+        assertEquals(
+            1150,
+            MeleeAccuracyOperations.modifyAttackRoll(1000, weapon, EnumSet.of(NpcAttr.Golem)),
+        )
+        assertEquals(
+            1000,
+            MeleeAccuracyOperations.modifyAttackRoll(
+                1000,
+                weapon,
+                EnumSet.noneOf(NpcAttr::class.java),
+            ),
+        )
+    }
+
     data class Loadout(
         val baseAttackRoll: Int,
         val finalAttackRoll: Int,

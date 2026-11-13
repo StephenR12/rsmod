@@ -105,6 +105,11 @@ constructor(
         addDelayed.add(objDuration)
     }
 
+    /** Cancel delayed spawns of an output when the activity which scheduled them is replaced. */
+    public fun cancelDelayed(coords: CoordGrid, type: ObjType) {
+        addDelayed.removeIf { it.obj.coords == coords && it.obj.type == type.id }
+    }
+
     public fun findAll(zone: ZoneKey): Sequence<Obj> = registry.findAll(zone)
 
     public fun findAll(coords: CoordGrid): Sequence<Obj> = registry.findAll(coords)

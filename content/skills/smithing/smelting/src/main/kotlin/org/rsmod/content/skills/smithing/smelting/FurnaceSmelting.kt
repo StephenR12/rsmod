@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.smithing.smelting
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.diary.recordDiarySmelt
 import kotlin.math.min
 import org.rsmod.api.config.refs.components
 import org.rsmod.api.config.refs.objs
@@ -63,6 +64,7 @@ constructor(
             }
             val recipe = recipes.forOutput(request.output) ?: return
             val outcome = smelt(this, recipe, request.kind, request.remaining, sendFailure = false)
+            if (outcome.performed) player.recordDiarySmelt(recipe.output.id, request.furnace.coords)
             if (!outcome.performed || outcome.stop || request.remaining <= outcome.units) {
                 resetAnim()
                 return

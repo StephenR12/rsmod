@@ -1,6 +1,9 @@
 package org.rsmod.content.minigames.cox
 
 import jakarta.inject.Inject
+import org.rsmod.api.config.refs.stats
+import org.rsmod.api.player.stat.statBase
+import org.rsmod.api.script.onOpHeld1
 import org.rsmod.api.config.refs.queues
 import org.rsmod.api.config.refs.timers
 import org.rsmod.api.npc.events.NpcKillEvents
@@ -28,6 +31,17 @@ constructor(
     private val npcRepo: NpcRepository,
 ) : PluginScript() {
     override fun ScriptContext.startup() {
+        val raidSkills=listOf(stats.attack,stats.strength,stats.defence,stats.hitpoints,stats.ranged,stats.prayer,stats.magic,stats.mining,stats.woodcutting,stats.herblore,stats.farming,stats.hunter,stats.cooking,stats.fishing,stats.thieving,stats.firemaking,stats.agility)
+        val skills=(raidSkills+listOf(stats.construction,stats.runecrafting,stats.smithing,stats.fletching,stats.slayer,stats.crafting)).sortedBy{it.id}
+        onOpHeld1(CoxObjs.darkRelic){
+            if(!player.members)return@onOpHeld1
+            val skill=skills.getOrNull(menu("Choose a skill",true,skills.map{it.displayName}))?:return@onOpHeld1
+            if(invDel(it.inventory,CoxObjs.darkRelic,slot=it.slot).success){
+                val multiplier=if(skill in raidSkills)150 else 50
+                statAdvance(skill,(player.statBase(skill)*multiplier).toDouble())
+            }
+        }
+
         onOpLoc1(CoxLocs.entrance) {
             startDialogue {
                 val challenge =
@@ -68,6 +82,7 @@ constructor(
                 CoxNpcs.vanguardRanged,
                 CoxNpcs.vanguardMagic,
                 CoxNpcs.vespula,
+                CoxNpcs.vespulaPortal,
                 CoxNpcs.babyMuttadile,
                 CoxNpcs.muttadile,
                 CoxNpcs.shamanA,

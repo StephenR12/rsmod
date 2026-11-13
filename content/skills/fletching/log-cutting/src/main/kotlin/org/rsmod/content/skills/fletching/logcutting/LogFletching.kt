@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.fletching.logcutting
 
+import org.rsmod.api.player.diary.recordDiaryFletch
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
@@ -88,6 +89,7 @@ constructor(private val recipes: LogFletchingRecipeRegistry, private val objType
                 add(inventory, recipe.output.id, recipe.outputCount)
             }
         check(result.success) { "Log-fletching transaction failed after validation: $recipe" }
+        player.recordDiaryFletch(recipe.output.id, recipe.outputCount, player.coords)
         statAdvance(stats.fletching, recipe.xp)
     }
 
@@ -142,7 +144,9 @@ constructor(private val recipes: LogFletchingRecipeRegistry, private val objType
         if (hasFletchingKnifeBonus()) FLETCHING_KNIFE_ACTION_TICKS else KNIFE_ACTION_TICKS
 
     private fun ProtectedAccess.maximumActions(recipe: LogFletchingRecipe): Int =
-        player.inv.count(objTypes[recipe.log]) / recipe.logCount
+        (player.inv.count(objTypes[recipe.log]) / recipe.logCount).let {
+            if (recipe.log == objs.ent_branch) it.coerceAtMost(28) else it
+        }
 
     private companion object {
         const val FIRST_ACTION_TICKS = 2

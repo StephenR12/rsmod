@@ -26,6 +26,8 @@ import org.rsmod.api.spells.attack.attack
 import org.rsmod.api.weapons.WeaponRegistry
 import org.rsmod.api.weapons.attack
 import org.rsmod.game.entity.Npc
+import org.rsmod.api.combat.commons.ranged.OgreBows
+import org.rsmod.api.config.refs.varps
 import org.rsmod.game.interact.InteractionOp
 import org.rsmod.game.type.obj.ObjTypeList
 
@@ -42,6 +44,13 @@ constructor(
     private val spellsReg: SpellAttackRegistry,
 ) {
     suspend fun attack(access: ProtectedAccess, target: Npc, attack: CombatAttack.PlayerAttack) {
+        if (OgreBows.isGameBird(target.id) &&
+            (attack !is CombatAttack.Ranged || !OgreBows.canFire(attack.weapon.id, access.player.quiver?.id) ||
+                !access.player.members || access.vars[varps.big_chompy_bird_hunting] < 65)) {
+            access.mes("You need an ogre bow and hunting arrows to shoot this bird.")
+            manager.stopCombat(access.player)
+            return
+        }
         when (attack) {
             is CombatAttack.Melee -> access.attackMelee(target, attack)
             is CombatAttack.Ranged -> access.attackRanged(target, attack)
@@ -51,6 +60,11 @@ constructor(
     }
 
     private suspend fun ProtectedAccess.attackMelee(npc: Npc, attack: CombatAttack.Melee) {
+        if (npc.visType.id == 492) {
+            mes("The cave kraken is out of reach of melee attacks.")
+            manager.stopCombat(player)
+            return
+        }
         if (!canAttack(npc)) {
             return
         }
@@ -211,9 +225,8 @@ constructor(
         }
 
         val damage = manager.rollRangedDamage(player, npc, attack)
-        manager.giveCombatXp(player, npc, attack, damage)
-
         val hitAmmoObj = if (usingThrown) null else quiverType
+        manager.giveCombatXp(player, npc, attack, damage, ammoId = hitAmmoObj?.id)
         manager.queueRangedHit(player, npc, hitAmmoObj, damage, clientDelay, serverDelay)
 
         if (usingThrown && player.righthand == null) {
@@ -304,7 +317,7 @@ constructor(
         }
 
         val hasAttackOp = npc.visType.hasOp(InteractionOp.Op2)
-        if (!hasAttackOp) {
+        if (!hasAttackOp && !OgreBows.isGameBird(npc.id)) {
             mes("You can't attack this npc.")
             return false
         }

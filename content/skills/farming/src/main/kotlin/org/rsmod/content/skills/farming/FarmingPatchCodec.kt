@@ -9,6 +9,7 @@ import org.rsmod.game.loc.LocInfo
 import org.rsmod.game.type.loc.LocTypeList
 import org.rsmod.game.type.loc.UnpackedLocType
 import org.rsmod.game.type.varbit.VarBitTypeList
+import org.rsmod.map.CoordGrid
 import org.rsmod.map.square.MapSquareKey
 
 @Singleton
@@ -46,13 +47,19 @@ constructor(private val locTypes: LocTypeList, private val varbits: VarBitTypeLi
     }
 
     public fun patchKey(loc: BoundLocInfo, type: UnpackedLocType): String =
-        patchKey(loc.coords.let(MapSquareKey::from).id, type)
+        patchKey(loc.coords, type)
 
-    public fun patchKey(loc: LocInfo, type: UnpackedLocType): String =
-        patchKey(loc.coords.let(MapSquareKey::from).id, type)
+    public fun patchKey(loc: LocInfo, type: UnpackedLocType): String = patchKey(loc.coords, type)
 
-    private fun patchKey(square: Int, type: UnpackedLocType): String =
-        "$square:${type.multiVarBit}:${patchType(type)?.name ?: "Unknown"}"
+    internal fun patchKey(coords: CoordGrid, type: UnpackedLocType): String =
+        patchKey(MapSquareKey.from(coords).id, type)
+
+    private fun patchKey(square: Int, type: UnpackedLocType): String {
+        // The combat instance copies the permanent Farming Guild plot.
+        val persistentSquare =
+            if (patchType(type) == FarmingPatchType.Hespori) (19 shl 8) + 157 else square
+        return "$persistentSquare:${type.multiVarBit}:${patchType(type)?.name ?: "Unknown"}"
+    }
 
     public fun sync(
         player: Player,
@@ -73,8 +80,25 @@ constructor(private val locTypes: LocTypeList, private val varbits: VarBitTypeLi
         val variants =
             base.multiLoc.indices.mapNotNull { index ->
                 val id = base.multiLoc[index].toInt() and 0xFFFF
-                locTypes[id]?.internalName?.let { Variant(index, it) }
+                locTypes[id]?.let { type ->
+                    type.internalName?.let { Variant(index, it, type.op[0].orEmpty().lowercase()) }
+                }
             }
+        if (state.patchType == FarmingPatchType.Grapes) {
+            val suffix =
+                when {
+                    state.isEmpty ->
+                        if (state.compost == FarmingCompost.Saltpetre) "treated" else "empty"
+                    state.status == FarmingCropStatus.Dead -> "dead"
+                    state.status == FarmingCropStatus.Harvestable && !state.healthChecked -> "xp"
+                    state.status == FarmingCropStatus.Harvestable ->
+                        if (state.harvestLives == 1) "grape_1"
+                        else "grapes_${state.harvestLives.coerceIn(2, 5)}"
+                    state.stage == 0 -> "seedling"
+                    else -> "growing_${state.stage.coerceIn(1, 6)}"
+                }
+            return variants.firstOrNull { it.name == "grapevine_clickzone_$suffix" }?.value
+        }
         if (state.patchType == FarmingPatchType.Compost) {
             val token =
                 when (state.compostBinStatus) {
@@ -147,13 +171,67 @@ constructor(private val locTypes: LocTypeList, private val varbits: VarBitTypeLi
                 ?: variants.firstOrNull()?.value
         }
 
+        if (state.patchType == FarmingPatchType.Hespori) {
+            val name =
+                when (state.status) {
+                    FarmingCropStatus.Harvestable -> "hespori_plant_fullygrown"
+                    FarmingCropStatus.Dead -> "hespori_plant_dead"
+                    else ->
+                        if (state.stage == 0) "hespori_patch_seed"
+                        else "hespori_plant_${state.stage}"
+                }
+            return variants.firstOrNull { it.name == name }?.value
+        }
+        if (state.patchType == FarmingPatchType.Anima) {
+            val stage =
+                when {
+                    state.status == FarmingCropStatus.Dead -> "fullygrown_dead"
+                    state.stage >= 7 -> "fullygrown_diseased"
+                    state.stage >= 4 -> "fullygrown"
+                    state.stage == 0 -> "seedling"
+                    else -> state.stage.toString()
+                }
+            return variants.firstOrNull { it.name == "anima_${crop.key}_$stage" }?.value
+        }
         fun Variant.matchesCrop(): Boolean =
             crop.visualPrefixes.any { prefix ->
                 (name == prefix || name.startsWith("${prefix}_") || name.startsWith(prefix)) &&
                     "patch_" !in name
             }
 
-        val matches = variants.filter(Variant::matchesCrop)
+        val matches =
+            variants
+                .distinctBy { it.name }
+                .filter { variant ->
+                    if (state.patchType == FarmingPatchType.Herb) {
+                        variant.name.startsWith("herb_" + crop.key) ||
+                            (variant.name.startsWith("herb_") &&
+                                (variant.action == "clear" || variant.action == "cure"))
+                    } else variant.matchesCrop()
+                }
+        if (state.status == FarmingCropStatus.Harvestable) {
+            if (crop.healthXp > 0.0 && !state.healthChecked) {
+                matches
+                    .firstOrNull { it.action == "check-health" }
+                    ?.let {
+                        return it.value
+                    }
+            }
+            val produce = matches.filter { it.action.startsWith("pick") || it.action == "harvest" }
+            if (state.harvestLives > 0 && produce.isNotEmpty()) {
+                val countVariant =
+                    produce.firstOrNull {
+                        it.name.substringAfterLast('_').toIntOrNull() == state.harvestLives
+                    }
+                return (countVariant ?: produce.last()).value
+            }
+            val mature =
+                matches.firstOrNull {
+                    it.action.startsWith("chop") ||
+                        (it.action == "clear" && "fullygrown" in it.name && "dead" !in it.name)
+                }
+            if (mature != null) return mature.value
+        }
         val candidates =
             when (state.status) {
                 FarmingCropStatus.Diseased -> matches.filter { "diseased" in it.name }
@@ -200,5 +278,5 @@ constructor(private val locTypes: LocTypeList, private val varbits: VarBitTypeLi
         return locTypes[id]
     }
 
-    private data class Variant(val value: Int, val name: String)
+    private data class Variant(val value: Int, val name: String, val action: String)
 }

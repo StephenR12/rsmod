@@ -33,7 +33,7 @@ constructor(
         }
     }
 
-    private fun Player.groupBoost(): Int {
+    internal fun Player.groupBoost(): Int {
         val tree = activeTree() ?: return 0
         if (!locTypes[tree].hasDespawnTimer) {
             return 0

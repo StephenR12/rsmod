@@ -14209,6 +14209,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'crystal_bow'
+req_stat2 = 'agility'
+req_level2 = 50
 req_stat1 = 'ranged'
 req_level1 = 70
 anim_stance1 = 426
@@ -14227,6 +14229,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'crystal_bow_inactive'
+req_stat2 = 'agility'
+req_level2 = 50
 req_stat1 = 'ranged'
 req_level1 = 70
 anim_stance1 = 426
@@ -14331,6 +14335,10 @@ weapon_category = 'Unarmed'
 
 [[config]]
 obj = 'crystal_bow_2500'
+req_stat2 = 'agility'
+req_level2 = 50
+req_stat1 = 'ranged'
+req_level1 = 70
 anim_stance1 = 426
 sound_stance1 = 1352
 anim_stance2 = 426
@@ -15445,6 +15453,8 @@ weapon_category = 'Scythe'
 
 [[config]]
 obj = 'bow_of_faerdhinen'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15462,6 +15472,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15584,6 +15596,8 @@ weapon_category = 'SlashSword'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite_ithell'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15601,6 +15615,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite_iorwerth'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15618,6 +15634,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite_trahaearn'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15635,6 +15653,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite_cadarn'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15652,6 +15672,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite_crwys'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15669,6 +15691,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite_meilyr'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -15686,6 +15710,8 @@ weapon_category = 'Bow'
 
 [[config]]
 obj = 'bow_of_faerdhinen_infinite_amlodd'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 anim_stance1 = 426
@@ -23123,6 +23149,8 @@ weapon_category = 'Banner'
 
 [[config]]
 obj = 'amethyst_dart'
+projectile_travel = 1936
+projectile_launch = 1937
 equipment_sound = 2244
 proj_anim = 'thrown'
 speed = 3
@@ -23131,6 +23159,8 @@ weapon_category = 'Thrown'
 
 [[config]]
 obj = 'amethyst_dart_p'
+projectile_travel = 1936
+projectile_launch = 1937
 equipment_sound = 2244
 proj_anim = 'thrown'
 speed = 3
@@ -23139,6 +23169,8 @@ weapon_category = 'Thrown'
 
 [[config]]
 obj = 'amethyst_dart_p+'
+projectile_travel = 1936
+projectile_launch = 1937
 equipment_sound = 2244
 proj_anim = 'thrown'
 speed = 3
@@ -23147,6 +23179,8 @@ weapon_category = 'Thrown'
 
 [[config]]
 obj = 'amethyst_dart_p++'
+projectile_travel = 1936
+projectile_launch = 1937
 equipment_sound = 2244
 proj_anim = 'thrown'
 speed = 3
@@ -34237,7 +34271,7 @@ dummyitem = 2
 [[config]]
 obj = 'anma_30_reward'
 req_stat1 = 'ranged'
-req_level1 = 50
+req_level1 = 30
 untradable = true
 ammo_recovery_rate = 60
 
@@ -35088,6 +35122,8 @@ dummyitem = 2
 
 [[config]]
 obj = 'bow_of_faerdhinen_inactive'
+req_stat2 = 'agility'
+req_level2 = 70
 req_stat1 = 'ranged'
 req_level1 = 80
 proj_anim = 'arrow'

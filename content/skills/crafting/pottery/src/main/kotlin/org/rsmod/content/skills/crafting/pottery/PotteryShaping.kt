@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.crafting.pottery
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.diary.recordDiaryPottery
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
@@ -70,7 +71,7 @@ constructor(private val recipes: PotteryRecipeRegistry, private val objTypes: Ob
                 resetAnim()
                 return
             }
-            shape(recipe)
+            shape(recipe, request.wheel.coords)
             val remaining = request.remaining - 1
             if (remaining <= 0 || !canShape(recipe, sendFailure = false)) {
                 resetAnim()
@@ -85,7 +86,7 @@ constructor(private val recipes: PotteryRecipeRegistry, private val objTypes: Ob
         }
     }
 
-    private fun ProtectedAccess.shape(recipe: PotteryRecipe) {
+    private fun ProtectedAccess.shape(recipe: PotteryRecipe, coords: org.rsmod.map.CoordGrid) {
         val result =
             player.invTransaction(player.inv) {
                 val inventory = select(player.inv)
@@ -94,6 +95,7 @@ constructor(private val recipes: PotteryRecipeRegistry, private val objTypes: Ob
             }
         check(result.success) { "Pottery-shaping transaction failed after validation: $recipe" }
         statAdvance(stats.crafting, recipe.shapingXp)
+        player.recordDiaryPottery(recipe.unfired.id, coords)
     }
 
     private fun ProtectedAccess.canShape(recipe: PotteryRecipe, sendFailure: Boolean): Boolean {

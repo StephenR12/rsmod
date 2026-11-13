@@ -15,43 +15,26 @@ import org.rsmod.game.type.obj.ObjTypeList
 
 /** The crystal-axe recipe shared by the Prifddinas singing bowl and elven singers. */
 public class CrystalAxeSinging @Inject constructor(private val objTypes: ObjTypeList) {
-    public suspend fun selectAtBowl(access: ProtectedAccess) {
-        with(access) {
-            if (!canAccess(sendFailure = true)) {
-                return
-            }
-            val input =
-                skillMulti(
-                    title = MENU_TITLE,
-                    choices = listOf(objs.crystal_axe),
-                    maxQuantity = 1,
-                    initialQuantity = 1,
-                    actionMode = MAKE_ACTION_MODE,
-                )
-            if (!components.skillmulti_a.isType(input.component)) {
-                return
-            }
-            create(this, assisted = false)
-        }
-    }
+    @com.google.inject.Inject(optional = true)
+    private var recipes: Set<@JvmSuppressWildcards CrystalSingingRecipe> = emptySet()
 
-    public suspend fun selectWithSinger(access: ProtectedAccess) {
+    public suspend fun selectAtBowl(access: ProtectedAccess): Unit = selectRecipe(access, assisted = false)
+
+    public suspend fun selectWithSinger(access: ProtectedAccess): Unit = selectRecipe(access, assisted = true)
+
+    private suspend fun selectRecipe(access: ProtectedAccess, assisted: Boolean) {
         with(access) {
-            if (!canAccess(sendFailure = true)) {
-                return
-            }
-            val input =
-                skillMulti(
-                    title = MENU_TITLE,
-                    choices = listOf(objs.crystal_axe),
-                    maxQuantity = 1,
-                    initialQuantity = 1,
-                    actionMode = MAKE_ACTION_MODE,
-                )
-            if (!components.skillmulti_a.isType(input.component)) {
-                return
-            }
-            create(this, assisted = true)
+            if (!canAccess(sendFailure = true)) return
+            val available = recipes.filter { it.available(player, assisted) }.sortedBy { it.item.id }
+            val choices = listOf(objs.crystal_axe) + available.map { it.item }
+            val input = skillMulti(title = MENU_TITLE, choices = choices, maxQuantity = 1,
+                initialQuantity = 1, actionMode = MAKE_ACTION_MODE)
+            val buttons = listOf(components.skillmulti_a, components.skillmulti_b, components.skillmulti_c,
+                components.skillmulti_d, components.skillmulti_e, components.skillmulti_f, components.skillmulti_g,
+                components.skillmulti_h, components.skillmulti_i, components.skillmulti_j)
+            val index = buttons.indexOfFirst { it.isType(input.component) }
+            if (index == 0) create(this, assisted)
+            else available.getOrNull(index - 1)?.sing(this, assisted)
         }
     }
 

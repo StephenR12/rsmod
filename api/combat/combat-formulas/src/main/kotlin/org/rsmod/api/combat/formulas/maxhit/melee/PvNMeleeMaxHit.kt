@@ -8,6 +8,7 @@ import org.rsmod.api.combat.formulas.attributes.CombatMeleeAttributes
 import org.rsmod.api.combat.formulas.attributes.CombatNpcAttributes
 import org.rsmod.api.combat.formulas.attributes.collector.CombatMeleeAttributeCollector
 import org.rsmod.api.combat.formulas.attributes.collector.CombatNpcAttributeCollector
+import org.rsmod.api.combat.commons.npc.isAssignedSlayerTarget
 import org.rsmod.api.combat.formulas.isSlayerTask
 import org.rsmod.api.combat.maxhit.player.PlayerMeleeMaxHit
 import org.rsmod.api.combat.weapon.WeaponSpeeds
@@ -52,6 +53,7 @@ constructor(
             computeMaxHit(
                 source = player,
                 target = target.visType,
+                slayerTask = target.isAssignedSlayerTarget(player),
                 targetCurrHp = target.hitpoints,
                 targetMaxHp = target.baseHitpointsLvl,
                 attackType = attackType,
@@ -70,11 +72,11 @@ constructor(
         attackType: MeleeAttackType?,
         attackStyle: MeleeAttackStyle?,
         specialMultiplier: Double,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
         val meleeAttributes = meleeAttributes.collect(source, attackType)
         addProcAttributes(meleeAttributes)
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 

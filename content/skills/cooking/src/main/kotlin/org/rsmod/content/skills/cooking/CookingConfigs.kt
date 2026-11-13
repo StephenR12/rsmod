@@ -8,6 +8,7 @@ public typealias cooking_locs = CookingLocs
 
 public object CookingLocs : LocReferences() {
     public val fire = find("fire")
+    public val campfires = listOf("forestry_fire", "forestry_fire_red", "forestry_fire_green", "forestry_fire_blue", "forestry_fire_white", "forestry_fire_purple").map { find(it) }
     public val permanentCookFire = find("fire_cook")
     public val ogreSpitRoast = find("multi_chompybird_spitroast_entity")
     public val ogreSpitRoastEmpty = find("chompybird_spitroast_empty")
@@ -81,10 +82,16 @@ public object CookingLocs : LocReferences() {
     public val standardRangesOp2 =
         listOf(find("poh_stove_7"), find("poh_stove_7_kettle"), find("poh_stove_7_pot"))
 
+    /** Early house stoves expose Remove only; they accept food-on-location instead of Cook. */
+    public val houseFireStoves = listOf(find("poh_stove_1"), find("poh_stove_2"), find("poh_stove_2_kettle"), find("poh_stove_3"), find("poh_stove_3_kettle"))
+    public val houseRangeStoves = listOf(find("poh_stove_4"), find("poh_stove_4_pot"), find("poh_stove_4_kettle"), find("poh_stove_5"), find("poh_stove_5_pot"), find("poh_stove_5_kettle"), find("poh_stove_6"), find("poh_stove_6_kettle"), find("poh_stove_6_pot"))
+
     public val allCookOperationSources =
         standardRangesOp1 +
             standardRangesOp2 +
             listOf(lumbridgeRange, hosidiusRange, hosidiusRange2, permanentCookFire)
+
+    public val allFoodUseSources = allCookOperationSources + fire + campfires + houseFireStoves + houseRangeStoves
 }
 
 public typealias cooking_queues = CookingQueues

@@ -1,0 +1,544 @@
+# Fixed Puro-Puro points, Impling oldid14988081 (2025-09-18).
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_3_3'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_3_60'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_8_35'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_11_17'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_11_49'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_21_12'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_24_56'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_36_8'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_49_51'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_50_16'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_55_34'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_60_3'
+
+[[spawn]]
+npc = 'ii_impling_type_1_maze'
+coords = '0_40_67_60_60'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_4_33'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_14_33'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_14_43'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_27_12'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_30_60'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_32_3'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_35_55'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_52_21'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_52_39'
+
+[[spawn]]
+npc = 'ii_impling_type_2_maze'
+coords = '0_40_67_59_34'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_8_8'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_8_39'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_14_23'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_20_55'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_25_8'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_37_5'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_42_58'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_49_29'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_55_10'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_55_54'
+
+[[spawn]]
+npc = 'ii_impling_type_3_maze'
+coords = '0_40_67_58_33'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_8_29'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_10_42'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_14_17'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_27_54'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_30_10'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_38_52'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_51_46'
+
+[[spawn]]
+npc = 'ii_impling_type_4_maze'
+coords = '0_40_67_52_22'
+
+[[spawn]]
+npc = 'ii_impling_type_5_maze'
+coords = '0_40_67_14_29'
+
+[[spawn]]
+npc = 'ii_impling_type_5_maze'
+coords = '0_40_67_16_49'
+
+[[spawn]]
+npc = 'ii_impling_type_5_maze'
+coords = '0_40_67_25_10'
+
+[[spawn]]
+npc = 'ii_impling_type_5_maze'
+coords = '0_40_67_41_55'
+
+[[spawn]]
+npc = 'ii_impling_type_5_maze'
+coords = '0_40_67_52_30'
+
+[[spawn]]
+npc = 'ii_impling_type_6_maze'
+coords = '0_40_67_7_31'
+
+[[spawn]]
+npc = 'ii_impling_type_6_maze'
+coords = '0_40_67_31_7'
+
+[[spawn]]
+npc = 'ii_impling_type_6_maze'
+coords = '0_40_67_31_52'
+
+[[spawn]]
+npc = 'ii_impling_type_6_maze'
+coords = '0_40_67_55_38'
+
+[[spawn]]
+npc = 'ii_elnock'
+coords = '0_40_67_26_26'
+
+[[spawn]]
+npc = 'ii_rare_impling_precursor_maze'
+coords = '0_40_67_16_48'
+
+[[spawn]]
+npc = 'ii_rare_impling_precursor_maze'
+coords = '0_40_67_50_13'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_9_54'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_31_51'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_56_55'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_18_46'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_45_46'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_12_33'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_50_32'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_15_18'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_31_13'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_45_18'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_10_9'
+
+[[spawn]]
+npc = 'ii_uncommon_impling_precursor'
+coords = '0_40_67_57_7'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_10_44'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_25_52'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_43_52'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_55_45'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_14_34'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_49_34'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_18_11'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_29_11'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_38_14'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_67_54_20'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_19_55_38_39'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_19_58_59_37'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_26_54_41_23'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_34_50_27_36'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_36_56_27_55'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_37_54_26_56'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_38_53_27_26'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_46_24_28'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_50_32_52'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_42_52_51_14'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_44_45_25_48'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_44_47_33_25'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_47_55_10_3'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_47_53_12_32'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_49_50_7_31'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_50_51_39_19'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_51_51_28_1'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_52_47_28_5'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_53_48_16_53'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_53_52_49_23'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_53_54_62_30'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_55_55_28_8'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_57_51_29_57'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_46_51_38_12'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_49_46_33_57'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_45_54_24_33'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_41_53_22_29'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_41_56_30_25'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_25_57_16_53'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_48_52_63_50'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_42_58_39_56'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_43_54_62_56'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_38_50_38_17'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_42_55_52_15'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_25_59_0_61'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_44_49_27_25'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_23_55_53_0'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_58_47_18_8'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_58_59_53_22'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_34_46_22_19'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_39_48_30_29'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_39_44_4_59'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_20_46_48_27'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_22_48_45_58'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_26_46_57_57'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_25_49_17_46'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_20_49_8_32'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_26_54_41_27'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_36_56_50_24'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_35_49_39_52'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_38_48_23_12'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_40_52_7_56'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_43_54_32_7'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_46_53_23_19'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_48_50_21_38'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_51_53_19_36'
+
+[[spawn]]
+npc = 'ii_impling_type_12_precursor'
+coords = '0_51_95_26_37'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_22_51_47_55'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_51_49_14_19'
+
+[[spawn]]
+npc = 'ii_common_impling_precursor'
+coords = '0_38_69_49_26'

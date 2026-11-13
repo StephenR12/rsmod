@@ -10,10 +10,10 @@ public class PrayerGodWarsAltarTeleport @Inject constructor() {
     }
 
     public companion object {
-        public val ZAMORAK_EXIT: CoordGrid = CoordGrid(2925, 5332, 2)
-        public val SARADOMIN_EXIT: CoordGrid = CoordGrid(2908, 5265, 0)
-        public val ARMADYL_EXIT: CoordGrid = CoordGrid(2839, 5295, 2)
-        public val BANDOS_EXIT: CoordGrid = CoordGrid(2863, 5354, 2)
+        public val ZAMORAK_EXIT: CoordGrid = CoordGrid(2925, 5333, 2)
+        public val SARADOMIN_EXIT: CoordGrid = CoordGrid(2909, 5265, 0)
+        public val ARMADYL_EXIT: CoordGrid = CoordGrid(2839, 5294, 2)
+        public val BANDOS_EXIT: CoordGrid = CoordGrid(2862, 5354, 2)
         public val ZAROS_EXIT: CoordGrid = CoordGrid(2900, 5204, 0)
 
         public fun destination(god: PrayerGodWarsGod): CoordGrid =

@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.cooking
 
 import org.rsmod.api.config.refs.objs
+import org.rsmod.content.skills.cooking.brewing.BreweryObjs
 import org.rsmod.game.type.obj.ObjType
 
 public data class CookingChance(public val low: Int, public val high: Int)
@@ -30,6 +31,7 @@ public data class StandardCookingRecipe(
     public val returnedContainer: ObjType? = null,
     public val successMessage: String? = null,
     public val burnMessage: String? = null,
+    public val returnedContainerOnSuccessOnly: Boolean = false,
     public val allowedSources: Set<CookingSourceKind> =
         setOf(
             CookingSourceKind.Fire,
@@ -45,6 +47,23 @@ public object StandardCookingRecipes {
 
     private val basic =
         listOf(
+            StandardCookingRecipe(
+                BreweryObjs.barley,
+                BreweryObjs.malt,
+                null,
+                1,
+                0.0,
+                true,
+                CookingChance(256, 256),
+                hosidius = CookingChance(256, 256),
+                hosidiusElite = CookingChance(256, 256),
+                alwaysSucceeds = true,
+                firstResultTicks = 4,
+                secondResultGapTicks = 4,
+                repeatResultGapTicks = 4,
+                allowedSources = rangeSources,
+                successMessage = "You toast the barley into malt.",
+            ),
             StandardCookingRecipe(
                 objs.raw_chicken,
                 objs.cooked_chicken,
@@ -947,7 +966,8 @@ public object StandardCookingRecipes {
             vegetables +
             hotDrinks +
             oomlieWraps +
-            deliberateBurns
+            deliberateBurns +
+            org.rsmod.content.skills.cooking.gnome.GnomeRecipes.bakes
     public val byRaw: Map<Int, StandardCookingRecipe> = all.associateBy { it.raw.id }
 
     private fun standardMeat(raw: ObjType, members: Boolean): StandardCookingRecipe =

@@ -1,0 +1,80 @@
+# Master Farmer oldid14966702 (2025-08-15), Martin oldid14972181 (2025-08-22).
+[[spawn]]
+npc = 'martin_the_master_farmer'
+coords = '0_48_50_6_58'
+
+[[spawn]]
+npc = 'master_farmer_1'
+coords = '0_48_50_8_50'
+
+[[spawn]]
+npc = 'master_farmer_2'
+coords = '0_41_52_12_36'
+
+[[spawn]]
+npc = 'master_farmer_1'
+coords = '0_50_52_40_17'
+
+[[spawn]]
+npc = 'master_farmer_1'
+coords = '0_19_58_20_15'
+
+[[spawn]]
+npc = 'master_farmer_1_f'
+coords = '0_19_58_31_38'
+
+[[spawn]]
+npc = 'master_farmer_2'
+coords = '0_19_58_48_13'
+
+[[spawn]]
+npc = 'master_farmer_1'
+coords = '0_27_56_33_49'
+
+[[spawn]]
+npc = 'master_farmer_2_f'
+coords = '0_27_56_59_8'
+
+[[spawn]]
+npc = 'varlamore_master_farmer_m_1'
+coords = '0_25_47_35_43'
+
+[[spawn]]
+npc = 'varlamore_master_farmer_f_1'
+coords = '0_26_47_18_44'
+
+[[spawn]]
+npc = 'varlamore_master_farmer_m_2'
+coords = '0_27_47_8_56'
+
+[[spawn]]
+npc = 'varlamore_master_farmer_f_2'
+coords = '0_27_47_22_58'
+
+[[spawn]]
+npc = 'varlamore_master_farmer_m_3'
+coords = '0_24_48_48_18'
+
+[[spawn]]
+npc = 'varlamore_master_farmer_f_3'
+coords = '0_24_48_46_59'
+
+[[spawn]]
+npc = 'varlamore_master_farmer_m_4'
+coords = '0_23_50_23_34'
+
+[[spawn]]
+npc = 'kastori_master_farmer_m_2'
+coords = '0_21_47_22_14'
+
+[[spawn]]
+npc = 'kastori_master_farmer_f_2'
+coords = '0_21_47_23_40'
+
+[[spawn]]
+npc = 'kastori_master_farmer_m_1'
+coords = '0_21_47_7_50'
+
+[[spawn]]
+npc = 'kastori_master_farmer_f_1'
+coords = '0_21_47_27_56'

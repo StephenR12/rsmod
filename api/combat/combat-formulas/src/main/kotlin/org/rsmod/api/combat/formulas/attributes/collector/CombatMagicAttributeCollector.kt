@@ -46,6 +46,7 @@ constructor(
         usedSunfireRune: Boolean,
         usedTomeOfWater: Boolean,
         random: GameRandom,
+        tomeElement: ObjType? = null,
     ): EnumSet<CombatSpellAttributes> {
         val attributes = EnumSet.noneOf(CombatSpellAttributes::class.java)
 
@@ -171,13 +172,11 @@ constructor(
             attributes += weaponAttribute
         }
 
-        val shield = player.lefthand
-
         val shieldAttribute =
             when {
                 usedTomeOfWater -> CombatSpellAttributes.WaterTome
-                shield.isType(objs.tome_of_earth) -> CombatSpellAttributes.EarthTome
-                shield.isType(objs.tome_of_fire) -> CombatSpellAttributes.FireTome
+                tomeElement == objs.earth_rune -> CombatSpellAttributes.EarthTome
+                tomeElement == objs.fire_rune -> CombatSpellAttributes.FireTome
                 else -> null
             }
 

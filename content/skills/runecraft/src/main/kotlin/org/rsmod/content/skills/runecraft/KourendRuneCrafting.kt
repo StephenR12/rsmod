@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.runecraft
 
 import jakarta.inject.Inject
+import org.rsmod.content.skills.pets.RiftGuardian
 import kotlin.math.min
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
@@ -9,6 +10,8 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.stat
 import org.rsmod.api.player.stat.statSub
@@ -50,6 +53,7 @@ public object KourendRuneRecipes {
 public class KourendRuneCrafting
 @Inject
 constructor(
+    private val guardian: RiftGuardian,
     private val modifiers: RunecraftOutputModifiers,
     private val bloodEssence: BloodEssenceLifecycle,
 ) {
@@ -217,8 +221,14 @@ constructor(
                 "Kourend rune altar transaction failed after validation: $transaction"
             }
 
+            val crafted = if (recipe == KourendRuneRecipes.blood) 1 else 2
+            vars[AbyssVars.kourend] = vars[AbyssVars.kourend] or crafted
+            if (recipe == KourendRuneRecipes.blood) {
+                player.completeDiaryTask(DiaryTask.CraftBloodFromDarkEssence)
+            }
             anim(RunecraftSeqs.craft)
             spotanim(RunecraftSpotanims.craft)
+            guardian.craft(player,if (recipe == KourendRuneRecipes.blood) "kourend blood" else "soul",fragments)
             statAdvance(stats.runecrafting, fragments * recipe.xp)
             mes("You bind the temple's power into ${recipe.name} runes.")
         }

@@ -9,6 +9,7 @@ kotlin {
 }
 
 dependencies {
+    integrationImplementation(libs.openrs2.cache)
     implementation(libs.jackson.databind)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.netty.buffer)

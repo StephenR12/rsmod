@@ -30,9 +30,9 @@ class LogFletchingTest {
     @Test
     fun GameTestState.`cache 233 exposes every standard log product tool and animation`() =
         runLogFletchingTest { deps ->
-            assertEquals(35, deps.recipes.recipes.size)
+            assertEquals(36, deps.recipes.recipes.size)
             assertEquals(
-                listOf(1511, 1521, 1519, 1517, 1515, 1513, 6333, 6332, 19669),
+                listOf(1511, 1521, 1519, 1517, 1515, 1513, 6333, 6332, 19669, 31032),
                 deps.recipes.logs.map { it.id },
             )
             assertEquals(946, objs.knife.id)
@@ -83,6 +83,7 @@ class LogFletchingTest {
                     "Arrow shafts:90:19669:1:52:105:35.0",
                     "Redwood hiking staff:90:19669:1:31049:1:10.5",
                     "Redwood shield:92:19669:2:22266:1:216.0",
+                    "Atlatl dart shafts:74:31032:1:31004:100:30.0",
                 ),
                 deps.recipes.recipes.map {
                     "${it.name}:${it.level}:${it.log.id}:${it.logCount}:${it.output.id}:" +
@@ -143,6 +144,7 @@ class LogFletchingTest {
                     6333 to listOf(9446),
                     6332 to listOf(9450),
                     19669 to listOf(52, 31049, 22266),
+                    31032 to listOf(31004),
                 ),
                 deps.recipes.logs.associate { log ->
                     log.id to deps.recipes.forLog(log).map { it.output.id }

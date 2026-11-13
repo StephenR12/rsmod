@@ -1,6 +1,7 @@
 package org.rsmod.content.interfaces.prayer.tab.scripts
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.minigames.inBarbarianAssault
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.output.ClientScripts
 import org.rsmod.api.player.output.mes
@@ -63,6 +64,10 @@ private constructor(
     }
 
     private suspend fun ProtectedAccess.enablePrayer(prayer: Prayer) {
+        if (player.inBarbarianAssault()) {
+            mes("Prayers cannot be used inside the Barbarian Assault arena.")
+            return
+        }
         if (player.prayerLvl == 0) {
             // Note: This is probably implicitly called by some other function, but as of now, we do
             // not know what that is.

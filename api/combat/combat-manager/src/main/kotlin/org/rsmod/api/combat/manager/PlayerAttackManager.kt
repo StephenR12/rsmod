@@ -1,6 +1,7 @@
 package org.rsmod.api.combat.manager
 
 import jakarta.inject.Inject
+import org.rsmod.api.combat.commons.npc.LeafBladed
 import kotlin.math.min
 import org.rsmod.api.combat.commons.CombatAttack
 import org.rsmod.api.combat.commons.fx.MeleeAnimationAndSound
@@ -42,6 +43,7 @@ import org.rsmod.api.player.output.UpdateRun
 import org.rsmod.api.player.output.soundSynth
 import org.rsmod.api.player.protect.clearPendingAction
 import org.rsmod.api.player.righthand
+import org.rsmod.api.player.quiver
 import org.rsmod.api.player.stat.baseHitpointsLvl
 import org.rsmod.api.player.stat.hitpoints
 import org.rsmod.api.player.stat.statAdd
@@ -253,6 +255,7 @@ constructor(
         }
 
     private fun giveCombatXp(player: Player, target: Npc, attack: CombatAttack.Melee, damage: Int) {
+        if (LeafBladed.required(target.visType) && !LeafBladed.melee(attack.weapon?.id)) return
         val cappedDamage = min(damage, target.hitpoints)
         val multiplier = target.resolveCombatXpMultiplier()
         giveCombatXp(player, attack, cappedDamage, multiplier)
@@ -309,9 +312,10 @@ constructor(
         target: PathingEntity,
         attack: CombatAttack.Ranged,
         damage: Int,
+        ammoId: Int? = player.quiver?.id,
     ): Unit =
         when (target) {
-            is Npc -> giveCombatXp(player, target, attack, damage)
+            is Npc -> giveCombatXp(player, target, attack, damage, ammoId)
             is Player -> giveCombatXp(player, target, attack, damage)
         }
 
@@ -320,7 +324,9 @@ constructor(
         target: Npc,
         attack: CombatAttack.Ranged,
         damage: Int,
+        ammoId: Int?,
     ) {
+        if (LeafBladed.required(target.visType) && !LeafBladed.ranged(ammoId)) return
         val cappedDamage = min(damage, target.hitpoints)
         val multiplier = target.resolveCombatXpMultiplier()
         giveCombatXp(player, attack, cappedDamage, multiplier)
@@ -380,6 +386,7 @@ constructor(
         }
 
     private fun giveCombatXp(player: Player, target: Npc, attack: CombatAttack.Spell, damage: Int) {
+        if (LeafBladed.required(target.visType) && attack.spell.obj.id != objs.spell_magic_dart.id) return
         val cappedDamage = min(damage, target.hitpoints)
         val multiplier = target.resolveCombatXpMultiplier()
         giveCombatXp(player, attack, cappedDamage, multiplier)
@@ -402,7 +409,11 @@ constructor(
         damage: Int,
         multiplier: Double,
     ) {
-        if (attack.defensive) {
+        giveMagicDamageXp(player, attack.defensive, damage, multiplier)
+    }
+
+    private fun giveMagicDamageXp(player: Player, defensive: Boolean, damage: Int, multiplier: Double) {
+        if (defensive) {
             statAdvance(player, stats.magic, damage * 1.33, multiplier)
             statAdvance(player, stats.defence, damage.toDouble(), multiplier)
         } else {
@@ -429,14 +440,13 @@ constructor(
             is Player -> giveCombatXp(player, target, attack, damage)
         }
 
-    @Suppress("unused")
     private fun giveCombatXp(player: Player, target: Npc, attack: CombatAttack.Staff, damage: Int) {
+        if (LeafBladed.required(target.visType)) return
         val cappedDamage = min(damage, target.hitpoints)
         val multiplier = target.resolveCombatXpMultiplier()
-        giveStaffCombatXp(player, cappedDamage, multiplier)
+        giveMagicDamageXp(player, attack.style == MagicAttackStyle.Longrange, cappedDamage, multiplier)
     }
 
-    @Suppress("unused")
     private fun giveCombatXp(
         player: Player,
         target: Player,
@@ -445,12 +455,7 @@ constructor(
     ) {
         val cappedDamage = min(damage, target.hitpoints)
         val multiplier = target.resolveCombatXpMultiplier()
-        giveStaffCombatXp(player, cappedDamage, multiplier)
-    }
-
-    private fun giveStaffCombatXp(player: Player, damage: Int, multiplier: Double) {
-        statAdvance(player, stats.magic, damage * 2.0, multiplier)
-        statAdvance(player, stats.hitpoints, damage * 1.33, multiplier)
+        giveMagicDamageXp(player, attack.style == MagicAttackStyle.Longrange, cappedDamage, multiplier)
     }
 
     private fun statAdvance(player: Player, stat: StatType, baseXp: Double, multiplier: Double) {
@@ -743,7 +748,6 @@ constructor(
         target.queueCombatRetaliate(source)
 
         val hit = target.queueHit(source, delay, HitType.Melee, damage, npcHitModifier)
-        target.heroPoints(source, min(hit.damage, target.hitpoints))
         target.combatPlayDefendAnim()
         return hit
     }
@@ -915,7 +919,8 @@ constructor(
                 multiplier = multiplier,
                 boltSpecDamage = boltSpecDamage,
             )
-        return random.of(1..maxHit)
+        val damage = random.of(1..maxHit)
+        return if (target is Npc && target.visType.id == 492) damage / 7 else damage
     }
 
     /**
@@ -1123,7 +1128,6 @@ constructor(
                 modifier = npcHitModifier,
                 sourceSecondary = ammo,
             )
-        target.heroPoints(source, min(hit.damage, target.hitpoints))
         target.combatPlayDefendAnim(clientDelay)
         target.combatPlayDefendSpot(objTypes, ammo, clientDelay)
         return hit
@@ -1216,7 +1220,6 @@ constructor(
                 modifier = npcHitModifier,
                 sourceSecondary = ammo,
             )
-        target.heroPoints(source, min(hit.damage, target.hitpoints))
         return hit
     }
 
@@ -1333,6 +1336,7 @@ constructor(
         attackRate: Int,
         sunfireRune: Boolean,
         tomeOfWater: Boolean = false,
+        tomeElement: ObjType? = null,
     ): Int {
         val hitRange =
             calculateSpellMaxHit(
@@ -1344,6 +1348,7 @@ constructor(
                 attackRate = attackRate,
                 sunfireRune = sunfireRune,
                 tomeOfWater = tomeOfWater,
+                tomeElement = tomeElement,
             )
         return random.of(hitRange)
     }
@@ -1377,6 +1382,7 @@ constructor(
         attackRate: Int,
         sunfireRune: Boolean,
         tomeOfWater: Boolean = false,
+        tomeElement: ObjType? = null,
     ): IntRange =
         when (target) {
             is Npc ->
@@ -1389,6 +1395,7 @@ constructor(
                     attackRate = attackRate,
                     sunfireRune = sunfireRune,
                     tomeOfWater = tomeOfWater,
+                tomeElement = tomeElement,
                 )
             is Player ->
                 calculateSpellMaxHit(
@@ -1399,6 +1406,7 @@ constructor(
                     baseMaxHit = baseMaxHit,
                     sunfireRune = sunfireRune,
                     tomeOfWater = tomeOfWater,
+                tomeElement = tomeElement,
                 )
         }
 
@@ -1411,6 +1419,7 @@ constructor(
         attackRate: Int,
         sunfireRune: Boolean,
         tomeOfWater: Boolean,
+        tomeElement: ObjType?,
     ): IntRange =
         maxHits.getSpellMaxHitRange(
             player = source,
@@ -1421,6 +1430,7 @@ constructor(
             attackRate = attackRate,
             usedSunfireRune = sunfireRune,
             usedTomeOfWater = tomeOfWater,
+            tomeElement = tomeElement,
         )
 
     private fun calculateSpellMaxHit(
@@ -1431,6 +1441,7 @@ constructor(
         baseMaxHit: Int,
         sunfireRune: Boolean,
         tomeOfWater: Boolean,
+        tomeElement: ObjType?,
     ): IntRange =
         maxHits.getSpellMaxHitRange(
             player = source,
@@ -1440,6 +1451,7 @@ constructor(
             baseMaxHit = baseMaxHit,
             usedSunfireRune = sunfireRune,
             usedTomeOfWater = tomeOfWater,
+            tomeElement = tomeElement,
         )
 
     /**
@@ -1710,7 +1722,6 @@ constructor(
                 modifier = npcHitModifier,
                 sourceSecondary = spell,
             )
-        target.heroPoints(source, min(hit.damage, target.hitpoints))
         target.combatPlayDefendAnim(clientDelay)
         return hit
     }

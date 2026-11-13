@@ -23,12 +23,14 @@ import org.rsmod.api.player.events.interact.HeldObjEvents
 import org.rsmod.api.player.events.interact.NpcEvents
 import org.rsmod.api.player.events.interact.WornObjEvents
 import org.rsmod.api.player.input.ResumePauseButtonInput
+import org.rsmod.api.player.interact.WornInteractions
 import org.rsmod.api.player.stat.stat
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.api.testing.scope.GameTestScope
 import org.rsmod.events.EventBus
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.spot.EntitySpotanim
+import org.rsmod.game.type.interf.IfButtonOp
 import org.rsmod.game.type.npc.NpcTypeList
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.varp.VarpLifetime
@@ -66,7 +68,8 @@ class HunterCapeTest {
                     ),
                 )
                 assertTrue(deps.events.contains(HeldObjEvents.Op3::class.java, cape.id.toLong()))
-                assertTrue(deps.events.contains(WornObjEvents.Op1::class.java, cape.id.toLong()))
+                assertFalse(deps.events.contains(WornObjEvents.Op1::class.java, cape.id.toLong()))
+                assertTrue(deps.events.contains(WornObjEvents.Op5::class.java, cape.id.toLong()))
                 assertTrue(deps.events.contains(WornObjEvents.Op2::class.java, cape.id.toLong()))
                 assertTrue(deps.events.contains(WornObjEvents.Op3::class.java, cape.id.toLong()))
                 assertTrue(deps.events.contains(WornObjEvents.Op4::class.java, cape.id.toLong()))
@@ -94,11 +97,15 @@ class HunterCapeTest {
     fun GameTestState.`worn Boost raises Hunter once to base plus one`() = runCapeTest { deps ->
         player.stats[stats.hunter] = 99
 
-        player.withProtectedAccess { deps.cape.boost(this) }
+        player.worn[1] = InvObj(objs.hunter_skillcape)
+        player.withProtectedAccess { deps.worn.interact(this, player.worn, 1, IfButtonOp.Op2) }
         assertEquals(100, player.stat(stats.hunter))
 
-        player.withProtectedAccess { deps.cape.boost(this) }
+        player.withProtectedAccess { deps.worn.interact(this, player.worn, 1, IfButtonOp.Op2) }
         assertEquals(100, player.stat(stats.hunter))
+        player.withProtectedAccess { deps.worn.interact(this, player.worn, 1, IfButtonOp.Op1) }
+        assertEquals(null, player.worn[1])
+        assertEquals(1, player.count(objs.hunter_skillcape))
     }
 
     @Test
@@ -370,6 +377,7 @@ class HunterCapeTest {
     @Inject
     constructor(
         val cape: HunterCapeScript,
+        val worn: WornInteractions,
         val teleport: HunterCapeTeleport,
         val state: HunterCapeState,
         val events: EventBus,

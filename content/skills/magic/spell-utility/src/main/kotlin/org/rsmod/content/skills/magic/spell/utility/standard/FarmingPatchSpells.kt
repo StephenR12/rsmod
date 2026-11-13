@@ -7,6 +7,8 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.invtx.invDel
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.events.interact.LocTDefaultEvents
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.random.GameRandom
@@ -17,7 +19,9 @@ import org.rsmod.api.type.refs.spot.SpotanimReferences
 import org.rsmod.api.type.refs.varbit.VarBitReferences
 import org.rsmod.content.skills.farming.FarmingCompost
 import org.rsmod.content.skills.farming.FarmingCropStatus
+import org.rsmod.content.skills.farming.FarmingPatchType
 import org.rsmod.content.skills.farming.FarmingService
+import org.rsmod.map.CoordGrid
 
 /** Lunar and Arceuus crop spells backed by the cache's farming multi-loc varbits. */
 public class FarmingPatchSpells
@@ -36,7 +40,10 @@ constructor(
                 mes("You can only cast this spell on a farming patch.")
                 return
             }
-            if (state.status != FarmingCropStatus.Diseased) {
+            if (
+                state.patchType == FarmingPatchType.Grapes ||
+                    state.status != FarmingCropStatus.Diseased
+            ) {
                 mes(
                     if (state.status == FarmingCropStatus.Dead) {
                         "It is too late to cure this plant."
@@ -66,6 +73,10 @@ constructor(
                 mes("You can only cast this spell on a farming patch.")
                 return
             }
+            if (state.patchType == FarmingPatchType.Grapes) {
+                mes("Vine patches need saltpetre.")
+                return
+            }
             if (state.compost != FarmingCompost.None) {
                 mes("This patch has already been treated with compost.")
                 return
@@ -88,6 +99,12 @@ constructor(
             )
             awardMagicXp(spell.castXp)
             statAdvance(stats.farming, FERTILE_SOIL_FARMING_XP)
+            if (
+                target.loc.coords == CoordGrid(3605, 3529) &&
+                    state.patchType == FarmingPatchType.Herb
+            ) {
+                player.completeDiaryTask(DiaryTask.FertiliseMorytaniaHerb)
+            }
             anim(LunarUtilitySeqs.fertileSoil)
             spotanim(LunarUtilitySpotanims.fertileSoil)
             mes(
@@ -107,9 +124,14 @@ constructor(
             val crop = state?.let(farming::crop)
             if (
                 state == null ||
+                    state.patchType in
+                        setOf(
+                            FarmingPatchType.Grapes,
+                            FarmingPatchType.Anima,
+                            FarmingPatchType.Hespori,
+                        ) ||
                     state.status != FarmingCropStatus.Dead ||
-                    crop == null ||
-                    crop.patchType.name.lowercase() in RESURRECTION_EXCLUSIONS
+                    crop == null
             ) {
                 mes("This spell can only be cast on a dead crop.")
                 return
@@ -157,7 +179,6 @@ constructor(
         private const val CURE_FARMING_XP = 60.0
         private const val FERTILE_SOIL_FARMING_XP = 18.0
         private const val VOLCANIC_ASH_COST = 2
-        private val RESURRECTION_EXCLUSIONS = setOf("hespori", "anima")
     }
 }
 

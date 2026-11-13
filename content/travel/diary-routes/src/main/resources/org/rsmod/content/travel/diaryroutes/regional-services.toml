@@ -1,0 +1,379 @@
+[[spawn]]
+npc = 'thessalia'
+coords = '0_50_53_6_24'
+
+[[spawn]]
+npc = 'hunting_shop_owner_yanille'
+coords = '0_40_48_7_11'
+
+[[spawn]]
+npc = 'warrens_shopkeeper'
+coords = '0_28_158_48_35'
+
+[[spawn]]
+npc = 'candle_maker'
+coords = '0_43_53_47_46'
+
+[[spawn]]
+npc = 'foresters_bartender'
+coords = '0_42_54_7_37'
+
+[[spawn]]
+npc = 'qip_soa_newspaperseller'
+coords = '0_50_53_20_39'
+
+[[spawn]]
+npc = 'brother_galahad'
+coords = '0_40_54_53_21'
+
+[[spawn]]
+npc = 'sherlock'
+coords = '0_42_53_45_21'
+
+[[spawn]]
+npc = 'curator'
+coords = '0_50_53_60_59'
+
+[[spawn]]
+npc = 'vm_nathis_apprentice'
+coords = '0_27_77_31_28'
+
+[[spawn]]
+npc = 'dog_stray'
+coords = '0_50_53_0_7'
+
+[[spawn]]
+npc = 'dog_stray2'
+coords = '0_50_53_62_18'
+
+[[spawn]]
+npc = 'pilot_grand_tree'
+coords = '3_38_54_33_45'
+
+[[spawn]]
+npc = 'pilot_digsite'
+coords = '0_51_53_57_39'
+
+[[spawn]]
+npc = 'pilot_al_kharid'
+coords = '0_51_50_16_12'
+
+[[spawn]]
+npc = 'pilot_white_wolf'
+coords = '0_44_54_33_44'
+
+[[spawn]]
+npc = 'pilot_karamja'
+coords = '0_46_46_28_30'
+
+[[spawn]]
+npc = 'gnormadium_avlafrim'
+coords = '0_39_46_48_27'
+
+[[spawn]]
+npc = 'pilot_apeatoll'
+coords = '0_42_43_26_51'
+
+[[spawn]]
+npc = 'magic_carpet_seller1'
+coords = '0_51_48_47_37'
+
+[[spawn]]
+npc = 'magic_carpet_seller2'
+coords = '0_49_47_46_35'
+
+[[spawn]]
+npc = 'magic_carpet_seller3'
+coords = '0_52_45_20_62'
+
+[[spawn]]
+npc = 'magic_carpet_seller4'
+coords = '0_54_48_11_38'
+
+[[spawn]]
+npc = 'magic_carpet_seller4'
+coords = '0_52_46_22_57'
+
+[[spawn]]
+npc = 'magic_carpet_seller8'
+coords = '0_53_45_9_38'
+
+[[spawn]]
+npc = 'magic_carpet_seller8'
+coords = '0_51_43_23_61'
+
+[[spawn]]
+npc = 'magic_carpet_seller8'
+coords = '0_50_43_43_61'
+
+[[spawn]]
+npc = 'captain_tobias'
+coords = '0_47_50_21_17'
+
+[[spawn]]
+npc = 'seaman_lorris'
+coords = '0_47_50_20_16'
+
+[[spawn]]
+npc = 'seaman_thresnor'
+coords = '0_47_50_20_18'
+
+[[spawn]]
+npc = 'customs_officer'
+coords = '0_46_49_6_15'
+
+[[spawn]]
+npc = 'captain_barnaby'
+coords = '0_41_51_56_10'
+
+[[spawn]]
+npc = 'captain_barnaby_karamja'
+coords = '0_43_50_16_27'
+
+[[spawn]]
+npc = 'captain_barnaby_rimmington'
+coords = '0_45_50_36_25'
+
+[[spawn]]
+npc = 'brimhavencartdriver'
+coords = '0_43_50_29_14'
+
+[[spawn]]
+npc = 'shilocartdriver'
+coords = '0_44_46_18_10'
+
+[[spawn]]
+npc = 'shiloshiptickets'
+coords = '1_44_46_54_29'
+
+[[spawn]]
+npc = 'captain_shanks'
+coords = '1_43_46_9_15'
+
+[[spawn]]
+npc = 'veos_sarim'
+coords = '0_47_50_46_45'
+
+[[spawn]]
+npc = 'veos'
+coords = '0_28_57_32_42'
+
+[[spawn]]
+npc = 'cabin_boy_herbert_sarim'
+coords = '0_47_50_46_45'
+
+[[spawn]]
+npc = 'cabin_boy_herbert_pisc'
+coords = '0_28_57_32_42'
+
+[[spawn]]
+npc = 'zeah_magoro'
+coords = '0_23_53_33_9'
+
+[[spawn]]
+npc = 'death_troll_melee1'
+coords = '0_19_54_21_62'
+
+[[spawn]]
+npc = 'death_troll_melee2'
+coords = '0_19_54_25_57'
+
+[[spawn]]
+npc = 'death_troll_melee3'
+coords = '0_19_54_26_63'
+
+[[spawn]]
+npc = 'death_troll_melee4'
+coords = '0_19_54_29_58'
+
+[[spawn]]
+npc = 'death_troll_melee5'
+coords = '0_19_54_30_61'
+
+[[spawn]]
+npc = 'death_troll_melee6'
+coords = '0_19_55_17_1'
+
+[[spawn]]
+npc = 'death_troll_melee7'
+coords = '0_19_55_20_0'
+
+[[spawn]]
+npc = 'death_troll_melee1'
+coords = '0_19_54_3_34'
+
+[[spawn]]
+npc = 'death_troll_melee2'
+coords = '0_19_54_5_40'
+
+[[spawn]]
+npc = 'death_troll_melee3'
+coords = '0_19_54_6_32'
+
+[[spawn]]
+npc = 'death_troll_melee4'
+coords = '0_19_54_7_45'
+
+[[spawn]]
+npc = 'death_troll_melee5'
+coords = '0_19_54_9_37'
+
+[[spawn]]
+npc = 'death_troll_melee6'
+coords = '0_19_54_12_44'
+
+[[spawn]]
+npc = 'death_troll_melee7'
+coords = '0_19_54_13_33'
+
+[[spawn]]
+npc = 'apothecary'
+coords = '0_49_53_59_12'
+
+[[spawn]]
+npc = 'pet_insurance_broker'
+coords = '0_40_51_62_29'
+
+[[spawn]]
+npc = 'sos_guard'
+coords = '1_47_49_5_56'
+
+[[spawn]]
+npc = 'emblem_trader'
+coords = '0_48_54_24_47'
+
+[[spawn]]
+npc = 'shipmonk'
+coords = '0_47_50_39_35'
+
+[[spawn]]
+npc = 'shipmonk1_b'
+coords = '0_47_50_37_34'
+
+[[spawn]]
+npc = 'shipmonk1_c'
+coords = '0_47_50_36_35'
+
+[[spawn]]
+npc = 'shipmonk2'
+coords = '0_44_52_18_6'
+
+[[spawn]]
+npc = 'shipmonk2_b'
+coords = '0_44_52_19_7'
+
+[[spawn]]
+npc = 'shipmonk2_c'
+coords = '0_44_52_17_7'
+
+[[spawn]]
+npc = 'silk_merchant_ardougne'
+coords = '0_41_51_34_38'
+
+[[spawn]]
+npc = 'tindel_marchant'
+coords = '0_41_49_49_14'
+
+[[spawn]]
+npc = 'handsand_bert'
+coords = '0_39_48_55_28'
+
+[[spawn]]
+npc = 'agility_pyramid_simon'
+coords = '0_52_44_16_12'
+
+[[spawn]]
+npc = 'siegfried_erkle'
+coords = '2_42_52_37_50'
+
+[[spawn]]
+npc = 'enakh_lazim_altar_multinpc'
+coords = '2_48_145_32_35'
+
+[[spawn]]
+npc = 'akd_lydia_fullore_castle'
+coords = '0_25_57_12_21'
+
+[[spawn]]
+npc = 'shantay'
+coords = '0_51_48_40_52'
+
+[[spawn]]
+npc = 'vm_archaeologist1_npc_dummy'
+coords = '0_50_53_54_54'
+
+[[spawn]]
+npc = 'vm_archaeologist2_npc_dummy'
+coords = '0_50_53_55_53'
+
+[[spawn]]
+npc = 'vm_archaeologist3_npc_dummy'
+coords = '0_50_53_56_52'
+
+[[spawn]]
+npc = 'vm_archaeologist4_npc_dummy'
+coords = '0_50_53_57_52'
+
+[[spawn]]
+npc = 'vm_archaeologist5_npc_dummy'
+coords = '0_51_53_1_53'
+
+[[spawn]]
+npc = 'vm_archaeologist6_npc_dummy'
+coords = '0_51_53_3_54'
+
+[[spawn]]
+npc = 'tempoross_pass_guard'
+coords = '0_49_44_29_2'
+
+[[spawn]]
+npc = 'tempoross_pass_guard'
+coords = '0_49_44_57_25'
+
+[[spawn]]
+npc = 'magictraining_guard_entrance'
+coords = '0_52_51_35_41'
+
+[[spawn]]
+npc = 'arceuus_library_customer_2'
+coords = '0_25_59_27_39'
+
+[[spawn]]
+npc = 'arceuus_library_customer_3'
+coords = '0_25_59_27_25'
+
+[[spawn]]
+npc = 'arceuus_library_customer_4'
+coords = '0_25_59_40_26'
+
+[[spawn]]
+npc = 'arceuus_library_assistant'
+coords = '2_25_59_33_47'
+
+[[spawn]]
+npc = 'shayzien_crime_controller'
+coords = '0_23_56_32_48'
+
+[[spawn]]
+npc = 'harry'
+coords = '0_44_53_16_52'
+
+[[spawn]]
+npc = 'hairdresser'
+coords = '0_46_52_1_52'
+
+[[spawn]]
+npc = 'viking_clothing_shopkeeper'
+coords = '0_41_57_0_26'
+
+[[spawn]]
+npc = 'gertrude'
+coords = '0_49_53_15_17'
+
+[[spawn]]
+npc = 'elid_genie'
+coords = '0_52_145_43_40'
+
+[[spawn]]
+npc = 'tailorp'
+coords = '0_51_53_17_6'

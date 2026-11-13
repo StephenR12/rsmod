@@ -20,6 +20,9 @@ constructor(private val lifecycle: BryophytasStaffLifecycle) : PluginScript() {
             onOpHeldU(staff, objs.nature_rune) {
                 lifecycle.charge(this, staffSlot = it.firstSlot, runeSlot = it.secondSlot)
             }
+            onProtectedEvent<BankedObjEvents.Autocharge>(staff.id) {
+                lifecycle.autocharge(this, it)
+            }
             onOpHeld3(staff) { lifecycle.check(this, it.inventory[it.slot]) }
             onOpWorn2(staff) { lifecycle.check(this, player.righthand) }
         }

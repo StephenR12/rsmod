@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.crafting.leatherworking
 
+import org.rsmod.api.player.diary.recordDiaryCraft
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
@@ -107,6 +108,7 @@ constructor(
             threadUses.completeUse(player)
         }
         statAdvance(stats.crafting, recipe.xp)
+        player.recordDiaryCraft(recipe.output.id, player.coords)
     }
 
     private fun ProtectedAccess.canOpen(

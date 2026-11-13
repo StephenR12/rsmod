@@ -221,14 +221,17 @@ public object MagicMaxHitOperations {
             modifiedMin = modifiedMax / 10
         }
 
-        val applyTomeMod =
-            SpellAttr.EarthTome in spellAttributes && SpellAttr.EarthSpell in spellAttributes ||
-                SpellAttr.WaterTome in spellAttributes && SpellAttr.WaterSpell in spellAttributes ||
-                SpellAttr.FireTome in spellAttributes && SpellAttr.FireSpell in spellAttributes
-
-        if (applyTomeMod) {
-            modifiedMax = scale(modifiedMax, multiplier = 12, divisor = 10)
-        }
+        val tomePercent =
+            when {
+                SpellAttr.FireTome in spellAttributes && SpellAttr.FireSpell in spellAttributes ->
+                    150
+                SpellAttr.WaterTome in spellAttributes && SpellAttr.WaterSpell in spellAttributes ->
+                    120
+                SpellAttr.EarthTome in spellAttributes && SpellAttr.EarthSpell in spellAttributes ->
+                    110
+                else -> 100
+            }
+        modifiedMax = scale(modifiedMax, multiplier = tomePercent, divisor = 100)
 
         if (SpellAttr.AhrimPassive in spellAttributes) {
             modifiedMax = scale(modifiedMax, multiplier = 13, divisor = 10)

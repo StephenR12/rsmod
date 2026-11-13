@@ -11,6 +11,7 @@ import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.player.hat
+import org.rsmod.api.player.hunter.isImplingCreature
 import org.rsmod.api.player.legs
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.torso
@@ -126,17 +127,18 @@ constructor(private val objTypes: ObjTypeList, private val states: BindingStateR
             val (serverDelay, clientDelay) = projectile.durations
             val spell = attack.spell.obj
 
+            val impling = target is Npc && target.isImplingCreature()
             val splash = manager.rollSplash(this, target, attack, castResult)
             if (splash) {
                 manager.playSplashFx(this, target, clientDelay, castSound, soundRadius = 8)
-                manager.queueSplashHit(this, target, spell, clientDelay, serverDelay)
+                if (!impling) manager.queueSplashHit(this, target, spell, clientDelay, serverDelay)
                 manager.stopCombat(this)
                 return
             }
 
             statAdvance(stats.magic, successXpBonus)
             val damage =
-                if (damageMaxHit > 0) {
+                if (damageMaxHit > 0 && !impling) {
                     manager.rollMaxHit(this, target, attack, castResult, damageMaxHit)
                 } else {
                     0
@@ -151,10 +153,10 @@ constructor(private val objTypes: ObjTypeList, private val states: BindingStateR
                 hitSpotHeight = 124,
                 hitSound = hitSound,
             )
-            if (damageMaxHit > 0) {
+            if (damageMaxHit > 0 && !impling) {
                 manager.giveCombatXp(this, target, attack, damage)
                 manager.queueMagicHit(this, target, spell, damage, clientDelay, serverDelay)
-            } else {
+            } else if (!impling) {
                 manager.queueEffectRetaliation(this, target, serverDelay)
             }
             val effectiveDuration = duration + player.swampbarkDurationBonus()

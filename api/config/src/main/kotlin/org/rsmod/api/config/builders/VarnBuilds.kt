@@ -10,5 +10,6 @@ internal object VarnBuilds : VarnBuilder() {
         build("attacking_player")
         build("lastattack")
         build("flat_armour")
+        build("slayer_superior_owner")
     }
 }

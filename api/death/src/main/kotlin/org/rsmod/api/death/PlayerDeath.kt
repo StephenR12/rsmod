@@ -40,7 +40,10 @@ public class PlayerDeath @Inject constructor(private val statTypes: StatTypeList
         midiSong(midis.stop_music)
         midiJingle(jingles.death_jingle_2)
         mes("Oh dear, you are dead!")
-        telejump(randomRespawn ?: respawn)
+        val resolution = PlayerDeathEvent.ResolveRespawn(player)
+        publish(resolution)
+        if (resolution.safeDestination == null) publish(PlayerDeathEvent.Unsafe(player))
+        telejump(resolution.safeDestination ?: randomRespawn ?: respawn)
         resetAnim()
         // TODO: Drop death invs, etc.
         resetPlayerState(statTypes)

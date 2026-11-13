@@ -1,7 +1,9 @@
 package org.rsmod.content.bosses.world
 
 import jakarta.inject.Inject
+import org.rsmod.api.clue.ClueTier
 import org.rsmod.api.config.refs.objs
+import org.rsmod.api.death.NpcClueDropRolls
 import org.rsmod.api.death.NpcDropRolls.independent
 import org.rsmod.api.death.NpcDropRolls.item
 import org.rsmod.api.death.NpcDropRolls.sequence
@@ -10,7 +12,9 @@ import org.rsmod.api.death.NpcDropTableRegistry
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
-public class WorldBossDrops @Inject constructor(private val registry: NpcDropTableRegistry) :
+public class WorldBossDrops
+@Inject
+constructor(private val registry: NpcDropTableRegistry, private val clues: NpcClueDropRolls) :
     PluginScript() {
     override fun ScriptContext.startup() {
         registry.register(
@@ -21,9 +25,10 @@ public class WorldBossDrops @Inject constructor(private val registry: NpcDropTab
             WorldBossNpcs.sarachnis,
             NpcDropTable(
                 sequence(
-                    item(objs.big_bones),
-                    item(objs.coins, 10_000..25_000),
-                    independent(denominator = 384, roll = item(WorldBossObjs.sarachnisCudgel)),
+                    SarachnisLoot.main(),
+                    independent(denominator = 20, roll = item(SarachnisLoot.egg)),
+                    clues.independent(ClueTier.Hard, SarachnisLoot.hardClue, denominator = 40),
+                    clues.independent(ClueTier.Elite, SarachnisLoot.eliteClue, denominator = 60),
                     independent(denominator = 2_000, roll = item(WorldBossObjs.jarOfEyes)),
                     independent(denominator = 3_000, roll = item(WorldBossObjs.sarachnisPet)),
                 )

@@ -588,6 +588,31 @@ class BoostPotionShareSpellTest {
         }
 
     @Test
+    fun GameTestState.`adult dragon melee attacks can substitute shield and potion capped breath`() =
+        runGameTest(ChromaticDragonfire::class) {
+            val dragon = spawnNpc(player.coords.translate(1,0),npcTypes.getValue(247))
+            fun alternate(): org.rsmod.api.npc.events.NpcMeleeAlternative.Attack? {
+                val event = org.rsmod.api.npc.events.NpcMeleeAlternative(dragon,player)
+                assertTrue(eventBus.publish(event))
+                return event.attack
+            }
+            random.next = 1
+            assertNull(alternate())
+            player.worn[5] = org.rsmod.game.inv.InvObj(objTypes.getValue(1540))
+            random.next = 0
+            random.then = 5
+            val breath = requireNotNull(alternate())
+            assertEquals(org.rsmod.game.hit.HitType.Typeless,breath.type)
+            assertEquals(5,breath.damage)
+            player.setVarBit(varbits.antifire_potion,8)
+            random.next = 0
+            random.then = 5
+            assertEquals(0,requireNotNull(alternate()).damage)
+            val baby = spawnNpc(player.coords.translate(2,0),npcTypes.getValue(244))
+            assertFalse(eventBus.publish(org.rsmod.api.npc.events.NpcMeleeAlternative(baby,player)))
+        }
+
+    @Test
     fun GameTestState.`goading potion share uses exact items duration display and lifecycle`() =
         runPotionShareTest { deps ->
             val recipient = registerRecipient("Recipient", 1, 0)

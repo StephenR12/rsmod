@@ -5,6 +5,7 @@ import org.rsmod.api.player.events.interact.LocEvents
 import org.rsmod.api.player.events.interact.LocTContentEvents
 import org.rsmod.api.player.events.interact.LocTDefaultEvents
 import org.rsmod.api.player.events.interact.LocTEvents
+import org.rsmod.api.player.events.interact.LocTileOp1
 import org.rsmod.api.player.events.interact.LocUContentEvents
 import org.rsmod.api.player.events.interact.LocUDefaultEvents
 import org.rsmod.api.player.events.interact.LocUEvents
@@ -14,6 +15,7 @@ import org.rsmod.game.type.comp.ComponentType
 import org.rsmod.game.type.content.ContentGroupType
 import org.rsmod.game.type.loc.LocType
 import org.rsmod.game.type.obj.ObjType
+import org.rsmod.map.CoordGrid
 import org.rsmod.plugin.scripts.ScriptContext
 
 /* Op functions */
@@ -21,6 +23,13 @@ public fun ScriptContext.onOpLoc1(
     type: LocType,
     action: suspend ProtectedAccess.(LocEvents.Op1) -> Unit,
 ): Unit = onProtectedEvent(type.id, action)
+
+/** Overrides op1 for this placement only. All other placements retain their ordinary handlers. */
+public fun ScriptContext.onOpLoc1(
+    type: LocType,
+    coords: CoordGrid,
+    action: suspend ProtectedAccess.(LocTileOp1) -> Unit,
+): Unit = onProtectedEvent(EventBus.composeLongKey(type.id, coords.packed), action)
 
 public fun ScriptContext.onOpLoc2(
     type: LocType,

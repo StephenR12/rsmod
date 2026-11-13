@@ -8,10 +8,10 @@ public object Rotations {
             dimensionA
         }
 
-    public fun rotate(angle: Int, blockAccessFlags: Int): Int =
-        if (angle == 0) {
-            blockAccessFlags
-        } else {
-            ((blockAccessFlags shl angle) and 0xF) or (blockAccessFlags shr (4 - angle))
-        }
+    public fun rotate(angle: Int, blockAccessFlags: Int): Int {
+        // Cache locs can carry additional bits, for example 0x1E on directional chests.
+        // Only the four approach directions participate in this circular shift.
+        val sides = blockAccessFlags and 0xF
+        return ((sides shl angle) and 0xF) or (sides ushr (4 - angle))
+    }
 }

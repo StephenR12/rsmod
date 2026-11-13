@@ -1,0 +1,28 @@
+# Alry oldid14992593; pool positions oldid14992159, both 2025-09-25. Six active pools is a bounded model.
+[[spawn]]
+npc = 'fishing_npc_angler'
+coords = '0_21_56_24_49'
+
+[[spawn]]
+npc = 'fishing_spot_aerial'
+coords = '0_21_56_38_43'
+
+[[spawn]]
+npc = 'fishing_spot_aerial'
+coords = '0_21_56_9_46'
+
+[[spawn]]
+npc = 'fishing_spot_aerial'
+coords = '0_21_56_9_44'
+
+[[spawn]]
+npc = 'fishing_spot_aerial'
+coords = '0_21_56_27_40'
+
+[[spawn]]
+npc = 'fishing_spot_aerial'
+coords = '0_21_56_38_49'
+
+[[spawn]]
+npc = 'fishing_spot_aerial'
+coords = '0_21_56_37_47'

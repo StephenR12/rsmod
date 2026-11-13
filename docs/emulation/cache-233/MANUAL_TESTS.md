@@ -4,6 +4,8 @@ Record the date, server commit, RuneLite commit/version, account state, steps, e
 actual observations and result for every run. A client test without reproducible state and expected
 tick-level behavior is not verification.
 
+For the November 2026 skill checkpoint, start with the [launch commands and short diary playtest](SKILLS_AND_DIARIES.md).
+
 ## Connection smoke test
 
 1. Start the RSMod server from this repository without repacking or changing the baseline cache.

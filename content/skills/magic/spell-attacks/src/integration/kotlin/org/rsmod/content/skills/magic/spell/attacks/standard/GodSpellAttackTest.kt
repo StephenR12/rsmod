@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.rsmod.api.combat.commons.CombatAttack
+import org.rsmod.api.combat.commons.magic.MageArenaTraining
 import org.rsmod.api.combat.commons.magic.MagicSpellType
 import org.rsmod.api.combat.commons.magic.Spellbook
 import org.rsmod.api.combat.manager.MagicRuneManager.CastResult
@@ -48,6 +49,7 @@ import org.rsmod.game.entity.Player
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.spot.EntitySpotanim
 import org.rsmod.game.type.obj.ObjType
+import org.rsmod.map.CoordGrid
 
 class GodSpellAttackTest {
     @Test
@@ -71,7 +73,7 @@ class GodSpellAttackTest {
             player.inv[0] = InvObj(objs.air_rune, 6)
             player.inv[1] = InvObj(objs.fire_rune, 6)
             player.inv[2] = InvObj(objs.blood_rune, 6)
-            player.setVarp(varps.magearena, 1)
+            player.setVarp(varps.magearena, 8)
             val startXp = player.statMap.getFineXP(stats.magic)
 
             player.withProtectedAccess { deps.charge.cast(this) }
@@ -193,6 +195,53 @@ class GodSpellAttackTest {
         assertEquals(startXp, player.statMap.getFineXP(stats.magic))
         assertTrue(player.pendingSpotanims.isEmpty())
     }
+
+    @Test
+    fun GameTestState
+        .`staff of light conserves one in seven costs after validating sufficient runes`() =
+        runGodSpellTest { deps ->
+            prepareCaster(objs.staff_of_light)
+            val target = spawnNpc(player.coords.translate(2, 0), targetType)
+            val (handler, attack) = deps.attack(objs.spell_saradomin_strike)
+            player.inv[2] = null
+            random.next = 0
+            player.withProtectedAccess { handler.attack(this, target, attack) }
+            assertEquals(20, player.count(objs.air_rune))
+            player.inv[2] = InvObj(objs.blood_rune, 20)
+            random.next = 0
+            player.withProtectedAccess { handler.attack(this, target, attack) }
+            assertRunes(20, 20, 20)
+            random.next = 1
+            player.withProtectedAccess { handler.attack(this, target, attack) }
+            assertRunes(16, 18, 18)
+        }
+
+    @Test
+    fun GameTestState.`last paid practice splash unlocks just that god spell for use outside`() =
+        runGodSpellTest { deps ->
+            prepareCaster(objs.saradomin_staff)
+            player.setVarp(MageArenaTraining.saradomin, 99)
+            player.setVarp(MageArenaTraining.guthix, 7)
+            val (handler, attack) = deps.attack(objs.spell_saradomin_strike)
+            val outside = spawnNpc(player.coords.translate(2, 0), targetType)
+            player.withProtectedAccess { handler.attack(this, outside, attack) }
+            assertRunes(20, 20, 20)
+            val arena = CoordGrid(3098, 3925)
+            player.placeAt(arena)
+            val mage = spawnNpc(arena.translate(2, 0), npcTypes.getValue(1611))
+            player.inv[2] = null
+            player.withProtectedAccess { handler.attack(this, mage, attack) }
+            assertEquals(99, player.vars[MageArenaTraining.saradomin])
+            player.inv[2] = InvObj(objs.blood_rune, 20)
+            random.next = 9999
+            player.withProtectedAccess { handler.attack(this, mage, attack) }
+            assertEquals(100, player.vars[MageArenaTraining.saradomin])
+            assertEquals(7, player.vars[MageArenaTraining.guthix])
+            assertRunes(16, 18, 18)
+            player.placeAt(outside.coords.translate(2, 0))
+            player.withProtectedAccess { handler.attack(this, outside, attack) }
+            assertRunes(12, 16, 16)
+        }
 
     @Test
     fun GameTestState.`saradomin strike hit drains one player prayer`() = runGodSpellTest { deps ->
@@ -327,6 +376,13 @@ class GodSpellAttackTest {
         casts: Int = 1,
     ) {
         player.stats[stats.magic] = 99
+        player.setVarp(varps.magearena, 8)
+        for (counter in
+            listOf(
+                MageArenaTraining.saradomin,
+                MageArenaTraining.guthix,
+                MageArenaTraining.zamorak,
+            )) player.setVarp(counter, 100)
         player.clearInv()
         player.inv[0] = InvObj(objs.air_rune, 20 * casts)
         player.inv[1] = InvObj(objs.fire_rune, 20 * casts)

@@ -1,0 +1,3 @@
+spawn = [
+    { obj = "dusty_key", coords = "0_45_152_20_38" },
+]

@@ -1,5 +1,6 @@
 package org.rsmod.content.bosses.kalphitequeen
 
+import org.rsmod.api.type.editors.npc.NpcEditor
 import org.rsmod.api.type.refs.npc.NpcReferences
 import org.rsmod.api.type.refs.obj.ObjReferences
 import org.rsmod.map.CoordGrid
@@ -26,4 +27,13 @@ public object KalphiteQueenDefinition {
     public const val MAGIC: Int = 150
     public const val RANGED: Int = 300
     public const val MAX_HIT: Int = 31
+}
+
+internal object KalphiteQueenAttackRanges : NpcEditor() {
+    init {
+        with(KalphiteQueenNpcs) {
+            edit(ground) { attackRange = 5 }
+            edit(airborne) { attackRange = 5 }
+        }
+    }
 }

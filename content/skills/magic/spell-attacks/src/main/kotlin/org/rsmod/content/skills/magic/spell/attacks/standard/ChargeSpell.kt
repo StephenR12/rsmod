@@ -35,7 +35,10 @@ constructor(private val spells: MagicSpellRegistry, private val runes: MagicRune
                 mes("You can only cast this spell once every 60 seconds.")
                 return
             }
-            if (vars[varps.magearena] == 0) {
+            if (
+                vars[varps.magearena] <
+                    org.rsmod.api.combat.commons.magic.MageArenaTraining.CLAIMED_STAFF
+            ) {
                 mes("You need to have claimed a god staff before you can cast this spell.")
                 return
             }

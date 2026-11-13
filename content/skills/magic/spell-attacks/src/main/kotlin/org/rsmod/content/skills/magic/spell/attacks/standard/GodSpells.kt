@@ -2,11 +2,16 @@ package org.rsmod.content.skills.magic.spell.attacks.standard
 
 import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.CombatAttack
+import org.rsmod.api.combat.commons.magic.MageArenaTraining
 import org.rsmod.api.combat.manager.MagicRuneManager.Companion.isFailure
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
+import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.attack.SpellAttack
 import org.rsmod.api.spells.attack.SpellAttackManager
@@ -49,13 +54,29 @@ public class GodSpells @Inject constructor() : SpellAttackMap {
         }
 
         private fun ProtectedAccess.cast(target: PathingEntity, attack: CombatAttack.Spell) {
+            val spell = attack.spell.obj
+            if (vars[varps.magearena] < MageArenaTraining.CLAIMED_STAFF) {
+                mes("You must defeat Kolodion and claim a god staff first.")
+                return
+            }
+            val counter = MageArenaTraining.counter(spell)
+            val casts = vars[counter]
+            val training = casts < MageArenaTraining.REQUIRED_CASTS
+            if (training && !MageArenaTraining.isPractice(coords, target)) {
+                mes("You must practise this spell on the battle mages in the Mage Arena first.")
+                return
+            }
             val castResult = manager.attemptCast(this, attack)
             if (castResult.isFailure()) {
                 return
             }
 
+            if (training) {
+                vars[counter] = casts + 1
+                if (casts + 1 == MageArenaTraining.REQUIRED_CASTS)
+                    mes("You can now cast this spell outside the Mage Arena.")
+            }
             anim(seqs.human_casting)
-            val spell = attack.spell.obj
             val splash = manager.rollSplash(this, target, attack, castResult)
             if (splash) {
                 manager.playSplashFx(this, target, CLIENT_DELAY, castSound = null, soundRadius = 8)
@@ -76,6 +97,13 @@ public class GodSpells @Inject constructor() : SpellAttackMap {
                 hitSound = null,
             )
             manager.giveCombatXp(this, target, attack, damage)
+            if (
+                target is Player &&
+                    vars[varbits.inside_wilderness] != 0 &&
+                    target.vars[varbits.inside_wilderness] != 0
+            ) {
+                player.completeDiaryTask(DiaryTask.CastWildernessGodSpell)
+            }
             manager.queueMagicHit(this, target, spell, damage, CLIENT_DELAY, SERVER_DELAY)
             target.queueGodEffect(effect, SERVER_DELAY)
             manager.continueCombatIfAutocast(this, target)

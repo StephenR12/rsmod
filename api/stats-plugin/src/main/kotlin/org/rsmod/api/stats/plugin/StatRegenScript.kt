@@ -5,6 +5,7 @@ import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.timers
+import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.back
 import org.rsmod.api.player.hands
 import org.rsmod.api.player.stat.baseHitpointsLvl
@@ -33,6 +34,12 @@ public class StatRegenScript @Inject constructor(private val statTypes: StatType
         onPlayerSoftTimer(timers.stat_regen) { player.statRegen() }
         onPlayerSoftTimer(timers.stat_boost_restore) { player.statBoostRestore() }
         onPlayerSoftTimer(timers.health_regen) { player.healthRegen() }
+        onPlayerSoftTimer(timers.health_cape_regen) {
+            if (player.vars[varbits.rapid_heal] == 0 && player.hasHitpointsCape()) player.healthRegen()
+        }
+        onPlayerSoftTimer(timers.health_boost_decay) {
+            if (player.hitpoints > player.baseHitpointsLvl) player.statSub(stats.hitpoints, 1, 0)
+        }
 
         onPlayerSoftTimer(timers.rapidrestore_regen) { player.statRegen() }
     }
@@ -40,7 +47,10 @@ public class StatRegenScript @Inject constructor(private val statTypes: StatType
     private fun Player.initRegenTimers() {
         softTimer(timers.stat_regen, constants.stat_regen_interval)
         softTimer(timers.stat_boost_restore, constants.stat_boost_restore_interval)
-        softTimer(timers.health_regen, constants.health_regen_interval)
+        val interval = constants.health_regen_interval
+        softTimer(timers.health_regen, if (vars[varbits.rapid_heal] != 0) interval / 2 else interval)
+        softTimer(timers.health_boost_decay, interval)
+        softTimer(timers.health_cape_regen, interval)
     }
 
     private fun Player.statRegen() {
@@ -64,23 +74,15 @@ public class StatRegenScript @Inject constructor(private val statTypes: StatType
     }
 
     private fun Player.healthRegen() {
-        if (hitpoints >= baseHitpointsLvl) {
-            return
-        }
-        val capeMultiplier =
-            if (
-                back.isType(objs.hitpoints_skillcape) ||
-                    back.isType(objs.hitpoints_skillcape_t) ||
-                    back.isType(objs.max_cape_worn)
-            ) {
-                2
-            } else {
-                1
-            }
-        val braceletMultiplier = if (hands.isType(objs.regen_bracelet)) 2 else 1
-        val amount = capeMultiplier * braceletMultiplier
+        if (hitpoints <= 0 || hitpoints >= baseHitpointsLvl) return
+        val amount = if (hands.isType(objs.regen_bracelet)) 2 else 1
         statHeal(stats.hitpoints, constant = amount, percent = 0)
     }
+
+    private fun Player.hasHitpointsCape(): Boolean =
+        back.isType(objs.hitpoints_skillcape) ||
+            back.isType(objs.hitpoints_skillcape_t) ||
+            back.isType(objs.max_cape_worn)
 
     private fun Collection<StatType>.toRegenStats(): List<StatType> {
         return filter { !it.isType(stats.prayer) && !it.isType(stats.hitpoints) }

@@ -1,0 +1,19 @@
+[[spawn]]
+npc = 'ahoy_disciple'
+coords = '0_57_55_12_0'
+
+[[spawn]]
+npc = 'ahoy_disciple'
+coords = '0_57_54_9_61'
+
+[[spawn]]
+npc = 'ahoy_robin'
+coords = '0_57_54_28_38'
+
+[[spawn]]
+npc = 'ahoy_velorina'
+coords = '0_57_54_30_54'
+
+[[spawn]]
+npc = 'arceuus_darkguardian'
+coords = '0_26_60_50_43'

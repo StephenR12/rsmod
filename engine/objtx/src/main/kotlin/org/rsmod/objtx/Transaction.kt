@@ -375,7 +375,7 @@ public class Transaction<T>(
         }
 
         private fun TransactionInventory<T>.deleteCounted(obj: Int, count: Int): TransactionResult {
-            val slots = indexesOf(obj, image.size, solveSlot, mutableListOf())
+            val slots = indexesOf(obj, image.size, solveSlot)
             if (slots.isEmpty() && isStrictCount) {
                 return TransactionResult.ObjNotFound
             } else if (strictSlot != null && slots.firstOrNull() != strictSlot) {
@@ -516,7 +516,7 @@ public class Transaction<T>(
             // we search for all objs of matching id individually so that their vars
             // can also be copied and transferred appropriately.
             if (count > 1 && obj.hasVars) {
-                val slots = from.indexesOf(obj.id, count, fromSlot, mutableListOf())
+                val slots = from.indexesOf(obj.id, count, fromSlot)
                 if (slots.isEmpty()) {
                     return TransactionResult.Exception(
                         "`slots` should never be empty at this point."

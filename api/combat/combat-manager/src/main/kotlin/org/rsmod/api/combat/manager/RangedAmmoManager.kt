@@ -2,6 +2,7 @@ package org.rsmod.api.combat.manager
 
 import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.ranged.RangedAmmunition
+import org.rsmod.api.config.refs.categories
 import org.rsmod.api.random.GameRandom
 import org.rsmod.api.repo.obj.ObjRepository
 import org.rsmod.events.EventBus
@@ -57,7 +58,8 @@ constructor(
      * @param dropCoord The coordinate where the ammo drop should land when applicable.
      * @param dropDelay The delay in cycles before the ammo appears on the ground.
      * @param dropChance The chance that the ammo will be dropped instead of disappearing, where `1
-     *   / dropChance` is the probability of it occurring.
+     *   / dropChance` is the probability of it occurring. When omitted, recoverable ammunition
+     *   has a 20% break chance independent of the device worn.
      * @param dropDuration The duration in cycles that the dropped ammo will remain on the ground.
      * @param useCount The number of ammo units to consume from the `quiver` slot. If the `quiver`
      *   slot obj does not have at least this value as its `count`, an [IllegalStateException] will
@@ -68,13 +70,13 @@ constructor(
         quiverType: UnpackedObjType,
         dropCoord: CoordGrid,
         dropDelay: Int,
-        dropChance: Int = RangedAmmunition.DEFAULT_AMMO_DROP_RATE,
+        dropChance: Int? = null,
         dropDuration: Int = RangedAmmunition.DEFAULT_AMMO_DROP_DURATION,
         useCount: Int = 1,
     ): Unit =
         useAmmo(
             player = player,
-            ammoWearpos = Wearpos.Quiver,
+            onConsumed = { RangedAmmunition.detractAmmo(player, Wearpos.Quiver, quiverType, it, eventBus) },
             ammoType = quiverType,
             ammoCount = useCount,
             dropCoord = dropCoord,
@@ -97,7 +99,8 @@ constructor(
      * @param dropCoord The coordinate where the ammo drop should land when applicable.
      * @param dropDelay The delay in cycles before the ammo appears on the ground.
      * @param dropChance The chance that the ammo will be dropped instead of disappearing, where `1
-     *   / dropChance` is the probability of it occurring.
+     *   / dropChance` is the probability of it occurring. When omitted, recoverable ammunition
+     *   has a 20% break chance independent of the device worn.
      * @param dropDuration The duration in cycles that the dropped ammo will remain on the ground.
      * @param useCount The number of thrown weapon units to consume from the `righthand` slot. If
      *   the slot obj does not have at least this value as its `count`, an [IllegalStateException]
@@ -108,13 +111,13 @@ constructor(
         weaponType: UnpackedObjType,
         dropCoord: CoordGrid,
         dropDelay: Int,
-        dropChance: Int = RangedAmmunition.DEFAULT_AMMO_DROP_RATE,
+        dropChance: Int? = null,
         dropDuration: Int = RangedAmmunition.DEFAULT_AMMO_DROP_DURATION,
         useCount: Int = 1,
     ): Unit =
         useAmmo(
             player = player,
-            ammoWearpos = Wearpos.RightHand,
+            onConsumed = { RangedAmmunition.detractAmmo(player, Wearpos.RightHand, weaponType, it, eventBus) },
             ammoType = weaponType,
             ammoCount = useCount,
             dropCoord = dropCoord,
@@ -123,27 +126,48 @@ constructor(
             dropDuration = dropDuration,
         )
 
+    /** Resolves recovery and ground drops for a dart stored inside a weapon. */
+    public fun consumeStoredDart(player: Player, dart: UnpackedObjType, dropCoord: CoordGrid, dropDelay: Int): Boolean {
+        var consumed = false
+        useAmmo(player, { consumed = true }, dart, 1, dropCoord, dropDelay, null, RangedAmmunition.DEFAULT_AMMO_DROP_DURATION)
+        return consumed
+    }
+
     private fun useAmmo(
         player: Player,
-        ammoWearpos: Wearpos,
+        onConsumed: (Int) -> Unit,
         ammoType: UnpackedObjType,
         ammoCount: Int,
         dropCoord: CoordGrid,
         dropDelay: Int,
-        dropChance: Int,
+        dropChance: Int?,
         dropDuration: Int,
     ) {
-        val conserve = RangedAmmunition.conserveAmmo(player, objTypes, random)
-        if (!conserve) {
-            RangedAmmunition.detractAmmo(player, ammoWearpos, ammoType, ammoCount, eventBus)
+        val expendable = ammoType.id == BOLT_RACK || ammoType.id == HOLY_WATER || ammoType.isCategoryType(categories.chinchompa)
+        val recovery = RangedAmmunition.recoveryRate(player, objTypes)
+        var consumed = 0
+        var dropped = 0
+        repeat(ammoCount) {
+            if (expendable) {
+                consumed++
+            } else {
+                val roll = random.of(100)
+                if (roll >= recovery) {
+                    consumed++
+                    val lands = if (dropChance == null) roll < 80 else random.randomBoolean(dropChance)
+                    if (lands) dropped++
+                }
+            }
         }
-
-        if (!conserve && random.randomBoolean(dropChance)) {
+        if (consumed > 0) {
+            onConsumed(consumed)
+        }
+        if (dropped > 0) {
             RangedAmmunition.attemptAmmoDrop(
                 player = player,
                 delay = dropDelay,
                 ammoType = ammoType,
-                ammoCount = ammoCount,
+                ammoCount = dropped,
                 dropCoord = dropCoord,
                 dropDuration = dropDuration,
                 collision = collision,
@@ -151,5 +175,10 @@ constructor(
                 objRepo = objRepo,
             )
         }
+    }
+
+    private companion object {
+        const val BOLT_RACK = 4740
+        const val HOLY_WATER = 732
     }
 }

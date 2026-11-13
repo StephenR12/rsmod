@@ -39,6 +39,36 @@ import org.rsmod.map.CoordGrid
 @Execution(ExecutionMode.SAME_THREAD)
 class BirdSnareTrapTest {
     @Test
+    fun GameTestState.`smoking requires boosted Hunter thirty nine and a carried lit torch`() =
+        runBirdSnareTest { deps ->
+            preparePlayer(level = 38)
+            player.inv[0] = InvObj(BirdSnareObjs.snare)
+            player.inv[1] = InvObj(BirdSnareObjs.litTorch)
+            val origin = player.coords
+            player.withProtectedAccess { deps.traps.lay(this, 0) }
+            advance(BirdSnareTrap.LAY_TICKS)
+            val trap = bound(deps, origin, BirdSnareLocs.open)
+
+            player.withProtectedAccess { deps.traps.smoke(this, trap) }
+            assertMessageSent("You need a Hunter level of 39 to smoke a trap.")
+            player.withProtectedAccess { deps.traps.investigate(this, trap) }
+            assertMessageSent("This trap has not been smoked.")
+
+            player.setCurrentLevel(stats.hunter, 39)
+            player.inv[1] = null
+            player.withProtectedAccess { deps.traps.smoke(this, trap) }
+            assertMessageSent("You need a lit torch to smoke a trap.")
+
+            for (torch in listOf(BirdSnareObjs.litTorch, BirdSnareObjs.brumaTorch)) {
+                player.inv[1] = InvObj(torch)
+                player.withProtectedAccess { deps.traps.smoke(this, trap) }
+                player.withProtectedAccess { deps.traps.investigate(this, trap) }
+                assertMessageSent("This trap has been smoked.")
+                assertEquals(torch.id, player.inv[1]?.id)
+            }
+        }
+
+    @Test
     fun GameTestState.`cache 233 trap birds rewards rates and operations are pinned`() =
         runBirdSnareTest { deps ->
             assertEquals(10006, BirdSnareObjs.snare.id)

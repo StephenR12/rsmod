@@ -1,0 +1,7 @@
+[[spawn]]
+npc = 'tribesman_doorman'
+coords = '0_42_49_56_16'
+
+[[spawn]]
+npc = 'agilityarena_clerk'
+coords = '0_43_49_56_57'

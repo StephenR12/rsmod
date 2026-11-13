@@ -210,6 +210,13 @@ constructor(private val antifire: AntifireProtectionRepository) {
             prePotionMaximum(player, breath, resistedAccuracyRoll, antiDragonShield),
         )
 
+    public fun rollDamage(
+        player: Player, breath: DragonfireBreath, resisted: Boolean, shield: Boolean, random: org.rsmod.api.random.GameRandom,
+    ): Int {
+        val maximum = prePotionMaximum(player,breath,resisted,shield)
+        return resolveDamage(player,breath,resisted,shield,random.of(0..maximum))
+    }
+
     /** Applies potion reduction after the supplied shield/prayer-capped damage roll. */
     public fun resolveDamage(
         player: Player,

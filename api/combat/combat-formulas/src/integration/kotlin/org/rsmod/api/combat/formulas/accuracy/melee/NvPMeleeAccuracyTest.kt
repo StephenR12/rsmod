@@ -34,6 +34,35 @@ import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.varbit.VarBitType
 
 class NvPMeleeAccuracyTest {
+    @org.junit.jupiter.api.Test
+    fun GameTestState
+        .`Camdozaal defence charm supplies five invisible levels only against its active golems`() =
+        runInjectedGameTest(
+            MeleeAccuracyTestDependencies::class,
+            MeleeAccuracyTestModule,
+            WeaponAttackStylesScript::class,
+        ) { d ->
+            val golem = Npc(npcTypes.getValue(10693))
+            val unrelated = Npc(test_npcs.glod)
+            player.stats[stats.defence] = 40
+            val regular = d.accuracy.getHitChance(golem, player, MeleeAttackType.Stab)
+            val other = d.accuracy.getHitChance(unrelated, player, MeleeAttackType.Stab)
+            player.setVarBit(cacheTypes.varbits.getValue(12101), 1)
+            val boosted = d.accuracy.getHitChance(golem, player, MeleeAttackType.Stab)
+            org.junit.jupiter.api.Assertions.assertTrue(boosted < regular)
+            org.junit.jupiter.api.Assertions.assertEquals(
+                other,
+                d.accuracy.getHitChance(unrelated, player, MeleeAttackType.Stab),
+            )
+            org.junit.jupiter.api.Assertions.assertEquals(40, player.stats[stats.defence])
+            player.setVarBit(cacheTypes.varbits.getValue(12101), 0)
+            player.stats[stats.defence] = 45
+            org.junit.jupiter.api.Assertions.assertEquals(
+                boosted,
+                d.accuracy.getHitChance(golem, player, MeleeAttackType.Stab),
+            )
+        }
+
     @TestWithArgs(MatchupProvider::class)
     fun `calculate matchup hit chance`(matchup: Matchup, state: GameTestState) =
         state.runInjectedGameTest(

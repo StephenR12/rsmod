@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.api.combat.combatFormulas)
     implementation(projects.api.combat.combatManager)
     implementation(projects.api.combat.combatScripts)
     implementation(projects.api.invtx)
@@ -19,8 +20,10 @@ dependencies {
     implementation(projects.api.spellsRunes)
     implementation(projects.api.utils.utilsTime)
     implementation(projects.content.skills.cooking)
+    implementation(projects.content.skills.slayer)
     implementation(projects.content.skills.herblore)
     implementation(projects.content.skills.farming)
+    implementation(projects.content.skills.runecraft)
     implementation(projects.content.skills.prayer.remains)
     implementation(projects.content.other.coalBag)
     implementation(projects.content.skills.crafting.jewellery)

@@ -7,6 +7,65 @@ import org.rsmod.game.type.obj.ObjType
 @Singleton
 public class FarmingCropCatalogue @Inject constructor() {
     public val crops: List<FarmingCrop> = buildList {
+        add(
+            FarmingCrop(
+                key = "hespori",
+                displayName = "Hespori",
+                patchType = FarmingPatchType.Hespori,
+                seed = FarmingObjs.hesporiSeed,
+                produce = null,
+                visualPrefixes = listOf("hespori"),
+                level = 65,
+                seedCount = 1,
+                growthMinutes = 640,
+                growthStages = 4,
+                baseHarvestLives = 0,
+                plantXp = 62.0,
+                harvestXp = 12600.0,
+                compostAffectsYield = false,
+                diseaseImmune = true,
+            )
+        )
+        for ((name, seed) in FarmingObjs.animaSeeds) add(
+            FarmingCrop(
+                key = name,
+                displayName = name.replaceFirstChar { it.uppercase() },
+                patchType = FarmingPatchType.Anima,
+                seed = seed,
+                produce = null,
+                visualPrefixes = listOf("anima_$name"),
+                level = 76,
+                seedCount = 1,
+                growthMinutes = 640,
+                growthStages = 9,
+                baseHarvestLives = 0,
+                plantXp = 100.0,
+                compostAffectsYield = false,
+                diseaseImmune = true,
+            )
+        )
+        add(
+            FarmingCrop(
+                key = "grape",
+                displayName = "Grape vine",
+                patchType = FarmingPatchType.Grapes,
+                seed = FarmingObjs.grapeSeed,
+                produce = FarmingObjs.grapes,
+                visualPrefixes = listOf("grapevine_clickzone"),
+                level = 36,
+                seedCount = 1,
+                growthMinutes = 5,
+                growthStages = 8,
+                baseHarvestLives = 5,
+                plantXp = 31.5,
+                harvestXp = 40.0,
+                healthXp = 625.0,
+                compostAffectsYield = false,
+                diseaseImmune = true,
+                harvestSaveLow = -50,
+                harvestSaveHigh = 180,
+            )
+        )
         allotment("potato", "Potato", FarmingObjs.potatoSeed, FarmingObjs.potato, 1, 8.0, 9.0, 5)
         allotment("onion", "Onion", FarmingObjs.onionSeed, FarmingObjs.onion, 5, 9.5, 10.5, 5)
         allotment(
@@ -357,7 +416,7 @@ public class FarmingCropCatalogue @Inject constructor() {
             "redwood",
             "Redwood tree",
             FarmingPatchType.Redwood,
-            FarmingObjs.redwoodSeed,
+            FarmingObjs.redwoodSapling,
             FarmingObjs.redwoodLogs,
             null,
             90,
@@ -373,7 +432,7 @@ public class FarmingCropCatalogue @Inject constructor() {
                 "crystal",
                 "Crystal tree",
                 FarmingPatchType.CrystalTree,
-                FarmingObjs.crystalAcorn,
+                FarmingObjs.crystalSapling,
                 null,
                 listOf("crystal_tree"),
                 74,
@@ -958,6 +1017,7 @@ public class FarmingCropCatalogue @Inject constructor() {
 
         val PROTECTION =
             mapOf(
+                "seaweed" to FarmingProtection(FarmingObjs.numulite, 200),
                 "potato" to FarmingProtection(FarmingObjs.compost, 2),
                 "onion" to FarmingProtection(FarmingObjs.sackPotatoes, 1),
                 "cabbage" to FarmingProtection(FarmingObjs.sackOnions, 1),

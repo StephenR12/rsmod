@@ -1,5 +1,7 @@
 package org.rsmod.content.bosses.zulrah
 
+import org.rsmod.game.movement.MoveRestrict
+import org.rsmod.api.type.editors.npc.NpcEditor
 import org.rsmod.api.type.refs.loc.LocReferences
 import org.rsmod.api.type.refs.npc.NpcReferences
 import org.rsmod.api.type.refs.obj.ObjReferences
@@ -127,4 +129,18 @@ public enum class ZulrahPosition(public val normalCoords: CoordGrid) {
     South(CoordGrid(2266, 3062, 0)),
     West(CoordGrid(2258, 3071, 0)),
     East(CoordGrid(2276, 3071, 0)),
+}
+
+internal object ZulrahAttackRanges : NpcEditor() {
+    init {
+        with(ZulrahNpcs) {
+            for (form in bosses) {
+                edit(form) {
+                    attackRange = 20
+                    moveRestrict = MoveRestrict.NoMove
+                }
+            }
+            edit(magicSnakeling) { attackRange = 8 }
+        }
+    }
 }

@@ -10,6 +10,9 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.player.diary.recordDiaryCook
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.stat
 import org.rsmod.game.loc.BoundLocInfo
@@ -149,7 +152,7 @@ constructor(
                 resetAnim()
                 return
             }
-            cook(recipe, request.kind)
+            cook(recipe, request.kind, request.source)
             val remaining = request.remaining - 1
             if (
                 remaining <= 0 ||
@@ -179,7 +182,11 @@ constructor(
         }
     }
 
-    private fun ProtectedAccess.cook(recipe: StandardCookingRecipe, kind: CookingSourceKind) {
+    private fun ProtectedAccess.cook(
+        recipe: StandardCookingRecipe,
+        kind: CookingSourceKind,
+        source: BoundLocInfo,
+    ) {
         val success =
             !recipe.deliberateBurn &&
                 (recipe.alwaysSucceeds || hasCookingBurnImmunity() || rollSuccess(recipe, kind))
@@ -189,13 +196,35 @@ constructor(
                 val inventory = select(player.inv)
                 delete(inventory, recipe.raw.id, 1)
                 add(inventory, output.id, 1)
-                recipe.returnedContainer?.let { add(inventory, it.id, 1) }
+                recipe.returnedContainer?.let {
+                    if (!recipe.returnedContainerOnSuccessOnly || success) add(inventory, it.id, 1)
+                }
             }
         check(result.success) { "Cooking transaction failed after validation: $recipe" }
         if (recipe.deliberateBurn) {
             mes(requireNotNull(recipe.burnMessage))
         } else if (success) {
             statAdvance(stats.cooking, recipe.xp)
+            if (org.rsmod.content.skills.cooking.gnome.GnomeRecipes.finishesByBaking(recipe.cooked))
+                publish(
+                    org.rsmod.api.player.events.PlayerGnomeCookingSuccess(player, recipe.cooked)
+                )
+            if (
+                recipe.cooked ==
+                    org.rsmod.content.skills.cooking.gnome.g("tbw_spider_on_stick_cooked") ||
+                    recipe.cooked ==
+                        org.rsmod.content.skills.cooking.gnome.g("tbw_spider_on_shaft_cooked")
+            )
+                player.completeDiaryTask(DiaryTask.CookSpiderOnStick)
+            player.recordDiaryCook(
+                recipe.cooked.id,
+                source.coords,
+                kind != CookingSourceKind.Fire,
+                wearingGauntlets(),
+            )
+            if (recipe.cooked.id == objs.bread.id && kind == CookingSourceKind.Lumbridge) {
+                player.completeDiaryTask(DiaryTask.BakeBreadLumbridge)
+            }
             mes(
                 recipe.successMessage
                     ?: "You successfully cook the ${objTypes[recipe.cooked].name.lowercase()}."
@@ -306,6 +335,14 @@ constructor(
         }
         if (checkLevel && player.stat(stats.cooking) < recipe.level) {
             return reject("You need a Cooking level of ${recipe.level} to cook this food.")
+        }
+        val rumours = when (recipe.raw) {
+            objs.raw_graahk, objs.raw_kyatt, objs.raw_pyre_fox -> 25
+            objs.raw_dashing_kebbit, objs.raw_sunlight_antelope, objs.raw_moonlight_antelope -> 50
+            else -> 0
+        }
+        if (player.vars[varps.hunter_rumours_completed] < rumours) {
+            return reject("Complete $rumours Hunters' Rumours to cook this meat.")
         }
         if (!player.inv.contains(recipe.raw)) {
             return false

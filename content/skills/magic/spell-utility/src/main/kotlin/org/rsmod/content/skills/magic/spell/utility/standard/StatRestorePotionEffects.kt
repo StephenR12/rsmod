@@ -34,8 +34,7 @@ public object StatRestorePotionEffects {
                 applySanfew(player, poison, disease)
             }
             StatRestorePotionFamily.Stamina -> {
-                restoreRunEnergy(player, percent = 20)
-                stamina.activate(player)
+                restoreRunEnergy(player, percent = if (stamina.drinkDose(player)) 40 else 20)
             }
         }
     }

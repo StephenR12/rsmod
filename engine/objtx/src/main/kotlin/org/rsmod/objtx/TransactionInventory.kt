@@ -33,8 +33,8 @@ public class TransactionInventory<T>(
         obj: Int,
         max: Int,
         startIndex: Int = 0,
-        slots: MutableList<Int> = emptyIndexList(),
     ): List<Int> {
+        val slots = ArrayList<Int>()
         for (i in image.indices) {
             val slot = (i + startIndex) % image.size
             if (image[slot]?.id == obj) {
@@ -75,12 +75,4 @@ public class TransactionInventory<T>(
 
     public data object NeverStack : StackType()
 
-    private companion object {
-        private val reusableIndexList = ArrayList<Int>()
-
-        private fun emptyIndexList(): MutableList<Int> {
-            reusableIndexList.clear()
-            return reusableIndexList
-        }
-    }
 }

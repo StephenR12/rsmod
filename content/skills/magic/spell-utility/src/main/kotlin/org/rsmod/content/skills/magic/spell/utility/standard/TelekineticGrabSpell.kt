@@ -12,6 +12,8 @@ import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.invtx.invAdd
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.registry.obj.ObjRegistry
@@ -107,9 +109,14 @@ constructor(
                 return
             }
             add.commitAll()
+            if (target.type == objs.wine_of_zamorak.id && target.coords in templeWine)
+                player.completeDiaryTask(DiaryTask.TelegrabTempleWine)
             spotanimMap(worldRepo, spotanims.telegrab_impact, target.coords)
         }
     }
+
+    private val templeWine =
+        setOf(org.rsmod.map.CoordGrid(2930, 3515), org.rsmod.map.CoordGrid(2938, 3517, 1))
 
     private fun ProtectedAccess.isCurrentTarget(target: Obj): Boolean =
         objRegistry.findAll(target.coords).any { it === target && it.isVisibleTo(player) }

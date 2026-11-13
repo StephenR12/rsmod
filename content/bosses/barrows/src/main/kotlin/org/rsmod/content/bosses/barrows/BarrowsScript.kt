@@ -4,14 +4,12 @@ import jakarta.inject.Inject
 import kotlin.math.min
 import org.rsmod.api.combat.commons.types.MeleeAttackType
 import org.rsmod.api.combat.formulas.AccuracyFormulae
-import org.rsmod.api.config.refs.huntmodes
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.npc.access.StandardNpcAccess
 import org.rsmod.api.npc.events.NpcKillEvents
 import org.rsmod.api.player.hit.queueHit
 import org.rsmod.api.player.stat.statSub
 import org.rsmod.api.random.GameRandom
-import org.rsmod.api.repo.npc.NpcRepository
 import org.rsmod.api.script.onAiApPlayer2
 import org.rsmod.api.script.onAiOpPlayer2
 import org.rsmod.api.script.onEvent
@@ -20,7 +18,6 @@ import org.rsmod.game.entity.Npc
 import org.rsmod.game.entity.Player
 import org.rsmod.game.entity.npc.NpcMode
 import org.rsmod.game.hit.HitType
-import org.rsmod.game.type.npc.NpcTypeList
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
@@ -30,23 +27,17 @@ constructor(
     private val controller: BarrowsController,
     private val accuracy: AccuracyFormulae,
     private val random: GameRandom,
-    private val npcs: NpcRepository,
-    private val npcTypes: NpcTypeList,
+    private val tunnels: BarrowsTunnels,
 ) : PluginScript() {
     override fun ScriptContext.startup() {
         BarrowsBrothers.all.forEach { brother ->
             onAiOpPlayer2(brother.npc) { attack(this, it.target, brother) }
             onAiApPlayer2(brother.npc) { attack(this, it.target, brother) }
-            val existing = npcs.findAll(brother.spawn).firstOrNull { it.id == brother.npc.id }
-            val npc =
-                existing
-                    ?: Npc(npcTypes[brother.npc], brother.spawn).also {
-                        npcs.add(it, Int.MAX_VALUE)
-                    }
-            configure(npc, brother)
         }
-        onEvent<NpcKillEvents.Credited> { controller.onKill(player, npc) }
-        onOpLoc1(BarrowsLocs.rewardChest) { controller.claim(this) }
+        onEvent<NpcKillEvents.Credited> {
+            if (tunnels.credited(player, npc)) controller.onKill(player, npc)
+        }
+        onOpLoc1(BarrowsLocs.rewardChest) { tunnels.chest(this) }
     }
 
     private fun attack(access: StandardNpcAccess, target: Player, brother: BarrowsBrother) {
@@ -88,27 +79,22 @@ constructor(
             }
         }
     }
+}
 
-    private fun configure(npc: Npc, brother: BarrowsBrother) {
-        npc.apply {
-            hitpoints = 100
-            baseHitpointsLvl = 100
-            attackLvl = 115
-            baseAttackLvl = 115
-            strengthLvl = 115
-            baseStrengthLvl = 115
-            defenceLvl = 100
-            baseDefenceLvl = 100
-            magicLvl = if (brother.style == HitType.Magic) 120 else 1
-            baseMagicLvl = magicLvl
-            rangedLvl = if (brother.style == HitType.Ranged) 120 else 1
-            baseRangedLvl = rangedLvl
-            mode = NpcMode.Wander
-            setHunt(12)
-            setHuntMode(
-                if (brother.style == HitType.Melee) huntmodes.constant_melee
-                else huntmodes.constant_ranged
-            )
-        }
+internal fun configureBrother(npc: Npc, brother: BarrowsBrother) {
+    npc.apply {
+        hitpoints = 100
+        baseHitpointsLvl = 100
+        attackLvl = 115
+        baseAttackLvl = 115
+        strengthLvl = 115
+        baseStrengthLvl = 115
+        defenceLvl = 100
+        baseDefenceLvl = 100
+        magicLvl = if (brother.style == HitType.Magic) 120 else 1
+        baseMagicLvl = magicLvl
+        rangedLvl = if (brother.style == HitType.Ranged) 120 else 1
+        baseRangedLvl = rangedLvl
+        mode = NpcMode.None
     }
 }

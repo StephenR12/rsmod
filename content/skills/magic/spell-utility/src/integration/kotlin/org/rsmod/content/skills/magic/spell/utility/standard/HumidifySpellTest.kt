@@ -198,6 +198,23 @@ class HumidifySpellTest {
         }
 
     @Test
+    fun GameTestState.`Gricoller's can refills by itself and a full can spends no additional runes`() =
+        runHumidifyTest { deps ->
+            prepareCaster(deps, casts = 2)
+            val water = cacheTypes.varps.getValue(65632)
+            player.inv[6] = InvObj(objTypes.getValue(13353))
+            player.withProtectedAccess { vars[water] = 997 }
+            val xp = player.statMap.getFineXP(stats.magic)
+            player.withProtectedAccess { deps.humidify.cast(this) }
+            assertEquals(1000,player.vars[water])
+            assertEquals(xp+650,player.statMap.getFineXP(stats.magic))
+            advance(4)
+            val remaining = player.count(objs.astral_rune)
+            player.withProtectedAccess { deps.humidify.cast(this) }
+            assertEquals(remaining,player.count(objs.astral_rune))
+        }
+
+    @Test
     fun GameTestState.`no eligible item and missing runes make no partial changes`() =
         runHumidifyTest { deps ->
             prepareCaster(deps)

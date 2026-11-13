@@ -1,17 +1,20 @@
 package org.rsmod.content.skills.thieving
 
 import jakarta.inject.Inject
+import org.rsmod.content.skills.pets.SkillPetRates
 import org.rsmod.api.clue.ClueReward
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
-import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
 import org.rsmod.api.player.back
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.LumbridgeDiarySkillArea
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.feet
 import org.rsmod.api.player.front
 import org.rsmod.api.player.hands
@@ -28,13 +31,27 @@ import org.rsmod.game.inv.InvObj
 
 public class Pickpocketing
 @Inject
-constructor(
+constructor(private val petRates: SkillPetRates,
     private val coinPouches: CoinPouches,
     private val stunStates: ThievingStunStateRepository,
     private val shadowVeil: ShadowVeilStateRepository,
     private val clueDrops: PickpocketClueDrops,
     private val objRepo: ObjRepository,
+    private val silentGloves: SilentGloves,
+    private val blackjacking: BlackjackingState,
 ) {
+    private fun rollPet(player: org.rsmod.game.entity.Player, definition: PickpocketDefinition) {
+        val rate = when (definition.name.lowercase()) {
+            "watchman" -> 134_625
+            "paladin" -> 127_056
+            "gnome" -> 108_718
+            "hero", "elf", "vyre" -> 99_175
+            "tzhaar-hur" -> 176_743
+            else -> 257_211
+        }
+        petRates.roll(player,stats.thieving,20663,rate)
+    }
+
     public fun attempt(access: ProtectedAccess, npc: Npc, definition: PickpocketDefinition) {
         with(access) {
             if (!player.members) {
@@ -48,13 +65,47 @@ constructor(
             if (actionDelay > player.currentMapClock) {
                 return
             }
-            if (coinPouches.count(this) >= coinPouches.limit(this)) {
+            blackjacking.interrupt(player, npc)
+            if (blackjacking.active(npc, player.currentMapClock) && !blackjacking.owns(player, npc))
+                return
+            if (blackjacking.owns(player, npc)) {
+                faceEntitySquare(npc)
+                anim(seqs.human_pickpocket)
+                actionDelay = player.currentMapClock + SUCCESS_INTERVAL_CYCLES
+                val reward = definition.rewards.single().coinPouch ?: return
+                val doubled = rogueOutfitDoubles(this)
+                val tx =
+                    player.invTransaction(inv) {
+                        add(
+                            select(inv),
+                            objs.coins.id,
+                            reward.roll(random, 1) * (if (doubled) 2 else 1),
+                        )
+                    }
+                if (!tx.success) {
+                    mes("You don't have enough inventory space.")
+                    return
+                }
+                blackjacking.picked(npc)
+                rollPet(player,definition)
+                statAdvance(stats.thieving, definition.xp)
+                if (definition === StandardPickpockets.menaphiteThug)
+                    player.completeDiaryTask(DiaryTask.BlackjackMenaphiteThug)
+                soundSynth(synths.thieving)
+                spam("You pick the ${definition.name}'s pocket.")
+                return
+            }
+            if (
+                definition.allRewards.any { it.coinPouch != null } &&
+                    coinPouches.count(this) >= coinPouches.limit(this)
+            ) {
                 mes("You need to open your coin pouches before you can continue pickpocketing.")
                 return
             }
             if (
                 player.inv.isFull() &&
-                    definition.rewards.none { reward -> player.inv.has(reward.obj) }
+                    (definition.requiresFreeInventorySlot ||
+                        definition.rewards.none { reward -> player.inv.has(reward.obj) })
             ) {
                 mes("You don't have enough inventory space.")
                 return
@@ -68,11 +119,12 @@ constructor(
             val bounds = successBounds(this, definition)
             if (statRandom(stats.thieving, bounds.first, bounds.last, invisibleBoost = 0)) {
                 val reward =
-                    if (definition.rewards.size == 1) {
-                        definition.rewards.single()
-                    } else {
-                        definition.rewardAt(random.of(definition.totalRewardWeight))
-                    }
+                    definition.rewardSelector?.invoke(this)
+                        ?: if (definition.rewards.size == 1) {
+                            definition.rewards.single()
+                        } else {
+                            definition.rewardAt(random.of(definition.totalRewardWeight))
+                        }
                 val doubled = rogueOutfitDoubles(this)
                 if (!grantRewards(this, listOf(reward) + definition.guaranteedRewards, doubled)) {
                     mes("You don't have enough inventory space.")
@@ -84,13 +136,23 @@ constructor(
                 definition.clueDrop?.let { clueDrop ->
                     grantClueReward(this, clueDrops.roll(this, clueDrop))
                 }
+                rollPet(player,definition)
                 statAdvance(stats.thieving, definition.xp)
+                if (
+                    (definition === StandardPickpockets.man ||
+                        definition === StandardPickpockets.woman) &&
+                        LumbridgeDiarySkillArea.contains(npc.coords)
+                ) {
+                    player.completeDiaryTask(DiaryTask.PickpocketLumbridgeCitizen)
+                }
+                recordPickpocketDiary(player, npc, definition)
                 soundSynth(synths.thieving)
                 spam("You pick the ${definition.name}'s pocket.")
                 return
             }
 
             spam("You fail to pick the ${definition.name}'s pocket.")
+            silentGloves.failedPickpocket(this, definition)
             if (shadowVeil.protects(player, random)) {
                 mes("Your attempt to steal goes unnoticed.")
                 return
@@ -113,10 +175,7 @@ constructor(
 
     public fun successBounds(access: ProtectedAccess, definition: PickpocketDefinition): IntRange {
         with(access) {
-            val diaryBonus =
-                player.vars[varbits.ardougne_diary_hard_complete] != 0 ||
-                    (definition.mediumArdougneDiaryApplies &&
-                        player.vars[varbits.ardougne_diary_medium_complete] != 0)
+            val diaryBonus = silentGloves.diaryOverrides(this, definition)
             val glovesBonus = player.hands?.id == objs.gloves_of_silence.id
             val capeBonus =
                 player.back?.id == objs.thieving_skillcape.id ||

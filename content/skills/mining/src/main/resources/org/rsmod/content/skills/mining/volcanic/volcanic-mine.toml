@@ -1,0 +1,4 @@
+spawn = [
+    { npc = "fossil_mineguard", coords = "0_59_59_41_33" },
+    { npc = "nurmof", coords = "0_46_153_54_52" },
+]

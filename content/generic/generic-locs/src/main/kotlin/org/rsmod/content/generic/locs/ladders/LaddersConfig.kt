@@ -12,6 +12,7 @@ internal object LadderLocs : LocReferences() {
     val ladder_down = find("laddertop")
     val ladder_up = find("ladder")
     val ladder_option = find("laddermiddle")
+    val outside_dungeonladder = find("ladder_outside_to_underground")
     val lumbridge_kitchen_dungeonladder = find("qip_cook_trapdoor_open")
     val lumbridge_cellar_dungeonladder = find("ladder_from_cellar")
 }
@@ -27,6 +28,10 @@ internal object LadderLocsEdits : LocEditor() {
 
         edit(ladder_locs.ladder_option) { contentGroup = content.ladder_option }
 
+        edit(ladder_locs.outside_dungeonladder) {
+            param[params.climb_anim] = seqs.human_pickupfloor
+            contentGroup = content.dungeonladder_down
+        }
         edit(ladder_locs.lumbridge_kitchen_dungeonladder) {
             param[params.climb_anim] = seqs.human_pickupfloor
             contentGroup = content.dungeonladder_down

@@ -1,0 +1,6 @@
+spawn = [
+    { npc = "forestry_forester", coords = "0_48_50_24_38" },
+    { npc = "forestry_forester", coords = "0_42_54_40_22" },
+    { npc = "forestry_forester", coords = "0_51_95_39_45" },
+    { npc = "forestry_forester", coords = "0_21_51_8_34" },
+]

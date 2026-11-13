@@ -20,9 +20,30 @@ constructor(
     private val random: GameRandom,
     private val protectedAccess: ProtectedAccessLauncher,
 ) {
+    internal fun battleMageAttack(access: StandardNpcAccess, target: Player, god: Int) {
+        with(access) {
+            if (
+                actionDelay > mapClock ||
+                    !isWithinDistance(target, 8) ||
+                    controller.inChallenge(target)
+            )
+                return
+            actionDelay = mapClock + 4
+            npc.anim(org.rsmod.api.config.refs.seqs.human_casting)
+            target.spotanim(
+                listOf(
+                    org.rsmod.api.config.refs.spotanims.saradomin_lightning,
+                    org.rsmod.api.config.refs.spotanims.guthix_claw,
+                    org.rsmod.api.config.refs.spotanims.zamorak_flame,
+                )[god]
+            )
+            target.queueHit(npc, 1, HitType.Magic, damage(target, HitType.Magic, 20))
+        }
+    }
+
     public fun kolodionAttack(access: StandardNpcAccess, target: Player) {
         with(access) {
-            if (actionDelay > mapClock) {
+            if (controller.challenger(npc) != target || actionDelay > mapClock) {
                 return
             }
             actionDelay = mapClock + 7

@@ -1,0 +1,23 @@
+[[spawn]]
+npc = 'mac'
+coords = '0_43_55_39_19'
+
+[[spawn]]
+npc = 'max_boulder'
+coords = '0_43_55_62_14'
+
+[[spawn]]
+npc = 'master_fisher'
+coords = '0_40_53_52_0'
+
+[[spawn]]
+npc = 'master_crafter'
+coords = '0_45_51_53_22'
+
+[[spawn]]
+npc = 'hickton'
+coords = '0_44_53_8_51'
+
+[[spawn]]
+npc = 'kaqemeex'
+coords = '0_45_54_46_28'

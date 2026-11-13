@@ -1,6 +1,10 @@
 package org.rsmod.content.skills.hunter.birdsnares
 
+import org.rsmod.api.player.events.HunterCapture
+import org.rsmod.api.player.diary.recordDiaryHunter
 import jakarta.inject.Inject
+import org.rsmod.api.player.events.RemainsDrop
+import org.rsmod.game.inv.InvObj
 import kotlin.math.min
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.stats
@@ -45,7 +49,12 @@ constructor(
     private val playerList: PlayerList,
     private val npcTypes: NpcTypeList,
     private val random: GameRandom,
+    private val portableTraps: PortableHunterTraps,
 ) {
+    init {
+        portableTraps.register(BirdSnareControllerBuilder.trap, BirdSnareVarCons.ownerSlot)
+    }
+
     public suspend fun lay(access: ProtectedAccess, slot: Int) {
         with(access) {
             if (!player.members) {
@@ -114,6 +123,21 @@ constructor(
             access.mes("This isn't your trap.")
             return
         }
+        if (!access.player.members) {
+            access.mes("You need to be on a members' world to smoke a trap.")
+            return
+        }
+        if (access.player.stat(stats.hunter) < SMOKING_LEVEL) {
+            access.mes("You need a Hunter level of $SMOKING_LEVEL to smoke a trap.")
+            return
+        }
+        if (
+            BirdSnareObjs.litTorch !in access.player.inv &&
+                BirdSnareObjs.brumaTorch !in access.player.inv
+        ) {
+            access.mes("You need a lit torch to smoke a trap.")
+            return
+        }
         if (controller.smoked == 0) {
             controller.smoked = 1
             access.mes("You smoke the trap, removing your scent.")
@@ -158,11 +182,13 @@ constructor(
         }
         val bird = BirdSnareBirds.all[controller.birdIndex]
         val feathers = random.of(MIN_FEATHERS..MAX_FEATHERS)
+        val remains = RemainsDrop(access.player,InvObj(BirdSnareObjs.bones))
+        access.publish(remains)
         val result =
             access.player.invTransaction(access.player.inv) {
                 val inv = select(access.player.inv)
                 add(inv, BirdSnareObjs.snare.id, 1)
-                add(inv, BirdSnareObjs.bones.id, 1)
+                if (remains.remaining > 0) add(inv, BirdSnareObjs.bones.id, remains.remaining)
                 add(inv, BirdSnareObjs.rawBirdMeat.id, 1)
                 add(inv, bird.feather.id, feathers)
             }
@@ -170,8 +196,11 @@ constructor(
             access.mes("You don't have enough inventory space to collect the trap.")
             return
         }
+        remains.commit()
         access.anim(BirdSnareSeqs.check)
         access.statAdvance(stats.hunter, bird.xp)
+        access.publish(HunterCapture(access.player, bird.npc.internalNameValue))
+        access.player.recordDiaryHunter(bird.npc.id, controller.coords)
         removeTrap(controller, access.player, Recovery.None)
     }
 
@@ -266,8 +295,7 @@ constructor(
             .forEach { removeTrap(it, player, Recovery.Inventory) }
     }
 
-    public fun activeTrapCount(player: Player): Int =
-        controllers.count { it.id == BirdSnareControllerBuilder.trap.id && it.isOwnedBy(player) }
+    public fun activeTrapCount(player: Player): Int = portableTraps.count(player)
 
     public fun maximumTraps(player: Player): Int {
         val base = min(MAXIMUM_TRAPS, player.stat(stats.hunter) / 20 + 1)
@@ -365,6 +393,7 @@ constructor(
     }
 
     public companion object {
+        public const val SMOKING_LEVEL: Int = 39
         public const val MINIMUM_LEVEL: Int = 1
         public const val LAY_TICKS: Int = 4
         public const val TRANSITION_TICKS: Int = 2

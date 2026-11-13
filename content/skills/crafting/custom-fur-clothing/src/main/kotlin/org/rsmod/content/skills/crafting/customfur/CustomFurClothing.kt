@@ -12,6 +12,7 @@ import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.player.vars.VarPlayerIntMapSetter
 import org.rsmod.api.player.stopInvTransmit
 import org.rsmod.game.entity.Player
 import org.rsmod.game.inv.InvObj
@@ -87,7 +88,9 @@ constructor(private val recipes: CustomFurRecipeRegistry, private val objTypes: 
                     delete(inventory, objs.coins.id, recipe.fee)
                     add(inventory, recipe.output.id, 1)
                 }
-            check(result.success) { "Custom fur transaction failed after validation: $recipe" }
+            if (result.success && recipe.output == objs.spottier_cape) {
+                VarPlayerIntMapSetter.set(player, FurDiaryVars.made, 1)
+            }
         }
     }
 

@@ -1,0 +1,7 @@
+# Pinned Foreman14922198 and Ordan14991983 map squares.
+[[spawn]]
+npc='blast_furnace_instructor'
+coords='0_30_77_24_30'
+[[spawn]]
+npc='smithing_guild_ore_seller'
+coords='0_30_77_16_38'

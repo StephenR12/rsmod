@@ -8,6 +8,7 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.recordDiaryPotion
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.stat
 import org.rsmod.game.type.obj.ObjType
@@ -15,7 +16,11 @@ import org.rsmod.game.type.obj.ObjTypeList
 
 public class FinishedPotionMixing
 @Inject
-constructor(private val objTypes: ObjTypeList, private val modifiers: PotionProductionModifiers) {
+constructor(
+    private val objTypes: ObjTypeList,
+    private val modifiers: PotionProductionModifiers,
+    private val pouch: org.rsmod.content.skills.herblore.mixology.ReagentPouch,
+) {
     public suspend fun select(access: ProtectedAccess, recipe: FinishedPotionRecipe) {
         with(access) {
             if (!canMix(recipe, sendFailure = true)) {
@@ -24,7 +29,7 @@ constructor(private val objTypes: ObjTypeList, private val modifiers: PotionProd
             val maximum =
                 minOf(
                     player.inv.count(objTypes[recipe.unfinished]),
-                    player.inv.count(objTypes[recipe.secondary]),
+                    pouch.quantity(this, recipe.secondary),
                 )
             val input =
                 skillMulti(
@@ -77,18 +82,22 @@ constructor(private val objTypes: ObjTypeList, private val modifiers: PotionProd
 
     private fun ProtectedAccess.mix(recipe: FinishedPotionRecipe) {
         val roll = modifiers.roll(this, recipe)
+        val secondarySource = pouch.source(this, recipe.secondary)
         val result =
             player.invTransaction(player.inv) {
                 val inventory = select(player.inv)
                 delete(inventory, recipe.unfinished.id, 1)
                 if (!roll.preserveSecondary) {
-                    delete(inventory, recipe.secondary.id, 1)
+                    val secondary =
+                        if (secondarySource === player.inv) inventory else select(secondarySource)
+                    delete(secondary, recipe.secondary.id, 1)
                 }
                 add(inventory, roll.output.id, 1)
             }
         check(result.success) { "Finished-potion transaction failed after validation: $recipe" }
         val commit = modifiers.commit(this, roll)
         statAdvance(stats.herblore, recipe.xp)
+        player.recordDiaryPotion(recipe.output.id, player.coords)
         val chemistryCharges = commit.chemistryChargesRemaining
         if (chemistryCharges != null) {
             if (chemistryCharges == 0) {
@@ -131,7 +140,7 @@ constructor(private val objTypes: ObjTypeList, private val modifiers: PotionProd
         if (player.inv.count(objTypes[recipe.unfinished]) == 0) {
             return false
         }
-        if (player.inv.count(objTypes[recipe.secondary]) == 0) {
+        if (pouch.quantity(this, recipe.secondary) == 0) {
             return false
         }
         return true

@@ -8,13 +8,16 @@ import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.player.righthand
 import org.rsmod.api.player.stat.statBase
 import org.rsmod.api.player.worn.HeldEquipResult
+import org.rsmod.api.stats.xpmod.XpModifiers
 import org.rsmod.content.skills.mining.configs.MiningObjs
+import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.Inventory
 import org.rsmod.game.type.obj.ObjType
 
-public class InfernalPickaxeLifecycle @Inject constructor() {
+public class InfernalPickaxeLifecycle @Inject constructor(private val xpMods: XpModifiers) {
     public val ornamentStyles: List<InfernalPickaxeStyle> =
         listOf(
             InfernalPickaxeStyle(
@@ -28,6 +31,137 @@ public class InfernalPickaxeLifecycle @Inject constructor() {
                 MiningObjs.infernalPickaxeTrailblazerReloadedUncharged,
             ),
         )
+
+    public val rechargePairs: List<InfernalPickaxeRecharge> =
+        listOf(
+            InfernalPickaxeRecharge(
+                MiningObjs.infernalPickaxeUncharged,
+                MiningObjs.infernalPickaxe,
+            ),
+            InfernalPickaxeRecharge(
+                MiningObjs.infernalPickaxeTrailblazerUncharged,
+                MiningObjs.infernalPickaxeTrailblazer,
+            ),
+            InfernalPickaxeRecharge(
+                MiningObjs.infernalPickaxeTrailblazerReloadedUncharged,
+                MiningObjs.infernalPickaxeTrailblazerReloaded,
+            ),
+        )
+
+    public fun checkCharges(access: ProtectedAccess, pickaxe: InvObj?) =
+        with(access) {
+            if (
+                !player.members ||
+                    pickaxe == null ||
+                    rechargePairs.none { it.charged.id == pickaxe.id }
+            )
+                return
+            val remaining = InfernalPickaxeState.fromCharged(pickaxe).charges
+            mes(
+                "The infernal pickaxe has ${remaining * 100 / InfernalPickaxeState.MAX_CHARGES}% of its charges remaining."
+            )
+        }
+
+    public fun recharge(
+        access: ProtectedAccess,
+        firstSlot: Int,
+        secondSlot: Int,
+        recharge: InfernalPickaxeRecharge,
+        material: ObjType,
+    ): Unit =
+        with(access) {
+            if (
+                !player.members ||
+                    material !in listOf(objs.smouldering_stone, MiningObjs.dragonPickaxe)
+            )
+                return
+            val pickSlot = selectedSlot(firstSlot, secondSlot, recharge.depleted.id) ?: return
+            val materialSlot = selectedSlot(firstSlot, secondSlot, material.id) ?: return
+            if (pickSlot == materialSlot) return
+            val result =
+                player.invTransaction(player.inv) {
+                    val inv = select(player.inv)
+                    delete(inv, recharge.depleted.id, 1, slot = pickSlot)
+                    delete(inv, material.id, 1, slot = materialSlot)
+                    add(inv, recharge.charged.id, 1, slot = pickSlot)
+                }
+            if (result.success) {
+                statAdvance(stats.mining, MINING_XP)
+                statAdvance(stats.smithing, SMITHING_XP)
+                mes("You recharge the infernal pickaxe.")
+            }
+        }
+
+    /** One-third ore destruction; ordinary production must call this before delivering each ore. */
+    public fun combust(
+        access: ProtectedAccess,
+        tool: InvObj,
+        product: ObjType,
+        requiredLevel: Int,
+    ): Boolean =
+        with(access) {
+            if (!player.members) return false
+            val depleted =
+                rechargePairs.firstOrNull { it.charged.id == tool.id }?.depleted ?: return false
+            val worn = player.righthand == tool
+            val slot = if (worn) -1 else player.inv.indexOfFirst { it == tool }
+            if (!worn && slot < 0) return false
+            // No procs at gem rocks, amethyst, dense essence, Motherlode or other separate
+            // activities.
+            if (product.id in excludedProducts) return false
+            if (!random.randomBoolean(3)) return false
+            val saved = objs.ghommals_lucky_penny in player.worn && random.randomBoolean(20)
+            if (!saved) {
+                val updated = InfernalPickaxeState.fromCharged(tool).consume(tool, depleted)
+                if (worn) player.righthand = updated else player.inv[slot] = updated
+                if (updated.id == depleted.id) mes("Your infernal pickaxe has run out of charges.")
+            }
+            statAdvance(
+                stats.smithing,
+                smithingXp(product, requiredLevel) * xpMods.get(player, stats.smithing),
+            )
+            mes("Your infernal pickaxe consumes the resource.")
+            true
+        }
+
+    private val excludedProducts: Set<Int> by lazy {
+        setOf(
+            objs.uncut_opal.id,
+            objs.uncut_jade.id,
+            objs.uncut_red_topaz.id,
+            objs.uncut_sapphire.id,
+            objs.uncut_emerald.id,
+            objs.uncut_ruby.id,
+            objs.uncut_diamond.id,
+            MiningObjs.runeEssence.id,
+            MiningObjs.pureEssence.id,
+            MiningObjs.denseEssenceBlock.id,
+            21347, // Amethyst.
+        )
+    }
+
+    /** Dated Infernal pickaxe table; unspecified non-smeltable XP is explicitly modelled. */
+    public fun smithingXp(product: ObjType, requiredLevel: Int): Double =
+        when (product.id) {
+            objs.copper_ore.id,
+            objs.tin_ore.id -> 3.6
+            objs.blurite_ore.id -> 4.0
+            objs.iron_ore.id -> 6.25
+            objs.silver_ore.id -> 7.8
+            objs.gold_ore.id -> 9.0
+            objs.mithril_ore.id -> 12.0
+            objs.adamantite_ore.id -> 18.75
+            objs.runite_ore.id -> 25.0
+            QuarryObjs.granite[0].id -> 7.2
+            QuarryObjs.granite[1].id -> 13.2
+            QuarryObjs.granite[2].id -> 22.2
+            QuarryObjs.sandstone[0].id -> 6.0
+            QuarryObjs.sandstone[1].id -> 9.0
+            QuarryObjs.sandstone[2].id -> 15.0
+            QuarryObjs.sandstone[3].id -> 21.0
+            // Published prose only specifies level-based XP for other nonsmeltable rocks.
+            else -> requiredLevel * 0.2
+        }
 
     public val ornamentPairs: List<InfernalPickaxeOrnament> =
         ornamentStyles.map { InfernalPickaxeOrnament(it.plain, it.trailblazer) }
@@ -248,3 +382,5 @@ public data class InfernalPickaxeStyle(
     val trailblazer: ObjType,
     val reloaded: ObjType,
 )
+
+public data class InfernalPickaxeRecharge(val depleted: ObjType, val charged: ObjType)

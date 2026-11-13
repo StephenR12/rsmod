@@ -1,0 +1,8 @@
+spawn = [
+    { npc = "pest_voidknight_1", coords = "0_41_41_30_39" },
+    { npc = "pest_voidknight_2", coords = "0_41_41_35_41" },
+    { npc = "pest_voidknight_3", coords = "0_41_41_38_25" },
+    { npc = "pest_voidknight_4", coords = "0_41_41_38_29" },
+    { npc = "pest_squire_ship_portsarim", coords = "0_47_50_33_2" },
+    { npc = "pest_squire_ship_island", coords = "0_41_41_34_52" },
+]

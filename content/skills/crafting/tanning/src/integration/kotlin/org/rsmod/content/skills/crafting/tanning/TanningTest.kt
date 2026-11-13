@@ -7,6 +7,7 @@ import net.rsprot.protocol.game.outgoing.interfaces.IfSetEventsV2
 import net.rsprot.protocol.game.outgoing.interfaces.IfSetObject
 import net.rsprot.protocol.game.outgoing.interfaces.IfSetText
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
@@ -17,6 +18,8 @@ import org.rsmod.api.config.refs.npcs
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.input.ResumePauseButtonInput
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.api.testing.scope.GameTestScope
 import org.rsmod.game.inv.InvObj
@@ -25,6 +28,26 @@ import org.rsmod.game.type.obj.ObjType
 
 @Execution(ExecutionMode.SAME_THREAD)
 class TanningTest {
+    @Test
+    fun GameTestState.`Sbott diary requires successful paid tanning with the actual tanner identity`() = runTanningTest { deps ->
+        player.members = true
+        val recipe = deps.recipes.recipes.first()
+        player.inv[0] = InvObj(recipe.input)
+        player.withProtectedAccess {
+            deps.tanning.open(this, TannerPricing.Premium, npcs.werewolf_tanner.id)
+            deps.tanning.tan(this, recipe, 1)
+            assertFalse(player.hasCompletedDiaryTask(DiaryTask.TanWithSbott))
+            player.inv[1] = InvObj(objs.coins, 50)
+            deps.tanning.open(this, TannerPricing.Premium, npcs.auburn_tanner.id)
+            deps.tanning.tan(this, recipe, 1)
+            assertFalse(player.hasCompletedDiaryTask(DiaryTask.TanWithSbott))
+            player.inv[0] = InvObj(recipe.input)
+            deps.tanning.open(this, TannerPricing.Premium, npcs.werewolf_tanner.id)
+            deps.tanning.tan(this, recipe, 1)
+            assertTrue(player.hasCompletedDiaryTask(DiaryTask.TanWithSbott))
+        }
+    }
+
     @Test
     fun GameTestState.`cache 233 exposes the native tannery interface objects and trade NPCs`() =
         runTanningTest { deps ->

@@ -7,6 +7,7 @@ import org.rsmod.api.registry.loc.LocRegistryNormal
 import org.rsmod.api.registry.npc.NpcRegistry
 import org.rsmod.api.registry.npc.isSuccess
 import org.rsmod.api.registry.zone.ZonePlayerActivityBitSet
+import org.rsmod.game.MapClock
 import org.rsmod.game.entity.Controller
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.loc.LocEntity
@@ -41,6 +42,7 @@ constructor(
     private val npcRegistry: NpcRegistry,
     private val conRegistry: ControllerRegistry,
     private val zoneActivity: ZonePlayerActivityBitSet,
+    private val clock: MapClock,
 ) {
     init {
         workingAreaSmall.assertValidBounds(smallRegions.capacity)
@@ -132,7 +134,7 @@ constructor(
     }
 
     public fun isEmpty(region: Region): Boolean {
-        return !zoneActivity.isAnyLevelFlagged(region.southWestZone, region.northEastZone)
+        return clock >= region.reclaimFromCycle && !zoneActivity.isAnyLevelFlagged(region.southWestZone, region.northEastZone)
     }
 
     public fun isValid(regionSlot: Int, regionUid: Int): Boolean {

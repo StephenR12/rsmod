@@ -45,6 +45,40 @@ import org.rsmod.game.type.varp.VarpLifetime
 @Execution(ExecutionMode.SAME_THREAD)
 class BryophytasStaffTest {
     @Test
+    fun GameTestState
+        .`withdrawal transforms the empty staff and consumes only the missing nature runes`() =
+        runStaffTest { deps ->
+            player.withProtectedAccess { vars[varbits.charges_bryophytas_staff_quantity] = 8 }
+            player.inv[4] = InvObj(objs.bryophytas_staff_uncharged)
+            var available = 3
+            fun withdraw() {
+                player.withProtectedAccess {
+                    assertTrue(
+                        deps.events.publish(
+                            this,
+                            BankedObjEvents.Autocharge(4, inv.getValue(4)) { type, requested ->
+                                assertEquals(objs.nature_rune.id, type.id)
+                                val used = minOf(available, requested)
+                                available -= used
+                                used
+                            },
+                        )
+                    )
+                }
+            }
+            withdraw()
+            assertEquals(InvObj(objs.bryophytas_staff, vars = 3), player.inv[4])
+            available = 9
+            withdraw()
+            assertEquals(8, player.inv[4]?.vars)
+            assertEquals(4, available)
+            player.withProtectedAccess { vars[varbits.charges_bryophytas_staff_quantity] = 2 }
+            withdraw()
+            assertEquals(8, player.inv[4]?.vars)
+            assertEquals(4, available)
+        }
+
+    @Test
     fun GameTestState.`cache 233 staff variants and interaction dispatch are pinned`() =
         runStaffTest { deps ->
             assertEquals(22368, objs.bryophytas_staff_uncharged.id)

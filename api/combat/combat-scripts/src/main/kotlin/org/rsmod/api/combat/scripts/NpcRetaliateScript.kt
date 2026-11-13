@@ -1,7 +1,7 @@
 package org.rsmod.api.combat.scripts
 
 import jakarta.inject.Inject
-import org.rsmod.api.combat.commons.npc.combatDefaultRetaliateOp
+import org.rsmod.api.combat.commons.npc.combatDefaultRetaliate
 import org.rsmod.api.config.refs.queues
 import org.rsmod.api.npc.access.StandardNpcAccess
 import org.rsmod.api.npc.interact.AiPlayerInteractions
@@ -17,6 +17,6 @@ constructor(private val interactions: AiPlayerInteractions) : PluginScript() {
     }
 
     private fun StandardNpcAccess.autoRetaliatePlayer() {
-        npc.combatDefaultRetaliateOp(interactions)
+        npc.combatDefaultRetaliate(interactions)
     }
 }

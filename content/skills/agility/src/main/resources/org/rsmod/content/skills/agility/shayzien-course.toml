@@ -1,0 +1,15 @@
+[[spawn]]
+npc = 'shayzien_guard_agility'
+coords = '0_24_56_16_49'
+
+[[spawn]]
+npc = 'dorgesh_male_engineer'
+coords = '2_42_81_53_57'
+
+[[spawn]]
+npc = 'mm_monkey_minder'
+coords = '0_40_51_43_11'
+
+[[spawn]]
+npc = 'hundred_agility_monkey'
+coords = '0_43_42_5_59'

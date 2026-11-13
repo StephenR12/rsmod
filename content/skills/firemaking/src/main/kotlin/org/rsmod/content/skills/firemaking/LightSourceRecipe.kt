@@ -13,6 +13,17 @@ public data class LightSourceRecipe(
 )
 
 public object LightSourceRecipes {
+    public fun carriesLight(player: org.rsmod.game.entity.Player): Boolean =
+        (player.inv.asSequence() + player.worn.asSequence()).filterNotNull().any { it.id in byLit || it.id in permanentLights }
+
+    private val permanentLights by lazy {
+        setOf(
+            objs.firemaking_skillcape.id, objs.firemaking_skillcape_t.id, objs.max_cape_inv.id,
+            objs.max_cape_worn.id, objs.bruma_torch.id, 29777, objs.diary_kandarin_headgear_1.id,
+            objs.diary_kandarin_headgear_2.id, objs.diary_kandarin_headgear_3.id, objs.diary_kandarin_headgear_4.id,
+        ) + (26824..26848 step 2)
+    }
+
     public val all: List<LightSourceRecipe> =
         listOf(
             LightSourceRecipe(objs.unlit_torch, objs.lit_torch, 1, 4, canUseDrySticks = true),

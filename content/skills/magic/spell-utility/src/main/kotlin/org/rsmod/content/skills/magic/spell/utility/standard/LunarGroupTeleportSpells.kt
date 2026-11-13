@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import java.util.WeakHashMap
@@ -151,7 +152,7 @@ constructor(
         if (vars[varbits.inside_wilderness] == 1 && wildernessLevel() > MAX_WILDERNESS_LEVEL) {
             return "A mysterious force prevents you from teleporting!"
         }
-        if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+        if (player.isTeleportBlocked()) {
             return "A magical force stops you from teleporting."
         }
         return null
@@ -168,7 +169,7 @@ constructor(
         const val CAST_TICKS = 4
         const val LUNAR_DIPLOMACY_COMPLETE = 190
         const val MAX_WILDERNESS_LEVEL = 20
-        const val TELEBLOCK_IMMUNITY_CYCLES = 100
+
         const val WILDERNESS_LEVEL_HEIGHT = 8
         const val WILDERNESS_Z = 3520
         const val WILDERNESS_UNDERGROUND_Z = 9920

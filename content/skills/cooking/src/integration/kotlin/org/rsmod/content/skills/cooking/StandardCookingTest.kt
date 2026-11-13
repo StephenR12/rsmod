@@ -19,6 +19,8 @@ import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.player.events.interact.HeldUEvents
 import org.rsmod.api.player.events.interact.LocEvents
 import org.rsmod.api.player.events.interact.LocUEvents
@@ -50,6 +52,41 @@ import org.rsmod.map.CoordGrid
 
 @Execution(ExecutionMode.SAME_THREAD)
 class StandardCookingTest {
+    @Test
+    fun GameTestState.`Lumbridge bread diary task excludes ordinary ranges and burnt bread`() =
+        runCookingTest { deps ->
+            val task = DiaryTask.BakeBreadLumbridge
+            val bread = StandardCookingRecipes.byRaw.getValue(objs.bread_dough.id)
+            preparePlayer(level = 1)
+            player.setVarp(varps.cookquest, 2)
+            add(objs.bread_dough)
+            val ordinaryRange = prepareSource(cooking_locs.range)
+            random.next = 0
+            player.withProtectedAccess {
+                deps.cooking.start(this, ordinaryRange, CookingSourceKind.Range, bread, 1)
+            }
+            advance()
+            assertFalse(player.hasCompletedDiaryTask(task))
+
+            preparePlayer(level = 1)
+            add(objs.bread_dough)
+            val castleRange = prepareSource(cooking_locs.lumbridgeRange, offset = 20)
+            random.next = 99
+            player.withProtectedAccess {
+                deps.cooking.start(this, castleRange, CookingSourceKind.Lumbridge, bread, 1)
+            }
+            advance()
+            assertFalse(player.hasCompletedDiaryTask(task))
+
+            add(objs.bread_dough)
+            random.next = 0
+            player.withProtectedAccess {
+                deps.cooking.start(this, castleRange, CookingSourceKind.Lumbridge, bread, 1)
+            }
+            advance()
+            assertTrue(player.hasCompletedDiaryTask(task))
+        }
+
     @Test
     fun GameTestState.`every cache 233 Cook location is classified and registered`() =
         runCookingTest { deps ->
@@ -119,6 +156,7 @@ class StandardCookingTest {
         runCookingTest { deps ->
             assertEquals(
                 listOf(
+                    RecipeContract(6006, 6008, null, 1, 0.0, true),
                     RecipeContract(2138, 2140, 2144, 1, 30.0, false),
                     RecipeContract(2132, 2142, 2146, 1, 30.0, false),
                     RecipeContract(2134, 2142, 2146, 1, 30.0, false),
@@ -192,6 +230,26 @@ class StandardCookingTest {
                     RecipeContract(2341, 2343, 2345, 50, 30.0, true),
                     RecipeContract(2142, 2146, 2146, 1, 0.0, false),
                     RecipeContract(24785, 2146, 2146, 1, 0.0, true),
+                    RecipeContract(2202, 2201, 2199, 1, 30.0, true),
+                    RecipeContract(2250, 2249, 2247, 1, 30.0, true),
+                    RecipeContract(2178, 2177, 2175, 1, 30.0, true),
+                    RecipeContract(9581, 9582, 2199, 10, 0.0, true),
+                    RecipeContract(9579, 9580, 2199, 12, 0.0, true),
+                    RecipeContract(9583, 9584, 2199, 14, 0.0, true),
+                    RecipeContract(9577, 9578, 2199, 16, 0.0, true),
+                    RecipeContract(9478, 9479, 2247, 25, 0.0, true),
+                    RecipeContract(9482, 2255, 2247, 26, 82.0, true),
+                    RecipeContract(9480, 9481, 2247, 27, 0.0, true),
+                    RecipeContract(9485, 9486, 2247, 28, 0.0, true),
+                    RecipeContract(9483, 9484, 2247, 29, 0.0, true),
+                    RecipeContract(9559, 9560, 2175, 30, 0.0, true),
+                    RecipeContract(9561, 9562, 2175, 35, 0.0, true),
+                    RecipeContract(9558, 2187, 2175, 40, 105.0, true),
+                    RecipeContract(9563, 9564, 2175, 42, 0.0, true),
+                    RecipeContract(9572, 9573, null, 32, 0.0, true),
+                    RecipeContract(9576, 2092, null, 32, 130.0, true),
+                    RecipeContract(6293, 6297, 6301, 16, 80.0, true),
+                    RecipeContract(6295, 6299, 6303, 16, 80.0, true),
                 ),
                 StandardCookingRecipes.all.map {
                     RecipeContract(
@@ -2203,8 +2261,31 @@ class StandardCookingTest {
         }
 
     @Test
+    fun GameTestState.`each Guild Hunter meat bracket unlocks on the required hand-in`() =
+        runCookingTest { deps ->
+            for ((raw, needed) in listOf(objs.raw_graahk to 25, objs.raw_moonlight_antelope to 50)) {
+                val recipe = StandardCookingRecipes.byRaw.getValue(raw.id)
+                preparePlayer(level = 99)
+                add(raw)
+                val range = prepareSource(cooking_locs.range, offset = 1100 + needed)
+                player.setVarp(varps.hunter_rumours_completed, needed - 1)
+                player.withProtectedAccess { deps.cooking.start(this, range, CookingSourceKind.Range, recipe, quantity = 1) }
+                assertMessageSent("Complete $needed Hunters' Rumours to cook this meat.")
+                advance(4)
+                assertEquals(1, player.count(raw))
+                assertEquals(0, cookingXp())
+                player.setVarp(varps.hunter_rumours_completed, needed)
+                random.next = 0
+                player.withProtectedAccess { deps.cooking.start(this, range, CookingSourceKind.Range, recipe, quantity = 1) }
+                advance(4)
+                assertEquals(1, player.count(recipe.cooked))
+            }
+        }
+
+    @Test
     fun GameTestState.`nine Hunter meats pin four tick curves requirements and outputs`() =
         runCookingTest { deps ->
+            player.setVarp(varps.hunter_rumours_completed, 50)
             val expected =
                 listOf(
                     FishCurve(

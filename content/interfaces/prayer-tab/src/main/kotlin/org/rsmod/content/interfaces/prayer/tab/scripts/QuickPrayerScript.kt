@@ -1,6 +1,7 @@
 package org.rsmod.content.interfaces.prayer.tab.scripts
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.minigames.inBarbarianAssault
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.components
 import org.rsmod.api.config.refs.interfaces
@@ -91,6 +92,10 @@ constructor(
     }
 
     private fun ProtectedAccess.enableQuickPrayers() {
+        if (player.inBarbarianAssault()) {
+            mes("Prayers cannot be used inside the Barbarian Assault arena.")
+            return
+        }
         val quickPrayerVars = vars[prayer_varbits.quickprayer_selected]
 
         if (quickPrayerVars == 0) {

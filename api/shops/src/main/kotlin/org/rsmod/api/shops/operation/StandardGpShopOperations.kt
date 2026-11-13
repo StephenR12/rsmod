@@ -132,6 +132,9 @@ constructor(
 
         if (success) {
             restockProcess += shopInv
+            eventBus.publish(
+                ObjTradeEvents.Purchased(player, shopInv.type, objType, finalPurchaseCount)
+            )
         }
 
         if (shopInv[slot] == null) {

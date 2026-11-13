@@ -2,6 +2,8 @@ package org.rsmod.content.bosses.modern
 
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
+import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.death.NpcDropRolls.conditional
 import org.rsmod.api.death.NpcDropRolls.independent
 import org.rsmod.api.death.NpcDropRolls.item
 import org.rsmod.api.death.NpcDropRolls.sequence
@@ -41,6 +43,7 @@ public class ModernBossDrops @Inject constructor(private val registry: NpcDropTa
                         denominator = 15,
                         roll = item(ModernBossObjs.oathplateShards, 1..5),
                     ),
+                    independent(numerator = 700, denominator = 9511, roll = item(ModernBossObjs.diabolicWorms, 90..90)),
                     independent(denominator = 32, roll = item(ModernBossObjs.forgottenLockbox)),
                     independent(denominator = 12, roll = item(ModernBossObjs.yamaDossier)),
                     independent(denominator = 3_000, roll = item(ModernBossObjs.yamaPet)),
@@ -63,14 +66,16 @@ public class ModernBossDrops @Inject constructor(private val registry: NpcDropTa
     }
 
     private fun registerTitan(npc: NpcType, pet: org.rsmod.game.type.obj.ObjType) {
+        val ice = npc.id == ModernBossNpcs.eldric.id
+        val scroll = if(ice)ModernBossObjs.deadeyeScroll else ModernBossObjs.mysticVigourScroll
+        val unlock = if(ice)varbits.prayer_deadeye_unlocked else varbits.prayer_mystic_vigour_unlocked
         registry.register(
             npc,
             NpcDropTable(
                 sequence(
                     item(objs.big_bones),
                     item(objs.coins, 30_000..80_000),
-                    independent(denominator = 300, roll = item(ModernBossObjs.deadeyeScroll)),
-                    independent(denominator = 300, roll = item(ModernBossObjs.mysticVigourScroll)),
+                    conditional({ it.hero.vars[unlock]==0 },independent(denominator = 75, roll = item(scroll))),
                     independent(denominator = 300, roll = item(ModernBossObjs.twinflamePieceOne)),
                     independent(denominator = 300, roll = item(ModernBossObjs.twinflamePieceTwo)),
                     independent(denominator = 500, roll = item(ModernBossObjs.giantsoulAmulet)),

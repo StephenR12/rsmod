@@ -29,7 +29,7 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
         val state = state(npc)
         when (definition.family) {
             WorldBossFamily.Sarachnis -> {
-                if (!state.firstMinions && npc.hitpoints <= 200) {
+                if (!state.firstMinions && npc.hitpoints <= 266) {
                     state.firstMinions = true
                     spawnPair(
                         npc,
@@ -38,7 +38,7 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
                         30,
                     )
                 }
-                if (!state.secondMinions && npc.hitpoints <= 100) {
+                if (!state.secondMinions && npc.hitpoints <= 133) {
                     state.secondMinions = true
                     spawnPair(
                         npc,
@@ -59,25 +59,37 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
         }
     }
 
-    private fun spawnPair(boss: Npc, first: NpcType, second: NpcType, hitpoints: Int) {
-        spawn(first, boss.coords, -2, 0, hitpoints)
-        spawn(second, boss.coords, 2, 0, hitpoints)
+    public fun removeSpawns(boss: Npc) {
+        val state = states.remove(boss) ?: return
+        for (spawn in state.spawns) if (spawn.isSlotAssigned && spawn.hitpoints > 0)
+            npcs.del(spawn, Int.MAX_VALUE)
     }
 
-    private fun spawn(type: NpcType, origin: CoordGrid, x: Int, z: Int, hitpoints: Int) {
+    private fun spawnPair(boss: Npc, first: NpcType, second: NpcType, hitpoints: Int) {
+        val state = state(boss)
+        state.spawns += spawn(first, boss.coords, -2, 0, hitpoints)
+        state.spawns += spawn(second, boss.coords, 2, 0, hitpoints)
+    }
+
+    private fun spawn(type: NpcType, origin: CoordGrid, x: Int, z: Int, hitpoints: Int): Npc {
         val npc = Npc(npcTypes[type], CoordGrid(origin.x + x, origin.z + z, origin.level))
         npc.apply {
             this.hitpoints = hitpoints
             baseHitpointsLvl = hitpoints
             mode = NpcMode.Wander
             setHunt(10)
-            setHuntMode(huntmodes.constant_melee)
+            setHuntMode(
+                if (type.id == WorldBossNpcs.sarachnisMagicSpawn.id) huntmodes.constant_ranged
+                else huntmodes.constant_melee
+            )
         }
         npcs.add(npc, 200)
+        return npc
     }
 }
 
 public data class WorldBossState(
+    val spawns: MutableList<Npc> = mutableListOf(),
     var attacks: Int = 0,
     var firstMinions: Boolean = false,
     var secondMinions: Boolean = false,

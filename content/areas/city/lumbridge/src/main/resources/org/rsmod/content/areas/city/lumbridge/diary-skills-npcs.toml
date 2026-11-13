@@ -1,0 +1,8 @@
+# Ordinary Al Kharid small-net/bait spots. Lumbridge citizens already exist in npcs.toml.
+[[spawn]]
+npc = '0_51_49_saltfish'
+coords = '0_51_49_3_12'
+
+[[spawn]]
+npc = '0_51_49_saltfish'
+coords = '0_51_49_10_5'

@@ -160,6 +160,7 @@ public class Player(
     public var username: String = ""
     public var displayName: String by avatar::name
     public var members: Boolean = false
+    public var twoFactorEnabled: Boolean = false
     public var lastKnownDevice: Int? = null
 
     public var followCoord: CoordGrid = CoordGrid.NULL
@@ -199,6 +200,9 @@ public class Player(
 
     public var publicMessage: PublicMessage? = null
     public var pendingSay: String? = null
+    /** An active minigame can require leaving through its exit before teleporting. */
+    public var activityBlocksTeleport: Boolean = false
+
     public var pendingRunWeight: Boolean = false
     public val pendingStatUpdates: BitSet = BitSet()
     public val activeHitmarks: LongArrayList = LongArrayList()

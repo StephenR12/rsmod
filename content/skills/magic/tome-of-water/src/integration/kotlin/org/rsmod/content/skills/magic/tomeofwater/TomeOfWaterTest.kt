@@ -22,6 +22,7 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varobjs
+import org.rsmod.api.player.events.interact.BankedObjEvents
 import org.rsmod.api.player.events.interact.HeldObjEvents
 import org.rsmod.api.player.events.interact.HeldUEvents
 import org.rsmod.api.player.events.interact.WornObjEvents
@@ -50,6 +51,173 @@ import org.rsmod.game.type.varp.VarpLifetime
 
 @Execution(ExecutionMode.SAME_THREAD)
 class TomeOfWaterTest {
+    @Test
+    fun GameTestState.`searing pages cost exactly a burnt page and one hundred sunfire runes`() =
+        runTomeTest { deps ->
+            player.members = true
+            player.inv[1] = InvObj(objs.burnt_page, 2)
+            player.inv[2] = InvObj(objs.sunfire_rune, 199)
+            fun infuse() {
+                player.withProtectedAccess {
+                    assertTrue(
+                        deps.events.publish(
+                            this,
+                            HeldUEvents.Type(
+                                deps.objs[objs.burnt_page],
+                                1,
+                                deps.objs[objs.sunfire_rune],
+                                2,
+                            ),
+                        )
+                    )
+                }
+            }
+            infuse()
+            infuse()
+            assertEquals(1, player.count(objs.burnt_page))
+            assertEquals(99, player.count(objs.sunfire_rune))
+            assertEquals(1, player.count(objs.searing_page))
+        }
+
+    @Test
+    fun GameTestState
+        .`all three bank quantities top up in whole pages and keep an above-target tome intact`() =
+        runTomeTest { deps ->
+            val books =
+                listOf(
+                    Triple(
+                        objs.tome_of_water_uncharged,
+                        objs.soaked_page,
+                        varbits.charges_tome_of_water_quantity,
+                    ),
+                    Triple(
+                        objs.tome_of_earth_uncharged,
+                        objs.soiled_page,
+                        varbits.charges_tome_of_earth_quantity,
+                    ),
+                    Triple(
+                        objs.tome_of_fire_uncharged,
+                        objs.burnt_page,
+                        varbits.charges_tome_of_fire_quantity,
+                    ),
+                )
+            for ((empty, page, target) in books) {
+                player.inv[2] = InvObj(empty)
+                player.withProtectedAccess { vars[target] = 55 }
+                var pages = 2
+                fun withdraw() {
+                    player.withProtectedAccess {
+                        assertTrue(
+                            deps.events.publish(
+                                this,
+                                BankedObjEvents.Autocharge(2, inv.getValue(2)) { type, need ->
+                                    assertEquals(page.id, type.id)
+                                    val used = minOf(pages, need)
+                                    pages -= used
+                                    used
+                                },
+                            )
+                        )
+                    }
+                }
+                withdraw()
+                assertEquals(40, deps.lifecycle.charges(player.inv[2]))
+                assertEquals(0, pages)
+                pages = 5
+                withdraw()
+                assertEquals(60, deps.lifecycle.charges(player.inv[2]))
+                assertEquals(4, pages)
+                withdraw()
+                assertEquals(4, pages)
+            }
+        }
+
+    @Test
+    fun GameTestState
+        .`fire and earth tomes retain final cast bonuses and exempt other combat spells`() =
+        runTomeTest { deps ->
+            for ((tome, empty, element, elementalSpell) in
+                listOf(
+                    listOf(
+                        objs.tome_of_fire,
+                        objs.tome_of_fire_uncharged,
+                        objs.fire_rune,
+                        objs.spell_fire_strike,
+                    ),
+                    listOf(
+                        objs.tome_of_earth,
+                        objs.tome_of_earth_uncharged,
+                        objs.earth_rune,
+                        objs.spell_earth_strike,
+                    ),
+                )) {
+                val searing = tome == objs.tome_of_fire
+                val active = InvObj(tome, vars = 1 or if (searing) TomeOfWater.SEARING_PAGES else 0)
+                player.worn[Wearpos.LeftHand.slot] = active
+                val spell =
+                    spell(Spellbook.Standard, MagicSpellType.Combat, 1)
+                        .copy(
+                            obj = elementalSpell,
+                            objReqs = listOf(MagicSpell.ObjRequirement(element, 1, null)),
+                        )
+                assertTrue(
+                    deps.runes.attemptCast(player, spell.copy(obj = objs.spell_iban_blast))
+                        is MagicRuneManager.CastResult.Success
+                )
+                assertEquals(active, player.worn[Wearpos.LeftHand.slot])
+                val cast = deps.runes.attemptCast(player, spell)
+                assertEquals(
+                    MagicRuneManager.CastResult.Success.ElementalTome(element, searing),
+                    cast,
+                )
+                assertEquals(InvObj(empty), player.worn[Wearpos.LeftHand.slot])
+                assertFalse(deps.runes.canCastSpell(player, spell))
+                player.worn[Wearpos.LeftHand.slot] = InvObj(tome)
+                assertFalse(deps.runes.canCastSpell(player, spell))
+                val attributes =
+                    deps.attributes.spellCollect(
+                        player,
+                        elementalSpell,
+                        Spellbook.Standard,
+                        searing,
+                        false,
+                        deps.random,
+                        element,
+                    )
+                assertTrue(
+                    (if (searing) CombatSpellAttributes.FireTome
+                    else CombatSpellAttributes.EarthTome) in attributes
+                )
+                assertEquals(searing, CombatSpellAttributes.SunfireRunePassive in attributes)
+            }
+        }
+
+    @Test
+    fun GameTestState.`searing pages retain their material across personal and bank charging`() =
+        runTomeTest { deps ->
+            player.inv[2] = InvObj(objs.tome_of_fire_uncharged)
+            player.inv[4] = InvObj(objs.searing_page, 2)
+            player.withProtectedAccess { deps.lifecycle.charge(this, 2, 4) }
+            assertEquals(40, deps.lifecycle.charges(player.inv[2]))
+            player.inv[4] = InvObj(objs.burnt_page)
+            player.withProtectedAccess { deps.lifecycle.charge(this, 2, 4) }
+            assertEquals(InvObj(objs.burnt_page), player.inv[4])
+            player.withProtectedAccess {
+                vars[varbits.charges_tome_of_fire_quantity] = 51
+                assertTrue(
+                    deps.events.publish(
+                        this,
+                        BankedObjEvents.Autocharge(2, inv.getValue(2)) { type, need ->
+                            assertEquals(objs.searing_page.id, type.id)
+                            assertEquals(1, need)
+                            1
+                        },
+                    )
+                )
+            }
+            assertEquals(60, deps.lifecycle.charges(player.inv[2]))
+        }
+
     @Test
     fun GameTestState.`cache 233 tome variants and core interaction dispatch are pinned`() =
         runTomeTest { deps ->
@@ -92,7 +260,7 @@ class TomeOfWaterTest {
                 deps.events.contains(HeldObjEvents.Op3::class.java, objs.tome_of_water.id.toLong())
             )
             assertTrue(
-                deps.events.contains(WornObjEvents.Op1::class.java, objs.tome_of_water.id.toLong())
+                deps.events.contains(WornObjEvents.Op2::class.java, objs.tome_of_water.id.toLong())
             )
         }
 

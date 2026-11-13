@@ -1,5 +1,6 @@
 package org.rsmod.content.travel.canoe.configs
 
+import org.rsmod.api.config.FellingAxes
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.type.builders.enums.EnumBuilder
 import org.rsmod.api.type.refs.enums.EnumReferences
@@ -37,6 +38,9 @@ object CanoeEnumBuilder : EnumBuilder() {
             this[objs.infernal_axe_or_reloaded_uncharged] = rate(112, 350)
             this[objs.crystal_axe] = rate(112, 350)
             this[objs.crystal_axe_inactive] = rate(112, 350)
+            for ((felling, ordinary) in FellingAxes.tools.zip(FellingAxes.ordinary)) {
+                this[felling] = checkNotNull(vals[ordinary])
+            }
         }
 
         build<ObjType, Int>("canoe_shaping_axe_rates") {
@@ -60,6 +64,9 @@ object CanoeEnumBuilder : EnumBuilder() {
             this[objs.infernal_axe_or_reloaded_uncharged] = rate(112, 350)
             this[objs.crystal_axe] = rate(112, 350)
             this[objs.crystal_axe_inactive] = rate(112, 350)
+            for ((felling, ordinary) in FellingAxes.tools.zip(FellingAxes.ordinary)) {
+                this[felling] = checkNotNull(vals[ordinary])
+            }
         }
 
         build<ObjType, SeqType>("canoe_shaping_axe_anims") {
@@ -84,6 +91,9 @@ object CanoeEnumBuilder : EnumBuilder() {
                 canoe_seqs.shape_infernal_axe_or_reloaded
             this[objs.crystal_axe] = canoe_seqs.shape_crystal_axe
             this[objs.crystal_axe_inactive] = canoe_seqs.shape_crystal_axe
+            for ((felling, animation) in FellingAxes.tools.zip(canoe_seqs.felling)) {
+                this[felling] = animation
+            }
         }
     }
 

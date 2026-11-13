@@ -15,6 +15,8 @@ import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.hit.plugin.PlayerHitScript
 import org.rsmod.api.player.back
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.player.feet
 import org.rsmod.api.player.front
 import org.rsmod.api.player.hands
@@ -34,6 +36,26 @@ import org.rsmod.map.CoordGrid
 
 class PickpocketScriptTest {
     @Test
+    fun GameTestState
+        .`failed pickpocket wears silent gloves while success leaves them unchanged`() =
+        runThievingTest { deps ->
+            prepare()
+            player.hands = InvObj(objs.gloves_of_silence)
+            val npc = spawnCitizen(deps)
+            random.next = 0
+            player.withProtectedAccess {
+                deps.pickpocketing.attempt(this, npc, StandardPickpockets.man)
+            }
+            assertEquals(0, player.vars[ThievingVarbits.silentGlovesDamage])
+            player.actionDelay = -1
+            random.next = 99
+            player.withProtectedAccess {
+                deps.pickpocketing.attempt(this, npc, StandardPickpockets.man)
+            }
+            assertEquals(1, player.vars[ThievingVarbits.silentGlovesDamage])
+        }
+
+    @Test
     fun GameTestState.`success awards one citizen pouch and eight xp on a two-tick cadence`() =
         runThievingTest { deps ->
             prepare()
@@ -46,6 +68,7 @@ class PickpocketScriptTest {
             advance()
             assertEquals(1, player.count(ThievingObjs.citizenPouch))
             assertEquals(80, player.statMap.getFineXP(stats.thieving) - startXp)
+            assertTrue(player.hasCompletedDiaryTask(DiaryTask.PickpocketLumbridgeCitizen))
             assertMessageSent("You pick the man's pocket.")
             assertEquals(4398, client.filterIsInstance<SynthSound>().single().id)
 

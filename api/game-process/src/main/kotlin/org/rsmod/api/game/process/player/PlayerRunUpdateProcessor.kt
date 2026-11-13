@@ -5,6 +5,8 @@ import kotlin.math.max
 import kotlin.math.min
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.params
+import org.rsmod.api.player.EnduranceRing
+import org.rsmod.api.player.ring
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.inv.weight.InvWeight
 import org.rsmod.api.player.output.UpdateRun
@@ -49,10 +51,10 @@ public class PlayerRunUpdateProcessor @Inject constructor(private val objTypes: 
         val baseLoss = 60 + (67 * weightKg) / 64
 
         var loss = baseLoss * (300 - agilityLvl) / 300
-        if (hasImprovedStaminaEffect()) {
-            loss = (loss * 85) / 100
-        } else if (hasStaminaEffect()) {
+        if (hasStaminaEffect()) {
             loss = (loss * 30) / 100
+        } else if (hasImprovedStaminaEffect()) {
+            loss = (loss * 85) / 100
         }
 
         runEnergy = max(0, runEnergy - loss)
@@ -62,7 +64,7 @@ public class PlayerRunUpdateProcessor @Inject constructor(private val objTypes: 
     }
 
     private fun Player.hasImprovedStaminaEffect(): Boolean {
-        return vars[varbits.improved_stamina_passive] == 1
+        return vars[varbits.improved_stamina_passive] == 1 || EnduranceRing.charges(ring) >= 500
     }
 
     private fun Player.hasStaminaEffect(): Boolean {

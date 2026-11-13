@@ -1,0 +1,9 @@
+spawn = [
+    { npc = "tempoross_ferry_to_lobby_npc", coords = "0_51_49_7_8" },
+    { npc = "tempoross_ferry_from_lobby_npc", coords = "0_49_44_13_27" },
+    { npc = "tempoross_lobby_host", coords = "0_49_44_17_24" },
+    { npc = "tempoross_lobby_announcer", coords = "0_48_44_61_26" },
+    { npc = "tempoross_lobby_pool_watcher", coords = "0_49_44_17_15" },
+    { npc = "tempoross_lobby_outfit_vendor", coords = "0_49_44_33_22" },
+    { npc = "tempoross_hut_character", coords = "0_49_44_24_32" },
+]

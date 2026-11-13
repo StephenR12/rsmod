@@ -14,11 +14,16 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.type.refs.interf.InterfaceReferences
 import org.rsmod.api.spells.MagicSpellRegistry
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.type.obj.ObjType
+
+internal object BoneConversionInterfaces: InterfaceReferences() { val graveyard = find("magictraining_grave") }
 
 public class BoneConversionSpells
 @Inject
@@ -41,12 +46,7 @@ constructor(
                 return
             }
 
-            val conversions =
-                player.inv.indices.mapNotNull { slot ->
-                    val obj = player.inv[slot] ?: return@mapNotNull null
-                    val yield = boneYield(obj) ?: return@mapNotNull null
-                    BoneConversion(slot, obj, yield)
-                }
+            val conversions = conversions()
             if (conversions.isEmpty()) {
                 mes("You aren't holding any bones!")
                 return
@@ -72,7 +72,15 @@ constructor(
             val committed = createTransaction(conversions, definition.output, outputCount, true)
             check(committed.success) { "Bone conversion failed after validation: $conversions" }
 
-            statAdvance(stats.magic, spell.castXp)
+            if (
+                definition == BoneConversionDefinition.Peaches &&
+                    player.x in 3280..3304 &&
+                    player.z in 3158..3177 &&
+                    player.level <= 1
+            ) {
+                player.completeDiaryTask(DiaryTask.PeachesAlKharidPalace)
+            }
+            if (vars[varbits.fountain_of_rune_active] == 0) statAdvance(stats.magic, spell.castXp)
             anim(seqs.human_castbonestobananas)
             spotanim(spotanims.bonestobananas_casting)
             soundSynth(synths.bones_to_bananas_all)
@@ -80,14 +88,46 @@ constructor(
         }
     }
 
+    internal fun breakTablet(access: ProtectedAccess, spell: ObjType, tablet: ObjType, slot: Int) {
+        with(access) {
+            val definition = BoneConversionDefinition.forSpell(spell) ?: return
+            // Inside the Creature Graveyard the peach tablet still requires the arena unlock.
+            if (definition == BoneConversionDefinition.Peaches && BoneConversionInterfaces.graveyard in player.ui && vars[varbits.magictraining_bonespeaches] == 0) {
+                mes("You have to unlock that spell to use it inside of Mage Training Arena.")
+                return
+            }
+            val conversions = conversions()
+            if (conversions.isEmpty()) {
+                mes("You aren't holding any bones!")
+                return
+            }
+            val extraSlot = if (inv[slot]?.count == 1) 1 else 0
+            val capacity = inv.freeSpace() + conversions.size + extraSlot
+            if (createTransaction(conversions, definition.output, capacity, true, tablet, slot).success) {
+                anim(seqs.poh_smash_magic_tablet)
+                soundSynth(synths.bones_to_bananas_all)
+            }
+        }
+    }
+
+    private fun ProtectedAccess.conversions(): List<BoneConversion> =
+        inv.indices.mapNotNull { slot ->
+            val obj = inv[slot] ?: return@mapNotNull null
+            val yield = boneYield(obj) ?: return@mapNotNull null
+            BoneConversion(slot, obj, yield)
+        }
+
     private fun ProtectedAccess.createTransaction(
         conversions: List<BoneConversion>,
         output: ObjType,
         outputLimit: Int,
         autoCommit: Boolean,
+        tablet: ObjType? = null,
+        slot: Int = -1,
     ) =
         player.invTransaction(player.inv, autoCommit = autoCommit) {
             val inventory = select(player.inv)
+            if (tablet != null) delete(inventory, tablet.id, 1, slot)
             for (conversion in conversions) {
                 delete(inventory, conversion.obj.id, conversion.obj.count, conversion.slot)
             }

@@ -1,5 +1,7 @@
 package org.rsmod.content.skills.firemaking
 
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
@@ -31,6 +33,9 @@ public class HandheldLightSources {
                 return
             }
             replaceInventory(sourceSlot, recipe.unlit.id, recipe.lit.id)
+            val coords = player.coords
+            if (recipe.lit == objs.lit_bullseye_lantern && coords.level == 0 && coords.x in 2928..2939 && coords.z in 3205..3220) player.completeDiaryTask(DiaryTask.LightChemistBullseye)
+            if (recipe.lit == objs.lit_mining_helmet && coords.level == 0 && coords.x in 3200..3220 && coords.z in 9600..9630) player.completeDiaryTask(DiaryTask.LightLumbridgeMiningHelmet)
         }
     }
 

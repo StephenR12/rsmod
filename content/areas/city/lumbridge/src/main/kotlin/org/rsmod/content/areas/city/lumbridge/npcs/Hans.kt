@@ -4,6 +4,8 @@ import java.time.Duration
 import java.time.LocalDateTime
 import org.rsmod.api.config.refs.varps
 import org.rsmod.api.player.dialogue.Dialogue
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.vars.intVarp
 import org.rsmod.api.script.onOpNpc1
@@ -79,6 +81,7 @@ class Hans : PluginScript() {
         startDialogue(npc) { playtimeDialogue(player) }
 
     private suspend fun Dialogue.playtimeDialogue(player: Player) {
+        player.completeDiaryTask(DiaryTask.LearnAgeFromHans)
         chatNpc(happy, ageMessage(player.playtime, player.createdAt))
     }
 

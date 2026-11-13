@@ -1,5 +1,7 @@
 package org.rsmod.content.skills.woodcutting
 
+import org.rsmod.api.config.FellingAxes
+
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -25,7 +27,7 @@ public class WoodcuttingAxeEffects @Inject constructor(private val firemakingXp:
             return Result(logConsumed = false)
         }
 
-        if (axe.id == objs.crystal_axe.id) {
+        if (axe.id == objs.crystal_axe.id || axe.id==objs.crystal_felling_axe.id) {
             check(consumeCrystalCharge(access, axe)) {
                 "Selected crystal axe was absent while applying its log effect."
             }
@@ -49,7 +51,8 @@ public class WoodcuttingAxeEffects @Inject constructor(private val firemakingXp:
         if (access.isChargeSaved(allowCrystalSignet = true)) {
             return true
         }
-        val updated = CrystalAxeState.fromCharged(axe).consume(axe, objs.crystal_axe_inactive)
+        val empty=if(axe.id==objs.crystal_felling_axe.id) FellingAxes.inactive else objs.crystal_axe_inactive
+        val updated = CrystalAxeState.fromCharged(axe).consume(axe, empty)
         return access.replaceSelectedAxe(axe, updated)
     }
 

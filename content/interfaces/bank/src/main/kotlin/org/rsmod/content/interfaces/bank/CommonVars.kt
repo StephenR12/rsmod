@@ -8,7 +8,15 @@ import org.rsmod.api.player.vars.intVarBit
 import org.rsmod.content.interfaces.bank.configs.bank_varbits
 import org.rsmod.game.entity.Player
 
-var ProtectedAccess.selectedTab by enumVarBit<BankTab>(bank_varbits.selected_tab)
+// Native potion storage uses tab15 and has its own contents/transactions.
+// Ordinary bank operations fall back to the main tab while that view is selected.
+var ProtectedAccess.selectedTab: BankTab
+    get() =
+        BankTab.entries.firstOrNull { it.varValue == vars[bank_varbits.selected_tab] }
+            ?: BankTab.Main
+    set(value) {
+        vars[bank_varbits.selected_tab] = value.varValue
+    }
 
 var ProtectedAccess.insertMode by boolVarBit(bank_varbits.rearrange_mode)
 var ProtectedAccess.withdrawCert by boolVarBit(bank_varbits.withdraw_mode)

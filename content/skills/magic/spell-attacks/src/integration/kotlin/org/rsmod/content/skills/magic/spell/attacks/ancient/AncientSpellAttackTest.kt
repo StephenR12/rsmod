@@ -132,15 +132,25 @@ class AncientSpellAttackTest {
         runAncientTest { deps ->
             val primary = spawnNpc(player.coords.translate(5, 5), largeTargetType)
             val westLarge = spawnNpc(primary.coords.translate(-3, 0), largeTargetType)
+            val peaceful =
+                spawnNpc(
+                    primary.coords.translate(1, 0),
+                    npcTypeFactory.create {
+                        name = "Bystander"
+                        hitpoints = 10
+                    },
+                )
             val east = spawnNpc(primary.coords.translate(1, 0), targetType)
             val outside = spawnNpc(primary.coords.translate(2, 0), targetType)
             repeat(10) { spawnNpc(primary.coords.translate(0, 1), targetType) }
 
-            assertEquals(listOf(primary), deps.targets.targets(primary, false, true))
-            assertEquals(listOf(primary), deps.targets.targets(primary, true, false))
+            assertEquals(listOf(primary), deps.targets.targets(player, primary, false, true))
+            assertEquals(listOf(primary), deps.targets.targets(player, primary, true, false))
 
-            val selected = deps.targets.targets(primary, multiTarget = true, multiway = true)
+            val selected =
+                deps.targets.targets(player, primary, multiTarget = true, multiway = true)
             assertEquals(primary, selected.first())
+            assertFalse(peaceful in selected)
             assertTrue(westLarge in selected)
             assertTrue(east in selected)
             assertFalse(outside in selected)
@@ -415,6 +425,7 @@ class AncientSpellAttackTest {
         val targetType =
             npcTypeFactory.create {
                 name = "Ancient spell target"
+                op[1] = "Attack"
                 hitpoints = 100
                 defence = 1
                 magic = 1
@@ -423,6 +434,7 @@ class AncientSpellAttackTest {
         val largeTargetType =
             npcTypeFactory.create {
                 name = "Large Ancient spell target"
+                op[1] = "Attack"
                 size = 3
                 hitpoints = 100
                 defence = 1

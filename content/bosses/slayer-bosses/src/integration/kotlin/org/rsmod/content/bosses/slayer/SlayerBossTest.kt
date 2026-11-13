@@ -35,7 +35,6 @@ class SlayerBossTest {
                 .filter {
                     it.family in
                         setOf(
-                            SlayerBossFamily.Cerberus,
                             SlayerBossFamily.Kraken,
                             SlayerBossFamily.Sire,
                             SlayerBossFamily.Araxxor,

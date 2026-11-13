@@ -113,7 +113,7 @@ constructor(
             attackType = attackType,
             attackStyle = attackStyle,
             blockType = blockType,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /**
@@ -319,7 +319,7 @@ constructor(
             attackType = attackType,
             attackStyle = attackStyle,
             blockType = blockType,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /**
@@ -502,7 +502,7 @@ constructor(
             spellbook = spellbook,
             usedSunfireRune = usedSunfireRune,
             usedTomeOfWater = usedTomeOfWater,
-            accuracyPercent = accuracyPercent,
+            accuracyPercent = (accuracyPercent * target.miningMultiplier(player)).toInt(),
         )
 
     /**
@@ -624,7 +624,7 @@ constructor(
             player = player,
             target = target,
             attackStyle = attackStyle,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /**
@@ -784,7 +784,7 @@ constructor(
             target = target,
             attackType = attackType,
             attackStyle = attackStyle,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /**
@@ -960,7 +960,7 @@ constructor(
             attackType = attackType,
             attackStyle = attackStyle,
             blockType = blockType,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /**
@@ -1130,7 +1130,7 @@ constructor(
             target = target,
             attackStyle = attackStyle,
             blockType = blockType,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /**
@@ -1288,7 +1288,7 @@ constructor(
             target = target,
             attackType = attackType,
             attackStyle = attackStyle,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /**

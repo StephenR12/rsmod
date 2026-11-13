@@ -1,0 +1,9 @@
+spawn = [
+    { npc = "fossil_mermaid_fishing", coords = "1_58_160_16_53" },
+    { npc = "fossilquest_barge_guard_port", coords = "0_52_53_34_56" },
+    { npc = "fossilquest_jr_navigator", coords = "1_52_53_35_61" },
+    { npc = "fossilquest_barge_guard_barge", coords = "1_52_53_34_58" },
+    { npc = "fossilquest_barge_guard_port_postquest", coords = "0_58_59_8_24" },
+    { npc = "fossilquest_jr_navigator_postquest", coords = "1_58_59_9_9" },
+    { npc = "fossilquest_barge_guard_barge", coords = "1_58_59_8_10" },
+]

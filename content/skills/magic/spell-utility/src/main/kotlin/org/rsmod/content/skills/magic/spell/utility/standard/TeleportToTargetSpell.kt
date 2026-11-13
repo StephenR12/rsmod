@@ -12,6 +12,7 @@ import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.isTeleportBlocked
 import org.rsmod.api.player.isValidTarget
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.MagicSpellRegistry
@@ -28,6 +29,7 @@ constructor(
 ) {
     public suspend fun cast(access: ProtectedAccess) {
         with(access) {
+            if (player.isTeleportBlocked()) { mes("A magical force stops you from teleporting.");return }
             if (!player.members) {
                 mes("You need to be on a members' world to cast this spell.")
                 return

@@ -1,5 +1,8 @@
 package org.rsmod.content.skills.crafting.weaving
 
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.config.refs.objs
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
@@ -77,7 +80,7 @@ constructor(private val recipes: WeavingRecipeRegistry, private val objTypes: Ob
                 resetAnim()
                 return
             }
-            weave(recipe)
+            weave(recipe, request.loom)
             val remaining = request.remaining - 1
             if (remaining <= 0 || !canWeave(recipe, false)) {
                 resetAnim()
@@ -92,7 +95,7 @@ constructor(private val recipes: WeavingRecipeRegistry, private val objTypes: Ob
         }
     }
 
-    private fun ProtectedAccess.weave(recipe: WeavingRecipe) {
+    private fun ProtectedAccess.weave(recipe: WeavingRecipe, loom: BoundLocInfo) {
         val result =
             player.invTransaction(player.inv) {
                 val inventory = select(player.inv)
@@ -100,6 +103,7 @@ constructor(private val recipes: WeavingRecipeRegistry, private val objTypes: Ob
                 add(inventory, recipe.output.id, 1)
             }
         check(result.success) { "Weaving transaction failed after validation: $recipe" }
+        if (recipe.output == objs.basket && loom.coords == org.rsmod.map.CoordGrid(3039, 3287)) player.completeDiaryTask(DiaryTask.WeaveFaladorBasket)
         statAdvance(stats.crafting, recipe.xp)
     }
 

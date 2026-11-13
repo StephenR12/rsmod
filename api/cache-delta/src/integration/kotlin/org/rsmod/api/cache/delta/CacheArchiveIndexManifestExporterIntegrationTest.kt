@@ -1,6 +1,8 @@
 package org.rsmod.api.cache.delta
 
 import java.nio.file.Path
+import org.openrs2.cache.Cache
+import org.rsmod.api.cache.Js5Archives
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -72,7 +74,7 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
     }
 
     @Test
-    fun `rsmod enrichment is an explicit additive archive delta`() {
+    fun `rsmod enrichment changes only expected archive groups`() {
         val vanilla =
             CacheArchiveIndexManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/vanilla"),
@@ -89,15 +91,19 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
             )
 
         val delta = CacheDeltaEngine.diff(vanilla, enriched)
-        assertEquals(373, delta.summary.added)
+        val maps = Js5Archives.MAPS
+        fun mapIds(directory:String)=Cache.open(Path.of(directory)).use {cache -> cache.list(maps).asSequence().mapTo(mutableSetOf()){it.id} }
+        val addedMaps = mapIds(".data/cache/game") - mapIds(".data/cache/vanilla")
+        val addedConfigs = setOf("2:200","2:201","2:202","2:204","2:205")
+        assertEquals(addedConfigs.size+addedMaps.size, delta.summary.added)
         assertEquals(0, delta.summary.removed)
-        assertEquals(12, delta.summary.changed)
-        assertEquals(116_004, delta.summary.unchanged)
+        // Motherlode Mine replaces the depleted default veins in its vanilla landscape.
+        assertEquals(13, delta.summary.changed)
+        assertEquals(116_003, delta.summary.unchanged)
 
         val additions =
             delta.changes.filter { it.kind == CacheDeltaKind.Added }.map { it.key }.toSet()
-        assertTrue(additions.containsAll(setOf("2:200", "2:201", "2:202", "2:204", "2:205")))
-        assertEquals(368, additions.count { it.startsWith("5:") })
+        assertEquals(addedConfigs+addedMaps.map {"$maps:$it"},additions)
 
         val changes =
             delta.changes.filter { it.kind == CacheDeltaKind.Changed }.map { it.key }.toSet()
@@ -115,6 +121,7 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
                 "2:18",
                 "2:38",
                 "2:39",
+                "5:4453",
             ),
             changes,
         )

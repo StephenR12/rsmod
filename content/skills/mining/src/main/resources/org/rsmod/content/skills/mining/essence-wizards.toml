@@ -1,0 +1,19 @@
+[[spawn]]
+npc = 'head_wizard'
+coords = '0_48_149_31_35'
+
+[[spawn]]
+npc = 'aubury'
+coords = '0_50_53_53_9'
+
+[[spawn]]
+npc = 'ardounge_wizard'
+coords = '0_41_51_60_61'
+
+[[spawn]]
+npc = 'gnome_brimstail'
+coords = '0_37_153_41_25'
+
+[[spawn]]
+npc = 'guild_wizard'
+coords = '0_40_48_31_16'

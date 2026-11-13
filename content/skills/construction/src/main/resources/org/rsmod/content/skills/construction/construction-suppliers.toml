@@ -1,0 +1,71 @@
+[[spawn]]
+npc = 'poh_sawmill_opp'
+coords = '0_51_54_38_36'
+
+[[spawn]]
+npc = 'poh_sawmill_opp'
+coords = '0_25_54_23_44'
+
+[[spawn]]
+npc = 'prif_sawmill_operator'
+coords = '0_51_95_51_36'
+
+[[spawn]]
+npc = 'auburn_sawmill_operator'
+coords = '0_21_52_51_41'
+
+[[spawn]]
+npc = 'poh_estate_agent'
+coords = '0_50_54_40_20'
+
+[[spawn]]
+npc = 'poh_estate_agent'
+coords = '0_46_52_39_41'
+
+[[spawn]]
+npc = 'poh_estate_agent'
+coords = '0_42_54_49_46'
+
+[[spawn]]
+npc = 'poh_estate_agent'
+coords = '0_41_51_15_27'
+
+[[spawn]]
+npc = 'poh_estate_agent'
+coords = '0_27_56_53_44'
+
+[[spawn]]
+npc = 'fortis_estate_agent'
+coords = '0_26_48_39_29'
+
+[[spawn]]
+npc = 'prif_estate_agent'
+coords = '0_50_94_19_41'
+
+[[spawn]]
+npc = 'poh_stonemason'
+coords = '0_44_159_33_9'
+
+[[spawn]]
+npc = 'poh_garden_supplier'
+coords = '0_47_52_9_45'
+
+[[spawn]]
+npc = 'kebos_poh_garden_supplier'
+coords = '0_19_58_35_23'
+
+[[spawn]]
+npc = 'fairy2_repair'
+coords = '0_37_69_45_18'
+
+[[spawn]]
+npc = 'poh_herald_of_falador'
+coords = '1_46_52_38_13'
+
+[[spawn]]
+npc = 'poh_taxidermist'
+coords = '0_54_54_23_28'
+
+[[spawn]]
+npc = 'viking_askelapen'
+coords = '0_41_57_35_14'

@@ -1,16 +1,19 @@
 package org.rsmod.content.areas.city.lumbridge.npcs
 
-import org.rsmod.api.config.constants
 import org.rsmod.api.player.dialogue.Dialogue
-import org.rsmod.api.player.output.ClientScripts.toplevelSidebuttonSwitch
+import org.rsmod.api.player.diary.DiaryRegion
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.script.onOpNpc1
 import org.rsmod.content.areas.city.lumbridge.configs.lumbridge_npcs
+import org.rsmod.content.interfaces.journal.tab.DiaryRewards
+import org.rsmod.content.interfaces.journal.tab.openDiaryTab
 import org.rsmod.game.entity.Npc
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
-class HatiusCosaintus : PluginScript() {
+class HatiusCosaintus
+@jakarta.inject.Inject
+constructor(private val eventBus: org.rsmod.events.EventBus) : PluginScript() {
     override fun ScriptContext.startup() {
         onOpNpc1(lumbridge_npcs.hatius_lumbridge_diary) { startDialogue(it.npc) }
     }
@@ -47,8 +50,7 @@ class HatiusCosaintus : PluginScript() {
                 "Eventually, with enough exploration, the inhabitants will " +
                 "reward you",
         )
-        // TODO(content): Open achievement diary overlay
-        toplevelSidebuttonSwitch(player, constants.toplevel_details)
+        player.openDiaryTab(eventBus)
         chatNpc(neutral, "You can see the list of tasks on the side-panel.")
         mainMenu()
     }
@@ -84,8 +86,7 @@ class HatiusCosaintus : PluginScript() {
                 "Eventually, with enough exploration, the inhabitants will " +
                 "reward you.",
         )
-        // TODO(content): Open achievement diary overlay
-        toplevelSidebuttonSwitch(player, constants.toplevel_details)
+        player.openDiaryTab(eventBus)
         chatNpc(neutral, "You can see the list of tasks on the side-panel.")
         mainMenu()
     }
@@ -170,6 +171,7 @@ class HatiusCosaintus : PluginScript() {
     }
 
     private suspend fun Dialogue.claimingRewards() {
+        if (DiaryRewards.claim(access, DiaryRegion.Lumbridge)) return
         chatPlayer(quiz, "How do I claim the rewards?")
         chatNpc(
             neutral,

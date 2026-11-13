@@ -32,6 +32,9 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
         if (result is HeldEquipResult.Success) {
             val (unequipWearpos, primaryWearpos) = result
             val allWearpos = unequipWearpos + primaryWearpos
+            if (player.righthand?.id == 27010 && allWearpos.any { it == Wearpos.RightHand || it == Wearpos.LeftHand }) {
+                return HeldEquipResult.Fail.NotEnoughWornSpace("Store your giant sword preform before equipping a weapon or shield.")
+            }
             val into = player.worn
 
             // Cache objs to publish as events after successful transaction.
@@ -114,13 +117,34 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
             return HeldEquipResult.Fail.StatRequirements(messages)
         }
 
+        if (type.id in CrystalBowRequirements.bows && player.vars[CrystalBowRequirements.roving] < 6) {
+            return HeldEquipResult.Fail.TrainingRequired("You need to complete Roving Elves to wield a crystal bow.")
+        }
+        if (GodStaffEquipment.conflicts(player,type)) {
+            return HeldEquipResult.Fail.TrainingRequired("You cannot wear a cape and god staff of different gods.")
+        }
+        if (type.id == 8856 && player.coords != org.rsmod.map.CoordGrid(2842, 3545, 1)) {
+            return HeldEquipResult.Fail.TrainingRequired("Stand on the target in the catapult room to wield this shield.")
+        }
+        if (type.id in 6587..6633 && type.id % 2 == 1 && player.vars[WhiteKnightTraining.wanted] < 11) {
+            return HeldEquipResult.Fail.TrainingRequired("You must complete Wanted! to use white knight equipment.")
+        }
+        if (type.id in BarbarianHastaTraining.weapons && player.vars[BarbarianHastaTraining.completed] < 3) {
+            return HeldEquipResult.Fail.TrainingRequired("You need to complete Otto's barbarian hasta training to wield this weapon.")
+        }
         val wearpos1 = Wearpos[type.wearpos1] ?: return HeldEquipResult.Fail.InvalidObj
-        val wearpos2 = Wearpos[type.wearpos2]?.takeUnless { it.isClientOnly }
+        if (player.worn[Wearpos.Hat.slot]?.id in 8860..8864 && wearpos1 in setOf(Wearpos.Hat, Wearpos.LeftHand, Wearpos.RightHand)) {
+            return HeldEquipResult.Fail.TrainingRequired("Put down the kegs before equipping that.")
+        }
+        val wearpos2 = if (type.id == 8856) Wearpos.RightHand else Wearpos[type.wearpos2]?.takeUnless { it.isClientOnly }
         val wearpos3 = Wearpos[type.wearpos3]?.takeUnless { it.isClientOnly }
 
         val unequipWearpos = mutableListOf<Wearpos>()
         wearpos2?.let(unequipWearpos::add)
         wearpos3?.let(unequipWearpos::add)
+        if (wearpos1 == Wearpos.RightHand && player.worn[Wearpos.LeftHand.slot]?.id == 8856 && Wearpos.LeftHand !in unequipWearpos) {
+            unequipWearpos += Wearpos.LeftHand
+        }
         if (wearpos1 == Wearpos.LeftHand) {
             val twoHanded = player.righthand?.takeIf { objTypes[it].isTwoHanded() }
             if (twoHanded != null && Wearpos.RightHand !in unequipWearpos) {

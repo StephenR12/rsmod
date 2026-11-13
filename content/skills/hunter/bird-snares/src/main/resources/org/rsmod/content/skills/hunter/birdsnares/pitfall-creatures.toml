@@ -1,0 +1,122 @@
+# Dated pitfall creature spawn sources; native pit morphs/corners remain cache map objects.
+
+# Spined-larupia oldid14964100, 2025-08-12T05:34:14Z.
+[[spawn]]
+npc = 'hunting_jaguar'
+coords = '0_39_45_48_30'
+
+[[spawn]]
+npc = 'hunting_jaguar'
+coords = '0_39_45_54_24'
+
+[[spawn]]
+npc = 'hunting_jaguar'
+coords = '0_39_45_60_15'
+
+[[spawn]]
+npc = 'hunting_jaguar'
+coords = '0_40_45_3_8'
+
+[[spawn]]
+npc = 'hunting_jaguar'
+coords = '0_40_45_13_3'
+
+
+# Horned-graahk oldid14838571, 2025-01-17T14:11:23Z.
+[[spawn]]
+npc = 'hunting_leopard'
+coords = '0_43_47_14_0'
+
+[[spawn]]
+npc = 'hunting_leopard'
+coords = '0_43_46_15_61'
+
+[[spawn]]
+npc = 'hunting_leopard'
+coords = '0_43_46_22_58'
+
+[[spawn]]
+npc = 'hunting_leopard'
+coords = '0_43_46_29_57'
+
+
+# Sabre-toothed-kyatt oldid14964118, 2025-08-12T05:54:19Z.
+[[spawn]]
+npc = 'hunting_snow_tiger'
+coords = '0_42_59_20_20'
+
+[[spawn]]
+npc = 'hunting_snow_tiger'
+coords = '0_42_59_37_15'
+
+[[spawn]]
+npc = 'hunting_snow_tiger'
+coords = '0_42_59_8_14'
+
+[[spawn]]
+npc = 'hunting_snow_tiger'
+coords = '0_42_59_14_14'
+
+[[spawn]]
+npc = 'hunting_snow_tiger'
+coords = '0_42_59_53_14'
+
+[[spawn]]
+npc = 'hunting_snow_tiger'
+coords = '0_42_59_46_4'
+
+
+# Sunlight-antelope oldid14968415, 2025-08-18T09:36:55Z.
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_47_7_0'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_46_10_59'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_46_16_62'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_47_18_3'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_47_21_8'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_46_22_57'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_46_26_62'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_47_27_5'
+
+[[spawn]]
+npc = 'sunlight_antelope'
+coords = '0_27_47_13_7'
+
+
+# Moonlight-antelope oldid14799419, 2024-11-14T19:26:59Z.
+[[spawn]]
+npc = 'moonlight_antelope'
+coords = '0_24_147_19_8'
+
+[[spawn]]
+npc = 'moonlight_antelope'
+coords = '0_24_147_26_9'
+
+[[spawn]]
+npc = 'moonlight_antelope'
+coords = '0_24_147_21_14'
+
+[[spawn]]
+npc = 'moonlight_antelope'
+coords = '0_24_147_25_13'

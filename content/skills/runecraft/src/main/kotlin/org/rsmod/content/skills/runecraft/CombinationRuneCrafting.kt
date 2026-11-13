@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.runecraft
 
 import jakarta.inject.Inject
+import org.rsmod.content.skills.pets.RiftGuardian
 import kotlin.math.min
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
@@ -8,15 +9,19 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.front
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.stat
-import org.rsmod.content.skills.magic.spell.utility.standard.MagicImbueStateRepository
+import org.rsmod.api.spells.MagicImbueStateRepository
 import org.rsmod.game.type.obj.ObjType
 
 public class CombinationRuneCrafting
 @Inject
-constructor(
+internal constructor(
+    private val guardian: RiftGuardian,
+    private val rift:RiftRound,private val imbuing:RiftImbuing,
     private val magicImbue: MagicImbueStateRepository,
     private val bindingNecklace: BindingNecklaceRepository,
 ) {
@@ -54,7 +59,8 @@ constructor(
                 return
             }
 
-            val essenceCounts = availableEssence(recipe)
+            val temple = riftTemples.firstOrNull { it.recipe.altar==recipe.altar && rift.playingAltar(player,it.recipe) }
+            val essenceCounts = if(temple==null)availableEssence(recipe) else listOf(RiftItems.essence to invTotal(inv,RiftItems.essence))
             val essenceTotal = essenceCounts.sumOf { it.second }
             if (essenceTotal <= 0) {
                 mes("You need pure essence to bind ${recipe.name} runes.")
@@ -83,6 +89,9 @@ constructor(
                             essenceRemaining -= consumed
                         }
                     }
+                    if(temple!=null)imbuing.cellToCharge(this@with,temple)?.let {cell->
+                        delete(inventory,cell.id,1);add(inventory,RiftItems.cells[temple.cellTier].id,1)
+                    }
                     if (consumeTalisman && talisman != null) {
                         val talismanSlot = if (selectedIsTalisman) selectedSlot else null
                         delete(inventory, talisman.id, 1, slot = talismanSlot)
@@ -91,9 +100,13 @@ constructor(
                         delete(inventory, RunecraftObjs.aetherCatalyst.id, successes)
                     }
                     if (successes > 0) {
-                        add(inventory, recipe.output.id, successes)
+                        val bonus=if(temple==null)0 else imbuing.lanternRunes(this@with,temple,successes)
+                        add(inventory, recipe.output.id, successes+bonus)
+                        if(temple!=null)add(inventory,RiftItems.stones[if(recipe.aether)3 else 2].id,successes)
                     }
                 }
+            if(temple!=null && !transaction.success){mes("You need more inventory space to imbue your essence.");return}
+            if(temple!=null)imbuing.rollTalisman(this,temple,attempts)?.let {invAdd(inv,it)}
             check(transaction.success) {
                 "Combination-rune transaction failed after validation: $transaction"
             }
@@ -101,7 +114,14 @@ constructor(
             anim(RunecraftSeqs.craft)
             spotanim(RunecraftSpotanims.craft)
             if (successes > 0) {
+                if (temple == null) {
+                    val altar = StandardRuneRecipes.all.firstOrNull { it.altar == recipe.altar }
+                    if (altar != null) guardian.craft(player,altar.name,successes)
+                }
                 statAdvance(stats.runecrafting, recipe.xp * successes)
+                if (recipe.output == objs.lava_rune && recipe.altar == RunecraftLocs.fireAltar) {
+                    player.completeDiaryTask(DiaryTask.CraftLavaAtFireAltar)
+                }
             }
             sendOutcome(recipe, attempts, successes)
             if (necklaceActive && bindingNecklace.consume(player)) {

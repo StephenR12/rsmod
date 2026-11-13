@@ -26,8 +26,8 @@ public object RangedAccuracyOperations {
     /**
      * @param targetMagic The target's magic level or magic bonus, whichever of the two is greater.
      *   Required for the Twisted bow modifier.
-     * @param targetDistance The chebyshev distance between the attacker's south-west coord and
-     *   target's south-west coord. Required for the Chinchompa-fuse modifier.
+     * @param targetDistance The Chebyshev distance between the attacker's occupied tiles and
+     *   the target's nearest occupied tile. Required for the Chinchompa-fuse modifier.
      */
     public fun modifyAttackRoll(
         attackRoll: Int,

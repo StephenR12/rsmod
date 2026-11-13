@@ -6,7 +6,7 @@ import org.rsmod.api.script.onOpHeld2
 import org.rsmod.api.script.onOpLoc1
 import org.rsmod.api.script.onOpLoc2
 import org.rsmod.api.script.onOpLocU
-import org.rsmod.api.script.onOpWorn1
+import org.rsmod.api.script.onOpWorn2
 import org.rsmod.api.script.onPlayerQueueWithArgs
 import org.rsmod.game.type.loc.LocType
 import org.rsmod.game.type.obj.ObjType
@@ -35,7 +35,7 @@ constructor(private val smelting: FurnaceSmelting, private val cannonballs: Cann
             cannonballs.process(this, it.args)
         }
         onOpHeld2(objs.ring_of_forging) { smelting.breakRing(this, it.slot) }
-        onOpWorn1(objs.ring_of_forging) { smelting.checkRing(this) }
+        onOpWorn2(objs.ring_of_forging) { smelting.checkRing(this) }
     }
 
     private fun ScriptContext.registerOp1(furnace: LocType, kind: FurnaceKind) {

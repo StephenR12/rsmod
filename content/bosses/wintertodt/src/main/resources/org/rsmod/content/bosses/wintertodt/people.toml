@@ -1,0 +1,8 @@
+# Ignisia14995680; Brew'ma14971184. Native plane1 LINK_BELOW maps to player plane0.
+[[spawn]]
+npc='wint_master_pyromancer'
+coords='0_25_61_34_45'
+
+[[spawn]]
+npc='wint_brewma'
+coords='0_25_62_35_18'

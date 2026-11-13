@@ -48,6 +48,7 @@ public class PlayerQueueList {
     private fun remove(node: Node) {
         val prev = node.prev
         val next = node.next
+        iterator?.skipRemoved(node)
 
         // If `prev` is null that means `node` was the first node.
         if (prev == null) {
@@ -174,6 +175,10 @@ public class PlayerQueueList {
     public inner class QueueIterator {
         private var next: Node? = null
         private var curr: Node? = null
+
+        internal fun skipRemoved(node: Node) {
+            if (next === node) next = node.next
+        }
 
         public fun hasNext(): Boolean = next != null
 

@@ -15,6 +15,7 @@ import org.rsmod.api.npc.vars.typePlayerUidVarn
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.entity.Player
 import org.rsmod.game.entity.npc.NpcMode
+import org.rsmod.game.interact.InteractionOp
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.ObjTypeList
 
@@ -35,40 +36,40 @@ public fun Npc.queueCombatRetaliate(source: Player, delay: Int = 1) {
     lastCombat = max(lastCombat, currentMapClock)
 }
 
+public fun Npc.combatDefaultRetaliate(interactions: AiPlayerInteractions) {
+    retaliate(interactions, Npc::engagePlayer)
+}
+
 public fun Npc.combatDefaultRetaliateOp(interactions: AiPlayerInteractions) {
-    if (!canRetaliate()) {
-        return
-    }
-    val target = interactions.resolvePlayer(aggressivePlayer) ?: return
-    attackingPlayer = target.uid
-    actionDelay = currentMapClock + (attackRate() / 2)
-    retaliate(target, interactions, ap = false)
+    retaliate(interactions, Npc::opPlayer2)
 }
 
 public fun Npc.combatDefaultRetaliateAp(interactions: AiPlayerInteractions) {
-    if (!canRetaliate()) {
-        return
-    }
+    retaliate(interactions, Npc::apPlayer2)
+}
+
+private inline fun Npc.retaliate(
+    interactions: AiPlayerInteractions,
+    engage: Npc.(Player, AiPlayerInteractions) -> Unit,
+) {
+    if (!canRetaliate()) return
     val target = interactions.resolvePlayer(aggressivePlayer) ?: return
     attackingPlayer = target.uid
     actionDelay = currentMapClock + (attackRate() / 2)
-    retaliate(target, interactions, ap = true)
+    when {
+        hitpoints <= param(params.retreat) -> playerEscape(target)
+        visType.wanderRange > 0 && !target.isWithinDistance(spawnCoords, aggressionRange()) ->
+            playerEscape(target)
+        else -> engage(target, interactions)
+    }
 }
 
-private fun Npc.retaliate(target: Player, interactions: AiPlayerInteractions, ap: Boolean) {
-    when {
-        hitpoints <= param(params.retreat) -> {
-            playerEscape(target)
-        }
-        visType.wanderRange > 0 && !target.isWithinDistance(spawnCoords, aggressionRange()) -> {
-            playerEscape(target)
-        }
-        ap -> {
-            apPlayer2(target, interactions)
-        }
-        else -> {
-            opPlayer2(target, interactions)
-        }
+/** Select the interaction that can execute this NPC's attack at its configured distance. */
+public fun Npc.engagePlayer(target: Player, interactions: AiPlayerInteractions) {
+    if (visType.attackRange > 1 && interactions.apTrigger(this, target, InteractionOp.Op2) != null) {
+        apPlayer2(target, interactions)
+    } else {
+        opPlayer2(target, interactions)
     }
 }
 

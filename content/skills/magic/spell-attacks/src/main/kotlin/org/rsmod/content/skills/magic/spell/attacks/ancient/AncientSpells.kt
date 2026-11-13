@@ -8,6 +8,9 @@ import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.projanims
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.SkillDiaryAreas
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.feet
 import org.rsmod.api.player.hands
 import org.rsmod.api.player.hat
@@ -74,7 +77,7 @@ internal class AncientSpellAttack(
         val ancientSceptre = player.hasAncientSceptre()
         val familySceptre = player.hasFamilySceptre(definition.family)
         val bloodbarkPieces = player.bloodbarkPieces()
-        val selected = targets.targets(primary, definition.multiTarget, mapMultiway())
+        val selected = targets.targets(player, primary, definition.multiTarget, mapMultiway())
 
         for ((index, target) in selected.withIndex()) {
             val projectile =
@@ -99,6 +102,16 @@ internal class AncientSpellAttack(
                 continue
             }
 
+            if (definition.spell.id == objs.spell_ice_barrage.id) {
+                if (
+                    SkillDiaryAreas.openDesert(coords) && SkillDiaryAreas.openDesert(target.coords)
+                ) {
+                    player.completeDiaryTask(DiaryTask.BarrageDesertFoe)
+                }
+                if (target is Player && castleWarsArena(coords) && castleWarsArena(target.coords)) {
+                    player.completeDiaryTask(DiaryTask.BarrageCastleWarsPlayer)
+                }
+            }
             val damage = manager.rollMaxHit(this, target, attack, castResult, definition.baseMaxHit)
             manager.playHitFx(
                 source = this,
@@ -186,3 +199,6 @@ internal class AncientSpellAttack(
         const val DESERT_TREASURE_COMPLETE = 15
     }
 }
+
+private fun castleWarsArena(tile: org.rsmod.map.CoordGrid): Boolean =
+    tile.x in 2368..2431 && (tile.z in 3072..3135 || tile.z in 9472..9535)

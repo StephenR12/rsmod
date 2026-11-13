@@ -37,6 +37,7 @@ object EmoteEnums : EnumReferences() {
 }
 
 internal object EmoteVarps : VarpReferences() {
+    val stronghold_diary_emotes = find("stronghold_diary_emotes")
     val emote_counters = find("emote_counters")
     val emote_clock_premier_shield = find("emote_clock_premier_shield")
 }
@@ -108,6 +109,7 @@ internal object EmoteEnumBuilds : EnumBuilder() {
 
 internal object EmoteVarpBuilds : VarpBuilder() {
     init {
+        build("stronghold_diary_emotes") { transmitNever = true }
         build("emote_counters")
         build("emote_clock_premier_shield")
     }

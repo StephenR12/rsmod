@@ -340,7 +340,7 @@ public object MagicRunes {
             }
 
             if (pouchCountVarBit != null && pouchRuneCount >= remaining) {
-                sources += Source.VarBitSource(pouchCountVarBit, remaining)
+                sources += Source.VarBitSource(pouchCountVarBit, remaining, rune)
                 return Validation.Valid.HasEnough(sources)
             }
         }
@@ -529,7 +529,8 @@ public object MagicRunes {
     public sealed class Source {
         public data class InvSource(val obj: ObjType, val slot: Int, val count: Int) : Source()
 
-        public data class VarBitSource(val varbit: VarBitType, val count: Int) : Source()
+        public data class VarBitSource(val varbit: VarBitType, val count: Int, val rune: ObjType) :
+            Source()
 
         public data class WornObjSource(
             val obj: ObjType,

@@ -175,23 +175,17 @@ class WoodcuttingAxeLifecycleTest {
                 }
             )
             val setup = client.filterIsInstance<RunClientScript>().single { it.id == 2046 }
+            val products =
+                listOf(objs.crystal_axe) +
+                    deps.recipes
+                        .filter { it.available(player, false) }
+                        .sortedBy { it.item.id }
+                        .map { it.item }
             assertEquals(
-                listOf<Any>(
-                    0,
-                    1,
-                    objs.crystal_axe.id,
-                    -1,
-                    -1,
-                    -1,
-                    -1,
-                    -1,
-                    -1,
-                    -1,
-                    -1,
-                    -1,
-                    1,
-                    "What would you like to sing?",
-                ),
+                listOf<Any>(0, 1) +
+                    products.map { it.id } +
+                    List(10 - products.size) { -1 } +
+                    listOf(1, "What would you like to sing?"),
                 setup.values,
             )
             val events =
@@ -547,7 +541,7 @@ class WoodcuttingAxeLifecycleTest {
     private fun GameTestState.runWoodcuttingTest(body: GameTestScope.(Dependencies) -> Unit) =
         runInjectedGameTest(
             Dependencies::class,
-            childModule = null,
+            childModule = CrystalGatheringSingingTestModule,
             Woodcutting::class,
             testBody = body,
         )
@@ -558,6 +552,7 @@ class WoodcuttingAxeLifecycleTest {
         val infernal: InfernalAxeLifecycle,
         val crystal: CrystalAxeLifecycle,
         val singing: CrystalAxeSinging,
+        val recipes: Set<@JvmSuppressWildcards CrystalSingingRecipe>,
         val events: EventBus,
         val held: HeldInteractions,
         val heldU: HeldUInteractions,

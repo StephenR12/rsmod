@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
 import jakarta.inject.Inject
+import org.rsmod.content.skills.magic.spell.utility.arena.ArenaItems
 import org.rsmod.api.config.refs.objs
 import org.rsmod.game.type.obj.ObjType
 
@@ -14,6 +15,7 @@ public data class JewelleryEnchantRecipe(
 ) {
     public enum class Gate {
         None,
+        Arena,
         DigsitePendant,
         NatureAmulet,
     }
@@ -120,8 +122,13 @@ public class JewelleryEnchantRecipeRegistry @Inject constructor() {
             recipe(objs.spell_enchant_lvl_7, objs.zenyte_amulet, objs.amulet_of_torture, true),
         )
 
+    // Arena shapes share the ordinary spell and autocast handlers. Tablets accept only jewellery.
+    private val arenaRecipes = listOf(objs.spell_enchant_lvl_1,objs.spell_enchant_lvl_2,objs.spell_enchant_lvl_3,objs.spell_enchant_lvl_4,objs.spell_enchant_lvl_5,objs.spell_enchant_lvl_6,objs.spell_enchant_lvl_7).flatMap { spell ->
+        (ArenaItems.shapes + ArenaItems.stone).map { shape -> recipe(spell,shape,ArenaItems.orb,true,JewelleryEnchantRecipe.Gate.Arena) }
+    }
+
     private val bySpellAndSource: Map<Long, JewelleryEnchantRecipe> =
-        recipes.associateBy { key(it.spell.id, it.source.id) }
+        (recipes + arenaRecipes).associateBy { key(it.spell.id, it.source.id) }
 
     public fun find(spell: ObjType, sourceId: Int): JewelleryEnchantRecipe? =
         bySpellAndSource[key(spell.id, sourceId)]

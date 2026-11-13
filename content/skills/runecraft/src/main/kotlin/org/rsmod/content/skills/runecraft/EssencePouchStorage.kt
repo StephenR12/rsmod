@@ -5,6 +5,7 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.invtx.invAdd
 import org.rsmod.api.invtx.invDel
+import org.rsmod.api.player.lefthand
 import org.rsmod.api.player.back
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.protect.ProtectedAccessLauncher
@@ -147,6 +148,15 @@ constructor(
         }
     }
 
+    public fun needsRepair(access: ProtectedAccess): Boolean =
+        EssencePouchDefinitions.all.any { pouch ->
+            val degraded = pouch.degraded
+            degraded != null &&
+                (degradation(access.player, pouch) > 0 ||
+                    degraded in access.inv ||
+                    degraded in access.bank)
+        }
+
     public fun repairAll(access: ProtectedAccess): Int {
         var repaired = 0
         for (pouch in EssencePouchDefinitions.all) {
@@ -265,6 +275,7 @@ constructor(
     }
 
     private fun hasPouchProtection(player: Player): Boolean {
+        if(player.vars[TempleVars.playingGuardiansOfTheRift]!=0 && player.lefthand?.id==26848)return true
         val cape = player.back ?: return false
         if (
             cape.id == objs.runecrafting_skillcape.id ||

@@ -402,6 +402,10 @@ class ElementalSpellTimingTest {
             player.clearInv()
             player.inv[0] = InvObj(objs.fire_rune, 10)
             player.inv[1] = InvObj(objs.death_rune, 2)
+            player.setVarp(
+                org.rsmod.content.skills.magic.spell.attacks.standard.IbanQuest.progress,
+                11,
+            )
             player.righthand = InvObj(objs.ibans_staff)
             deps.ibanCharges.set(player, 2)
             val spell = requireNotNull(deps.magicSpells.getObjSpell(objs.spell_iban_blast))
@@ -461,6 +465,8 @@ class ElementalSpellTimingTest {
             player.inv[0] = InvObj(objs.air_rune, 8)
             player.inv[1] = InvObj(objs.fire_rune, 4)
             player.inv[2] = InvObj(objs.blood_rune, 4)
+            player.setVarp(org.rsmod.api.config.refs.varps.magearena, 8)
+            player.setVarp(org.rsmod.api.combat.commons.magic.MageArenaTraining.saradomin, 100)
             player.righthand = InvObj(objs.saradomin_staff)
             val spell = requireNotNull(deps.magicSpells.getObjSpell(objs.spell_saradomin_strike))
             val attack =

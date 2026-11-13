@@ -45,6 +45,10 @@ public object MeleeAccuracyOperations {
             modified += attackRoll / 10
         }
 
+        if (MeleeAttr.BarroniteMaceWeapon in meleeAttributes && NpcAttr.Golem in npcAttributes) {
+            modified = scale(modified, multiplier = 23, divisor = 20)
+        }
+
         if (MeleeAttr.RevenantWeapon in meleeAttributes && NpcAttr.Wilderness in npcAttributes) {
             modified = scale(modified, multiplier = 3, divisor = 2)
         }
@@ -214,10 +218,10 @@ public object MeleeAccuracyOperations {
         return 1.1
     }
 
-    public fun calculateEffectiveDefence(player: Player, attackStyle: AttackStyle?): Int {
+    public fun calculateEffectiveDefence(player: Player, attackStyle: AttackStyle?, visibleBonus: Int = 0): Int {
         val armourBonus = AccuracyOperations.defensiveArmourBonus(player)
         return calculateEffectiveDefence(
-            visLevel = player.defenceLvl,
+            visLevel = player.defenceLvl + visibleBonus,
             armourBonus = armourBonus,
             vars = player.vars,
             attackStyle = attackStyle,

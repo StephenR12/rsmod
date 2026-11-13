@@ -3,7 +3,6 @@ package org.rsmod.content.interfaces.equipment.death
 import jakarta.inject.Inject
 import java.util.Objects
 import kotlin.math.abs
-import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.market.MarketPrices
 import org.rsmod.api.player.isInCombat
@@ -35,6 +34,7 @@ constructor(
     private val invTypes: InvTypeList,
     private val objTypes: ObjTypeList,
     private val marketPrices: MarketPrices,
+    private val keeps: org.rsmod.api.death.DeathKeeps,
 ) : PluginScript() {
     override fun ScriptContext.startup() {
         onIfOverlayButton(equip_components.items_kept_on_death) { player.selectKeptOnDeath() }
@@ -136,7 +136,7 @@ constructor(
             "Death inventory can only fit `${lostInventory.size}` objs."
         }
 
-        val carried = sortedCarriedObjs().toMutableList()
+        val carried = keeps.ordered(player).toMutableList()
         val (kept, lost) = carried.partition(settings.keepCount())
 
         val keptAddResult = invMoveAll(keptInventory, kept)
@@ -158,14 +158,6 @@ constructor(
         }
 
         return DeathInventory(keptInventory, lostInventory, dataInventory)
-    }
-
-    private fun ProtectedAccess.sortedCarriedObjs(): Sequence<InvObj> {
-        val overall = inv.filterNotNull() + worn.filterNotNull()
-        return overall
-            .asSequence()
-            .filterNot { objTypes[it].param(params.bond_item) }
-            .sortedByDescending(::marketPriceSingle)
     }
 
     private fun MutableList<InvObj>.partition(keepCount: Int): Pair<List<InvObj>, List<InvObj>> {

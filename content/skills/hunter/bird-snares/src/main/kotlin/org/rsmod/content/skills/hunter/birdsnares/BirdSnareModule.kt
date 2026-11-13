@@ -7,5 +7,8 @@ public class BirdSnareModule : PluginModule() {
     override fun bind() {
         bind(BirdSnarePlacement::class.java).`in`(Scopes.SINGLETON)
         bind(BirdSnareTrap::class.java).`in`(Scopes.SINGLETON)
+        bind(BoxTrap::class.java).`in`(Scopes.SINGLETON)
+        bind(NetTrap::class.java).`in`(Scopes.SINGLETON)
+        bind(PitfallTrap::class.java).`in`(Scopes.SINGLETON)
     }
 }

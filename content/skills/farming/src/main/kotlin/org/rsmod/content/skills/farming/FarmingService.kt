@@ -4,24 +4,36 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
+import org.rsmod.api.invtx.add
+import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invDel
+import org.rsmod.api.invtx.invTransaction
+import org.rsmod.api.invtx.select
 import org.rsmod.api.player.back
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.player.diary.recordDiaryCelastrusHarvest
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.random.GameRandom
 import org.rsmod.content.skills.woodcutting.configs.WoodcuttingParams
 import org.rsmod.content.skills.woodcutting.scripts.Woodcutting
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.loc.BoundLocInfo
+import org.rsmod.game.loc.LocInfo
 import org.rsmod.game.map.LocZoneStorage
 import org.rsmod.game.type.enums.EnumTypeList
 import org.rsmod.game.type.loc.LocTypeList
+import org.rsmod.game.type.loc.UnpackedLocType
 import org.rsmod.game.type.obj.ObjTypeList
+import org.rsmod.map.CoordGrid
+import org.rsmod.map.square.MapSquareKey
 import org.rsmod.map.zone.ZoneKey
 
 @Singleton
 public class FarmingService
 @Inject
 constructor(
+    private val petRates:org.rsmod.content.skills.pets.SkillPetRates,
     private val repository: FarmingPatchRepository,
     private val catalogue: FarmingCropCatalogue,
     private val codec: FarmingPatchCodec,
@@ -31,6 +43,26 @@ constructor(
     private val objTypes: ObjTypeList,
     private val enumTypes: EnumTypeList,
 ) {
+    internal fun spiritTrees(player: org.rsmod.game.entity.Player): Set<CoordGrid> {
+        val destinations = mutableSetOf<CoordGrid>()
+        for ((index, tile) in SPIRIT_TREES.withIndex()) {
+            val base = locTypes[SpiritPatchLocs.grownPlots[index]]
+            val state = repository.find(player, codec.patchKey(tile, base)) ?: continue
+            repository.advance(player, state)
+            if (
+                state.cropKey == "spirit" &&
+                    state.status == FarmingCropStatus.Harvestable &&
+                    state.healthChecked
+            )
+                destinations += tile
+        }
+        return destinations
+    }
+
+    internal fun syncHespori(player: org.rsmod.game.entity.Player, state: FarmingPatchState) {
+        codec.sync(player, locTypes[HesporiLocs.patch], state, crop(state))
+    }
+
     public fun syncNearby(player: org.rsmod.game.entity.Player) {
         val centre = ZoneKey.from(player.coords)
         for (zoneX in nearbyZones(centre.x)) {
@@ -38,6 +70,13 @@ constructor(
                 val zone = ZoneKey(zoneX, zoneZ, centre.level)
                 for (loc in locs.mapLocs.findAll(zone)) {
                     val base = locTypes[loc.id] ?: continue
+                    if (base.internalName == "kebos_farming_guild_hespori_indicator") {
+                        val plot = locTypes[HesporiLocs.patch]
+                        val key = codec.patchKey(loc, plot)
+                        val state = repository.getOrCreate(player, key, FarmingPatchType.Hespori)
+                        repository.advance(player, state)
+                        syncHespori(player, state)
+                    }
                     val patchType = codec.patchType(base) ?: continue
                     val patch = repository.getOrCreate(player, codec.patchKey(loc, base), patchType)
                     repository.advance(player, patch)
@@ -64,6 +103,10 @@ constructor(
         compost: FarmingCompost,
     ): Boolean {
         val state = state(access, loc) ?: return false
+        if (state.patchType == FarmingPatchType.Grapes) {
+            access.mes("Vine patches must be treated with saltpetre.")
+            return false
+        }
         if (state.compost != FarmingCompost.None) {
             access.mes("This patch has already been treated with compost.")
             return false
@@ -115,6 +158,7 @@ constructor(
 
     public fun resurrect(access: ProtectedAccess, loc: BoundLocInfo, success: Boolean): Boolean {
         val state = state(access, loc) ?: return false
+        if (state.patchType in setOf(FarmingPatchType.Anima, FarmingPatchType.Hespori)) return false
         if (state.status != FarmingCropStatus.Dead || state.resurrectionAttempted) return false
         state.resurrectionAttempted = true
         if (success) {
@@ -138,7 +182,7 @@ constructor(
         if (!state.isEmpty || state.weeds <= 0) return false
         state.weeds--
         access.invAdd(access.inv, FarmingObjs.weeds)
-        access.statAdvance(stats.farming, 4.0)
+        access.farmingXp(4.0)
         sync(access, loc, state)
         return true
     }
@@ -156,6 +200,12 @@ constructor(
             access.mes(
                 "You need a Farming level of ${crop.level} to grow ${crop.displayName.lowercase()}."
             )
+            return null
+        }
+        if (
+            crop.patchType == FarmingPatchType.Grapes && state.compost != FarmingCompost.Saltpetre
+        ) {
+            access.mes("Treat the soil with saltpetre before planting a grape seed.")
             return null
         }
         if (crop.key == "spirit") {
@@ -176,17 +226,44 @@ constructor(
         }
         val treeCrop = crop.patchType in TREE_PATCHES
         val tool = if (treeCrop) FarmingObjs.spade else FarmingObjs.dibber
-        if (tool !in access.inv) {
+        val bareHanded =
+            !treeCrop && tool !in access.inv && access.vars[BarbarianFarmingBits.planting] > 0
+        if (tool !in access.inv && !bareHanded) {
             access.mes(
                 if (treeCrop) "You need a spade to plant that sapling."
                 else "You need a seed dibber to plant that seed."
             )
             return null
         }
+        if (crop.patchType == FarmingPatchType.Anima) repository.advanceExisting(access.player)
         val removed = access.invDel(access.inv, crop.seed, crop.seedCount, slot = slot)
         if (removed.failure) return null
-        if (treeCrop && crop.key !in setOf("redwood", "crystal")) {
-            access.invAdd(access.inv, FarmingObjs.plantPot)
+        if (
+            bareHanded &&
+                crop.patchType != FarmingPatchType.Grapes &&
+                access.vars[BarbarianFarmingBits.planting] == 1
+        ) {
+            val failures = access.vars[BarbarianFarmingBits.failures]
+            if (failures < 7 && random.of(8) > failures) {
+                access.vars[BarbarianFarmingBits.failures] = failures + 1
+                access.mes("You crush the seed while trying to plant it without a dibber.")
+                return null
+            }
+            access.vars[BarbarianFarmingBits.planting] = 2
+            access.mes("You plant the seed bare-handed. You can report your progress to Otto.")
+        }
+        if (treeCrop) {
+            if (
+                access.vars[BarbarianFarmingBits.smashing] > 0 &&
+                    access.vars[BarbarianFarmingBits.automatic] != 0
+            ) {
+                access.mes("You smash the empty plant pot to dust.")
+                if (
+                    crop.patchType != FarmingPatchType.SpiritTree &&
+                        access.vars[BarbarianFarmingBits.smashing] == 1
+                )
+                    access.vars[BarbarianFarmingBits.smashing] = 2
+            } else access.invAdd(access.inv, FarmingObjs.plantPot)
         }
         state.cropKey = crop.key
         state.stage = 0
@@ -202,7 +279,10 @@ constructor(
                 crop.growthMinutes,
                 System.currentTimeMillis(),
             )
-        access.statAdvance(stats.farming, crop.plantXp)
+        if (crop.key == "jute" && MapSquareKey.from(loc.coords).id == 10551) {
+            access.player.completeDiaryTask(DiaryTask.PlantMcGruborJute)
+        }
+        access.farmingXp(crop.plantXp)
         sync(access, loc, state)
         return crop
     }
@@ -210,15 +290,41 @@ constructor(
     public fun harvest(access: ProtectedAccess, loc: BoundLocInfo): FarmingCrop? {
         val state = state(access, loc) ?: return null
         val crop = crop(state) ?: return null
-        if (state.status != FarmingCropStatus.Harvestable || crop.produce == null) return null
-        if (access.inv.isFull()) {
+        if (
+            state.status != FarmingCropStatus.Harvestable ||
+                state.harvestLives <= 0 ||
+                crop.produce == null
+        )
+            return null
+        val blessed =
+            crop.patchType == FarmingPatchType.Grapes && FarmingObjs.bologaBlessing in access.inv
+        val received =
+            access.player.invTransaction(access.inv) {
+                val inventory = select(access.inv)
+                if (blessed) delete(inventory, FarmingObjs.bologaBlessing.id, 1)
+                add(inventory, if (blessed) FarmingObjs.zamorakGrapes.id else crop.produce.id, 1)
+            }
+        if (!received.success) {
             access.mes("You don't have enough inventory space.")
             return null
         }
-        access.invAdd(access.inv, crop.produce)
-        access.statAdvance(stats.farming, crop.harvestXp)
-        val low = crop.harvestSaveLow
-        val high = crop.harvestSaveHigh
+        if (crop.key == "celastrus") access.player.recordDiaryCelastrusHarvest(loc.coords)
+        val task =
+            when (crop.key to MapSquareKey.from(loc.coords).id) {
+                "strawberry" to 10548 -> DiaryTask.HarvestArdougneStrawberries
+                "poisonivy" to 10290 -> DiaryTask.PickArdougnePoisonIvy
+                "torstol" to 10548 -> DiaryTask.PickArdougneTorstol
+                "limpwurt" to 11062 -> DiaryTask.PickCatherbyLimpwurt
+                "dwarf_weed" to 11062 -> DiaryTask.PickCatherbyDwarfWeed
+                "belladonna" to 12340 -> DiaryTask.PickDraynorBelladonna
+                "watermelon" to 15148 -> DiaryTask.HarvestHarmonyWatermelon
+                "bittercap" to 13622 -> DiaryTask.HarvestCanifisMushroom
+                else -> null
+            }
+        task?.let(access.player::completeDiaryTask)
+        access.farmingXp(crop.harvestXp)
+        val low = if (blessed) -70 else crop.harvestSaveLow
+        val high = if (blessed) 160 else crop.harvestSaveHigh
         val hasMagicSecateurs =
             crop.key != "seaweed" &&
                 (access.inv.contains(FarmingObjs.magicSecateurs) ||
@@ -228,7 +334,10 @@ constructor(
                 (access.player.back?.id == objs.farming_skillcape.id ||
                     access.player.back?.id == objs.farming_skillcape_t.id ||
                     access.player.back?.id == objs.max_cape_worn.id)
-        val itemBonus = (if (hasMagicSecateurs) 10 else 0) + (if (hasFarmingCape) 5 else 0)
+        val itemBonus =
+            (if (hasMagicSecateurs) 10 else 0) +
+                (if (hasFarmingCape) 5 else 0) +
+                (if (repository.activeAnima(access.player) == "attas") 5 else 0)
         val saved =
             if (low != null && high != null) {
                 val level = access.stat(stats.farming).coerceIn(1, 99)
@@ -239,34 +348,130 @@ constructor(
         if (!saved) {
             state.harvestLives--
         }
-        if (state.harvestLives <= 0) {
-            if (crop.regrowMinutes > 0) {
-                state.nextGrowthAt =
-                    repository.firstGrowthTick(
-                        access.player,
-                        crop.regrowMinutes,
-                        System.currentTimeMillis(),
-                    )
-            } else {
-                clear(state)
+        if (!saved && crop.regrowMinutes > 0 && state.nextGrowthAt == 0L) {
+            state.nextGrowthAt =
+                repository.firstGrowthTick(
+                    access.player,
+                    crop.regrowMinutes,
+                    System.currentTimeMillis(),
+                )
+        } else if (crop.regrowMinutes == 0 && state.harvestLives <= 0) {
+            if (crop.healthXp == 0.0) {
+                access.finishContract(crop, loc.coords)
+                rollHesporiSeed(access, crop)
             }
+            if (crop.patchType == FarmingPatchType.Grapes) state.status = FarmingCropStatus.Dead
+            else clear(state)
         }
         sync(access, loc, state)
         return crop
     }
 
-    public fun checkHealth(access: ProtectedAccess, state: FarmingPatchState): FarmingCrop? {
+    public fun checkHealth(
+        access: ProtectedAccess,
+        loc: BoundLocInfo,
+        state: FarmingPatchState,
+    ): FarmingCrop? {
         val crop = crop(state) ?: return null
         if (state.status != FarmingCropStatus.Harvestable || state.healthChecked) return null
         if (crop.healthXp <= 0.0) return null
-        access.statAdvance(stats.farming, crop.healthXp)
+        access.farmingXp(crop.healthXp)
         state.healthChecked = true
+        access.finishContract(crop, loc.coords)
+        rollHesporiSeed(access, crop)
+        val square = MapSquareKey.from(loc.coords).id
+        if (square == 11058 && crop.patchType == FarmingPatchType.FruitTree) {
+            access.player.completeDiaryTask(DiaryTask.GrowBrimhavenFruitTree)
+        }
+        val task =
+            when (crop.key to square) {
+                "palm" to 9777 -> DiaryTask.CheckGnomeVillagePalm
+                "palm" to 11058 -> DiaryTask.CheckBrimhavenPalm
+                "calquat" to 11056 -> DiaryTask.CheckTaiBwoWannaiCalquat
+                "palm" to 9265 -> DiaryTask.CheckLletyaPalm
+                else -> null
+            }
+        task?.let(access.player::completeDiaryTask)
         return crop
+    }
+
+    private fun rollHesporiSeed(access: ProtectedAccess, crop: FarmingCrop) {
+        petRates.rollTangleroot(access.player,crop)
+        if (access.inv.freeSpace() == 0) return
+        val denominator =
+            when (crop.patchType) {
+                FarmingPatchType.Herb -> 196
+                FarmingPatchType.FruitTree -> 18
+                else ->
+                    when (crop.key) {
+                        "potato",
+                        "onion",
+                        "cabbage",
+                        "tomato",
+                        "marigold",
+                        "rosemary",
+                        "nasturtium",
+                        "woad",
+                        "white_lily" -> 562
+                        "sweetcorn",
+                        "limpwurt" -> 449
+                        "strawberry" -> 374
+                        "snape_grass" -> 347
+                        "watermelon",
+                        "potato_cactus" -> 321
+                        "barley",
+                        "hammerstone" -> 244
+                        "asgarnian",
+                        "jute" -> 179
+                        "yanillian" -> 149
+                        "krandorian" -> 128
+                        "wildblood" -> 112
+                        "redberry" -> 89
+                        "cadavaberry" -> 74
+                        "dwellberry" -> 64
+                        "jangerberry",
+                        "whiteberry",
+                        "poisonivy" -> 56
+                        "oak" -> 44
+                        "willow" -> 32
+                        "maple" -> 28
+                        "yew" -> 22
+                        "magic",
+                        "celastrus",
+                        "crystal" -> 18
+                        "belladonna" -> 16
+                        "seaweed",
+                        "bittercap" -> 15
+                        "cactus" -> 14
+                        "calquat" -> 12
+                        "spirit",
+                        "teak",
+                        "mahogany",
+                        "redwood" -> 10
+                        "grape" -> 770
+                        else -> return
+                    }
+            }
+        if (
+            random.of(denominator) == 0 &&
+                access.invAdd(access.inv, FarmingObjs.hesporiSeed).success
+        ) {
+            access.mes("You find a Hespori seed.")
+        }
+    }
+
+    internal fun clearAnima(access: ProtectedAccess, loc: BoundLocInfo) {
+        val state = state(access, loc) ?: return
+        if (state.patchType != FarmingPatchType.Anima || state.isEmpty) return
+        repository.advanceExisting(access.player)
+        clear(state)
+        sync(access, loc, state)
     }
 
     public fun clearDead(access: ProtectedAccess, loc: BoundLocInfo): Boolean {
         val state = state(access, loc) ?: return false
         if (state.status != FarmingCropStatus.Dead) return false
+        if (state.patchType == FarmingPatchType.Anima) repository.advanceExisting(access.player)
         clear(state)
         sync(access, loc, state)
         return true
@@ -295,6 +500,7 @@ constructor(
     }
 
     private fun clear(state: FarmingPatchState) {
+        state.compost = FarmingCompost.None
         state.weeds = 0
         state.cropKey = null
         state.stage = 0
@@ -308,96 +514,155 @@ constructor(
         state.scarecrow = false
     }
 
-    public fun protect(access: ProtectedAccess, loc: BoundLocInfo, objId: Int, slot: Int): Boolean {
-        val state = state(access, loc) ?: return false
-        val crop = crop(state) ?: return false
-        val payment = crop.protection ?: return false
-        if (state.protected || payment.item.id != objId) return false
-        val removed =
-            if (crop.key == "spirit") {
-                access.invDel(
-                    access.inv,
-                    FarmingObjs.monkeyNuts,
-                    5,
-                    FarmingObjs.monkeyBar,
-                    1,
-                    FarmingObjs.groundTooth,
-                    1,
-                )
-            } else {
-                access.invDel(access.inv, payment.item, payment.quantity, slot = slot)
-            }
-        if (removed.failure) {
-            access.mes("You do not have the gardener's full payment with you.")
-            return false
-        }
-        state.protected = true
-        sync(access, loc, state)
-        access.mes("The nearby gardener agrees to watch over your ${crop.displayName.lowercase()}.")
-        return true
-    }
+    private data class TendedPatch(
+        val loc: LocInfo,
+        val type: UnpackedLocType,
+        val state: FarmingPatchState,
+    )
 
-    public fun protectNearest(
+    public suspend fun payGardener(
         access: ProtectedAccess,
         gardener: Npc,
-        objId: Int,
-        slot: Int,
-    ): Boolean {
-        val usedType = objTypes[objId] ?: return false
-        val paymentId = objTypes.uncert(usedType).id
-        val centre = ZoneKey.from(gardener.coords)
-        val candidates = buildList {
-            for (zoneX in nearbyZones(centre.x)) {
-                for (zoneZ in nearbyZones(centre.z)) {
-                    for (loc in locs.mapLocs.findAll(ZoneKey(zoneX, zoneZ, centre.level))) {
-                        if (loc.coords.chebyshevDistance(gardener.coords) > 20) continue
-                        val base = locTypes[loc.id] ?: continue
-                        val type = codec.patchType(base) ?: continue
-                        if (type == FarmingPatchType.Compost) continue
-                        val patch =
-                            repository.getOrCreate(access.player, codec.patchKey(loc, base), type)
-                        repository.advance(access.player, patch)
-                        val crop = crop(patch) ?: continue
-                        val payment = crop.protection ?: continue
-                        if (
-                            !patch.protected &&
-                                payment.item.id == paymentId &&
-                                patch.status in
-                                    setOf(FarmingCropStatus.Growing, FarmingCropStatus.Diseased)
-                        ) {
-                            add(Triple(loc, base, patch))
-                        }
-                    }
-                }
+        option: String = "",
+        used: Int? = null,
+    ) {
+        val usedType = used?.let { objTypes[it] }?.let(objTypes::uncert)
+        val nearby = gardenerPatches(access, gardener)
+        val directional =
+            when {
+                "north" in option -> nearby.maxByOrNull { it.loc.coords.z }
+                "south" in option -> nearby.minByOrNull { it.loc.coords.z }
+                "east" in option -> nearby.maxByOrNull { it.loc.coords.x }
+                "west" in option -> nearby.minByOrNull { it.loc.coords.x }
+                else -> null
             }
+        val candidates =
+            (directional?.let(::listOf) ?: nearby).filter { candidate ->
+                val plant = crop(candidate.state)
+                plant != null &&
+                    plant.protection != null &&
+                    !candidate.state.protected &&
+                    candidate.state.status in
+                        setOf(FarmingCropStatus.Growing, FarmingCropStatus.Diseased) &&
+                    (usedType == null || payment(plant).any { it.item.id == usedType.id })
+            }
+        if (candidates.isEmpty()) {
+            access.mes("There is no nearby crop requiring that payment.")
+            return
         }
         val chosen =
-            candidates.minByOrNull { it.first.coords.chebyshevDistance(gardener.coords) }
-                ?: return false
-        val crop = requireNotNull(crop(chosen.third))
-        val payment = requireNotNull(crop.protection)
-        val removed =
-            if (crop.key == "spirit" && objId == FarmingObjs.monkeyNuts.id) {
-                access.invDel(
-                    access.inv,
-                    FarmingObjs.monkeyNuts,
-                    5,
-                    FarmingObjs.monkeyBar,
-                    1,
-                    FarmingObjs.groundTooth,
-                    1,
-                )
-            } else {
-                access.player.invDel(access.inv, objId, payment.quantity, slot = slot)
+            if (candidates.size == 1) candidates.single()
+            else {
+                val names =
+                    candidates.map {
+                        "${crop(it.state)!!.displayName} at ${it.loc.coords.x}, ${it.loc.coords.z}"
+                    }
+                candidates.getOrNull(access.menu("Which patch should I look after?", true, names))
+                    ?: return
             }
-        if (removed.failure) {
+        val crop = crop(chosen.state) ?: return
+        val price = payment(crop)
+        val quote =
+            price.joinToString(", ") { "${it.quantity} × ${objTypes[it.item].name.lowercase()}" }
+        if (
+            !access.choice2(
+                "Pay $quote to protect the ${crop.displayName.lowercase()}.",
+                true,
+                "Cancel.",
+                false,
+            )
+        )
+            return
+        repository.advance(access.player, chosen.state)
+        if (
+            chosen.state.protected ||
+                chosen.state.cropKey != crop.key ||
+                chosen.state.status !in setOf(FarmingCropStatus.Growing, FarmingCropStatus.Diseased)
+        )
+            return
+        if (!takePayment(access, price)) {
             access.mes("You do not have the gardener's full payment with you.")
-            return true
+            return
         }
-        chosen.third.protected = true
-        codec.sync(access.player, chosen.second, chosen.third, crop)
+        chosen.state.protected = true
+        if (crop.key == "magic" && gardener.type.internalName == "farming_gardener_tree_gnome") {
+            access.player.completeDiaryTask(DiaryTask.ProtectGnomeMagicTree)
+        }
+        if (chosen.state.status == FarmingCropStatus.Diseased)
+            chosen.state.status = FarmingCropStatus.Growing
+        codec.sync(access.player, chosen.type, chosen.state, crop)
         access.mes("The gardener agrees to watch over your ${crop.displayName.lowercase()}.")
-        return true
+    }
+
+    private fun gardenerPatches(access: ProtectedAccess, gardener: Npc): List<TendedPatch> {
+        val centre = ZoneKey.from(gardener.coords)
+        val nearby = mutableMapOf<String, TendedPatch>()
+        val allowed = tendedTypes(gardener)
+        for (x in nearbyZones(centre.x)) for (z in nearbyZones(centre.z)) {
+            for (loc in locs.mapLocs.findAll(ZoneKey(x, z, centre.level))) {
+                if (loc.coords.chebyshevDistance(gardener.coords) > 20) continue
+                val base = locTypes[loc.id] ?: continue
+                val type = codec.patchType(base) ?: continue
+                if (type !in allowed) continue
+                val key = codec.patchKey(loc, base)
+                if (key in nearby) continue
+                val state = repository.getOrCreate(access.player, key, type)
+                repository.advance(access.player, state)
+                nearby[key] = TendedPatch(loc, base, state)
+            }
+        }
+        return nearby.values.sortedBy { it.loc.coords.chebyshevDistance(gardener.coords) }
+    }
+
+    private fun tendedTypes(gardener: Npc): Set<FarmingPatchType> {
+        val name = gardener.type.internalName.orEmpty()
+        return when {
+            "spirit" in name -> setOf(FarmingPatchType.SpiritTree)
+            "redwood" in name -> setOf(FarmingPatchType.Redwood)
+            "celastrus" in name -> setOf(FarmingPatchType.Celastrus)
+            "farmguild_t3" in name || "fruit" in name || name == "garth" ->
+                setOf(FarmingPatchType.FruitTree)
+            "farmguild_t2" in name || "_tree_" in name -> setOf(FarmingPatchType.Tree)
+            "farmguild_t1" in name -> setOf(FarmingPatchType.Allotment)
+            "underwater" in name -> setOf(FarmingPatchType.Seaweed)
+            "squirrel" in name -> setOf(FarmingPatchType.HardwoodTree)
+            "calquat" in name -> setOf(FarmingPatchType.Calquat)
+            "cactus" in name -> setOf(FarmingPatchType.Cactus)
+            "hops" in name || name == "francis" -> setOf(FarmingPatchType.Hops)
+            "bush" in name -> setOf(FarmingPatchType.Bush)
+            else -> setOf(FarmingPatchType.Allotment)
+        }
+    }
+
+    private fun payment(crop: FarmingCrop): List<FarmingProtection> =
+        if (crop.key == "spirit")
+            listOf(
+                FarmingProtection(FarmingObjs.monkeyNuts, 5),
+                FarmingProtection(FarmingObjs.monkeyBar, 1),
+                FarmingProtection(FarmingObjs.groundTooth, 1),
+            )
+        else listOf(requireNotNull(crop.protection))
+
+    private fun takePayment(access: ProtectedAccess, price: List<FarmingProtection>): Boolean {
+        val deletions = mutableListOf<Pair<Int, Int>>()
+        for ((item, amount) in price) {
+            val unnoted = objTypes[item]
+            val normalCount = minOf(amount, access.invTotal(access.inv, unnoted))
+            if (normalCount > 0) deletions += unnoted.id to normalCount
+            val remainder = amount - normalCount
+            if (remainder > 0) {
+                val note = objTypes.cert(unnoted)
+                if (note.id == unnoted.id || access.invTotal(access.inv, note) < remainder)
+                    return false
+                deletions += note.id to remainder
+            }
+        }
+        return access.player
+            .invTransaction(access.inv) {
+                val inventory = select(access.inv)
+                for ((id, count) in deletions) delete(inventory, id, count)
+            }
+            .success
     }
 
     private fun nearbyZones(centre: Int): IntRange =
@@ -415,6 +680,10 @@ constructor(
         }
         if (access.invDel(access.inv, FarmingObjs.scarecrow, slot = slot).failure) return false
         state.scarecrow = true
+        when (MapSquareKey.from(loc.coords).id) {
+            12083 -> access.player.completeDiaryTask(DiaryTask.PlaceFaladorScarecrow)
+            14391 -> access.player.completeDiaryTask(DiaryTask.PlaceMorytaniaScarecrow)
+        }
         state.nextGrowthAt =
             repository.firstGrowthTick(access.player, 5, System.currentTimeMillis())
         sync(access, loc, state)
@@ -491,11 +760,19 @@ constructor(
         val state = state(access, loc) ?: return false
         val crop = crop(state) ?: return false
         if (state.status != FarmingCropStatus.Stump) return false
-        if (crop.roots != null && access.inv.isFull()) {
-            access.mes("You need inventory space for the roots.")
-            return false
+        if (crop.roots != null) {
+            val count =
+                (1 + (access.stat(stats.farming) - crop.level).coerceAtLeast(0) / 8).coerceAtMost(4)
+            if (access.invAdd(access.inv, crop.roots, count).failure) {
+                access.mes("You need inventory space for the roots.")
+                return false
+            }
+            val square = MapSquareKey.from(loc.coords).id
+            if (crop.key == "magic" && square == 11828 && count >= 3)
+                access.player.completeDiaryTask(DiaryTask.DigFaladorMagicRoots)
+            if (crop.key == "yew" && square == 12854 && count >= 2)
+                access.player.completeDiaryTask(DiaryTask.DigVarrockYewRoots)
         }
-        crop.roots?.let { access.invAdd(access.inv, it) }
         clear(state)
         sync(access, loc, state)
         return true
@@ -624,7 +901,7 @@ constructor(
                     }
                 access.invDel(access.inv, FarmingObjs.bucket)
                 access.invAdd(access.inv, output)
-                access.statAdvance(stats.farming, 4.5)
+                access.farmingXp(4.5)
                 state.compostBinCount--
                 if (state.compostBinCount <= 0) {
                     state.compostBinCount = 0
@@ -645,6 +922,14 @@ constructor(
     }
 
     public companion object {
+        private val SPIRIT_TREES =
+            listOf(
+                CoordGrid(3059, 3257),
+                CoordGrid(2612, 3857),
+                CoordGrid(2801, 3202),
+                CoordGrid(1692, 3541),
+                CoordGrid(1252, 3749),
+            )
         private const val NEARBY_ZONE_RADIUS = 2
         public val WATERABLE_PATCHES: Set<FarmingPatchType> =
             setOf(FarmingPatchType.Allotment, FarmingPatchType.Flower, FarmingPatchType.Hops)

@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.fletching.bowstringing
 
+import org.rsmod.api.player.diary.recordDiaryFletch
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
@@ -104,6 +105,7 @@ constructor(
             check(spool.consume(this)) { "Bow string spool became unavailable after validation." }
         }
         statAdvance(stats.fletching, recipe.xp)
+        player.recordDiaryFletch(recipe.output.id, 1, player.coords)
     }
 
     private fun ProtectedAccess.canString(

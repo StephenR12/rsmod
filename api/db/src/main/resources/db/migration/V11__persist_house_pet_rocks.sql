@@ -1,0 +1,1 @@
+ALTER TABLE house_rooms ADD COLUMN pet_rocks BIGINT NOT NULL DEFAULT 0;

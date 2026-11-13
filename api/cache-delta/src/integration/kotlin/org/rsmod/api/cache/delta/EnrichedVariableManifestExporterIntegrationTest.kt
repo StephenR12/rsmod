@@ -17,18 +17,17 @@ class EnrichedVariableManifestExporterIntegrationTest {
                 capturedAt = "2025-10-01T10:45:07.114859Z",
             )
 
-        assertEquals(
-            mapOf(
-                "server-controllers" to 1,
-                "server-varcons" to 3,
-                "server-varns" to 6,
-                "server-varobjects" to 12,
-            ),
-            manifest.entries.groupingBy(CacheManifestEntry::domain).eachCount().toSortedMap(),
+        val symbols = EnrichedVariableSymbols.load(Path.of(".data/symbols"))
+        val expected = mapOf(
+            "server-controllers" to symbols.controllers,
+            "server-varcons" to symbols.varCons,
+            "server-varns" to symbols.varns,
+            "server-varobjects" to symbols.varObjects,
         )
-        assertEquals(22, manifest.entries.size)
-        assertTrue(manifest.entries.all { it.symbol != null })
-        assertEquals(22, manifest.entries.map { it.domain to it.key }.toSet().size)
+        assertEquals(expected, manifest.entries.groupBy {it.domain}.mapValues { (_,entries) ->
+            entries.associate {it.key.toInt() to it.symbol}
+        })
+        assertEquals(expected.values.sumOf {it.size},manifest.entries.size)
         assertTrue(manifest.entries.all { it.fingerprint.matches(Regex("sha256:[0-9a-f]{64}")) })
 
         val bloodEssence = manifest.entry("server-varobjects", "65523")

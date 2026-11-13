@@ -1,0 +1,25 @@
+# Chest-room patrol, revision 14941535.
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_15_37'
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_20_42'
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_21_35'
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_21_39'
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_24_42'
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_26_34'
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_32_35'
+[[spawn]]
+npc = 'wilderness_rogue'
+coords = '0_51_61_33_38'

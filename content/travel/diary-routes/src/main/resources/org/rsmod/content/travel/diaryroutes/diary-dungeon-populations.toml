@@ -1,0 +1,251 @@
+[[spawn]]
+npc = 'shadow_warrior_rasool'
+coords = '0_39_53_39_39'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_29_25'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_30_52'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_33_48'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_38_35'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_43_4'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_44_17'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_52_27'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_54_47'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_59_38'
+
+[[spawn]]
+npc = 'shadow_dog_wild'
+coords = '0_42_79_6_11'
+
+[[spawn]]
+npc = 'blue_dragon'
+coords = '0_45_154_28_49'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_9_44'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_15_43'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_18_27'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_19_54'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_20_38'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_22_18'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_24_46'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_29_46'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_32_11'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_33_45'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_41_29'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_41_51'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_44_45'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_47_21'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_48_54'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_50_40'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_51_57'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_25_26'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_28_29'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_29_23'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_33_23'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_36_21'
+
+[[spawn]]
+npc = 'jogre'
+coords = '0_44_148_39_19'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_44_24'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_47_28'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_48_21'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_51_16'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_54_12'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_56_28'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_59_16'
+
+[[spawn]]
+npc = 'deathwing'
+coords = '0_43_145_59_21'
+
+[[spawn]]
+npc = 'bronze_dragon'
+coords = '0_42_148_43_10'
+
+[[spawn]]
+npc = 'bronze_dragon'
+coords = '0_42_148_43_19'
+
+[[spawn]]
+npc = 'bronze_dragon'
+coords = '0_42_148_52_20'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_16_23'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_16_49'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_17_16'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_26_12'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_26_41'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_26_52'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_34_16'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_36_27'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_42_29'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_44_51'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_48_16'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_50_32'
+
+[[spawn]]
+npc = 'iron_dragon'
+coords = '0_42_147_51_42'
+
+[[spawn]]
+npc = 'steel_dragon'
+coords = '0_42_147_24_27'
+
+[[spawn]]
+npc = 'steel_dragon'
+coords = '0_42_147_14_39'
+
+[[spawn]]
+npc = 'steel_dragon'
+coords = '0_42_147_35_50'
+
+[[spawn]]
+npc = 'steel_dragon'
+coords = '0_42_147_38_37'

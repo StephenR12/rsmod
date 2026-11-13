@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.smithing.smelting
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.diary.recordDiaryCannonballs
 import kotlin.math.min
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
@@ -67,6 +68,7 @@ constructor(private val recipes: CannonballRecipeRegistry, private val objTypes:
                 return
             }
             make(recipe, request.kind)
+            player.recordDiaryCannonballs(request.furnace.coords)
             val remaining = request.remaining - 1
             if (remaining <= 0 || !canMake(recipe, request.kind, sendFailure = false)) {
                 resetAnim()

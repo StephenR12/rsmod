@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.fletching.crossbowassembly
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.diary.recordDiaryFletch
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.invtx.add
@@ -113,6 +114,7 @@ constructor(
                 }
             }
         check(result.success) { "Crossbow-assembly transaction failed after validation: $recipe" }
+        player.recordDiaryFletch(if(stage==CrossbowAssemblyStage.Limbs)recipe.unstrung.id else recipe.output.id,1,player.coords)
         statAdvance(
             stats.fletching,
             when (stage) {

@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.magic.MagicSpellType
 import org.rsmod.api.combat.manager.MagicRuneManager
@@ -41,28 +42,23 @@ constructor(
                 mes("A mysterious force prevents you from teleporting!")
                 return
             }
-            if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+            if (player.isTeleportBlocked()) {
                 mes("A magical force stops you from teleporting.")
                 return
             }
 
-            val target =
-                when (destination) {
-                    HouseTeleportDestination.Inside -> {
-                        val buildingMode = vars[varbits.poh_teleport_building_mode] != 0
-                        houses.destination(player, buildingMode)
-                            ?: run {
-                                mes("Your house is not ready to enter.")
-                                return
-                            }
-                    }
-                    HouseTeleportDestination.Outside -> houseLocation.outside
-                    HouseTeleportDestination.GroupChoose,
-                    HouseTeleportDestination.GroupPrevious -> error("Group route passed validation")
-                }
-
+            val buildingMode = vars[varbits.poh_teleport_building_mode] != 0
             val spell = requireNotNull(spells.getObjSpell(objs.spell_poh_teleport))
             check(spell.type == MagicSpellType.Teleport) { "Expected teleport spell: $spell" }
+            val target =
+                if (destination == HouseTeleportDestination.Inside) {
+                    if (!runes.canCastSpell(player, spell)) return
+                    houses.destination(player, buildingMode)
+                        ?: run {
+                            mes("Your house is not ready to enter.")
+                            return
+                        }
+                } else houseLocation.outside
             if (runes.attemptCast(player, spell).isFailure()) {
                 return
             }
@@ -88,7 +84,7 @@ constructor(
     private companion object {
         const val CAST_TICKS = 4
         const val MAX_WILDERNESS_LEVEL = 20
-        const val TELEBLOCK_IMMUNITY_CYCLES = 100
+
         const val WILDERNESS_LEVEL_HEIGHT = 8
         const val WILDERNESS_Z = 3520
         const val WILDERNESS_UNDERGROUND_Z = 9920

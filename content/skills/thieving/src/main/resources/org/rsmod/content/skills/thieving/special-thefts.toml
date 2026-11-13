@@ -1,0 +1,10 @@
+# Desert Phoenix14768269; Martin shop14993260; native Rogues Den player plane1.
+[[spawn]]
+npc='golem_phoenix'
+coords='0_53_49_27_19'
+[[spawn]]
+npc='roguesden_trader'
+coords='1_47_77_43_46'
+[[spawn]]
+npc='roguesden_banker'
+coords='1_47_77_35_48'

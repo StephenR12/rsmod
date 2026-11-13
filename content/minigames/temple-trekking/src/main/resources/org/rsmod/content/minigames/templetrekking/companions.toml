@@ -1,0 +1,14 @@
+spawn = [
+    { npc = "templetrek_child_hard", coords = "0_54_50_24_37" },
+    { npc = "templetrek_oldman_hard", coords = "0_54_50_25_38" },
+    { npc = "templetrek_woman_med", coords = "0_54_50_22_37" },
+    { npc = "templetrek_man_med", coords = "0_54_50_26_35" },
+    { npc = "templetrek_retired_man_easy", coords = "0_54_50_22_35" },
+    { npc = "templetrek_retired_soldier_easy", coords = "0_54_50_24_39" },
+    { npc = "ramble_hard_ranger", coords = "0_53_54_44_30" },
+    { npc = "ramble_hard_fighter", coords = "0_53_54_45_31" },
+    { npc = "ramble_med_mage", coords = "0_53_54_42_30" },
+    { npc = "ramble_med_ranger", coords = "0_53_54_46_28" },
+    { npc = "ramble_easy_fighter", coords = "0_53_54_42_28" },
+    { npc = "ramble_easy_mage", coords = "0_53_54_44_32" },
+]

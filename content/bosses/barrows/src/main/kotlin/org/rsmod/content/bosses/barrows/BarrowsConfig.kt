@@ -22,6 +22,10 @@ public object BarrowsLocs : LocReferences() {
 }
 
 public object BarrowsObjs : ObjReferences() {
+    val racks = find("barrows_karil_ammo")
+    val loop = find("keyhalf1")
+    val tooth = find("keyhalf2")
+    val dragonHelm = find("dragon_med_helm")
     val dharokHead = find("barrows_dharok_head")
     val dharokBody = find("barrows_dharok_body")
     val dharokLegs = find("barrows_dharok_legs")
@@ -136,5 +140,13 @@ public object BarrowsBrothers {
         style: HitType,
         maxHit: Int,
         vararg equipment: ObjType,
-    ): BarrowsBrother = BarrowsBrother(npc, CoordGrid(x, z, 0), style, maxHit, equipment.toList())
+    ): BarrowsBrother = BarrowsBrother(npc, CoordGrid(x, z, 3), style, maxHit, equipment.toList())
+}
+
+
+internal object BarrowsAttackRange : org.rsmod.api.type.editors.npc.NpcEditor() {
+    init {
+        edit(BarrowsNpcs.ahrim) { attackRange = 10 }
+        edit(BarrowsNpcs.karil) { attackRange = 8 }
+    }
 }

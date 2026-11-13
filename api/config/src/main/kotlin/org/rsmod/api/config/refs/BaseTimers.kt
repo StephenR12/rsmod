@@ -11,6 +11,8 @@ object BaseTimers : TimerReferences() {
     val stat_regen = find("stat_regen")
     val stat_boost_restore = find("stat_boost_restore")
     val health_regen = find("health_regen")
+    val health_boost_decay = find("health_boost_decay")
+    val health_cape_regen = find("health_cape_regen")
     val rapidrestore_regen = find("rapidrestore_regen")
     val spec_regen = find("spec_regen")
     val prayer_drain = find("prayer_drain")

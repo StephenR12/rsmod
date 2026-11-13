@@ -12,6 +12,7 @@ import org.rsmod.api.combat.formulas.attributes.CombatNpcAttributes
 import org.rsmod.api.combat.formulas.attributes.CombatRangedAttributes
 import org.rsmod.api.combat.formulas.attributes.collector.CombatNpcAttributeCollector
 import org.rsmod.api.combat.formulas.attributes.collector.CombatRangedAttributeCollector
+import org.rsmod.api.combat.commons.npc.isAssignedSlayerTarget
 import org.rsmod.api.combat.formulas.isSlayerTask
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.varbits
@@ -37,10 +38,11 @@ constructor(
     ): Int {
         val targetType = target.visType
         val targetMagic = max(target.magicLvl, targetType.param(params.attack_magic))
-        val targetDistance = player.coords.chebyshevDistance(target.coords)
+        val targetDistance = player.bounds().distanceTo(target.bounds())
         return computeHitChance(
             source = player,
             target = targetType,
+            slayerTask = target.isAssignedSlayerTarget(player),
             targetDefence = target.defenceLvl,
             targetCurrHp = target.hitpoints,
             targetMaxHp = target.baseHitpointsLvl,
@@ -65,10 +67,10 @@ constructor(
         attackStyle: RangedAttackStyle?,
         blockType: RangedAttackType?,
         specialMultiplier: Double,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
         val rangeAttributes = rangedAttributes.collect(source, attackType, attackStyle)
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 

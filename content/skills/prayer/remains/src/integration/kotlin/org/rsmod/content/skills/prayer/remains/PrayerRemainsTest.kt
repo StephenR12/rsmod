@@ -49,6 +49,53 @@ import org.rsmod.map.CoordGrid
 @OptIn(UncheckedType::class)
 class PrayerRemainsTest {
     @Test
+    fun GameTestState
+        .`all prayer scrolls consume once after confirmation and check their own reading level`() =
+        runInjectedGameTest(Dependencies::class, TestModule, PrayerScrolls::class) { deps ->
+            preparePlayer()
+            val items = listOf(21047, 21034, 21079, 30626, 30627)
+            val bits = listOf(5453, 5451, 5452, 16097, 16098)
+            for (index in items.indices) {
+                val scroll = objTypes.getValue(items[index])
+                val bit = cacheTypes.varbits.getValue(bits[index])
+                val level = listOf(1, 1, 1, 62, 63)[index]
+                fun read() {
+                    player.ifClose()
+                    player.withProtectedAccess { deps.held.interact(this, inv, 0, HeldOp.Op1) }
+                }
+                player.inv[0] = InvObj(scroll)
+                if (level > 1) {
+                    player.setBaseLevel(stats.prayer, level - 1)
+                    read()
+                    assertEquals(0, player.vars[bit])
+                    assertEquals(1, player.count(scroll))
+                }
+                player.setBaseLevel(stats.prayer, level)
+                advance()
+                read()
+                declineChoice()
+                assertEquals(1, player.count(scroll))
+                advance()
+                read()
+                confirmChoice()
+                assertMessageSent(
+                    "You have unlocked " +
+                        listOf("Preserve", "Rigour", "Augury", "Deadeye", "Mystic Vigour")[index] +
+                        "."
+                )
+                org.junit.jupiter.api.Assertions.assertEquals(
+                    1,
+                    player.vars[bit],
+                    "Unlock for scroll ${scroll.id}",
+                )
+                assertEquals(0, player.count(scroll))
+                player.inv[0] = InvObj(scroll)
+                read()
+                assertEquals(1, player.count(scroll))
+            }
+        }
+
+    @Test
     fun GameTestState.`cache 233 Goblin Temple altar pins composite loc and quest contracts`() =
         runPrayerRemainsTest { deps ->
             assertEquals(
@@ -138,7 +185,7 @@ class PrayerRemainsTest {
             )
             assertEquals(listOf(2412, 2413, 2414), statues.map { (_, cape) -> cape.id })
             assertEquals(267, varps.magearena.id)
-            assertEquals(1, PrayerMageArenaStatues.MAGE_ARENA_COMPLETE)
+            assertEquals(6, PrayerMageArenaStatues.MAGE_ARENA_COMPLETE)
         }
 
     @Test
@@ -825,10 +872,10 @@ class PrayerRemainsTest {
             )
             assertEquals(
                 mapOf(
-                    PrayerGodWarsGod.Zamorak to CoordGrid(2925, 5332, 2),
-                    PrayerGodWarsGod.Saradomin to CoordGrid(2908, 5265, 0),
-                    PrayerGodWarsGod.Armadyl to CoordGrid(2839, 5295, 2),
-                    PrayerGodWarsGod.Bandos to CoordGrid(2863, 5354, 2),
+                    PrayerGodWarsGod.Zamorak to CoordGrid(2925, 5333, 2),
+                    PrayerGodWarsGod.Saradomin to CoordGrid(2909, 5265, 0),
+                    PrayerGodWarsGod.Armadyl to CoordGrid(2839, 5294, 2),
+                    PrayerGodWarsGod.Bandos to CoordGrid(2862, 5354, 2),
                     PrayerGodWarsGod.Zaros to CoordGrid(2900, 5204, 0),
                 ),
                 PrayerGodWarsGod.entries.associateWith(PrayerGodWarsAltarTeleport::destination),

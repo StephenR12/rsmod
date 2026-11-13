@@ -7,6 +7,9 @@ import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.player.output.mes
+import org.rsmod.api.player.vars.intVarBit
+import org.rsmod.game.entity.Player
 import org.rsmod.api.player.stat.basePrayerLvl
 
 public class PrayerRemains @Inject constructor() {
@@ -46,26 +49,17 @@ public class PrayerRemains @Inject constructor() {
                     return
                 }
             }
-            val ancestralBonus =
-                recipe.kind == PrayerRemainsKind.Bone &&
-                    recipe.obj != objs.big_bones &&
-                    player.vars[varbits.brut_prayer_total] > 0
             when (recipe.kind) {
                 PrayerRemainsKind.Bone -> {
+                    player.restoreBurialPrayer(recipe.obj)
                     anim(seqs.human_pickupfloor)
                     soundSynth(synths.bury_bones)
                     mes("You bury the bones.")
                 }
                 PrayerRemainsKind.DemonicAsh -> mes("You scatter the ashes.")
             }
-            if (ancestralBonus) {
-                vars[varbits.brut_prayer_total] = player.vars[varbits.brut_prayer_total] - 1
-                mes(
-                    "You gain extra prayer experience as the ancestral barbarian spirits " +
-                        "watch over you."
-                )
-            }
-            statAdvance(stats.prayer, if (ancestralBonus) recipe.xp * 3.0 else recipe.xp)
+            val boosted = player.consumeAncestralBurials(recipe,1)
+            statAdvance(stats.prayer, recipe.xp * (1 + 2 * boosted))
             weakQueue(cooldown, ACTION_COOLDOWN)
         }
     }
@@ -80,4 +74,17 @@ public class PrayerRemains @Inject constructor() {
     private companion object {
         const val ACTION_COOLDOWN = 2
     }
+}
+
+private var Player.ancestralBurials by intVarBit(varbits.brut_prayer_total)
+
+/** Reserves no charges until the actual burial has committed. */
+internal fun Player.consumeAncestralBurials(recipe: PrayerRemainsRecipe, count: Int): Int {
+    if (recipe.kind != PrayerRemainsKind.Bone || recipe.obj == objs.big_bones) return 0
+    val boosted = minOf(ancestralBurials,count)
+    if (boosted > 0) {
+        ancestralBurials -= boosted
+        mes("You gain extra prayer experience as the ancestral barbarian spirits watch over you.")
+    }
+    return boosted
 }

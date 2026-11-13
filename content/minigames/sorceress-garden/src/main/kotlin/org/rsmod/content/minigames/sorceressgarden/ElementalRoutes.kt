@@ -1,0 +1,97 @@
+package org.rsmod.content.minigames.sorceressgarden
+
+import org.rsmod.map.CoordGrid
+
+internal val elementalRoutes =
+    listOf(
+        listOf(
+            CoordGrid(2899, 5466),
+            CoordGrid(2899, 5468),
+            CoordGrid(2897, 5468),
+            CoordGrid(2897, 5466),
+            CoordGrid(2897, 5468),
+            CoordGrid(2899, 5468),
+        ),
+        listOf(CoordGrid(2897, 5470), CoordGrid(2891, 5470)),
+        listOf(
+            CoordGrid(2897, 5471),
+            CoordGrid(2899, 5471),
+            CoordGrid(2899, 5478),
+            CoordGrid(2897, 5478),
+        ),
+        listOf(
+            CoordGrid(2896, 5483),
+            CoordGrid(2900, 5483),
+            CoordGrid(2900, 5480),
+            CoordGrid(2897, 5480),
+            CoordGrid(2897, 5481),
+            CoordGrid(2896, 5481),
+            CoordGrid(2896, 5482),
+        ),
+        listOf(
+            CoordGrid(2896, 5483),
+            CoordGrid(2896, 5481),
+            CoordGrid(2891, 5481),
+            CoordGrid(2891, 5483),
+        ),
+        listOf(CoordGrid(2889, 5485), CoordGrid(2900, 5485)),
+        listOf(CoordGrid(2922, 5471), CoordGrid(2922, 5459)),
+        listOf(
+            CoordGrid(2924, 5463),
+            CoordGrid(2928, 5463),
+            CoordGrid(2928, 5461),
+            CoordGrid(2924, 5461),
+        ),
+        listOf(
+            CoordGrid(2924, 5461),
+            CoordGrid(2926, 5461),
+            CoordGrid(2926, 5458),
+            CoordGrid(2924, 5458),
+        ),
+        listOf(
+            CoordGrid(2928, 5458),
+            CoordGrid(2928, 5460),
+            CoordGrid(2934, 5460),
+            CoordGrid(2934, 5458),
+        ),
+        listOf(CoordGrid(2931, 5477), CoordGrid(2931, 5470)),
+        listOf(CoordGrid(2935, 5469), CoordGrid(2928, 5469)),
+        listOf(CoordGrid(2925, 5464), CoordGrid(2925, 5475)),
+        listOf(CoordGrid(2931, 5477), CoordGrid(2931, 5470)),
+        listOf(CoordGrid(2908, 5460), CoordGrid(2898, 5460)),
+        listOf(CoordGrid(2900, 5448), CoordGrid(2900, 5455)),
+        listOf(CoordGrid(2905, 5449), CoordGrid(2899, 5449)),
+        listOf(
+            CoordGrid(2903, 5451),
+            CoordGrid(2903, 5455),
+            CoordGrid(2905, 5455),
+            CoordGrid(2905, 5451),
+        ),
+        listOf(CoordGrid(2903, 5457), CoordGrid(2917, 5457)),
+        listOf(CoordGrid(2908, 5455), CoordGrid(2917, 5455)),
+        listOf(CoordGrid(2907, 5488), CoordGrid(2907, 5483)),
+        listOf(CoordGrid(2907, 5490), CoordGrid(2907, 5495)),
+        listOf(CoordGrid(2910, 5487), CoordGrid(2910, 5493)),
+        listOf(
+            CoordGrid(2912, 5485),
+            CoordGrid(2915, 5485),
+            CoordGrid(2915, 5483),
+            CoordGrid(2918, 5483),
+            CoordGrid(2918, 5485),
+            CoordGrid(2915, 5485),
+            CoordGrid(2915, 5483),
+            CoordGrid(2912, 5483),
+        ),
+        listOf(
+            CoordGrid(2921, 5486),
+            CoordGrid(2923, 5486),
+            CoordGrid(2923, 5490),
+            CoordGrid(2923, 5486),
+        ),
+        listOf(
+            CoordGrid(2921, 5495),
+            CoordGrid(2921, 5491),
+            CoordGrid(2923, 5491),
+            CoordGrid(2923, 5495),
+        ),
+    )

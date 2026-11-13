@@ -5,6 +5,9 @@ import java.util.WeakHashMap
 import kotlin.math.min
 import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.config.refs.objs
+import org.rsmod.api.config.refs.npcs
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
@@ -24,14 +27,16 @@ public enum class TannerPricing {
 public class Tanning
 @Inject
 constructor(private val recipes: TanningRecipeRegistry, private val objTypes: ObjTypeList) {
+    private val activeTanner: MutableMap<Player, Int> = WeakHashMap()
     private val activePricing: MutableMap<Player, TannerPricing> = WeakHashMap()
 
-    public fun open(access: ProtectedAccess, pricing: TannerPricing) {
+    public fun open(access: ProtectedAccess, pricing: TannerPricing, tannerId: Int? = null) {
         with(access) {
             if (interfaces.tanner !in player.ui) {
                 ifOpenMainModal(interfaces.tanner)
             }
             activePricing[player] = pricing
+            if (tannerId == null) activeTanner.remove(player) else activeTanner[player] = tannerId
             for (recipe in recipes.recipes) {
                 ifSetObj(recipe.modelComponent, recipe.output, zoom = 1)
                 ifSetText(recipe.textComponent, recipe.name)
@@ -46,6 +51,7 @@ constructor(private val recipes: TanningRecipeRegistry, private val objTypes: Ob
 
     public fun close(player: Player) {
         activePricing.remove(player)
+        activeTanner.remove(player)
     }
 
     public fun tan(access: ProtectedAccess, recipe: TanningRecipe, requested: Int) {
@@ -79,6 +85,7 @@ constructor(private val recipes: TanningRecipeRegistry, private val objTypes: Ob
                     add(inventory, recipe.output.id, count)
                 }
             check(result.success) { "Tanning transaction failed after validation: $recipe" }
+            if (player.members && activeTanner[player] == npcs.werewolf_tanner.id) player.completeDiaryTask(DiaryTask.TanWithSbott)
             mes(if (count == 1) "The tanner tans your hide." else "The tanner tans your hides.")
         }
     }

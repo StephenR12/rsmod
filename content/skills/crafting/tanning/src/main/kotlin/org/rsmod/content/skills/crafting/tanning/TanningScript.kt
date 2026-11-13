@@ -2,9 +2,12 @@ package org.rsmod.content.skills.crafting.tanning
 
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.npcs
+import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.player.dialogue.Dialogue
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.script.onIfModalButton
+import org.rsmod.api.script.onIfClose
+import org.rsmod.api.script.onPlayerLogout
 import org.rsmod.api.script.onOpNpc1
 import org.rsmod.api.script.onOpNpc3
 import org.rsmod.game.entity.Npc
@@ -19,9 +22,12 @@ constructor(private val tanning: Tanning, private val recipes: TanningRecipeRegi
         onOpNpc3(npcs.ellis_tanner) { tanning.open(this, TannerPricing.Standard) }
         onOpNpc3(npcs.tanner) { tanning.open(this, TannerPricing.Standard) }
         onOpNpc1(npcs.ranging_guild_leatherworker) { leatherworkerDialogue(it.npc) }
-        onOpNpc3(npcs.werewolf_tanner) { tanning.open(this, TannerPricing.Premium) }
+        onOpNpc3(npcs.werewolf_tanner) { tanning.open(this, TannerPricing.Premium, it.npc.id) }
         onOpNpc3(npcs.auburn_tanner) { tanning.open(this, TannerPricing.Premium) }
         onOpNpc3(npcs.eodan) { tanning.open(this, TannerPricing.Eodan) }
+
+        onIfClose(interfaces.tanner) { tanning.close(player) }
+        onPlayerLogout { tanning.close(player) }
 
         for (recipe in recipes.recipes) {
             onIfModalButton(recipe.buttons.all) { tanning.tan(this, recipe, Int.MAX_VALUE) }

@@ -8,6 +8,7 @@ import org.rsmod.api.combat.formulas.accuracy.AccuracyOperations
 import org.rsmod.api.combat.weapon.styles.AttackStyles
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.player.bonus.WornBonuses
+import org.rsmod.api.type.refs.varbit.VarBitReferences
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.entity.Player
 import org.rsmod.game.type.npc.UnpackedNpcType
@@ -30,7 +31,9 @@ constructor(private val bonuses: WornBonuses, private val attackStyles: AttackSt
         attackType: MeleeAttackType?,
     ): Int {
         val attackRoll = computeAttackRoll(source, sourceType)
-        val defenceRoll = computeDefenceRoll(target, attackType)
+        val camdozaal = sourceType.id in 10689..10695 && sourceType.id % 2 == 1
+        val charmBonus = if (camdozaal && target.vars[CamdozaalDefence.charm] != 0) 5 else 0
+        val defenceRoll = computeDefenceRoll(target, attackType, charmBonus)
         return AccuracyOperations.calculateHitChance(attackRoll, defenceRoll)
     }
 
@@ -40,10 +43,18 @@ constructor(private val bonuses: WornBonuses, private val attackStyles: AttackSt
         return NpcMeleeAccuracy.calculateBaseAttackRoll(effectiveAttack, attackBonus)
     }
 
-    public fun computeDefenceRoll(target: Player, attackType: MeleeAttackType?): Int {
+    public fun computeDefenceRoll(
+        target: Player,
+        attackType: MeleeAttackType?,
+        visibleBonus: Int = 0,
+    ): Int {
         val targetAttackStyle = attackStyles.get(target)
         val effectiveDefence =
-            MeleeAccuracyOperations.calculateEffectiveDefence(target, targetAttackStyle)
+            MeleeAccuracyOperations.calculateEffectiveDefence(
+                target,
+                targetAttackStyle,
+                visibleBonus,
+            )
         val defenceBonus = target.getDefenceBonus(attackType)
         return PlayerMeleeAccuracy.calculateBaseDefenceRoll(effectiveDefence, defenceBonus)
     }
@@ -55,4 +66,8 @@ constructor(private val bonuses: WornBonuses, private val attackStyles: AttackSt
             MeleeAttackType.Crush -> bonuses.defensiveCrushBonus(this)
             null -> 0
         }
+}
+
+internal object CamdozaalDefence : VarBitReferences() {
+    val charm = find("camdozaal_defence_buff")
 }

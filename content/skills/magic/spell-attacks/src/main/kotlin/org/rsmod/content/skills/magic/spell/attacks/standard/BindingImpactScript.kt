@@ -2,6 +2,7 @@ package org.rsmod.content.skills.magic.spell.attacks.standard
 
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.walktriggers
+import org.rsmod.api.player.hunter.reserveImplingCatch
 import org.rsmod.api.script.onNpcQueueWithArgs
 import org.rsmod.api.script.onNpcWalkTrigger
 import org.rsmod.api.script.onPlayerQueueWithArgs
@@ -27,6 +28,7 @@ public class BindingImpactScript @Inject constructor(private val states: Binding
         onNpcQueueWithArgs<BindingImpact>(binding_queues.impact) {
             val impact = it.args
             states.bind(npc, impact.source, impact.duration)
+            npc.reserveImplingCatch(impact.source)
         }
         onPlayerQueueWithArgs<BindingWarning>(binding_queues.warning) {
             if (states.isCurrent(player, it.args)) {

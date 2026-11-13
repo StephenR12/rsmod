@@ -1,5 +1,6 @@
 package org.rsmod.content.bosses.wilderness
 
+import org.rsmod.api.type.editors.npc.NpcEditor
 import org.rsmod.api.type.refs.loc.LocReferences
 import org.rsmod.api.type.refs.npc.NpcReferences
 import org.rsmod.api.type.refs.obj.ObjReferences
@@ -325,4 +326,17 @@ public object WildernessBosses {
             rate,
             lesser,
         )
+}
+
+internal object WildernessBossAttackRanges : NpcEditor() {
+    init {
+        with(WildernessBossNpcs) {
+            for (type in listOf(callisto, artio, venenatis, spindel, vetion, vetionEnraged, calvarion, calvarionEnraged)) {
+                edit(type) { attackRange = 18 }
+            }
+            for (type in listOf(chaosElemental, chaosFanatic, crazyArchaeologist, kingBlackDragon)) {
+                edit(type) { attackRange = 10 }
+            }
+        }
+    }
 }

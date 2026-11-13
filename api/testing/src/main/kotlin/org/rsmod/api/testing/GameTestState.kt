@@ -183,7 +183,7 @@ public class GameTestState {
         logger.info { "Setting up game-test state..." }
         val duration = measureTime {
             val server = GameServer(skipTypeVerificationOverride = false)
-            val injector = initializeGameInjector(server)
+            val injector = server.prepareGame()
             injected = injector.getInstance(GameTestInjected::class.java)
             readOnly = injector.getInstance(AdvancedReadOnly::class.java)
 
@@ -205,9 +205,4 @@ public class GameTestState {
         logger.info { "Finalizing game-test state..." }
     }
 
-    private fun initializeGameInjector(server: GameServer): Injector {
-        val injector = server.createInjector()
-        server.prepareGame(injector)
-        return injector
-    }
 }

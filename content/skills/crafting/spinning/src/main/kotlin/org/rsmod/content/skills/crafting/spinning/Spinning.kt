@@ -1,6 +1,8 @@
 package org.rsmod.content.skills.crafting.spinning
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.diary.recordDiaryCrossbowString
+import org.rsmod.map.CoordGrid
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.invtx.add
@@ -85,7 +87,7 @@ constructor(private val recipes: SpinningRecipeRegistry, private val objTypes: O
                 resetAnim()
                 return
             }
-            spin(recipe, request.material)
+            spin(recipe, request.material,request.wheel.coords)
             val remaining = request.remaining - 1
             if (remaining <= 0 || !canSpin(recipe, request.material, sendFailure = false)) {
                 resetAnim()
@@ -100,7 +102,7 @@ constructor(private val recipes: SpinningRecipeRegistry, private val objTypes: O
         }
     }
 
-    private fun ProtectedAccess.spin(recipe: SpinningRecipe, material: ObjType) {
+    private fun ProtectedAccess.spin(recipe: SpinningRecipe, material: ObjType,wheel:CoordGrid) {
         val result =
             player.invTransaction(player.inv) {
                 val inventory = select(player.inv)
@@ -108,6 +110,7 @@ constructor(private val recipes: SpinningRecipeRegistry, private val objTypes: O
                 add(inventory, recipe.output.id, 1)
             }
         check(result.success) { "Spinning transaction failed after validation: $recipe" }
+        player.recordDiaryCrossbowString(recipe.output.id,wheel)
         statAdvance(stats.crafting, recipe.xp)
     }
 

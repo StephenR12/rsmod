@@ -14,12 +14,12 @@ import org.rsmod.game.entity.Player
  */
 @Singleton
 public class PlayerOwnedHousePresenceRepository @Inject constructor() {
-    private val occupants = WeakHashMap<Player, Unit>()
+    private val occupants = WeakHashMap<Player, (Player) -> Boolean>()
 
-    public fun isInside(player: Player): Boolean = player in occupants
+    public fun isInside(player: Player): Boolean = occupants[player]?.invoke(player) == true
 
-    public fun enter(player: Player) {
-        occupants[player] = Unit
+    public fun enter(player: Player, contains: (Player) -> Boolean = { true }) {
+        occupants[player] = contains
     }
 
     public fun leave(player: Player) {

@@ -5,6 +5,26 @@ import org.rsmod.api.type.refs.seq.SeqReferences
 typealias canoe_seqs = CanoeSeqs
 
 object CanoeSeqs : SeqReferences() {
+    val felling =
+        listOf(
+                "bronze",
+                "iron",
+                "steel",
+                "black",
+                "mithril",
+                "adamant",
+                "rune",
+                "dragon",
+                "crystal",
+                "crystal_inactive",
+                "3a",
+            )
+            .map {
+                find(
+                    if (it == "crystal_inactive") "human_canoeing_carve_crystal_2h_axe_inactive"
+                    else "human_canoeing_carve_${it}_2h_axe"
+                )
+            }
     val canoeing_station_animations = find("canoeing_station_animations", 8572148383224722846)
     val canoeing_pushing_into_water = find("canoeing_pushing_into_water", 2997966032775519330)
     val canoeing_rowing = find("canoeing_rowing", 1556344674969094092)

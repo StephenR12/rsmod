@@ -1,0 +1,447 @@
+[[spawn]]
+npc = 'rcu_zammy_mage2'
+coords = '0_47_75_31_34'
+
+[[spawn]]
+npc = 'gotr_cordelia'
+coords = '0_56_148_33_19'
+
+[[spawn]]
+npc = 'rcu_zammy_mage1'
+coords = '0_48_55_35_35'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_6_38'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_7_28'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_7_37'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_8_24'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_8_30'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_8_34'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_8_38'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_9_13'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_9_16'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_9_25'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_10_41'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_10_44'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_11_16'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_12_47'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_13_13'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_15_51'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_17_51'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_20_54'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_21_10'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_25_54'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_30_55'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_35_9'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_36_54'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_39_53'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_43_52'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_47_11'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_47_49'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_51_17'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_52_38'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_54_37'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_75_58_22'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_12_13'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_22_12'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_32_6'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_42_9'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_53_16'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_9_39'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_9_46'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_13_54'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_21_53'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_28_45'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_37_52'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_48_48'
+
+[[spawn]]
+npc = 'abyssal_leech'
+coords = '0_47_76_56_37'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_32_57'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_42_55'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_48_51'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_49_17'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_49_46'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_50_48'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_51_12'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_52_10'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_52_19'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_52_24'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_52_36'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_53_41'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_55_23'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_56_30'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_56_40'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_9_47'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_19_8'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_75_6_26'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_76_44_34'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_76_49_44'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_76_12_32'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_76_36_20'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_76_19_50'
+
+[[spawn]]
+npc = 'abyssal_pyramid'
+coords = '0_47_76_30_42'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_8_32'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_9_23'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_12_17'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_15_13'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_17_11'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_18_9'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_20_7'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_20_11'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_22_8'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_23_11'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_24_8'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_26_9'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_28_8'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_29_10'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_30_7'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_32_10'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_37_11'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_39_8'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_42_11'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_44_11'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_44_55'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_45_9'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_46_13'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_50_10'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_50_13'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_50_16'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_51_44'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_52_20'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_53_11'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_53_19'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_53_28'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_54_20'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_14_49'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_75_22_56'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_76_53_51'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_76_12_50'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_76_23_8'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_76_23_38'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_76_25_22'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_76_35_38'
+
+[[spawn]]
+npc = 'abyssal_walker'
+coords = '0_47_76_55_21'

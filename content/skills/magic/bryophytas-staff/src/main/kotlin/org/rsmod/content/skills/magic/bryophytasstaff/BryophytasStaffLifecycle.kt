@@ -5,20 +5,42 @@ import kotlin.math.min
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.varobjs
 import org.rsmod.api.obj.charges.ObjChargeManager
+import org.rsmod.api.player.events.interact.BankedObjEvents
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.vars.intVarBit
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.isAnyType
 import org.rsmod.game.inv.isType
+import org.rsmod.utils.bits.withBits
 
 public class BryophytasStaffLifecycle
 @Inject
 constructor(private val chargeManager: ObjChargeManager) {
     public suspend fun configureCharges(access: ProtectedAccess) {
         with(access) {
-            val requested = countDialog("How many charges should be added on withdrawal?")
+            val requested = countDialog("How many charges should the staff hold on withdrawal?")
             player.bryophytasStaffAutochargeQuantity = requested.coerceIn(0, MAX_CHARGES)
         }
+    }
+
+    public fun autocharge(access: ProtectedAccess, event: BankedObjEvents.Autocharge) {
+        val staff = access.inv[event.slot] ?: return
+        if (
+            staff != event.obj ||
+                !staff.isAnyType(objs.bryophytas_staff, objs.bryophytas_staff_uncharged)
+        )
+            return
+        val current = charges(staff)
+        val needed =
+            access.player.bryophytasStaffAutochargeQuantity.coerceIn(0, MAX_CHARGES) - current
+        if (needed <= 0) return
+        val runes = event.takeMaterial(objs.nature_rune, needed)
+        if (runes > 0) {
+            val vars = staff.vars.withBits(varobjs.charges_16383.bits, current + runes)
+            access.inv[event.slot] = InvObj(objs.bryophytas_staff, vars = vars)
+        }
+        if (runes < needed)
+            access.mes("There aren't enough nature runes in your bank to charge the staff fully.")
     }
 
     public fun charge(access: ProtectedAccess, staffSlot: Int, runeSlot: Int) {

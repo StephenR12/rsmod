@@ -1,6 +1,13 @@
 package org.rsmod.content.skills.woodcutting.scripts
 
+import org.rsmod.api.config.FellingAxes
+
+import org.rsmod.api.player.diary.recordDiaryWood
+import org.rsmod.content.skills.woodcutting.forestry.ForestryHarvest
 import jakarta.inject.Inject
+import org.rsmod.content.skills.pets.SkillPetRates
+import org.rsmod.api.player.events.KingdomWork
+import org.rsmod.api.player.events.KingdomContribution
 import org.rsmod.api.config.Constants
 import org.rsmod.api.config.locParam
 import org.rsmod.api.config.locXpParam
@@ -14,6 +21,9 @@ import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varcons
 import org.rsmod.api.controller.vars.intVarCon
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.player.diary.recordLumbridgeOakCut
 import org.rsmod.api.player.events.interact.BankedObjEvents
 import org.rsmod.api.player.output.ClientScripts
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -68,7 +78,9 @@ import org.rsmod.plugin.scripts.ScriptContext
 
 class Woodcutting
 @Inject
-constructor(
+constructor(private val petRates: SkillPetRates,
+    private val gear: org.rsmod.content.skills.woodcutting.forestry.ForestryGear,
+    private val harvest:ForestryHarvest,
     private val objTypes: ObjTypeList,
     private val locTypes: LocTypeList,
     private val enumTypes: EnumTypeList,
@@ -136,6 +148,14 @@ constructor(
         onProtectedEvent<BankedObjEvents.ConfigureCharges>(objs.crystal_axe_inactive.id) {
             crystalAxe.configureCharges(this)
         }
+        val fellingActive=objs.crystal_felling_axe
+        for(form in listOf(fellingActive,FellingAxes.inactive)) {
+            onOpHeldU(form,objs.crystal_shard){crystalAxe.charge(this,it.firstSlot,it.secondSlot,fellingActive,FellingAxes.inactive)}
+            onOpHeld4(form){crystalAxe.revert(this,it.slot,form)}
+            onProtectedEvent<BankedObjEvents.ConfigureCharges>(form.id){crystalAxe.configureCharges(this)}
+        }
+        onOpHeld3(fellingActive){crystalAxe.checkCharges(this,inv[it.slot])}
+        onOpWorn2(fellingActive){crystalAxe.checkCharges(this,player.worn[it.slot])}
         onOpLoc1(CrystalSingingLocs.bowl) { crystalAxeSinging.selectAtBowl(this) }
         for (singer in CrystalSingingNpcs.assistants) {
             onOpNpc3(singer) { crystalAxeSinging.selectWithSinger(this) }
@@ -152,7 +172,9 @@ constructor(
             return
         }
 
-        if (inv.isFull()) {
+        val kingdom = KingdomWork.tree(tree.coords, type.treeLogs)
+        if (kingdom != null && !kingdom.permitted(player)) return
+        if (inv.isFull() && kingdom == null && !gear.autoStores(player,type.treeLogs.id)) {
             val product = objTypes[type.treeLogs]
             mes("Your inventory is too full to hold any more ${product.name.lowercase()}.")
             soundSynth(synths.pillory_wrong)
@@ -189,7 +211,9 @@ constructor(
             return
         }
 
-        if (inv.isFull()) {
+        val kingdom = KingdomWork.tree(tree.coords, type.treeLogs)
+        if (kingdom != null && !kingdom.permitted(player)) return
+        if (inv.isFull() && kingdom == null && !gear.autoStores(player,type.treeLogs.id)) {
             val product = objTypes[type.treeLogs]
             mes("Your inventory is too full to hold any more ${product.name.lowercase()}.")
             soundSynth(synths.pillory_wrong)
@@ -208,6 +232,7 @@ constructor(
             actionDelay = mapClock + 3
         } else if (actionDelay == mapClock) {
             val (low, high) = cutSuccessRates(type, axe, enumTypes)
+            publish(org.rsmod.content.skills.woodcutting.forestry.TreeChopRoll(player,tree,type))
             cutLogs = statRandom(stats.woodcutting, low, high, invisibleLvls)
         }
 
@@ -218,16 +243,49 @@ constructor(
             despawn = cutLogs && random.of(1, 255) > type.treeDepleteChance
         }
 
-        if (cutLogs) {
+        if (cutLogs && kingdom != null) {
+            statAdvance(stats.woodcutting, type.treeXp * xpMods.get(player, stats.woodcutting))
+            publish(KingdomContribution(player, kingdom))
+        } else if (cutLogs) {
             val product = objTypes[type.treeLogs]
             clueNests.tryDrops(this, type)
             if (!birdNests.tryDrop(this, product)) {
-                val xp = type.treeXp * xpMods.get(player, stats.woodcutting)
+                val felling=harvest.chop(player,axe)
+                val xp = type.treeXp * xpMods.get(player, stats.woodcutting)*felling.xp
                 val axeResult = axeEffects.apply(this, axe, product)
-                spam("You get some ${product.name.lowercase()}.")
+                if(!felling.skipLog)spam("You get some ${product.name.lowercase()}.")
                 statAdvance(stats.woodcutting, xp)
-                if (!axeResult.logConsumed) {
-                    invAdd(inv, product)
+                player.recordDiaryWood(product.id, tree.id, tree.coords)
+                if (product.id == objs.oak_logs.id) player.recordLumbridgeOakCut(tree.coords)
+                val firstFree = inv.indexOfFirst { it == null }
+                if (!axeResult.logConsumed && !felling.skipLog) {
+                    val spare=inv.freeSpace()>=2
+                    if (!gear.storeLog(player,product)) invAdd(inv, product)
+                    harvest.afterLog(player,product,spare)
+                }
+                val petRate = when (product.id) {
+                    objs.logs.id, objs.achey_tree_logs.id -> 317_647
+                    objs.oak_logs.id -> 361_146
+                    objs.willow_logs.id, objs.blisterwood_logs.id -> 289_286
+                    objs.teak_logs.id -> 264_336
+                    objs.juniper_logs.id -> 360_000
+                    objs.maple_logs.id -> 221_918
+                    objs.bark.id -> 214_367
+                    objs.mahogany_logs.id -> 220_623
+                    objs.arctic_pine_logs.id -> 145_758
+                    objs.yew_logs.id -> 145_013
+                    objs.magic_logs.id, objs.redwood_logs.id -> 72_321
+                    else -> null
+                }
+                if (petRate != null) petRates.roll(player,stats.woodcutting,13322,petRate,
+                    firstFree.takeIf { inv[it]?.id == product.id } ?: -1)
+                if (
+                    product.id == objs.willow_logs.id &&
+                        tree.coords.level == 0 &&
+                        tree.coords.x in 3070..3100 &&
+                        tree.coords.z in 3220..3240
+                ) {
+                    player.completeDiaryTask(DiaryTask.LUMBRIDGE_DRAYNOR_MEDIUM_CHOP_DRAYNOR_WILLOW)
                 }
                 publish(CutLogs(player, tree, product))
             }
@@ -329,7 +387,7 @@ constructor(
         val UnpackedObjType.axeWoodcuttingAnim: SeqType by objParam(params.skill_anim)
         val UnpackedObjType.axePriority: Int
             get() =
-                when (id) {
+                when (FellingAxes.ordinaryId(id)) {
                     objs.bronze_axe.id -> 1
                     objs.iron_axe.id -> 2
                     objs.steel_axe.id -> 3
@@ -343,7 +401,7 @@ constructor(
                 }
 
         val UnpackedObjType.axeSoteRequired: Boolean
-            get() = id == objs.crystal_axe.id || id == objs.crystal_axe_inactive.id
+            get() = FellingAxes.ordinaryId(id) in setOf(objs.crystal_axe.id,objs.crystal_axe_inactive.id)
 
         val UnpackedLocType.treeLevelReq: Int by locParam(params.levelrequire)
         val UnpackedLocType.treeLogs: ObjType by locParam(params.skill_productitem)
@@ -362,13 +420,15 @@ constructor(
             val worn = player.wornAxe(objTypes)
             val carried = player.carriedAxe(objTypes)
             if (worn != null && carried != null) {
-                if (objTypes[worn].axePriority >= objTypes[carried].axePriority) {
+                if (objTypes[worn].selectionPriority >= objTypes[carried].selectionPriority) {
                     return worn
                 }
                 return carried
             }
             return worn ?: carried
         }
+
+        private val UnpackedObjType.selectionPriority get()=axePriority*2 + if(FellingAxes.isFelling(id))1 else 0
 
         private fun Player.wornAxe(objTypes: ObjTypeList): InvObj? {
             val righthand = righthand ?: return null
@@ -377,7 +437,7 @@ constructor(
 
         private fun Player.carriedAxe(objTypes: ObjTypeList): InvObj? {
             return inv.filterNotNull { objTypes[it].isUsableAxe(this) }
-                .maxByOrNull { objTypes[it].axePriority }
+                .maxByOrNull { objTypes[it].selectionPriority }
         }
 
         private fun UnpackedObjType.isUsableAxe(player: Player): Boolean =
@@ -401,7 +461,7 @@ constructor(
             enumTypes: EnumTypeList,
         ): Pair<Int, Int> {
             val axes = treeType.param(WoodcuttingParams.success_rates)
-            val rates = enumTypes[axes].find(axe)
+            val rates = enumTypes[axes].find(axe.copy(id = FellingAxes.ordinaryId(axe.id)))
             val low = rates shr 16
             val high = rates and 0xFFFF
             return low to high

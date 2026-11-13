@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.herblore
 
+import org.rsmod.api.player.diary.recordDiaryPotion
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
@@ -80,6 +81,7 @@ public class BarbarianMixing @Inject constructor(private val objTypes: ObjTypeLi
                 mesboxNp(TRAINING_MESSAGE)
             }
             statAdvance(stats.herblore, recipe.xp)
+            player.recordDiaryPotion(recipe.output.id, player.coords)
             val remaining = request.remaining - 1
             if (remaining <= 0 || !canMix(recipe, request.egg, sendFailure = false)) {
                 resetAnim()

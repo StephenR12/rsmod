@@ -27,6 +27,7 @@ public class SlayerBossScript
 @Inject
 constructor(
     private val controller: SlayerBossController,
+    private val cerberus: CerberusCombat,
     private val accuracy: AccuracyFormulae,
     private val random: GameRandom,
     private val npcs: NpcRepository,
@@ -52,14 +53,17 @@ constructor(
             }
         }
         SlayerBosses.definitions.forEach { definition ->
-            val existing = npcs.findAll(definition.spawn).firstOrNull { it.id == definition.npc.id }
-            val boss =
-                existing
-                    ?: Npc(npcTypes[definition.npc], definition.spawn).also {
-                        npcs.add(it, Int.MAX_VALUE)
-                    }
-            configure(boss, definition)
-            controller.reset(boss)
+            val spawns =
+                if (definition.family == SlayerBossFamily.Cerberus)
+                    CerberusRoom.entries.map { it.spawn }
+                else listOf(definition.spawn)
+            for (tile in spawns) {
+                val boss =
+                    npcs.findAll(tile).firstOrNull { it.id == definition.npc.id }
+                        ?: Npc(npcTypes[definition.npc], tile).also { npcs.add(it, Int.MAX_VALUE) }
+                configure(boss, definition)
+                controller.reset(boss)
+            }
         }
     }
 
@@ -70,6 +74,10 @@ constructor(
     ) {
         with(access) {
             if (actionDelay > mapClock) return
+            if (definition.family == SlayerBossFamily.Cerberus) {
+                cerberus.attack(npc, target)
+                return
+            }
             val speed =
                 when (definition.family) {
                     SlayerBossFamily.Thermy -> 2
@@ -81,12 +89,7 @@ constructor(
             val attack = controller.state(npc).consumeAttack()
             val style =
                 when (definition.family) {
-                    SlayerBossFamily.Cerberus ->
-                        when (attack % 3) {
-                            0 -> HitType.Melee
-                            1 -> HitType.Ranged
-                            else -> HitType.Magic
-                        }
+                    SlayerBossFamily.Cerberus -> error("Cerberus uses her own combat cycle.")
                     SlayerBossFamily.Kraken -> HitType.Magic
                     SlayerBossFamily.Thermy ->
                         if (isWithinDistance(target, 1)) HitType.Melee else HitType.Magic
@@ -121,7 +124,6 @@ constructor(
                 when (type.id) {
                     SlayerBossNpcs.magicSoul.id,
                     SlayerBossNpcs.krakenTentacle.id,
-                    SlayerBossNpcs.sireLung.id,
                     SlayerBossNpcs.acidicAraxyte.id -> HitType.Magic
                     SlayerBossNpcs.rangedSoul.id -> HitType.Ranged
                     else -> HitType.Melee
@@ -162,7 +164,8 @@ constructor(
             baseMagicLvl = definition.magic
             rangedLvl = definition.ranged
             baseRangedLvl = definition.ranged
-            mode = NpcMode.Wander
+            mode =
+                if (definition.family == SlayerBossFamily.Cerberus) NpcMode.None else NpcMode.Wander
             setHunt(18)
             setHuntMode(huntmodes.constant_ranged)
         }
@@ -171,11 +174,7 @@ constructor(
     private companion object {
         private val minionTypes =
             listOf(
-                SlayerBossNpcs.rangedSoul,
-                SlayerBossNpcs.magicSoul,
-                SlayerBossNpcs.meleeSoul,
                 SlayerBossNpcs.krakenTentacle,
-                SlayerBossNpcs.sireLung,
                 SlayerBossNpcs.sireSpawn,
                 SlayerBossNpcs.sireScion,
                 SlayerBossNpcs.mirrorback,

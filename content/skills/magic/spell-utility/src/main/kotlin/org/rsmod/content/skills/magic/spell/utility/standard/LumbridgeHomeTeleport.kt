@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import kotlin.math.max
 import org.rsmod.api.config.refs.seqs
@@ -42,7 +43,7 @@ constructor(
                 mes("A mysterious force prevents you from teleporting!")
                 return
             }
-            if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+            if (player.isTeleportBlocked()) {
                 mes("A magical force stops you from teleporting.")
                 return
             }
@@ -51,15 +52,18 @@ constructor(
                 return
             }
 
+            channel(this,destination.coords) { vars[varps.aide_tele_timer] = epochMinute() }
+        }
+    }
+
+    /** Home and Grouping teleports use the same interruptible animation with independent cooldowns. */
+    public fun channel(access: ProtectedAccess, destination: CoordGrid, onArrival: ProtectedAccess.() -> Unit) {
+        with(access) {
             stopAction()
             clearQueue(home_teleport_queues.channel)
             val token = channels.begin(player)
             playStage(CHALK_STAGE)
-            queue(
-                home_teleport_queues.channel,
-                1,
-                HomeTeleportChannel(token, coords, destination, elapsedTicks = 1),
-            )
+            queue(home_teleport_queues.channel, 1, HomeTeleportChannel(token, coords, destination, onArrival, elapsedTicks = 1))
         }
     }
 
@@ -78,8 +82,8 @@ constructor(
                 check(channels.finish(player, channel.token))
                 resetAnim()
                 resetSpotanim()
-                spellTeleport(channel.destination.coords)
-                vars[varps.aide_tele_timer] = epochMinute()
+                spellTeleport(channel.destination)
+                channel.onArrival(this)
                 return
             }
 
@@ -153,7 +157,7 @@ constructor(
         // The update protocol carries the captured -10 offset as an unsigned 16-bit value.
         const val PORTAL_HEIGHT = 65526
         const val MAX_WILDERNESS_LEVEL = 20
-        const val TELEBLOCK_IMMUNITY_CYCLES = 100
+
         const val WILDERNESS_LEVEL_HEIGHT = 8
         const val WILDERNESS_Z = 3520
         const val WILDERNESS_UNDERGROUND_Z = 9920

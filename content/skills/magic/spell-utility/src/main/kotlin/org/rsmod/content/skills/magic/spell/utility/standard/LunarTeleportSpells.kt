@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.magic.MagicSpellType
 import org.rsmod.api.combat.manager.MagicRuneManager
@@ -11,6 +12,8 @@ import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.MagicSpellRegistry
 import org.rsmod.game.type.obj.ObjType
@@ -50,6 +53,12 @@ constructor(
             soundSynth(synths.teleport_all)
             delay(CAST_TICKS)
             spellTeleport(destination(spellType))
+            when (spellType.id) {
+                objs.spell_waterbirth_teleport.id ->
+                    player.completeDiaryTask(DiaryTask.TeleportToWaterbirth)
+                objs.spell_catherby_teleport.id ->
+                    player.completeDiaryTask(DiaryTask.TeleportToCatherby)
+            }
         }
     }
 
@@ -76,7 +85,7 @@ constructor(
             mes("A mysterious force prevents you from teleporting!")
             return false
         }
-        if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+        if (player.isTeleportBlocked()) {
             mes("A magical force stops you from teleporting.")
             return false
         }
@@ -96,7 +105,7 @@ constructor(
         const val CAST_TICKS = 4
         const val LUNAR_DIPLOMACY_COMPLETE = 190
         const val MAX_WILDERNESS_LEVEL = 20
-        const val TELEBLOCK_IMMUNITY_CYCLES = 100
+
         const val WILDERNESS_LEVEL_HEIGHT = 8
         const val WILDERNESS_Z = 3520
         const val WILDERNESS_UNDERGROUND_Z = 9920

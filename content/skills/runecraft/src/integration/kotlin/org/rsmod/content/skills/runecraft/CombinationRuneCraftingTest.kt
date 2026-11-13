@@ -13,9 +13,9 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.player.front
 import org.rsmod.api.player.interact.HeldInteractions
+import org.rsmod.api.spells.MagicImbueStateRepository
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.api.testing.scope.GameTestScope
-import org.rsmod.content.skills.magic.spell.utility.standard.MagicImbueStateRepository
 import org.rsmod.game.interact.HeldOp
 import org.rsmod.game.inv.InvObj
 

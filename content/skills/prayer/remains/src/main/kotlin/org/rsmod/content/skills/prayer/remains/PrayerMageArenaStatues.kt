@@ -16,6 +16,7 @@ public class PrayerMageArenaStatues @Inject constructor(private val objRepo: Obj
             if (vars[varps.magearena] < MAGE_ARENA_COMPLETE) {
                 return
             }
+            if (vars[varps.magearena] == MAGE_ARENA_COMPLETE) vars[varps.magearena] = 7
             faceLoc(statue)
             anim(seqs.human_pray)
             objRepo.add(
@@ -28,6 +29,6 @@ public class PrayerMageArenaStatues @Inject constructor(private val objRepo: Obj
     }
 
     public companion object {
-        public const val MAGE_ARENA_COMPLETE: Int = 1
+        public const val MAGE_ARENA_COMPLETE: Int = 6
     }
 }

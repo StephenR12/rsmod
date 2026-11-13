@@ -38,6 +38,8 @@ constructor(
         registerRange(cooking_locs.lumbridgeRange, CookingSourceKind.Lumbridge)
         registerRange(cooking_locs.hosidiusRange, CookingSourceKind.Hosidius)
         registerRange(cooking_locs.hosidiusRange2, CookingSourceKind.Hosidius)
+        for (stove in cooking_locs.houseFireStoves + cooking_locs.campfires) registerFoodUse(stove, CookingSourceKind.Fire)
+        for (stove in cooking_locs.houseRangeStoves) registerFoodUse(stove, CookingSourceKind.Range)
         registerFoodUse(cooking_locs.fire, CookingSourceKind.Fire)
         registerRange(cooking_locs.permanentCookFire, CookingSourceKind.Fire)
         onOpHeldU(objs.raw_chompy, objs.iron_spit) {
@@ -72,6 +74,10 @@ constructor(
             for (input in DairyChurningRecipes.inputs) {
                 onOpLocU(churn, input) { dairyChurning.select(this, it.loc, input, it.invSlot) }
             }
+        }
+        for (stove in cooking_locs.houseFireStoves + cooking_locs.campfires) {
+            onOpLocU(stove, objs.skewered_chompy) { chompy.start(this, it.loc, it.invSlot) }
+            for (recipe in IronSpitRecipes.all) onOpLocU(stove, recipe.skewered) { ironSpit.start(this, recipe, it.loc, it.invSlot) }
         }
         onOpLocU(cooking_locs.fire, objs.skewered_chompy) { chompy.start(this, it.loc, it.invSlot) }
         onOpLocU(cooking_locs.permanentCookFire, objs.skewered_chompy) {

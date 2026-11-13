@@ -1,0 +1,8 @@
+spawn = [
+    { npc = "lovakengj_blast_oreguard", coords = "0_23_60_25_24" },
+    { npc = "lovakengj_blast_hopperguard", coords = "0_23_60_4_24" },
+    { npc = "lovakengj_blast_hopperguard", coords = "0_23_60_7_34" },
+    { npc = "lovakengj_blast_hopperguard", coords = "0_23_60_26_31" },
+    { npc = "lovakengj_thirus", coords = "0_23_59_45_58" },
+    { npc = "lovakengj_charcoal_keeper", coords = "0_26_54_54_13" },
+]

@@ -9,6 +9,7 @@ import org.rsmod.api.combat.formulas.attributes.CombatNpcAttributes
 import org.rsmod.api.combat.formulas.attributes.CombatRangedAttributes
 import org.rsmod.api.combat.formulas.attributes.collector.CombatNpcAttributeCollector
 import org.rsmod.api.combat.formulas.attributes.collector.CombatRangedAttributeCollector
+import org.rsmod.api.combat.commons.npc.isAssignedSlayerTarget
 import org.rsmod.api.combat.formulas.isSlayerTask
 import org.rsmod.api.combat.maxhit.player.PlayerRangedMaxHit
 import org.rsmod.api.combat.weapon.WeaponSpeeds
@@ -56,6 +57,7 @@ constructor(
             computeMaxHit(
                 source = player,
                 target = targetType,
+                slayerTask = target.isAssignedSlayerTarget(player),
                 targetCurrHp = target.hitpoints,
                 targetMaxHp = target.baseHitpointsLvl,
                 targetMagic = targetMagic,
@@ -68,6 +70,12 @@ constructor(
         return maxHit
     }
 
+    /** Secondary chinchompa targets share the primary's ceiling without its Salve or Avarice damage bonus. */
+    public fun chinchompaAreaMaxHit(source: Player, primary: Npc, type: RangedAttackType?, style: RangedAttackStyle?): Int =
+        computeMaxHit(source, primary.visType, primary.hitpoints, primary.baseHitpointsLvl,
+            max(primary.magicLvl, primary.visType.param(params.attack_magic)), type, style, 1.0, 0,
+            primary.isAssignedSlayerTarget(source), areaChinchompa = true)
+
     public fun computeMaxHit(
         source: Player,
         target: UnpackedNpcType,
@@ -78,10 +86,16 @@ constructor(
         attackStyle: RangedAttackStyle?,
         specialMultiplier: Double,
         boltSpecDamage: Int,
+        slayerTask: Boolean = target.isSlayerTask(source),
+        areaChinchompa: Boolean = false,
     ): Int {
         val rangeAttributes = rangedAttributes.collect(source, attackType, attackStyle)
+        if (areaChinchompa) {
+            rangeAttributes.remove(CombatRangedAttributes.SalveAmuletI)
+            rangeAttributes.remove(CombatRangedAttributes.SalveAmuletEi)
+            rangeAttributes.remove(CombatRangedAttributes.AmuletOfAvarice)
+        }
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 

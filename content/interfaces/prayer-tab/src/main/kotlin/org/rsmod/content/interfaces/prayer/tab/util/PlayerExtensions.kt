@@ -18,6 +18,7 @@ internal fun ProtectedAccess.enablePrayerStatRegen(prayer: Prayer) {
         }
 
         prayer.enabled.isType(varbits.rapid_heal) -> {
+            softTimer(timers.health_boost_decay, constants.health_regen_interval)
             softTimer(timers.health_regen, constants.health_regen_interval / 2)
         }
 
@@ -35,6 +36,7 @@ internal fun ProtectedAccess.disablePrayerStatRegen(prayer: Prayer) {
         }
 
         prayer.enabled.isType(varbits.rapid_heal) -> {
+            softTimer(timers.health_boost_decay, constants.health_regen_interval)
             softTimer(timers.health_regen, constants.health_regen_interval)
         }
 

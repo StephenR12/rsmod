@@ -15,6 +15,7 @@ import org.rsmod.api.config.refs.projanims
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
+import org.rsmod.api.config.refs.varps
 import org.rsmod.api.player.righthand
 import org.rsmod.api.registry.zone.ZoneUpdateMap
 import org.rsmod.api.spells.MagicSpellModule
@@ -42,6 +43,7 @@ import org.rsmod.api.testing.GameTestState
 import org.rsmod.api.testing.factory.npcTypeFactory
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.spot.EntitySpotanim
+import org.rsmod.game.type.npc.NpcTypeList
 import org.rsmod.map.zone.ZoneKey
 
 class MagicDartSpellAttackTest {
@@ -184,6 +186,26 @@ class MagicDartSpellAttackTest {
         }
 
     @Test
+    fun GameTestState
+        .`an assigned creature gets the enchanted damage formula and uses the final staff charge`() =
+        runMagicDartTest { deps ->
+            prepareCaster(objs.slayers_staff_e)
+            player.setVarp(varps.slayer_target, 6)
+            player.setVarp(varps.slayer_count, 10)
+            player.righthand = InvObj(objs.slayers_staff_e, vars = 1)
+            val cow = spawnNpc(player.coords.translate(3, 0), deps.types.getValue(2791))
+            val (handler, attack) = deps.attack(player.righthand)
+            val cast = CastResult.Success.Consumed(usedSunfire = false)
+            random.next = 0
+            random.then = 0
+            player.withProtectedAccess {
+                assertEquals(0..29, deps.manager.calculateMaxHit(this, cow, attack, cast, 0))
+                handler.attack(this, cow, attack)
+            }
+            assertEquals(objs.slayers_staff.id, player.righthand?.id)
+        }
+
+    @Test
     fun GameTestState.`only documented weapons can select restricted magic dart autocast`() =
         runMagicDartTest { deps ->
             val autocastId =
@@ -257,6 +279,7 @@ class MagicDartSpellAttackTest {
     data class Dependencies
     @Inject
     constructor(
+        val types: NpcTypeList,
         val spells: MagicDartSpells,
         val manager: SpellAttackManager,
         val runes: MagicRuneManager,

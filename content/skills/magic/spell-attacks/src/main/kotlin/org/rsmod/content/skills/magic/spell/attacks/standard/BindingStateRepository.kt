@@ -52,7 +52,7 @@ public class BindingStateRepository {
 
     fun bind(
         target: PathingEntity,
-        source: Player,
+        source: PathingEntity,
         duration: Int,
         immunityDuration: Int = REFREEZE_IMMUNITY_CYCLES,
     ): BindingState {

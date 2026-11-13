@@ -33,3 +33,5 @@ as cache and historical-Wiki inventories are produced.
 
 `STANDARD_SPELLBOOK.md` is the explicit implemented-versus-missing inventory for all cache-233
 standard spellbook entries.
+
+The [in-game skill and diary test guide](SKILLS_AND_DIARIES.md) contains the local launch commands, coverage for all 23 skills, diary checks, current test results and deferred work.

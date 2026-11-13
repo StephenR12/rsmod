@@ -97,7 +97,7 @@ public object SlayerBosses {
         listOf(
             SlayerBossDefinition(
                 SlayerBossNpcs.cerberus,
-                CoordGrid(1304, 1255, 0),
+                CoordGrid(1238, 1250, 0),
                 SlayerBossFamily.Cerberus,
                 600,
                 220,
@@ -194,4 +194,16 @@ public object SlayerBosses {
         )
 
     public val byId: Map<Int, SlayerBossDefinition> = definitions.associateBy { it.npc.id }
+}
+
+
+internal object SlayerBossAttackRange : org.rsmod.api.type.editors.npc.NpcEditor() {
+    init {
+        with(SlayerBossNpcs) {
+            for (type in listOf(rangedSoul, magicSoul, kraken, krakenTentacle, dawn, sire, acidicAraxyte, araxxor, hydra))
+                edit(type) { attackRange = 10 }
+            edit(cerberus) { attackRange = 14 }
+            edit(thermy) { attackRange = 2 }
+        }
+    }
 }

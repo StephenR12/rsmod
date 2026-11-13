@@ -9,6 +9,18 @@ import org.rsmod.map.CoordGrid
 
 class RegionRepositoryTest {
     @Test
+    fun GameTestState.`pending arrival keeps its region exclusive until its reservation expires`() = runGameTest {
+        val first = createRegion(template)
+        first.reclaimFromCycle = mapClock + 2
+        val other = createRegion(template)
+        assertTrue(first.slot >= 0)
+        assertTrue(first.southWest != other.southWest)
+        advance(2)
+        removeInactiveRegions()
+        assertEquals(-1, first.slot)
+    }
+
+    @Test
     fun GameTestState.`delete respawning npcs on region clear`() = runGameTest {
         val region = createRegion(template)
         val npc = spawnNpc(region.southWest, man).apply { respawns = true }

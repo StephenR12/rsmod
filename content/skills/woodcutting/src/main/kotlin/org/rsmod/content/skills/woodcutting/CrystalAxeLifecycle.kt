@@ -1,5 +1,7 @@
 package org.rsmod.content.skills.woodcutting
 
+import org.rsmod.api.config.FellingAxes
+
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.invtx.add
@@ -18,17 +20,17 @@ public class CrystalAxeLifecycle @Inject constructor() {
                 mes("You need to be on a members' world to configure a crystal axe.")
                 return
             }
-            val requested = countDialog("How many charges should be added on withdrawal?")
+            val requested = countDialog("How many charges should the tool hold on withdrawal?")
             player.crystalToolAutochargeQuantity =
                 requested.coerceIn(0, CrystalAxeState.MAX_CHARGES)
         }
     }
 
-    public suspend fun charge(access: ProtectedAccess, firstSlot: Int, secondSlot: Int) {
+    public suspend fun charge(access: ProtectedAccess, firstSlot: Int, secondSlot: Int, charged: ObjType=objs.crystal_axe, empty: ObjType=objs.crystal_axe_inactive) {
         with(access) {
             val toolSlot =
-                selectedSlot(firstSlot, secondSlot, objs.crystal_axe.id)
-                    ?: selectedSlot(firstSlot, secondSlot, objs.crystal_axe_inactive.id)
+                selectedSlot(firstSlot, secondSlot, charged.id)
+                    ?: selectedSlot(firstSlot, secondSlot, empty.id)
                     ?: return
             val shardSlot = selectedSlot(firstSlot, secondSlot, objs.crystal_shard.id) ?: return
             if (!player.members) {
@@ -38,7 +40,7 @@ public class CrystalAxeLifecycle @Inject constructor() {
             val tool = player.inv[toolSlot] ?: return
             val shards = player.inv[shardSlot] ?: return
             val current =
-                if (tool.id == objs.crystal_axe.id) {
+                if (tool.id == charged.id) {
                     CrystalAxeState.fromCharged(tool).charges
                 } else {
                     0
@@ -55,7 +57,7 @@ public class CrystalAxeLifecycle @Inject constructor() {
                     countDialog("How many crystal shards would you like to add? (Up to $maximum)"),
                     maximum,
                 )
-            if (requested == 0 || player.inv[toolSlot] != tool || player.inv[shardSlot] != shards) {
+            if (requested <= 0 || player.inv[toolSlot] != tool || player.inv[shardSlot] != shards) {
                 return
             }
             val updatedCharges =
@@ -67,7 +69,7 @@ public class CrystalAxeLifecycle @Inject constructor() {
                     delete(inventory, objs.crystal_shard.id, requested, slot = shardSlot)
                     add(
                         inventory,
-                        objs.crystal_axe.id,
+                        charged.id,
                         1,
                         vars = CrystalAxeState(updatedCharges).pack(),
                         slot = toolSlot,
@@ -83,7 +85,7 @@ public class CrystalAxeLifecycle @Inject constructor() {
                 mes("You need to be on a members' world to check a crystal axe.")
                 return
             }
-            if (axe?.id != objs.crystal_axe.id) {
+            if (axe==null || axe.id!=objs.crystal_axe.id && axe.id!=objs.crystal_felling_axe.id) {
                 return
             }
             val charges = CrystalAxeState.fromCharged(axe).charges
@@ -104,7 +106,7 @@ public class CrystalAxeLifecycle @Inject constructor() {
                 player.invTransaction(player.inv) {
                     val inventory = select(player.inv)
                     delete(inventory, expected.id, 1, slot = slot)
-                    add(inventory, objs.dragon_axe.id, 1, slot = slot)
+                    add(inventory, if(FellingAxes.isFelling(expected.id))objs.dragon_felling_axe.id else objs.dragon_axe.id, 1, slot = slot)
                     add(inventory, objs.crystal_tool_seed.id, 1)
                 }
             if (!result.success) {

@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.hunter.experts
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.spotanims
@@ -49,7 +50,7 @@ public class HunterCapeTeleport @Inject constructor(private val state: HunterCap
                 mes("A mysterious force prevents you from teleporting!")
                 return
             }
-            if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+            if (player.isTeleportBlocked()) {
                 mes("A magical force stops you from teleporting.")
                 return
             }
@@ -87,22 +88,18 @@ public class HunterCapeTeleport @Inject constructor(private val state: HunterCap
         add(HunterCapeDestination.WildernessHunterArea)
     }
 
-    private fun ProtectedAccess.wildernessLevel(): Int {
-        val baseZ =
-            if (coords.z >= WILDERNESS_UNDERGROUND_Z) WILDERNESS_UNDERGROUND_Z else WILDERNESS_Z
-        return ((coords.z - baseZ) / WILDERNESS_LEVEL_HEIGHT) + 1
-    }
-
     public companion object {
         public const val MENU_TITLE: String = "Hunter Areas"
         public const val CAST_TICKS: Int = 4
 
         private const val MAX_WILDERNESS_LEVEL = 20
-        private const val TELEBLOCK_IMMUNITY_CYCLES = 100
-        private const val WILDERNESS_LEVEL_HEIGHT = 8
-        private const val WILDERNESS_Z = 3520
-        private const val WILDERNESS_UNDERGROUND_Z = 9920
+
     }
+}
+
+internal fun ProtectedAccess.wildernessLevel():Int {
+    val baseZ=if(coords.z>=9920)9920 else 3520
+    return (coords.z-baseZ)/8+1
 }
 
 public enum class HunterCapeDestination(

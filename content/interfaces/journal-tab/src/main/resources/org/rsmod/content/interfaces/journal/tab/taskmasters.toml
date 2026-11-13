@@ -1,0 +1,43 @@
+[[spawn]]
+npc = 'ardy_twopints_diary'
+coords = '0_40_51_14_59'
+
+[[spawn]]
+npc = 'jarr_desert_diary'
+coords = '0_51_48_38_50'
+
+[[spawn]]
+npc = 'white_knight_diary'
+coords = '0_46_52_34_19'
+
+[[spawn]]
+npc = 'viking_frem_diary'
+coords = '0_41_56_35_43'
+
+[[spawn]]
+npc = 'seers_diary_wedge'
+coords = '0_43_54_7_20'
+
+[[spawn]]
+npc = 'agilityarena_tickettrader'
+coords = '0_43_49_57_57'
+
+[[spawn]]
+npc = 'elise_kourend_kebos_diary'
+coords = '0_25_57_48_17'
+
+[[spawn]]
+npc = 'lesabre_mort_diary'
+coords = '0_54_54_9_22'
+
+[[spawn]]
+npc = 'toby_varrock_diary'
+coords = '0_50_53_25_23'
+
+[[spawn]]
+npc = 'western_gnome_child_diary'
+coords = '0_38_54_35_3'
+
+[[spawn]]
+npc = 'lesser_fanatic_diary'
+coords = '0_48_54_49_60'

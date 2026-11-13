@@ -1,6 +1,8 @@
 package org.rsmod.content.skills.farming
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.events.CultivatedSpiritTrees
+import org.rsmod.api.script.onEvent
 import org.rsmod.api.script.onOpHeldU
 import org.rsmod.api.script.onOpLoc1
 import org.rsmod.api.script.onOpLoc2
@@ -8,6 +10,9 @@ import org.rsmod.api.script.onOpLoc3
 import org.rsmod.api.script.onOpLoc4
 import org.rsmod.api.script.onOpLoc5
 import org.rsmod.api.script.onOpLocU
+import org.rsmod.api.script.onOpNpc1
+import org.rsmod.api.script.onOpNpc3
+import org.rsmod.api.script.onOpNpc4
 import org.rsmod.api.script.onOpNpcU
 import org.rsmod.api.script.onPlayerLogin
 import org.rsmod.api.script.onPlayerSoftTimer
@@ -22,7 +27,9 @@ public class FarmingScript
 @Inject
 constructor(
     private val service: FarmingService,
+    private val hespori: HesporiEncounter,
     private val crops: FarmingCropCatalogue,
+    private val seedlings: TreeSeedlings,
     private val codec: FarmingPatchCodec,
     private val locTypes: LocTypeList,
     private val npcTypes: NpcTypeList,
@@ -38,7 +45,16 @@ constructor(
             onOpLoc2(base) { service.inspect(this, it.loc) }
             onOpLoc3(base) { service.inspect(this, it.loc) }
             onOpLoc4(base) { service.inspect(this, it.loc) }
-            onOpLoc5(base) { service.inspect(this, it.loc) }
+            onOpLoc5(base) {
+                if (
+                    codec.patchType(base) == FarmingPatchType.SpiritTree &&
+                        service.state(this, it.loc)?.healthChecked == true
+                ) {
+                    if (FarmingObjs.spade !in inv) mes("You need a spade to clear the tree.")
+                    else if (choice2("Dig up this spirit tree?", true, "Leave it.", false))
+                        service.clearMatureSpecialTree(this, it.loc)
+                } else service.inspect(this, it.loc)
+            }
             onOpLocU(base) { useItem(it.loc, it.objType.id, it.invSlot) }
         }
         onOpHeldU(FarmingObjs.haySack, FarmingObjs.bronzeSpear) {
@@ -61,17 +77,26 @@ constructor(
         val gardeners = npcTypes.values.filter { isPatchGardener(it.internalName.orEmpty()) }
         for (gardener in gardeners) {
             val type = HashedNpcType(null, gardener.internalName, gardener.id)
-            onOpNpcU(type) {
-                if (!service.protectNearest(this, it.npc, it.objType.id, it.invSlot)) {
-                    mes("The gardener cannot use that as payment for any nearby crop.")
-                }
+            onOpNpc1(type) { service.payGardener(this, it.npc) }
+            if (gardener.op.getOrNull(2)?.startsWith("Pay") == true) {
+                onOpNpc3(type) { service.payGardener(this, it.npc, gardener.op[2]!!.lowercase()) }
             }
+            if (gardener.op.getOrNull(3)?.startsWith("Pay") == true) {
+                onOpNpc4(type) { service.payGardener(this, it.npc, gardener.op[3]!!.lowercase()) }
+            }
+            onOpNpcU(type) { service.payGardener(this, it.npc, used = it.objType.id) }
         }
+        onEvent<CultivatedSpiritTrees> { plots += service.spiritTrees(player) }
         onPlayerLogin {
+            seedlings.mature(player)
+            WhiteTree.refresh(player)
             service.syncNearby(player)
             player.softTimer(FarmingTimers.sync, SYNC_INTERVAL)
         }
         onPlayerSoftTimer(FarmingTimers.sync) {
+            hespori.cleanupIfAway(player)
+            seedlings.mature(player)
+            WhiteTree.refresh(player)
             service.syncNearby(player)
             player.softTimer(FarmingTimers.sync, SYNC_INTERVAL)
         }
@@ -82,6 +107,10 @@ constructor(
         faceLoc(loc)
         val state = service.state(this, loc) ?: return
         when {
+            state.patchType == FarmingPatchType.Hespori &&
+                state.status == FarmingCropStatus.Harvestable -> hespori.disturb(this, state)
+            state.patchType == FarmingPatchType.Hespori && state.status == FarmingCropStatus.Dead ->
+                hespori.harvest(this, loc, state)
             state.patchType == FarmingPatchType.Compost -> service.operateCompostBin(this, loc)
             state.isEmpty && state.weeds > 0 -> {
                 if (FarmingObjs.rake !in inv) {
@@ -135,7 +164,7 @@ constructor(
                 if (service.clearStump(this, loc)) mes("You dig up the tree roots.")
             }
             state.status == FarmingCropStatus.Harvestable -> {
-                val checked = service.checkHealth(this, state)
+                val checked = service.checkHealth(this, loc, state)
                 if (checked != null) {
                     mes("You check the health of the ${checked.displayName.lowercase()}.")
                     service.sync(this, loc, state)
@@ -143,9 +172,10 @@ constructor(
                 }
                 val tree = service.crop(state)
                 if (tree?.logs != null && tree.baseHarvestLives == 0) {
-                    val chopped = service.chopTree(this, loc) ?: return
+                    service.chopTree(this, loc) ?: return
                     if (service.state(this, loc)?.status != FarmingCropStatus.Stump) {
-                        opLoc3(loc)
+                        delay(4)
+                        opLoc1(loc)
                     }
                     return
                 }
@@ -173,6 +203,28 @@ constructor(
         }
         val crop = crops.forSeed(objId)
         when {
+            objId == FarmingObjs.saltpetre.id && state.patchType == FarmingPatchType.Grapes -> {
+                if (SeedlingObjs.trowel !in inv) {
+                    mes("You need a gardening trowel to treat the vine patch.")
+                    return
+                }
+                if (!state.isEmpty || state.compost == FarmingCompost.Saltpetre) {
+                    mes("This patch does not need treating.")
+                    return
+                }
+                if (invDel(inv, FarmingObjs.saltpetre, slot = slot).failure) return
+                state.compost = FarmingCompost.Saltpetre
+                service.sync(this, loc, state)
+                mes("You treat the soil with saltpetre.")
+            }
+            objId == FarmingObjs.plantPot.id && state.isEmpty && state.weeds == 0 -> {
+                if (SeedlingObjs.trowel !in inv) {
+                    mes("You need a gardening trowel to fill this plant pot.")
+                    return
+                }
+                if (invReplaceSlot(inv, slot, 1, SeedlingObjs.filledPot).failure) return
+                mes("You fill the plant pot with soil.")
+            }
             crop != null -> {
                 val planted =
                     service.plant(this, loc, objId, slot)
@@ -191,7 +243,8 @@ constructor(
                 applyCompost(loc, FarmingCompost.Supercompost, slot)
             objId == FarmingObjs.ultracompost.id ->
                 applyCompost(loc, FarmingCompost.Ultracompost, slot)
-            objId in FarmingObjs.wateringCans.drop(1).map { it.id } -> water(loc, objId, slot)
+            objId == org.rsmod.api.config.refs.objs.gricollers_can.id ||
+                FarmingObjs.wateringCans.any { it.id == objId } -> water(loc, slot)
             (objId == FarmingObjs.secateurs.id || objId == FarmingObjs.magicSecateurs.id) &&
                 state.status == FarmingCropStatus.Diseased &&
                 FarmingService.requiresSecateurs(state.patchType) -> {
@@ -213,6 +266,23 @@ constructor(
             objId == FarmingObjs.rake.id && state.isEmpty && state.weeds > 0 -> {
                 anim(FarmingSeqs.rake)
                 service.rake(this, loc)
+            }
+            objId == FarmingObjs.spade.id &&
+                state.patchType == FarmingPatchType.Hespori &&
+                state.status == FarmingCropStatus.Dead -> hespori.harvest(this, loc, state)
+            objId == FarmingObjs.spade.id &&
+                state.patchType == FarmingPatchType.Hespori &&
+                state.status == FarmingCropStatus.Harvestable -> hespori.disturb(this, state)
+            objId == FarmingObjs.spade.id &&
+                state.patchType == FarmingPatchType.Anima &&
+                !state.isEmpty -> {
+                if (
+                    state.status == FarmingCropStatus.Dead ||
+                        choice2("Dig up this anima plant?", true, "Leave it.", false)
+                ) {
+                    anim(FarmingSeqs.harvest)
+                    service.clearAnima(this, loc)
+                }
             }
             objId == FarmingObjs.spade.id && state.status == FarmingCropStatus.Dead -> {
                 anim(FarmingSeqs.harvest)
@@ -244,23 +314,20 @@ constructor(
             objId == FarmingObjs.spade.id && state.scarecrow -> {
                 if (service.removeScarecrow(this, loc)) mes("You remove the scarecrow.")
             }
-            service.protect(this, loc, objId, slot) -> Unit
             else -> mes("Nothing interesting happens.")
         }
     }
 
-    private fun org.rsmod.api.player.protect.ProtectedAccess.water(
-        loc: BoundLocInfo,
-        objId: Int,
-        slot: Int,
-    ) {
-        val charge = FarmingObjs.wateringCans.indexOfFirst { it.id == objId }
-        if (charge <= 0 || !service.water(this, loc)) {
+    private fun org.rsmod.api.player.protect.ProtectedAccess.water(loc: BoundLocInfo, slot: Int) {
+        if (!hasWater(slot)) {
+            mes("Your watering can is empty.")
+            return
+        }
+        if (!service.water(this, loc)) {
             mes("This patch does not need watering.")
             return
         }
-        invDel(inv, FarmingObjs.wateringCans[charge], slot = slot)
-        invAdd(inv, FarmingObjs.wateringCans[charge - 1])
+        check(useWater(slot))
         anim(FarmingSeqs.water)
         mes("You water the growing plants.")
     }
@@ -276,7 +343,8 @@ constructor(
                 FarmingCompost.Compost -> FarmingObjs.compost
                 FarmingCompost.Supercompost -> FarmingObjs.supercompost
                 FarmingCompost.Ultracompost -> FarmingObjs.ultracompost
-                FarmingCompost.None -> return
+                FarmingCompost.None,
+                FarmingCompost.Saltpetre -> return
             }
         invDel(inv, source, slot = slot)
         invAdd(inv, FarmingObjs.bucket)
@@ -293,6 +361,7 @@ constructor(
                 name in
                     setOf(
                         "hosidius_allotment_gardener",
+                        "fossil_gardener_underwater",
                         "prif_gardener",
                         "fortis_gardener",
                         "farmer_farming",

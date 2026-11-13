@@ -13,6 +13,7 @@ import org.rsmod.api.invtx.invAddOrDrop
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.player.minigames.ContactAmy
 import org.rsmod.api.random.GameRandom
 import org.rsmod.api.repo.obj.ObjRepository
 import org.rsmod.api.spells.MagicSpellRegistry
@@ -20,6 +21,9 @@ import org.rsmod.api.type.refs.interf.InterfaceReferences
 import org.rsmod.api.type.refs.obj.ObjReferences
 import org.rsmod.api.type.refs.seq.SeqReferences
 import org.rsmod.api.type.refs.spot.SpotanimReferences
+import org.rsmod.content.skills.runecraft.EssencePouchStorage
+import org.rsmod.content.skills.slayer.Master
+import org.rsmod.content.skills.slayer.SlayerMasterDialogue
 
 public class LunarUtilitySpells
 @Inject
@@ -29,6 +33,8 @@ constructor(
     private val cooldowns: UtilitySpellCooldownRepository,
     private val random: GameRandom,
     private val objRepo: ObjRepository,
+    private val pouches: EssencePouchStorage,
+    private val slayerDialogue: SlayerMasterDialogue,
 ) {
     public fun superglassMake(access: ProtectedAccess) {
         with(access) {
@@ -116,13 +122,18 @@ constructor(
             if (!canUseLunarSpell() || !cooldowns.isReady(player, mapClock)) {
                 return
             }
+            val contacts =
+                CONTACTS.filter {
+                    (it.master == null || slayerDialogue.canContact(player, it.master)) &&
+                        (it.name != "Amy" || vars[AmyContactBits.introduced] != 0)
+                }
             val contact =
                 menu(
                     title = "NPC Contact",
                     hotkeys = false,
-                    choices = CONTACTS.map { it.name } + "Cancel",
+                    choices = contacts.map { it.name } + "Cancel",
                 )
-            if (contact !in CONTACTS.indices) {
+            if (contact !in contacts.indices) {
                 return
             }
             val spell = requireNotNull(spells.getObjSpell(objs.spell_npc_contact))
@@ -134,7 +145,20 @@ constructor(
             }
             anim(LunarUtilitySeqs.summon)
             spotanim(LunarUtilitySpotanims.contact)
-            mes(CONTACTS[contact].reply)
+            val selected = contacts[contact]
+            if (selected.master != null) {
+                slayerDialogue.request(this, selected.master)
+            } else if (selected.name == "Amy") {
+                publish(ContactAmy)
+            } else if (selected.name == "Dark Mage") {
+                val repairs = pouches.repairAll(this)
+                mes(
+                    if (repairs > 0) "The Dark Mage repairs your essence pouches."
+                    else "Your essence pouches do not need repairing."
+                )
+            } else {
+                mes(selected.reply)
+            }
             cooldowns.markCast(player, mapClock + STANDARD_CAST_TICKS)
         }
     }
@@ -167,7 +191,11 @@ constructor(
         }
     }
 
-    private data class Contact(val name: String, val reply: String)
+    private data class Contact(
+        val name: String,
+        val reply: String = "",
+        val master: Master? = null,
+    )
 
     private companion object {
         const val LUNAR_DIPLOMACY_COMPLETE = 190
@@ -185,11 +213,16 @@ constructor(
                 Contact("Bert", "Bert says your daily sand is waiting in Yanille."),
                 Contact("Advisor Ghrim", "Advisor Ghrim says Miscellania is running normally."),
                 Contact("Honest Jimmy", "Honest Jimmy tells you to meet him at Trouble Brewing."),
-                Contact("Turael", "Turael says he has no new assignment information for you."),
-                Contact("Mazchna", "Mazchna says he has no new assignment information for you."),
-                Contact("Vannaka", "Vannaka says he has no new assignment information for you."),
-                Contact("Chaeldar", "Chaeldar says she has no new assignment information for you."),
-                Contact("Duradel", "Duradel says he has no new assignment information for you."),
+                Contact("Turael", master = Master.Turael),
+                Contact("Mazchna", master = Master.Mazchna),
+                Contact("Vannaka", master = Master.Vannaka),
+                Contact("Chaeldar", master = Master.Chaeldar),
+                Contact("Duradel", master = Master.Duradel),
+                Contact("Nieve", master = Master.Nieve),
+                Contact("Spria", master = Master.Spria),
+                Contact("Krystilia", master = Master.Krystilia),
+                Contact("Konar", master = Master.Konar),
+                Contact("Amy"),
             )
     }
 }
@@ -215,4 +248,8 @@ internal object LunarUtilitySpotanims : SpotanimReferences() {
     val geomancy = find("quest_lunar_spellbook_geomancy")
     val curePlant = find("quest_lunar_cure_plant_spot")
     val fertileSoil = find("quest_lunar_spellbook_fertile_soil_spot_anim")
+}
+
+internal object AmyContactBits : org.rsmod.api.type.refs.varbit.VarBitReferences() {
+    val introduced = find("con_contract_discussed")
 }

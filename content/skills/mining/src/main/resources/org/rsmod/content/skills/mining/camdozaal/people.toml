@@ -1,0 +1,11 @@
+spawn = [
+    { npc = "camdozaal_ramarno_entrance_multi", coords = "0_46_90_7_19" },
+    { npc = "camdozaal_ramarno_multi", coords = "0_46_90_15_49" },
+    { npc = "camdozaal_fishingspot_1", coords = "0_45_90_46_24" },
+    { npc = "camdozaal_fishingspot_1", coords = "0_45_90_48_19" },
+    { npc = "camdozaal_fishingspot_1", coords = "0_45_90_48_17" },
+    { npc = "camdozaal_fishingspot_1", coords = "0_45_90_48_16" },
+    { npc = "camdozaal_fishingspot_1", coords = "0_45_90_42_54" },
+    { npc = "camdozaal_fishingspot_1", coords = "0_45_90_41_47" },
+    { npc = "camdozaal_fishingspot_1", coords = "0_45_90_47_53" },
+]

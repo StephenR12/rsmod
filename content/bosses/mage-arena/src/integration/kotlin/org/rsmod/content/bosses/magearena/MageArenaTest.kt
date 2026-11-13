@@ -6,12 +6,22 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
+import org.rsmod.api.config.refs.components
+import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.config.refs.varps
 import org.rsmod.api.death.NpcDropContext
 import org.rsmod.api.death.NpcDropTableRegistry
+import org.rsmod.api.hit.plugin.NpcHitScript
+import org.rsmod.api.npc.hit.modifier.StandardNpcHitModifier
+import org.rsmod.api.npc.hit.queueHit
+import org.rsmod.api.player.input.ResumePauseButtonInput
 import org.rsmod.api.repo.npc.NpcRepository
 import org.rsmod.api.testing.GameTestState
+import org.rsmod.game.hit.HitType
+import org.rsmod.game.inv.InvObj
 import org.rsmod.game.type.npc.NpcTypeList
+import org.rsmod.map.CoordGrid
 import org.rsmod.map.zone.ZoneKey
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -31,13 +41,87 @@ class MageArenaTest {
         }
 
     @Test
+    fun GameTestState
+        .`Kolodion checks Magic then advances only the challenger through five magic kills`() =
+        runInjectedGameTest(
+            Dependencies::class,
+            WeaponTestModule,
+            MageArenaAccess::class,
+            MageArenaScript::class,
+            NpcHitScript::class,
+            org.rsmod.api.combat.weapon.scripts.WeaponAttackStylesScript::class,
+        ) { deps ->
+            player.members = true
+            val lobby = CoordGrid(2541, 4715)
+            player.placeAt(lobby.translate(-1, 0))
+            val guide = deps.npcs.findAll(lobby).single { it.id == 1603 }
+            player.setBaseLevel(stats.magic, 59)
+            player.opNpc1(guide)
+            advance(2)
+            assertEquals(0, player.vars[varps.magearena])
+            player.setBaseLevel(stats.magic, 60)
+            player.opNpc1(guide)
+            advance()
+            player.resumeActiveCoroutine(ResumePauseButtonInput(components.chatmenu_pbutton, 1))
+            val opponent =
+                deps.npcs.findAll(MageArenaBosses.mageArena).single {
+                    it.visType.id == MageArenaNpcs.kolodionHuman.id
+                }
+            val outsider = registerPlayer(player.coords.translate(0, 1))
+            opponent.queueHit(outsider, 1, HitType.Magic, 12, deps.modifier)
+            opponent.queueHit(player, 1, HitType.Melee, 12, deps.modifier)
+            advance(2)
+            assertEquals(3, opponent.hitpoints)
+            for ((idx, form) in MageArenaBosses.kolodionForms.withIndex()) {
+                assertEquals(form.npc.id, opponent.visType.id)
+                assertEquals(idx + 1, player.vars[varps.magearena])
+                opponent.queueHit(player, 1, HitType.Magic, form.hitpoints, deps.modifier)
+                advance(2)
+            }
+            assertEquals(6, player.vars[varps.magearena])
+            assertEquals(CoordGrid(2539, 4715), player.coords)
+            assertEquals(0, outsider.vars[varps.magearena])
+        }
+
+    @Test
+    fun GameTestState.`the chamber guardian grants one matching staff after the statue cape`() =
+        runInjectedGameTest(Dependencies::class, null, MageArenaAccess::class) { d ->
+            player.members = true
+            val room = CoordGrid(2508, 4696)
+            player.placeAt(room.translate(1, 0))
+            val guardian = d.npcs.findAll(room).single { it.visType.name == "Chamber guardian" }
+            player.setVarp(varps.magearena, 6)
+            player.opNpc1(guardian)
+            advance(2)
+            assertEquals(0, player.count(org.rsmod.api.config.refs.objs.guthix_staff))
+            player.setVarp(varps.magearena, 7)
+            player.inv[0] = InvObj(org.rsmod.api.config.refs.objs.guthix_cape)
+            player.opNpc1(guardian)
+            advance(2)
+            assertEquals(1, player.count(org.rsmod.api.config.refs.objs.guthix_staff))
+            assertEquals(8, player.vars[varps.magearena])
+            player.opNpc1(guardian)
+            advance(2)
+            assertEquals(1, player.count(org.rsmod.api.config.refs.objs.guthix_staff))
+        }
+
+    @Test
     fun GameTestState.`enchanted symbol summons the next mage arena two follower`() =
         runInjectedGameTest(Dependencies::class) { deps ->
-            player.withProtectedAccess {
-                vars[varbits.inside_wilderness] = 1
-                deps.controller.summonNextFollower(this)
-            }
-
+            val point =
+                MageArenaController.followerLocation(
+                    player.accountHash,
+                    (System.currentTimeMillis() / 2_700_000).toInt(),
+                    0,
+                )
+            player.placeAt(point)
+            player.members = true
+            player.withProtectedAccess { vars[varbits.inside_wilderness] = 1 }
+            player.withProtectedAccess { deps.controller.activateSymbol(this) }
+            assertTrue(deps.npcs.findAll(point).none { it.id in MageArenaBosses.followerIds })
+            player.setVarBit(cacheTypes.varbits.getValue(6067), 2)
+            player.withProtectedAccess { deps.controller.activateSymbol(this) }
+            player.resumeActiveCoroutine(ResumePauseButtonInput(components.chatmenu_pbutton, 0))
             val followers =
                 deps.npcs
                     .findAll(ZoneKey.from(player.coords), 1)
@@ -84,9 +168,17 @@ class MageArenaTest {
             }
         }
 
+    private object WeaponTestModule : com.google.inject.AbstractModule() {
+        override fun configure() {
+            bind(org.rsmod.api.combat.weapon.styles.AttackStyles::class.java)
+                .`in`(com.google.inject.Scopes.SINGLETON)
+        }
+    }
+
     private data class Dependencies
     @Inject
     constructor(
+        val modifier: StandardNpcHitModifier,
         val types: NpcTypeList,
         val npcs: NpcRepository,
         val drops: NpcDropTableRegistry,

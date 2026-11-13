@@ -54,6 +54,29 @@ public data class IfOverlayButton(
     override val id: Long = component.packed.toLong()
 }
 
+/** A native right-click submenu entry on an open overlay, keyed by its parent component. */
+public data class IfOverlaySubOp(
+    val player: Player,
+    val component: ComponentType,
+    val comsub: Int,
+    val obj: Int,
+    val op: IfButtonOp,
+    val subop: Int,
+) : KeyedEvent {
+    override val id: Long = component.packed.toLong()
+}
+
+/** A submenu selection on an item verified against the player's current inventory or equipment. */
+public data class IfItemSubOp(
+    val slot: Int,
+    val worn: Boolean,
+    val obj: Int,
+    val op: IfButtonOp,
+    val subop: Int,
+) : SuspendEvent<ProtectedAccess> {
+    override val id: Long = obj.toLong()
+}
+
 public class IfModalButtonT(
     public val selectedSlot: Int,
     public val selectedObj: UnpackedObjType?,

@@ -10,6 +10,8 @@ import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.MagicSpellRegistry
 import org.rsmod.game.entity.Npc
@@ -36,6 +38,15 @@ constructor(private val spells: MagicSpellRegistry, private val runes: MagicRune
 
             if (vars[varbits.fountain_of_rune_active] == 0) {
                 statAdvance(stats.magic, spell.castXp)
+            }
+            if (
+                spellType.id == objs.spell_monster_examine.id &&
+                    type.id in 936..942 &&
+                    npc.coords.level == 0 &&
+                    npc.coords.x in 1209..1255 &&
+                    npc.coords.z in 3480..3529
+            ) {
+                player.completeDiaryTask(DiaryTask.ExamineQuidamortemTroll)
             }
             anim(seqs.dream_player_monsterexam_statspy)
             spotanim(spotanims.dream_spell_monsterexam_statspy_spotanim)

@@ -28,12 +28,29 @@ import org.rsmod.game.ui.UserInterface
 
 @Execution(ExecutionMode.SAME_THREAD)
 class AmmunitionFletchingTest {
+
+    @Test
+    fun GameTestState.`atlatl darts assemble in twenty item sets after two ticks`()=
+        runAmmunitionTest { deps ->
+            for(output in listOf(objs.headless_atlatl_dart,objs.atlatl_dart)){
+                preparePlayer()
+                val recipe=deps.recipes.recipes.single{it.output==output}
+                player.setCurrentLevel(stats.fletching,74)
+                add(recipe.primary,20);add(recipe.secondary,20)
+                player.withProtectedAccess{deps.fletching.start(this,recipe,quantity=1)}
+                advance(1);assertEquals(0,player.count(output))
+                advance(1);assertEquals(20,player.count(output))
+            }
+        }
+
     @Test
     fun GameTestState.`cache 233 pins all standard ammunition recipe contracts`() =
         runAmmunitionTest { deps ->
             assertEquals(
                 listOf(
                     "Headless arrow:HeadlessArrow:1:52+314=53:1.0:8481:false",
+                    "Headless atlatl darts:Atlatl:74:31004+314=31010:1.0:8481:false",
+                    "Atlatl darts:Atlatl:74:31010+30998=28991:9.5:8480:false",
                     "Bronze arrow:Arrow:1:53+39=882:1.3:8480:false",
                     "Iron arrow:Arrow:15:53+40=884:2.5:8480:false",
                     "Steel arrow:Arrow:30:53+41=886:5.0:8480:false",

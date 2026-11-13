@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.herblore
 
+import org.rsmod.api.player.diary.recordDiaryPotion
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
@@ -91,6 +92,7 @@ constructor(private val objTypes: ObjTypeList, private val modifiers: PotionProd
         check(result.success) { "Dose-scaled potion transaction failed after validation: $recipe" }
         val commit = modifiers.commit(this, roll)
         statAdvance(stats.herblore, recipe.xp)
+        player.recordDiaryPotion(recipe.output.id, player.coords)
         val chemistryCharges = commit.chemistryChargesRemaining
         if (chemistryCharges != null) {
             val resultingDoses = recipe.doses + 1

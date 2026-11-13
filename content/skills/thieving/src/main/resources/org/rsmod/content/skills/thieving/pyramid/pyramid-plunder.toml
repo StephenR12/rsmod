@@ -1,0 +1,7 @@
+# Guardian in the native sceptre arrival chamber; exact NPC square is approximate.
+[[spawn]]
+npc='ntk_mummy_guardian'
+coords='3_30_69_14_10'
+[[spawn]]
+npc='feud_snakecharmer_multi'
+coords='0_52_46_26_8'

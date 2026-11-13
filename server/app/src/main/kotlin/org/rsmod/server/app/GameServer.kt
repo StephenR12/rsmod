@@ -84,20 +84,27 @@ class GameServer(private val skipTypeVerificationOverride: Boolean? = null) :
     }
 
     private fun startApplication() {
-        val injector = createInjector()
-        try {
-            prepareGame(injector)
-            startupGame(injector)
-        } catch (_: ServerRestartException) {}
+        startupGame(prepareGame())
     }
 
-    fun createInjector(): Injector {
+    private fun createInjector(): Injector {
         val pluginModules = loadModules()
         val modules = Modules.combine(GameServerModule, *pluginModules.toTypedArray())
         return Guice.createInjector(modules)
     }
 
-    fun prepareGame(injector: Injector) {
+    fun prepareGame(): Injector {
+        var injector = createInjector()
+        try {
+            prepareGame(injector)
+        } catch (_: CacheRepackedException) {
+            injector = createInjector()
+            prepareGame(injector)
+        }
+        return injector
+    }
+
+    private fun prepareGame(injector: Injector) {
         loadCache(injector)
         loadMap(injector)
         loadTypeResolver(injector)
@@ -224,8 +231,7 @@ class GameServer(private val skipTypeVerificationOverride: Boolean? = null) :
             updateCacheConfigs(injector)
             logger.info { "Now restarting game server..." }
             packedCache = true
-            startApplication()
-            throw ServerRestartException()
+            throw CacheRepackedException()
         } else if (verification.isFailure()) {
             throw RuntimeException(verification.formatError())
         }
@@ -321,13 +327,6 @@ class GameServer(private val skipTypeVerificationOverride: Boolean? = null) :
         }
     }
 
-    /**
-     * Thrown to immediately abort the current server startup process when a cache update requires a
-     * server restart.
-     *
-     * After performing the necessary cache update and calling `startApplication` to restart the
-     * server, this exception is thrown to ensure that no further initialization occurs in the
-     * current execution context. It is caught at the top level and safely ignored.
-     */
-    private class ServerRestartException : Exception()
+    /** Cache types in the old injector refer to the store before repacking. */
+    private class CacheRepackedException : Exception()
 }

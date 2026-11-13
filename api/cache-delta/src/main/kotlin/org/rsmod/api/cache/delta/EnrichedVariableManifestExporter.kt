@@ -10,8 +10,6 @@ import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.types.varn.VarnTypeDecoder
 import org.rsmod.api.cache.types.varnbit.VarnBitTypeDecoder
-import org.rsmod.api.config.refs.BaseControllers
-import org.rsmod.api.config.refs.BaseVarCons
 import org.rsmod.api.config.refs.BaseVarObjBits
 import org.rsmod.api.type.symbols.name.NameLoader
 import org.rsmod.game.type.varn.UnpackedVarnType
@@ -62,23 +60,21 @@ public object EnrichedVariableManifestExporter {
                 )
             }
         entries +=
-            BaseVarCons.definitions().map { type ->
-                val id = symbols.varCons.idFor(type.internalName)
+            symbols.varCons.map { (id,name) ->
                 codeEntry(
                     domain = "server-varcons",
                     id = id,
-                    symbol = type.internalName,
+                    symbol = name,
                     attributes = emptyMap(),
                     risks = listOf("controller-state-risk", "state-transition-risk"),
                 )
             }
         entries +=
-            BaseControllers.definitions().map { type ->
-                val id = symbols.controllers.idFor(type.internalName)
+            symbols.controllers.map { (id,name) ->
                 codeEntry(
                     domain = "server-controllers",
                     id = id,
-                    symbol = type.internalName,
+                    symbol = name,
                     attributes = emptyMap(),
                     risks = listOf("controller-state-risk"),
                 )

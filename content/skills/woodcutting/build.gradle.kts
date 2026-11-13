@@ -4,14 +4,23 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.content.skills.pets)
+    implementation(projects.content.interfaces.bank)
+    implementation(projects.api.scriptAdvanced)
     implementation(projects.api.clue)
+    implementation(projects.api.shops)
     implementation(projects.api.invtx)
     implementation(projects.engine.utilsBits)
     implementation(projects.api.pluginCommons)
     implementation(projects.content.skills.firemaking)
+    integrationImplementation(libs.rsprot.api)
+    integrationImplementation(projects.api.net)
+    integrationImplementation(projects.api.shops)
+    integrationImplementation(projects.api.stats.xpmod)
     integrationImplementation(projects.api.clue)
     integrationImplementation(projects.api.areaChecker)
     integrationImplementation(projects.api.cache)
+    integrationImplementation(projects.api.npc)
     integrationImplementation(projects.api.player)
     integrationImplementation(projects.api.registry)
     integrationImplementation(projects.api.stats.levelmod)

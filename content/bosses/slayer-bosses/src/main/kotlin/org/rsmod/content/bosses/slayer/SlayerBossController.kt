@@ -26,19 +26,7 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
     public fun onBossDamaged(npc: Npc, definition: SlayerBossDefinition) {
         val state = state(npc)
         when (definition.family) {
-            SlayerBossFamily.Cerberus ->
-                if (!state.firstWave && npc.hitpoints <= 400) {
-                    state.firstWave = true
-                    spawnWave(
-                        npc,
-                        listOf(
-                            SlayerBossNpcs.magicSoul,
-                            SlayerBossNpcs.rangedSoul,
-                            SlayerBossNpcs.meleeSoul,
-                        ),
-                        30,
-                    )
-                }
+            SlayerBossFamily.Cerberus -> Unit
             SlayerBossFamily.Kraken ->
                 if (!state.firstWave && npc.hitpoints <= 128) {
                     state.firstWave = true
@@ -121,9 +109,14 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
                 baseMagicLvl = 150
                 rangedLvl = 150
                 baseRangedLvl = 150
-                mode = NpcMode.Wander
-                setHunt(14)
-                setHuntMode(huntmodes.constant_melee)
+                if (type == SlayerBossNpcs.sireLung) {
+                    mode = NpcMode.None
+                    setHunt(0)
+                } else {
+                    mode = NpcMode.Wander
+                    setHunt(14)
+                    setHuntMode(if (visType.attackRange > 1) huntmodes.constant_ranged else huntmodes.constant_melee)
+                }
             }
             owners[minion] = boss
             state(boss).activeMinions.add(minion)

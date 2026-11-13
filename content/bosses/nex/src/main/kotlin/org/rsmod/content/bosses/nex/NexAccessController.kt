@@ -1,5 +1,6 @@
 package org.rsmod.content.bosses.nex
 
+import org.rsmod.api.combat.commons.npc.godWarsEssenceCost
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import org.rsmod.api.config.refs.stats
@@ -111,12 +112,13 @@ constructor(
 
     public suspend fun enterSafeRoom(access: ProtectedAccess) {
         with(access) {
+            val cost = player.godWarsEssenceCost()
             when {
-                ancientEssence >= REQUIRED_ESSENCE -> ancientEssence -= REQUIRED_ESSENCE
+                ancientEssence >= cost -> ancientEssence -= cost
                 invTotal(inv, NexObjs.ecumenicalKey) > 0 -> invDel(inv, NexObjs.ecumenicalKey)
                 else -> {
                     mes(
-                        "You need $REQUIRED_ESSENCE Ancient Prison kill count or an ecumenical key."
+                        "You need $cost Ancient Prison kill count or an ecumenical key."
                     )
                     return
                 }
@@ -157,7 +159,7 @@ constructor(
         public const val FROZEN_DOOR_LEVEL: Int = 70
         public const val DESERT_TREASURE_COMPLETE: Int = 15
         public const val REQUIRED_ESSENCE: Int = 40
-        public const val MAX_ESSENCE: Int = 200
+        public const val MAX_ESSENCE: Int = 4000
         public const val BODYGUARD_DROP_DENOMINATOR: Int = 20
 
         private val KEY_PIECES =

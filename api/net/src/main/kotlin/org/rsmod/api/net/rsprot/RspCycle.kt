@@ -390,13 +390,14 @@ class RspCycle(
         )
 
         for (wearpos in Wearpos.visibleWearpos) {
-            val obj = worn[wearpos.slot]
-            if (obj == null) {
+            val prop = appearance.heldProp?.takeIf { wearpos == Wearpos.RightHand }
+            val objId = prop ?: worn[wearpos.slot]?.id
+            if (objId == null) {
                 info.setWornObj(wearpos.slot, -1, -1, -1)
                 continue
             }
-            val objType = objTypes[obj]
-            info.setWornObj(wearpos.slot, obj.id, objType.wearpos2, objType.wearpos3)
+            val objType = objTypes.getValue(objId)
+            info.setWornObj(wearpos.slot, objId, objType.wearpos2, objType.wearpos3)
         }
     }
 }

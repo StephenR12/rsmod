@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.mining.scripts
 
 import jakarta.inject.Inject
+import org.rsmod.api.clue.ClueVessels
 import org.rsmod.api.config.Constants
 import org.rsmod.api.config.locParam
 import org.rsmod.api.config.locXpParam
@@ -12,8 +13,15 @@ import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.back
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.LumbridgeDiarySkillArea
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.player.diary.recordDiaryOre
+import org.rsmod.api.player.events.KingdomContribution
+import org.rsmod.api.player.events.KingdomWork
 import org.rsmod.api.player.events.interact.BankedObjEvents
 import org.rsmod.api.player.front
+import org.rsmod.api.player.hands
 import org.rsmod.api.player.output.ClientScripts
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.righthand
@@ -22,26 +30,39 @@ import org.rsmod.api.player.stat.miningLvl
 import org.rsmod.api.repo.loc.LocRepository
 import org.rsmod.api.repo.player.PlayerRepository
 import org.rsmod.api.script.onOpHeld1
+import org.rsmod.api.script.onOpHeld2
 import org.rsmod.api.script.onOpHeld3
 import org.rsmod.api.script.onOpHeld4
 import org.rsmod.api.script.onOpHeldU
 import org.rsmod.api.script.onOpLoc1
 import org.rsmod.api.script.onOpLoc3
 import org.rsmod.api.script.onOpLocU
+import org.rsmod.api.script.onOpWorn2
 import org.rsmod.api.script.onOpWorn3
 import org.rsmod.api.script.onProtectedEvent
 import org.rsmod.api.stats.levelmod.InvisibleLevels
 import org.rsmod.api.stats.xpmod.XpModifiers
 import org.rsmod.content.other.coalbag.CoalBagStorage
 import org.rsmod.content.other.gembag.GemBagStorage
+import org.rsmod.content.skills.mining.CelestialMiningRing
+import org.rsmod.content.skills.mining.ClayBracelet
 import org.rsmod.content.skills.mining.CrystalPickaxeBankPreference
+import org.rsmod.content.skills.mining.CrystalPickaxeLifecycle
 import org.rsmod.content.skills.mining.GemRockRewards
 import org.rsmod.content.skills.mining.InfernalPickaxeLifecycle
+import org.rsmod.content.skills.mining.KourendMineralLocs
+import org.rsmod.content.skills.mining.KourendMineralObjs
+import org.rsmod.content.skills.mining.KourendMinerals
 import org.rsmod.content.skills.mining.MiningGemPreTable
+import org.rsmod.content.skills.mining.MiningGuild
+import org.rsmod.content.skills.mining.QuarryRocks
+import org.rsmod.content.skills.mining.SpecialistMinerals
+import org.rsmod.content.skills.mining.VarrockMining
 import org.rsmod.content.skills.mining.configs.MiningLocs
 import org.rsmod.content.skills.mining.configs.MiningObjs
 import org.rsmod.content.skills.mining.configs.MiningParams
 import org.rsmod.content.skills.mining.configs.MiningVarbits
+import org.rsmod.content.skills.pets.SkillPetRates
 import org.rsmod.events.UnboundEvent
 import org.rsmod.game.MapClock
 import org.rsmod.game.entity.Player
@@ -60,6 +81,8 @@ import org.rsmod.plugin.scripts.ScriptContext
 class Mining
 @Inject
 constructor(
+    private val petRates: SkillPetRates,
+    private val vessels: ClueVessels,
     private val objTypes: ObjTypeList,
     private val locRepo: LocRepository,
     private val playerRepo: PlayerRepository,
@@ -67,13 +90,29 @@ constructor(
     private val invisibleLvls: InvisibleLevels,
     private val mapClock: MapClock,
     private val infernalPickaxe: InfernalPickaxeLifecycle,
+    private val guild: MiningGuild,
     private val crystalPickaxeBankPreference: CrystalPickaxeBankPreference,
+    private val crystalPickaxe: CrystalPickaxeLifecycle,
+    private val minerals: SpecialistMinerals,
+    private val clayBracelet: ClayBracelet,
+    private val celestial: CelestialMiningRing,
     private val coalBag: CoalBagStorage,
     private val gemBag: GemBagStorage,
 ) : PluginScript() {
     override fun ScriptContext.startup() {
         onOpHeldU(MiningObjs.dragonPickaxe, objs.smouldering_stone) {
             infernalPickaxe.create(this, it.firstSlot, it.secondSlot)
+        }
+        for (recharge in infernalPickaxe.rechargePairs) {
+            for (material in listOf(objs.smouldering_stone, MiningObjs.dragonPickaxe)) {
+                onOpHeldU(recharge.depleted, material) {
+                    infernalPickaxe.recharge(this, it.firstSlot, it.secondSlot, recharge, material)
+                }
+            }
+            onOpWorn2(recharge.charged) { infernalPickaxe.checkCharges(this, player.worn[it.slot]) }
+        }
+        onOpHeld3(MiningObjs.infernalPickaxe) {
+            infernalPickaxe.checkCharges(this, player.inv[it.slot])
         }
         for (cosmetic in infernalPickaxe.cosmeticDragonPickaxes) {
             onOpHeldU(cosmetic, objs.smouldering_stone) {
@@ -89,6 +128,11 @@ constructor(
             for (ornamented in listOf(style.trailblazer, style.reloaded)) {
                 onOpHeld1(ornamented) {
                     infernalPickaxe.wieldOrnamented(this, it.inventory, it.slot)
+                }
+                if (style.plain == MiningObjs.infernalPickaxe) {
+                    onOpHeld2(ornamented) {
+                        infernalPickaxe.checkCharges(this, player.inv[it.slot])
+                    }
                 }
                 onOpHeld3(ornamented) {
                     infernalPickaxe.revertOrnament(this, it.slot, ornamented, style.plain)
@@ -107,12 +151,63 @@ constructor(
         onProtectedEvent<BankedObjEvents.ConfigureCharges>(MiningObjs.crystalPickaxeInactive.id) {
             crystalPickaxeBankPreference.configureCharges(this)
         }
+        for (pick in listOf(MiningObjs.crystalPickaxe, MiningObjs.crystalPickaxeInactive)) {
+            onOpHeldU(pick, objs.crystal_shard) {
+                crystalPickaxe.charge(this, it.firstSlot, it.secondSlot)
+            }
+        }
+        onOpHeld2(MiningObjs.crystalPickaxe) {
+            crystalPickaxe.checkCharges(this, player.inv[it.slot])
+        }
+        onOpWorn2(MiningObjs.crystalPickaxe) { crystalPickaxe.checkCharges(this, player.righthand) }
+        onOpHeld3(MiningObjs.crystalPickaxe) {
+            crystalPickaxe.revert(this, it.slot, MiningObjs.crystalPickaxe)
+        }
+        onOpHeld3(MiningObjs.crystalPickaxeInactive) {
+            crystalPickaxe.revert(this, it.slot, MiningObjs.crystalPickaxeInactive)
+        }
         onOpLoc1(content.ore) { startMining(it.loc, it.type) }
         onOpLoc3(content.ore) { mine(it.loc, it.type) }
         onOpLocU(content.ore, content.mining_pickaxe) { startMining(it.loc, it.type) }
+        onOpLoc1(MiningLocs.essenceRock) { mineEssence(it.loc, start = true) }
+        onOpLoc3(MiningLocs.essenceRock) { mineEssence(it.loc, start = false) }
         onOpLoc1(MiningLocs.denseRunestone) { startDenseRunestoneMining(it.loc) }
         onOpLoc3(MiningLocs.denseRunestone) { mineDenseRunestone(it.loc) }
         onOpLoc1(MiningLocs.depletedRunestone) { mes("The runestone has been mined to depletion.") }
+    }
+
+    private fun ProtectedAccess.mineEssence(rock: BoundLocInfo, start: Boolean) {
+        val tool = findPickaxe(player, objTypes)
+        if (tool == null) {
+            noPickaxeMessage()
+            return
+        }
+        if (inv.isFull()) {
+            mes("Your inventory is too full to hold any more essence.")
+            resetAnim()
+            return
+        }
+        val pickaxe = objTypes[tool]
+        if (start || skillAnimDelay <= mapClock) {
+            anim(pickaxe.pickaxeAnim)
+            skillAnimDelay = mapClock + 4
+        }
+        if (start) {
+            actionDelay = mapClock + nextRollDelay(pickaxe)
+        } else if (actionDelay <= mapClock) {
+            val essence =
+                if (player.members && player.miningLvl >= 30) MiningObjs.pureEssence
+                else MiningObjs.runeEssence
+            if (!invAdd(inv, essence, 1).success) return
+            crystalPickaxe.consumeCharge(this, tool)
+            statAdvance(stats.mining, 5.0 * xpMods.get(player, stats.mining))
+            if (inv.isFull()) {
+                resetAnim()
+                return
+            }
+            actionDelay = mapClock + nextRollDelay(pickaxe)
+        }
+        opLoc3(rock)
     }
 
     private fun ProtectedAccess.startDenseRunestoneMining(rock: BoundLocInfo) {
@@ -206,7 +301,7 @@ constructor(
     }
 
     private fun ProtectedAccess.startMining(rock: BoundLocInfo, type: UnpackedLocType) {
-        if (!canMine(type)) {
+        if (!canMine(rock, type)) {
             return
         }
         val pickaxe = findPickaxe(player, objTypes) ?: return noPickaxeMessage()
@@ -218,7 +313,7 @@ constructor(
     }
 
     private fun ProtectedAccess.mine(rock: BoundLocInfo, type: UnpackedLocType) {
-        if (!canMine(type)) {
+        if (!canMine(rock, type)) {
             resetAnim()
             return
         }
@@ -240,44 +335,173 @@ constructor(
                 opLoc3(rock)
                 return
             }
-            val bounds = successBounds(player, type)
-            val success = statRandom(stats.mining, bounds.first, bounds.last, invisibleLvls)
+            val bounds = minerals.adjustBounds(player, rock, successBounds(player, type))
+            val quarryTable = QuarryRocks.table(type.id)
+            val quarryReward =
+                quarryTable?.let { table ->
+                    QuarryRocks.roll(table) { low, high ->
+                        statRandom(
+                            stats.mining,
+                            low,
+                            high,
+                            invisibleLvls.get(player, stats.mining) +
+                                celestial.invisibleBoost(player) +
+                                guild.invisibleBoost(player, rock.coords),
+                        )
+                    }
+                }
+            val success =
+                if (quarryTable != null) quarryReward != null
+                else
+                    statRandom(
+                        stats.mining,
+                        bounds.first,
+                        bounds.last,
+                        invisibleLvls.get(player, stats.mining) +
+                            celestial.invisibleBoost(player) +
+                            guild.invisibleBoost(player, rock.coords),
+                    )
             actionDelay = mapClock + nextRollDelay(objTypes[pickaxe])
             if (success) {
+                if (minerals.supports(rock.id)) {
+                    val depleted = minerals.mine(this, rock)
+                    crystalPickaxe.consumeCharge(this, pickaxe)
+                    if (depleted) {
+                        resetAnim()
+                        sendLocalOverlayLoc(rock, type, type.respawnTime)
+                    } else opLoc3(rock)
+                    return
+                }
                 val gemReward =
                     if (type.gemRock) GemRockRewards.at(random.of(GemRockRewards.totalWeight))
                     else null
-                val product = gemReward?.obj ?: type.product
-                val xp = type.xp * xpMods.get(player, stats.mining)
-                if (gemReward != null) {
+                val product = quarryReward?.obj ?: gemReward?.obj ?: type.product
+                val usingBracelet =
+                    player.members &&
+                        player.hands?.id == objs.bracelet_of_clay.id &&
+                        product in listOf(objs.clay, objs.soft_clay)
+                val ore = if (usingBracelet) objs.soft_clay else product
+                val xp = (quarryReward?.xp ?: type.xp) * xpMods.get(player, stats.mining)
+                val kingdom = KingdomWork.mine(rock.coords, product)
+                val petRate =
+                    when {
+                        type.gemRock -> 211_886
+                        quarryReward != null -> 741_600
+                        else ->
+                            when (product.id) {
+                                1761,
+                                434,
+                                436,
+                                438,
+                                440,
+                                442,
+                                668,
+                                3211 -> 741_600
+                                453 -> 290_640
+                                444 -> 296_640
+                                447 -> 148_320
+                                449 -> 59_328
+                                451 -> 42_377
+                                13356 -> 245_562
+                                13571 -> 710_000
+                                21347 -> 46_350
+                                else -> null
+                            }
+                    }
+                val replaced =
+                    kingdom == null &&
+                        petRate != null &&
+                        vessels.geodes(player, player.miningLvl, petRate)
+                if (!replaced && gemReward != null) {
                     mes("You just mined ${gemReward.article} ${gemReward.displayName}!")
                     soundSynth(synths.found_gem)
-                } else {
-                    mes("You manage to mine some ${objTypes[product].name.lowercase()}.")
+                } else if (!replaced) {
+                    mes("You manage to mine some ${objTypes[ore].name.lowercase()}.")
                 }
                 statAdvance(stats.mining, xp)
-                val storedInCoalBag = coalBag.storeMinedCoal(player, product)
-                if (storedInCoalBag == 0 && gemBag.storeAcquired(player, product) > 0) {
-                    mes(GemBagStorage.AUTO_STORE_MESSAGE)
-                } else if (storedInCoalBag == 0) {
-                    invAdd(inv, product)
+                if (
+                    !replaced &&
+                        product.id == objs.iron_ore.id &&
+                        LumbridgeDiarySkillArea.alKharidMine(rock.coords)
+                ) {
+                    player.completeDiaryTask(DiaryTask.MineAlKharidIron)
                 }
-                if (hasMiningCape() && product.isMiningCapeOre() && random.of(20) == 0) {
-                    val bonusStored = coalBag.storeMinedCoal(player, product)
-                    if (bonusStored == 0) {
-                        invAdd(inv, product)
+                if (!replaced) player.recordDiaryOre(product.id, rock.coords)
+                if (kingdom != null) publish(KingdomContribution(player, kingdom))
+                else {
+                    val firstFree = inv.indexOfFirst { it == null }
+                    val consumed =
+                        !replaced &&
+                            !type.gemRock &&
+                            infernalPickaxe.combust(this, pickaxe, product, type.level)
+                    if (!replaced && !consumed) {
+                        val storedInCoalBag = coalBag.storeMinedCoal(player, product)
+                        if (storedInCoalBag == 0 && gemBag.storeAcquired(player, product) > 0) {
+                            mes(GemBagStorage.AUTO_STORE_MESSAGE)
+                        } else if (storedInCoalBag == 0) {
+                            invAdd(inv, ore)
+                        }
+                        if (usingBracelet) {
+                            if (product == objs.clay || invAdd(inv, objs.soft_clay).success)
+                                clayBracelet.use(this)
+                        }
                     }
-                    mes("Your cape allows you to mine an additional ore.")
+                    if (petRate != null)
+                        petRates.roll(
+                            player,
+                            stats.mining,
+                            13321,
+                            petRate,
+                            firstFree.takeIf { inv[it]?.id == product.id } ?: -1,
+                        )
+                    if (
+                        !replaced &&
+                            hasMiningCape() &&
+                            celestialEligible(type, product) &&
+                            random.of(20) == 0
+                    ) {
+                        val bonusTool = findPickaxe(player, objTypes)
+                        if (
+                            bonusTool == null ||
+                                !infernalPickaxe.combust(this, bonusTool, product, type.level)
+                        ) {
+                            val bonusStored = coalBag.storeMinedCoal(player, product)
+                            if (bonusStored == 0) invAdd(inv, ore)
+                        }
+                        mes("Your cape allows you to mine an additional ore.")
+                    }
                 }
-                publish(MinedOre(player, rock, product))
-
-                locRepo.change(rock, type.depleted, type.respawnTime)
+                if (!replaced && kingdom == null) {
+                    if (VarrockMining.roll(player, VarrockMining.tierFor(product), random))
+                        awardExtraOre(ore, type.level, xp)
+                    if (celestialEligible(type, product) && celestial.rollExtra(this))
+                        awardExtraOre(ore, type.level, xp)
+                }
+                crystalPickaxe.consumeCharge(this, pickaxe)
+                guild.mineral(this, rock.coords, product)
+                if (!replaced) publish(MinedOre(player, rock, product))
+                if (guild.retain(player, rock, product)) {
+                    opLoc3(rock)
+                    return
+                }
+                val respawn = guild.respawn(rock.coords, product, type.respawnTime)
+                locRepo.change(rock, type.depleted, respawn)
                 resetAnim()
-                sendLocalOverlayLoc(rock, type, type.respawnTime)
+                sendLocalOverlayLoc(rock, type, respawn)
                 return
             }
         }
         opLoc3(rock)
+    }
+
+    private fun ProtectedAccess.awardExtraOre(product: ObjType, level: Int, xp: Double) {
+        val tool = findPickaxe(player, objTypes)
+        if (
+            tool != null && infernalPickaxe.combust(this, tool, product, level) ||
+                coalBag.storeMinedCoal(player, product) > 0 ||
+                invAdd(inv, product).success
+        )
+            statAdvance(stats.mining, xp)
     }
 
     private fun ProtectedAccess.rollOrdinaryRockGem(type: UnpackedLocType): Boolean {
@@ -301,28 +525,65 @@ constructor(
         return true
     }
 
+    /** Period Mining enhancers table: charged duplicates are separate from the invisible boost. */
+    private fun celestialEligible(type: UnpackedLocType, product: ObjType): Boolean =
+        !type.gemRock &&
+            (product.id == 3211 /* Limestone. */ ||
+                product in
+                    listOf(
+                        objs.clay,
+                        objs.soft_clay,
+                        objs.copper_ore,
+                        objs.tin_ore,
+                        objs.blurite_ore,
+                        objs.iron_ore,
+                        objs.silver_ore,
+                        objs.coal,
+                        objs.gold_ore,
+                        objs.mithril_ore,
+                        objs.adamantite_ore,
+                        KourendMineralObjs.lovakite,
+                        KourendMineralObjs.sulphur,
+                    ) ||
+                QuarryRocks.table(type.id) != null)
+
     private fun ProtectedAccess.hasMiningCape(): Boolean =
         player.back?.id == objs.mining_skillcape.id ||
             player.back?.id == objs.mining_skillcape_t.id ||
             player.back?.id == objs.max_cape_worn.id
 
-    private fun ObjType.isMiningCapeOre(): Boolean =
-        id == objs.copper_ore.id ||
-            id == objs.tin_ore.id ||
-            id == objs.iron_ore.id ||
-            id == objs.coal.id ||
-            id == objs.silver_ore.id ||
-            id == objs.gold_ore.id ||
-            id == objs.mithril_ore.id ||
-            id == objs.adamantite_ore.id
-
-    private fun ProtectedAccess.canMine(type: UnpackedLocType): Boolean {
+    private fun ProtectedAccess.canMine(rock: BoundLocInfo, type: UnpackedLocType): Boolean {
+        if (!guild.canMine(this, rock) || !minerals.canMine(player, rock.id)) return false
+        if (
+            type.id in 11382..11384 && !player.members ||
+                type.id == MiningLocs.prifClay.id &&
+                    (!player.members || vars[varbits.song_of_the_elves] < 194)
+        )
+            return false
+        if (
+            type.id in KourendMineralLocs.sulphur.map { it.id } &&
+                !KourendMinerals.sulphurFilter(player, objTypes)
+        ) {
+            mes("You'll choke on the fumes if you try to mine without protection.")
+            return false
+        }
+        if (
+            (QuarryRocks.table(type.id) != null ||
+                type.id in
+                    (KourendMineralLocs.lovakite + KourendMineralLocs.sulphur).map { it.id }) &&
+                !player.members
+        ) {
+            mes("You need to be on a members' world to mine this rock.")
+            return false
+        }
         if (player.miningLvl < type.level) {
             mes("You need a Mining level of ${type.level} to mine this rock.")
             return false
         }
         val coalCanRedirect = !type.gemRock && coalBag.canStoreMinedCoal(player, type.product)
-        if (inv.isFull() && !coalCanRedirect) {
+        val kingdom = if (type.gemRock) null else KingdomWork.mine(rock.coords, type.product)
+        if (kingdom != null && !kingdom.permitted(player)) return false
+        if (inv.isFull() && !coalCanRedirect && kingdom == null) {
             if (type.gemRock) {
                 mes("Your inventory is too full to hold any more gems.")
             } else {
@@ -415,7 +676,7 @@ constructor(
 
         private fun Player.hasChargedGlory(): Boolean = front?.id in chargedGloryIds
 
-        fun findPickaxe(player: Player, objTypes: ObjTypeList): InvObj? {
+        public fun findPickaxe(player: Player, objTypes: ObjTypeList): InvObj? {
             val worn = player.righthand?.takeIf { objTypes[it].isUsablePickaxe(player) }
             val carried =
                 player.inv

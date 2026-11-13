@@ -1,0 +1,813 @@
+# Golden warbler oldid=14781115, 2024-10-20T07:59:12Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_49_4_22'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_49_14_16'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_49_8_13'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_49_16_11'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_49_12_8'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_49_3_7'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_48_14_25'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_48_10_23'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_48_15_13'
+
+[[spawn]]
+npc = 'hunting_bird_desert'
+coords = '0_53_48_18_13'
+
+# Copper longtail oldid=14945768, 2025-07-23T23:41:26Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_37_20'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_41_17'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_37_15'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_3_12'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_1_9'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_5_9'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_56_7'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_60_7'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_58_4'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_6_3'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_11_3'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_50_3'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_9_0'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_48_0'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_36_56_53_0'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_24_53_19_50'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_24_53_14_44'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_24_53_18_43'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_24_53_25_43'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_24_53_22_39'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_24_53_28_38'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_34_46_27_19'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_34_46_29_23'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_34_46_31_17'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_34_46_31_20'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_34_46_33_21'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_34_46_34_16'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_34_46_36_20'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_46_15_27'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_46_13_37'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_46_18_31'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_46_12_32'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_46_19_36'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_52_11_16'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_52_10_16'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_52_4_20'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_20_52_62_10'
+
+[[spawn]]
+npc = 'hunting_bird_woodland'
+coords = '0_21_52_3_17'
+
+# Cerulean twitch oldid=14819584, 2024-12-08T16:53:37Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_59_35_60'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_59_34_57'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_59_14_53'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_59_31_40'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_59_29_28'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_28_63'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_45_63'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_39_60'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_52_58'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_31_57'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_43_55'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_26_53'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_42_58_48_53'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_22_50_44_46'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_22_50_22_43'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_22_50_39_44'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_22_50_40_37'
+
+[[spawn]]
+npc = 'hunting_bird_polar'
+coords = '0_22_50_33_32'
+
+# Crimson swift oldid=14780803, 2024-10-20T07:53:39Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_54_58'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_50_54'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_55_53'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_47_49'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_52_45'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_45_42'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_49_38'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_44_36'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_52_20'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_49_17'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_46_13'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_52_13'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_28_6'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_25_4'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_40_45_31_1'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_18_56_33_14'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_18_56_35_12'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_18_56_30_11'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_18_56_36_9'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_18_56_32_7'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_33_44_41_13'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_33_44_40_9'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_33_44_43_11'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_33_44_51_7'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_33_44_49_2'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_33_44_53_3'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_53_43_45_40'
+
+[[spawn]]
+npc = 'hunting_bird_jungle'
+coords = '0_53_43_41_36'
+
+# Tropical wagtail oldid=14964851, 2025-08-13T07:24:59Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_27_59'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_30_59'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_29_53'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_15_34'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_19_34'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_17_31'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_6_12'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_3_10'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_8_8'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_47_7'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_42_4'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_39_45_49_2'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_19_48_45_32'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_19_48_48_26'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_19_48_51_26'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_19_48_53_32'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_19_48_56_31'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_19_48_56_27'
+
+[[spawn]]
+npc = 'multicoloured_bird'
+coords = '0_19_48_58_30'
+
+# Chinchompa (Hunter) oldid=14978906, 2025-09-03T06:30:53Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_28_42'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_26_38'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_37_34'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_35_31'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_17_27'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_12_22'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_17_15'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_10_12'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_35_9'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_30_7'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_56_38_6'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_56_49'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_60_45'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_57_41'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_11_29'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_11_25'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_18_25'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_46_20'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_52_20'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_13_19'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_50_16'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_36_55_47_14'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_23_54_11_52'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_23_54_15_50'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_23_54_8_47'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_23_54_15_45'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_33_46_14_8'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_33_46_17_9'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_33_46_16_7'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_33_46_14_5'
+
+[[spawn]]
+npc = 'hunting_chinchompa'
+coords = '0_33_46_18_6'
+
+# Carnivorous chinchompa oldid=14950548, 2025-07-26T11:13:58Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_26_19'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_28_17'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_29_21'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_31_19'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_33_12'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_35_15'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_36_9'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_37_12'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_35_53_39_13'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_61_56'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_57_55'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_61_52'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_63_38'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_60_34'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_63_31'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_1_29'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_5_26'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_1_21'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_11_5'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_39_45_7_1'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_20_49_40_30'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_20_49_39_31'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_20_49_38_32'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_20_49_37_30'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_20_49_38_34'
+
+[[spawn]]
+npc = 'hunting_chinchompa_big'
+coords = '0_20_49_36_34'
+
+# Black chinchompa (Hunter) oldid=14917327, 2025-06-09T07:59:15Z. Surface public spawn rows only.
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_48_59_62_10'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_59_4_8'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_59_0_6'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_59_3_4'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_6_63'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_10_62'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_23_62'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_18_61'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_2_60'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_22_58'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_5_57'
+
+[[spawn]]
+npc = 'hunting_chinchompa_black'
+coords = '0_49_58_16_57'
+
+
+# Embertailed jerboa, Avium Savannah and Locus Oasis.
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_38_38'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_39_42'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_41_35'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_43_41'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_46_43'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_46_33'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_47_37'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_49_40'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_50_35'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_52_42'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_23_47_52_38'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_0_54'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_0_59'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_0_61'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_2_62'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_3_52'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_3_57'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_3_60'
+
+[[spawn]]
+npc = 'varlamore_hunterjerboa01'
+coords = '0_26_46_7_61'

@@ -1,0 +1,5 @@
+spawn = [
+    { npc = "gotr_great_guardian", coords = "0_56_148_30_29" },
+    { npc = "gotr_reward_trader", coords = "0_56_148_35_3" },
+    { npc = "gotr_tamara_parent", coords = "0_56_148_30_17" },
+]

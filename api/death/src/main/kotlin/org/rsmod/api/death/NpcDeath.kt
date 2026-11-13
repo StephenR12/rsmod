@@ -8,6 +8,7 @@ import org.rsmod.api.config.refs.varns
 import org.rsmod.api.config.refs.varps
 import org.rsmod.api.npc.access.StandardNpcAccess
 import org.rsmod.api.npc.vars.typePlayerUidVarn
+import org.rsmod.api.player.events.RemainsDrop
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.output.soundSynth
 import org.rsmod.api.player.vars.intVarp
@@ -16,6 +17,7 @@ import org.rsmod.api.random.CoreRandom
 import org.rsmod.api.random.GameRandom
 import org.rsmod.api.repo.npc.NpcRepository
 import org.rsmod.api.repo.obj.ObjRepository
+import org.rsmod.events.EventBus
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.entity.Player
 import org.rsmod.game.entity.PlayerList
@@ -27,6 +29,7 @@ import org.rsmod.map.CoordGrid
 public class NpcDeath
 @Inject
 constructor(
+    private val events: EventBus,
     private val npcRepo: NpcRepository,
     private val seqTypes: SeqTypeList,
     private val players: PlayerList,
@@ -42,8 +45,7 @@ constructor(
         access: StandardNpcAccess,
         dropCoords: CoordGrid = access.coords,
     ) {
-        access.death(npcRepo, seqTypes, players)
-        access.npc.spawnDeathDrops(dropCoords)
+        access.death(npcRepo, seqTypes, players) { access.npc.spawnDeathDrops(dropCoords) }
     }
 
     private fun Npc.spawnDeathDrops(dropCoords: CoordGrid) {
@@ -59,7 +61,18 @@ constructor(
                     ?: hero.lootDropDuration
                     ?: constants.lootdrop_duration
             val reveal = drop.reveal ?: ObjRepository.DEFAULT_REVEAL_DELAY
-            objRepo.add(drop.obj, drop.coords, duration, drop.receiver, reveal)
+            val remains = drop.receiver?.takeIf { it === hero }?.let { RemainsDrop(it, drop.obj) }
+            if (remains == null) {
+                objRepo.add(drop.obj, drop.coords, duration, drop.receiver, reveal)
+            } else {
+                events.publish(remains)
+                val delivered = remains.remaining == 0 || objRepo.add(
+                    org.rsmod.game.obj.Obj.fromOwner(hero, drop.coords, drop.obj.copy(count = remains.remaining)),
+                    duration,
+                    reveal,
+                )
+                if (delivered) remains.commit()
+            }
         }
     }
 
@@ -95,6 +108,7 @@ public suspend fun StandardNpcAccess.death(
     npcRepo: NpcRepository,
     seqTypes: SeqTypeList,
     players: PlayerList,
+    beforeRemoval: () -> Unit = {},
 ) {
     walk(coords)
     noneMode()
@@ -122,6 +136,7 @@ public suspend fun StandardNpcAccess.death(
     anim(deathAnim)
     delay(seqTypes[deathAnim])
 
+    beforeRemoval()
     if (npc.respawns) {
         npcRepo.despawn(npc, npc.type.respawnRate)
         return

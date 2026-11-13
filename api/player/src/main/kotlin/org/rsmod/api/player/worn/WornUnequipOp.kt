@@ -24,6 +24,10 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
         val wearpos = Wearpos[wornSlot] ?: error("Wearpos `$wornSlot` not found.")
         val objType = objTypes[obj]
 
+        if (objType.id in 8860..8864 || objType.id == 27010) {
+            return WornUnequipResult.Fail.InvalidObj
+        }
+
         val transaction =
             player.invTransfer(
                 from = worn,

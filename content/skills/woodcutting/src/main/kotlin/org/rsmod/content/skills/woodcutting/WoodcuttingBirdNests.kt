@@ -13,7 +13,7 @@ import org.rsmod.map.CoordGrid
 
 public class WoodcuttingBirdNests
 @Inject
-constructor(private val random: GameRandom, private val objRepo: ObjRepository) {
+constructor(private val random: GameRandom, private val objRepo: ObjRepository, private val gear: org.rsmod.content.skills.woodcutting.forestry.ForestryGear) {
     /**
      * Rolls the standard Woodcutting nest table after an otherwise-successful log roll.
      *
@@ -33,7 +33,12 @@ constructor(private val random: GameRandom, private val objRepo: ObjRepository) 
             }
 
             val tableSize = tableSize(player)
-            val nest = selectNest(random.of(tableSize))
+            val preference=org.rsmod.content.skills.woodcutting.forestry.TwitchersGloves.preference(player)
+            val nest=if(preference in 1..3 && random.of(5)==0)when(preference){
+                1->WoodcuttingObjs.birdNestRing
+                2->selectNest(random.of(3))
+                else->WoodcuttingObjs.birdNestSeeds
+            }else selectNest(random.of(tableSize))
             val dropCoords = adjacentDropCoords(player.coords, random.of(ADJACENT_OFFSETS.size))
             objRepo.add(
                 type = nest,
@@ -55,7 +60,7 @@ constructor(private val random: GameRandom, private val objRepo: ObjRepository) 
     private fun Player.hasWoodcuttingCape(): Boolean =
         worn.contains(objs.woodcutting_skillcape) ||
             worn.contains(objs.woodcutting_skillcape_t) ||
-            worn.contains(objs.max_cape_worn)
+            worn.contains(objs.max_cape_worn) || gear.capeEquipped(this)
 
     public companion object {
         public const val BASE_DENOMINATOR: Int = 256

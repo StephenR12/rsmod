@@ -1,0 +1,3 @@
+spawn = [
+    { npc = "nzone_host", coords = "0_40_48_50_43" },
+]

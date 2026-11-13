@@ -11,6 +11,8 @@ import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.back
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.protect.ProtectedAccessLauncher
@@ -182,7 +184,7 @@ private constructor(
                 lockedLoopAnimDialog(
                     seqs.emote_slap_head,
                     seqs.emote_slap_head_loop,
-                    varbits.sos_emote_idea,
+                    varbits.sos_emote_doh,
                     "You can't use that emote yet - visit the Stronghold of Security to unlock it.",
                     op = op,
                 )
@@ -326,6 +328,17 @@ private constructor(
         anim(seq)
         spot?.let(::spotanim)
         publishEmoteEvent(seq)
+        val bit = when(seq.id) {
+            seqs.emote_panic_flap.id, seqs.emote_panic_flap_loop.id, seqs.vm_natural_historian_monkey_hop.id -> 1
+            seqs.emote_slap_head.id, seqs.emote_slap_head_loop.id -> 2
+            seqs.emote_lightbulb.id, seqs.emote_lightbulb_loop.id -> 4
+            seqs.emote_stampfeet.id, seqs.emote_stampfeet_loop.id -> 8
+            else -> return
+        }
+        if (!player.members) return
+        val mask = vars[emote_varps.stronghold_diary_emotes] or bit
+        vars[emote_varps.stronghold_diary_emotes] = mask
+        if (mask == 15) player.completeDiaryTask(DiaryTask.PerformStrongholdEmotes)
     }
 
     private fun ProtectedAccess.simpleAnim(seq: SeqType, spot: SpotanimType? = null) {
@@ -425,6 +438,14 @@ private constructor(
             return
         }
         playAnim(seq, spotanim)
+        val questCape = seq.id == seqs.skillcapes_player_quest_cape.id
+        if (questCape && coords.x in 3083..3090 && coords.z in 3251..3257 && coords.level <= 1) {
+            player.completeDiaryTask(DiaryTask.WiseOldManQuestCape)
+        }
+        if ((questCape || ocIsContentType(player.back, content.skill_cape)) &&
+            coords.level == 3 && coords.x in 2954..2981 && coords.z in 3329..3347) {
+            player.completeDiaryTask(DiaryTask.CastleCapeEmote)
+        }
         delay(seq)
         rebuildAppearance()
     }

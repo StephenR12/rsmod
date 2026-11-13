@@ -186,6 +186,7 @@ class AccountLoadResponseHook(
             resizable = loginBlock.resizable,
         )
         player.newAccount = fromResponse.isNewAccount()
+        player.twoFactorEnabled = fromResponse.account.twofaEnabled
         return player
     }
 

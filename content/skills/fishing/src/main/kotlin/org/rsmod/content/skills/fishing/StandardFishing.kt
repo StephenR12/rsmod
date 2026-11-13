@@ -1,6 +1,8 @@
 package org.rsmod.content.skills.fishing
 
 import jakarta.inject.Inject
+import org.rsmod.api.clue.ClueVessels
+import org.rsmod.content.skills.pets.SkillPetRates
 import kotlin.math.floor
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
@@ -10,6 +12,14 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryDifficulty
+import org.rsmod.api.player.diary.DiaryRegion
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.LumbridgeDiarySkillArea
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.player.diary.recordDiaryFish
+import org.rsmod.api.player.events.KingdomContribution
+import org.rsmod.api.player.events.KingdomWork
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.stat
 import org.rsmod.api.player.stat.statBase
@@ -20,7 +30,7 @@ import org.rsmod.game.type.obj.ObjTypeList
 
 public class StandardFishing
 @Inject
-constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarrelStorage) {
+constructor(private val vessels: ClueVessels, private val petRates: SkillPetRates, private val objTypes: ObjTypeList, private val fishBarrel: FishBarrelStorage) {
     public suspend fun lure(access: ProtectedAccess, npc: Npc) {
         val method =
             if (access.player.inv.contains(StandardFishingMethods.fly.bait!!)) {
@@ -33,13 +43,20 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
         fish(access, npc, method)
     }
 
-    public suspend fun fish(access: ProtectedAccess, npc: Npc, method: FishingMethod) {
+    public suspend fun fish(access: ProtectedAccess, npc: Npc, initialMethod: FishingMethod) {
         with(access) {
-            if (!canFish(method, sendFailure = true)) {
+            val kingdom = KingdomWork.fish(npc.coords)
+            var method = initialMethod
+            var previousDiabolicCatch = false
+            if (!canFish(method, sendFailure = true, kingdom = kingdom)) {
                 return
             }
             faceEntitySquare(npc)
             while (true) {
+                if (initialMethod.catches.singleOrNull()?.output == objs.raw_anglerfish) {
+                    method = HighLevelFishingMethods.selectAngler(player)
+                    if (!canFish(method, sendFailure = false, kingdom = kingdom)) return
+                }
                 val tool = findTool(method)
                 val barehanded = tool == null && canBarehand(method)
                 if (tool == null && !barehanded) {
@@ -47,10 +64,14 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
                 }
                 anim(tool?.animation ?: seqs.brut_player_hand_fishing_end_blank)
                 val extraDelay = method.extraRollDelayChance?.let(random::randomBoolean) == true
-                delay(ROLL_INTERVAL + if (extraDelay) 1 else 0)
+                val fasterRoll = previousDiabolicCatch && random.randomBoolean(2)
+                previousDiabolicCatch = false
+                gatheringDelay(
+                    ROLL_INTERVAL + (if (extraDelay) 1 else 0) - (if (fasterRoll) 1 else 0)
+                )
                 if (
                     !isWithinDistance(npc, distance = 1) ||
-                        !canFish(method, sendFailure = false) ||
+                        !canFish(method, sendFailure = false, kingdom = kingdom) ||
                         (tool?.let { !hasTool(it) } ?: !canBarehand(method))
                 ) {
                     resetAnim()
@@ -71,6 +92,13 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
                     }
                 val output = replacement?.output ?: catch.output
                 val message = replacement?.message ?: catch.message
+                if (kingdom != null) {
+                    FishingXp.advance(this, catch.xp)
+                    if (barehanded && catch.barehandedStrengthXp > 0.0)
+                        statAdvance(stats.strength, catch.barehandedStrengthXp)
+                    publish(KingdomContribution(player, kingdom))
+                    continue
+                }
                 val multiplier = catchMultiplier(method, output)
                 val infernalCookingXp =
                     catch.infernalCookingXp?.takeIf {
@@ -93,6 +121,7 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
                         0
                     }
                 val inventoryRawCount = rawCount - barrelCount
+                val occupied = petRates.occupiedBy(player,output.id)
                 val inventorySuccess =
                     if (bait == null && !multiplier.consumeSpiritFlake && inventoryRawCount == 0) {
                         true
@@ -114,6 +143,7 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
                     resetAnim()
                     return
                 }
+                previousDiabolicCatch = bait == HighLevelFishingObjs.diabolic
                 check(fishBarrel.storeCaught(player, output, barrelCount) == barrelCount)
                 if (cookedCount > 0 && !consumeInfernalCharges(tool!!, cookedCount)) {
                     resetAnim()
@@ -126,7 +156,47 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
                     resetAnim()
                     return
                 }
-                statAdvance(stats.fishing, catch.xp)
+                val petRate = when (catch.output.id) {
+                    objs.raw_shrimps.id, objs.raw_anchovies.id -> 870_330
+                    objs.raw_sardine.id, objs.raw_herring.id -> 1_056_000
+                    objs.raw_trout.id, objs.raw_salmon.id -> 923_616
+                    objs.raw_pike.id -> 305_792
+                    objs.raw_rainbow_fish.id -> 137_739
+                    objs.raw_tuna.id, objs.raw_swordfish.id, objs.raw_cave_eel.id, 25664 -> 257_770
+                    objs.raw_lobster.id -> 116_129
+                    objs.raw_monkfish.id -> 138_583
+                    objs.leaping_trout.id, objs.leaping_salmon.id, objs.leaping_sturgeon.id -> 1_280_862
+                    objs.raw_shark.id -> 82_243
+                    objs.infernal_eel.id -> 165_000
+                    objs.raw_anglerfish.id -> 78_649
+                    objs.raw_dark_crab.id -> 149_434
+                    objs.sacred_eel.id -> 99_000
+                    21356 -> 977_778
+                    25652 -> 820_330
+                    25658 -> 300_792
+                    25670 -> 152_120
+                    else -> null
+                }
+                if (petRate != null) petRates.roll(player,stats.fishing,13320,petRate,
+                    petRates.newResourceSlot(player,output.id,occupied))
+                val bottleRate = when (catch.output.id) {
+                    objs.raw_shrimps.id, objs.raw_anchovies.id -> 435_165
+                    objs.raw_sardine.id, objs.raw_herring.id -> 528_000
+                    objs.raw_trout.id, objs.raw_salmon.id -> 461_808
+                    objs.leaping_trout.id, objs.leaping_salmon.id, objs.leaping_sturgeon.id -> 426_954
+                    objs.infernal_eel.id -> 160_000
+                    25652, 25658, 25664, 25670 -> 257_770
+                    else -> petRate
+                }
+                if (bottleRate != null) vessels.bottles(player, level, bottleRate)
+                FishingXp.advance(this, catch.xp)
+                player.recordDiaryFish(catch.output.id, npc.coords, barehanded)
+                if (
+                    catch.output.id == objs.raw_anchovies.id &&
+                        LumbridgeDiarySkillArea.alKharidFishing(npc.coords)
+                ) {
+                    player.completeDiaryTask(DiaryTask.CatchAlKharidAnchovies)
+                }
                 if (barehanded) {
                     statAdvance(stats.strength, catch.barehandedStrengthXp)
                 }
@@ -174,7 +244,7 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
             faceEntitySquare(npc)
             while (true) {
                 anim(seqs.human_bignet)
-                delay(ROLL_INTERVAL)
+                gatheringDelay(ROLL_INTERVAL)
                 if (!isWithinDistance(npc, distance = 1) || !canBigNet(sendFailure = false)) {
                     resetAnim()
                     return
@@ -221,6 +291,8 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
                     resetAnim()
                     return
                 }
+                val lastResource = accepted.catches.lastOrNull { it.inventoryCount > 0 }?.output?.id ?: -1
+                val occupied = petRates.occupiedBy(player,lastResource)
                 val inventorySuccess =
                     if (
                         accepted.spiritFlakesConsumed == 0 &&
@@ -255,8 +327,11 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
                         fishBarrel.storeCaught(player, it.output, it.barrelCount) == it.barrelCount
                     )
                 }
+                petRates.roll(player,stats.fishing,13320,1_147_827,petRates.newResourceSlot(player,lastResource,occupied))
+                vessels.bottles(player, player.stat(stats.fishing), 382_609)
                 accepted.catches.forEach {
-                    statAdvance(stats.fishing, it.xp)
+                    FishingXp.advance(this, it.xp)
+                    player.recordDiaryFish(it.output.id, npc.coords)
                     mes(it.message)
                 }
                 if (
@@ -273,7 +348,12 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
         }
     }
 
-    private fun ProtectedAccess.canFish(method: FishingMethod, sendFailure: Boolean): Boolean {
+    private fun ProtectedAccess.canFish(
+        method: FishingMethod,
+        sendFailure: Boolean,
+        kingdom: KingdomWork?,
+    ): Boolean {
+        if (kingdom != null && !kingdom.permitted(player, sendFailure)) return false
         if (method.membersOnly && !player.members) {
             if (sendFailure) {
                 mes("You need to be on a members' world to fish here.")
@@ -342,7 +422,8 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
         val barrelCanAcceptCatch =
             method.catches.any { fishBarrel.canStoreCaught(player, it.output) }
         if (
-            player.inv.isFull() &&
+            kingdom == null &&
+                player.inv.isFull() &&
                 (bait == null || player.inv.count(objTypes[bait]) > 1) &&
                 !barrelCanAcceptCatch
         ) {
@@ -518,6 +599,19 @@ constructor(private val objTypes: ObjTypeList, private val fishBarrel: FishBarre
         catchRateMultiplier: Double,
         invisibleBoost: Int,
     ): Boolean {
+        // Elite Wilderness adds an independent bonus roll; a failed bonus still gets normal3/40.
+        if (
+            catch.output == objs.raw_dark_crab &&
+                vars[DiaryRegion.Wilderness.tier(DiaryDifficulty.Elite).complete] != 0
+        ) {
+            val bonus = catch.copy(low = 13, high = 55)
+            val rate =
+                adjustFishingSuccessRate(
+                    fishingSuccessRate(bonus, player.stat(stats.fishing), invisibleBoost),
+                    catchRateMultiplier,
+                )
+            if (rate > random.randomDouble()) return true
+        }
         val baseRate = fishingSuccessRate(catch, player.stat(stats.fishing), invisibleBoost)
         val adjustedRate = adjustFishingSuccessRate(baseRate, catchRateMultiplier)
         return adjustedRate > random.randomDouble()

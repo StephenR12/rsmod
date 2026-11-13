@@ -7,6 +7,8 @@ import net.rsprot.protocol.game.outgoing.interfaces.IfSetEventsV2
 import net.rsprot.protocol.game.outgoing.misc.player.RunClientScript
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
@@ -24,6 +26,21 @@ import org.rsmod.map.CoordGrid
 
 @Execution(ExecutionMode.SAME_THREAD)
 class WeavingTest {
+    @Test
+    fun GameTestState.`successful basket weaving on Falador farm loom awards the diary task`() = runWeavingTest { deps ->
+        preparePlayer()
+        val coords = CoordGrid(3039, 3287)
+        allocZoneCollision(coords)
+        val loom = placeMapLoc(coords, weaving_locs.all.first { it.id == 8717 })
+        player.placeAt(coords.translateX(-1))
+        add(objs.willow_branch, 6)
+        val recipe = deps.recipes.recipes.single { it.output == objs.basket }
+        player.withProtectedAccess { deps.weaving.start(this, loom, recipe, 1) }
+        advance(4)
+        assertEquals(1, player.count(objs.basket))
+        assertTrue(player.hasCompletedDiaryTask(DiaryTask.WeaveFaladorBasket))
+    }
+
     @Test
     fun GameTestState.`cache 233 exposes four weaving recipes looms and animation`() =
         runWeavingTest { deps ->

@@ -6,6 +6,16 @@ import org.rsmod.api.type.refs.seq.SeqReferences
 import org.rsmod.api.type.refs.varbit.VarBitReferences
 
 object MiningLocs : LocReferences() {
+    val barronite = listOf("camdozaalrock1", "camdozaalrock2").map(::find)
+    val barroniteEmpty = listOf("camdozaalrock1_empty", "camdozaalrock2_empty").map(::find)
+    val fossilAsh = find("fossil_ashpile")
+    val fossilEmpty = find("fossil_ashpile_empty")
+    val calcified = listOf("", "02", "03", "04").map { find("varlamore_mining_rock$it") }
+    val calcifiedEmpty = listOf("", "02", "03", "04").map { find("varlamore_mining_rock_empty$it") }
+    val limestone = listOf("limestone_rock1", "limestone_rock2", "limestone_rock3").map(::find)
+    val depletedLimestone = find("limestone_rock_noore")
+    val prifClay = find("prif_mine_softclayrock1")
+    val prifEmpty = find("prif_mine_rocks1_empty")
     val copper1 = find("copperrock1")
     val copper2 = find("copperrock2")
     val tin1 = find("tinrock1")
@@ -31,6 +41,7 @@ object MiningLocs : LocReferences() {
     val gemRock1 = find("gemrock1")
     val gemRock2 = find("gemrock")
 
+    val essenceRock = find("blankrunestone")
     val denseRunestone = find("arceuus_runestone_base_mine")
     val depletedRunestone = find("arceuus_runestone_base_depleted")
     val denseRunestoneOne = find("arceuus_runestone_base_1")
@@ -42,6 +53,14 @@ object MiningLocs : LocReferences() {
 }
 
 object MiningObjs : ObjReferences() {
+    val barroniteShards = find("camdozaal_barronite_shard")
+    val barroniteDeposit = find("camdozaal_barronite_deposit")
+    val volcanicAsh = find("fossil_volcanic_ash")
+    val shards = find("blessed_bone_shard")
+    val deposit = find("calcified_deposit")
+    val moth = find("varlamore_mining_teleport")
+    val moonLoop = find("varlamore_key_half_2")
+    val limestone = find("limestone")
     val bronzePickaxe = find("bronze_pickaxe")
     val ironPickaxe = find("iron_pickaxe")
     val steelPickaxe = find("steel_pickaxe")
@@ -65,6 +84,8 @@ object MiningObjs : ObjReferences() {
     val crystalPickaxe = find("crystal_pickaxe")
     val crystalPickaxeInactive = find("crystal_pickaxe_inactive")
     val chisel = find("chisel")
+    val runeEssence = find("blankrune")
+    val pureEssence = find("blankrune_high")
     val denseEssenceBlock = find("arceuus_essence_block")
 }
 

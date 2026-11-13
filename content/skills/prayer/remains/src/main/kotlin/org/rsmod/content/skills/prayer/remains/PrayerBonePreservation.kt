@@ -12,6 +12,10 @@ internal fun ProtectedAccess.zealotPreservesBone(recipe: PrayerRemainsRecipe): B
     if (recipe.kind != PrayerRemainsKind.Bone) {
         return false
     }
+    return zealotPreservesOffering()
+}
+
+public fun ProtectedAccess.zealotPreservesOffering(): Boolean {
     val pieces =
         listOf(
                 player.hat?.id == objs.zealots_helm.id,

@@ -5,6 +5,8 @@ import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.player.output.UpdateRun
 import org.rsmod.api.player.protect.ProtectedAccess
+import org.rsmod.api.player.stat.statHeal
+import org.rsmod.game.entity.Player
 import org.rsmod.game.type.stat.StatType
 
 public object MothEffects {
@@ -43,22 +45,25 @@ public object MothEffects {
         SUNLIGHT_CONSTANT + (baseLevel * SUNLIGHT_PERCENT) / 100
 
     public fun apply(access: ProtectedAccess, effect: MothEffect, directCatch: Boolean) {
+        apply(access.player, effect, directCatch)
+    }
+
+    internal fun apply(player: Player, effect: MothEffect, directCatch: Boolean) {
         when (effect) {
-            MothEffect.Sunlight -> applySunlight(access, directCatch)
-            MothEffect.Moonlight -> access.statHeal(stats.prayer, MOONLIGHT_PRAYER, percent = 0)
+            MothEffect.Sunlight -> applySunlight(player, directCatch)
+            MothEffect.Moonlight -> player.statHeal(stats.prayer, MOONLIGHT_PRAYER, percent = 0)
         }
     }
 
-    private fun applySunlight(access: ProtectedAccess, directCatch: Boolean) {
+    private fun applySunlight(player: Player, directCatch: Boolean) {
         for (stat in sunlightRestoredStats) {
-            access.statHeal(stat, SUNLIGHT_CONSTANT, SUNLIGHT_PERCENT)
+            player.statHeal(stat, SUNLIGHT_CONSTANT, SUNLIGHT_PERCENT)
         }
-        access.statHeal(stats.hitpoints, SUNLIGHT_HITPOINTS, percent = 0)
+        player.statHeal(stats.hitpoints, SUNLIGHT_HITPOINTS, percent = 0)
         if (directCatch) {
             val amount = (constants.run_max_energy * SUNLIGHT_RUN_PERCENT) / 100
-            access.player.runEnergy =
-                min(constants.run_max_energy, access.player.runEnergy + amount)
-            UpdateRun.energy(access.player, access.player.runEnergy)
+            player.runEnergy = min(constants.run_max_energy, player.runEnergy + amount)
+            UpdateRun.energy(player, player.runEnergy)
         }
     }
 }

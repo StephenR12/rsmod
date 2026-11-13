@@ -1,0 +1,4 @@
+spawn = [
+    { npc = "barbassault_barbarian_commander", coords = "0_39_55_38_54" },
+    { npc = "barbassault_barbarian_captain", coords = "0_39_55_38_50" },
+]

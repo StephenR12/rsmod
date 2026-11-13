@@ -9,6 +9,7 @@ import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.BaseHitmarkGroups
 import org.rsmod.api.config.refs.components
 import org.rsmod.api.config.refs.hitmark_groups
+import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.config.refs.invs
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.queues
@@ -907,7 +908,7 @@ public class ProtectedAccess(
     }
 
     public fun stopAction() {
-        player.clearPendingAction(context.eventBus)
+        player.clearPendingAction(context.eventBus, keep = coroutine)
         player.resetFaceEntity()
         player.clearMapFlag()
         player.abortRoute()
@@ -1927,6 +1928,19 @@ public class ProtectedAccess(
     }
 
     /**
+     * Waits for the next gathering roll without blocking movement or another player action. Input
+     * may cancel this coroutine while it is paused; the normal modal guard still applies if it
+     * resumes. Use hard [delay] for animations/actions which intentionally block input.
+     */
+    public suspend fun gatheringDelay(cycles: Int) {
+        require(cycles > 0) { "Gathering delay must be positive." }
+        val modal = player.ui.getModalOrNull(components.mainmodal)
+        val resumeCycle = mapClock + cycles
+        coroutine.pause { mapClock >= resumeCycle && player.isNotDelayed }
+        resumeWithMainModalProtectedAccess(Unit, modal)
+    }
+
+    /**
      * @throws ProtectedAccessLostException if the player could not retain protected access after
      *   the coroutine suspension.
      * @see [resumeWithMainModalProtectedAccess]
@@ -2882,7 +2896,9 @@ public class ProtectedAccess(
         val modal = player.ui.getModalOrNull(components.mainmodal)
         val input = coroutine.pause(ResumePauseButtonInput::class)
         chatDefaultRestoreInput(player)
-        return resumeWithMainModalProtectedAccess(input.subcomponent.absoluteValue, modal)
+        val selection = resumeWithMainModalProtectedAccess(input.subcomponent.absoluteValue, modal)
+        ifCloseSub(interfaces.menu)
+        return selection
     }
 
     /**
@@ -3043,6 +3059,15 @@ public class ProtectedAccess(
             expectedModal,
             components.mainmodal,
         )
+    }
+
+    /** Waits for a pause-button selection from a specific open main modal. */
+    public suspend fun awaitMainModalSelection(button: ComponentType): Int {
+        val modal =
+            player.ui.getModalOrNull(components.mainmodal) ?: throw ProtectedAccessLostException()
+        val input = coroutine.pause(ResumePauseButtonInput::class)
+        if (!button.isType(input.component)) throw ProtectedAccessLostException()
+        return resumeWithMainModalProtectedAccess(input.subcomponent, modal)
     }
 
     /* Client script helper functions */
@@ -3647,10 +3672,14 @@ private fun UnpackedMesAnimType.splitGetAnim(lines: Int) =
  * This function should only be called directly under specific circumstances. Prefer calling
  * [org.rsmod.api.player.protect.ProtectedAccess.clearPendingAction] instead.
  */
-public fun Player.clearPendingAction(eventBus: EventBus) {
+public fun Player.clearPendingAction(eventBus: EventBus): Unit = clearPendingAction(eventBus, keep = null)
+
+private fun Player.clearPendingAction(eventBus: EventBus, keep: GameCoroutine?) {
     check(!isDelayed) { "`clearpendingaction` should never be called while player is delayed." }
     eventBus.publish(PlayerActionEvent.Interrupt(this))
     ifClose(eventBus)
-    cancelActiveCoroutine()
+    // A script may stop the previous action after its own menu has resumed. Its next delay
+    // still needs to be advanced by the player cycle.
+    if (activeCoroutine !== keep) cancelActiveCoroutine()
     clearInteraction()
 }

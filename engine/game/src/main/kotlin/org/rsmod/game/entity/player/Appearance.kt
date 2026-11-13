@@ -23,6 +23,14 @@ public class Appearance {
             rebuild = true
         }
 
+    /** A temporary prop held during an activity. This has no inventory or combat effects. */
+    public var heldProp: Int? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            rebuild = true
+        }
+
     public var skullIcon: Int? = null
         set(value) {
             field = value

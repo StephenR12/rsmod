@@ -40,6 +40,10 @@ public fun Player.combatClearQueue() {
 }
 
 public fun Player.disablePrayers() {
+    if (vars[varbits.rapid_heal] != 0) {
+        softTimer(timers.health_regen, constants.health_regen_interval)
+        softTimer(timers.health_boost_decay, constants.health_regen_interval)
+    }
     enabledPrayers = 0
     prayerDrainCounter = 0
 
@@ -60,6 +64,9 @@ public fun Player.deathResetTimers() {
     softTimer(timers.stat_regen, constants.stat_regen_interval)
     softTimer(timers.stat_boost_restore, constants.stat_boost_restore_interval)
     softTimer(timers.health_regen, constants.health_regen_interval)
+
+    softTimer(timers.health_boost_decay, constants.health_regen_interval)
+    softTimer(timers.health_cape_regen, constants.health_regen_interval)
 
     // Note: RL regeneration meter plugin does not reset on death. This can lead to de-sync, but
     // it is (currently) the official behavior.

@@ -6,7 +6,6 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.player.protect.ProtectedAccessLauncher
 import org.rsmod.api.script.onIfOverlayButton
 import org.rsmod.game.type.comp.ComponentType
-import org.rsmod.game.type.interf.IfButtonOp
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
@@ -35,9 +34,7 @@ constructor(
 
     private fun ScriptContext.register(component: ComponentType, spell: ObjType) {
         onIfOverlayButton(component) {
-            if (op == IfButtonOp.Op1) {
-                protectedAccess.launch(player) { teleports.cast(this, spell) }
-            }
+            protectedAccess.launch(player) { teleports.handleButton(this, spell, op) }
         }
     }
 }

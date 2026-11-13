@@ -1,6 +1,8 @@
 package org.rsmod.content.skills.fishing
 
 import jakarta.inject.Inject
+import org.rsmod.api.clue.ClueVessels
+import org.rsmod.content.skills.pets.SkillPetRates
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
@@ -13,7 +15,7 @@ import org.rsmod.api.player.stat.stat
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.type.obj.ObjType
 
-public class KarambwanjiFishing @Inject constructor() {
+public class KarambwanjiFishing @Inject constructor(private val vessels: ClueVessels, private val petRates: SkillPetRates, ) {
     public suspend fun fish(access: ProtectedAccess, npc: Npc) {
         with(access) {
             if (!canFish(sendFailure = true)) {
@@ -22,7 +24,7 @@ public class KarambwanjiFishing @Inject constructor() {
             faceEntitySquare(npc)
             while (true) {
                 anim(seqs.human_smallnet)
-                delay(ROLL_INTERVAL)
+                gatheringDelay(ROLL_INTERVAL)
                 if (!isWithinDistance(npc, distance = 1) || !canFish(sendFailure = false)) {
                     resetAnim()
                     return
@@ -44,6 +46,7 @@ public class KarambwanjiFishing @Inject constructor() {
                         else -> null
                     } ?: continue
 
+                val occupied = petRates.occupiedBy(player,catch.output.id)
                 val multiplier = catchMultiplier(catch.output)
                 val result =
                     player.invTransaction(player.inv) {
@@ -57,7 +60,9 @@ public class KarambwanjiFishing @Inject constructor() {
                     resetAnim()
                     return
                 }
-                statAdvance(stats.fishing, CATCH_XP)
+                petRates.roll(player,stats.fishing,13320,if (rawKarambwanji) 443_697 else 870_330,petRates.newResourceSlot(player,catch.output.id,occupied))
+                vessels.bottles(player,player.stat(stats.fishing),if(rawKarambwanji)443_697 else 435_165)
+                FishingXp.advance(this, CATCH_XP)
                 mes(catch.message)
             }
         }

@@ -37,6 +37,10 @@ internal object ObjEdits : ObjEditor() {
             bryophytasStaffRequirements()
         }
 
+        edit(objs.tome_of_fire_uncharged) { param[params.charged_variant] = objs.tome_of_fire }
+        edit(objs.tome_of_fire) { param[params.uncharged_variant] = objs.tome_of_fire_uncharged }
+        edit(objs.tome_of_earth_uncharged) { param[params.charged_variant] = objs.tome_of_earth }
+        edit(objs.tome_of_earth) { param[params.uncharged_variant] = objs.tome_of_earth_uncharged }
         edit(objs.tome_of_water_uncharged) { param[params.charged_variant] = objs.tome_of_water }
         edit(objs.tome_of_water) { param[params.uncharged_variant] = objs.tome_of_water_uncharged }
 

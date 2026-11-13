@@ -11,6 +11,8 @@ import org.rsmod.api.player.stat.stat
 import org.rsmod.api.player.stat.statAdd
 import org.rsmod.api.player.stat.statBase
 import org.rsmod.api.player.stat.statSub
+import org.rsmod.api.script.onEvent
+import org.rsmod.game.entity.npc.NpcStateEvents
 import org.rsmod.api.script.onNpcQueueWithArgs
 import org.rsmod.api.script.onPlayerQueueWithArgs
 import org.rsmod.content.skills.magic.spell.attacks.ancient.config.ancient_queues
@@ -33,6 +35,7 @@ constructor(
     override fun ScriptContext.startup() {
         onPlayerQueueWithArgs<AncientImpact>(ancient_queues.impact) { apply(player, it.args) }
         onNpcQueueWithArgs<AncientImpact>(ancient_queues.impact) { apply(npc, it.args) }
+        onEvent<NpcStateEvents.Respawn> { npcPoison.clear(npc) }
         onNpcQueueWithArgs<NpcPoisonTick>(ancient_queues.poison) { npcPoison.tick(npc) }
     }
 

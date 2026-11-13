@@ -1,5 +1,8 @@
 package org.rsmod.api.combat.scripts
 
+import org.rsmod.api.combat.commons.npc.isAssignedSlayerTarget
+import org.rsmod.api.combat.commons.npc.slayerSuperiorOwner
+import org.rsmod.api.combat.commons.npc.requiresSlayerAssignment
 import jakarta.inject.Inject
 import org.rsmod.api.combat.ACTIVE_COMBAT_DELAY
 import org.rsmod.api.combat.PvNCombat
@@ -16,10 +19,16 @@ import org.rsmod.api.combat.weapon.styles.AttackStyles
 import org.rsmod.api.combat.weapon.types.AttackTypes
 import org.rsmod.api.config.refs.categories
 import org.rsmod.api.config.refs.queues
+import org.rsmod.api.config.refs.params
+import org.rsmod.api.config.refs.stats
+import org.rsmod.api.player.stat.stat
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.righthand
 import org.rsmod.api.script.advanced.onDefaultApNpc2
 import org.rsmod.api.script.advanced.onDefaultOpNpc2
+import org.rsmod.api.script.onApNpc5
+import org.rsmod.api.script.onOpNpc5
+import org.rsmod.api.type.refs.npc.NpcReferences
 import org.rsmod.api.script.onApNpcT
 import org.rsmod.api.spells.MagicSpellRegistry
 import org.rsmod.api.spells.autocast.AutocastWeapons
@@ -27,6 +36,10 @@ import org.rsmod.game.entity.Npc
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
+
+internal object GameBirds : NpcReferences() {
+    val birds = listOf(find("chompybird"), find("100_jubbly_bird"))
+}
 
 internal class PvNCombatScript
 @Inject
@@ -42,6 +55,11 @@ constructor(
     override fun ScriptContext.startup() {
         onDefaultApNpc2 { attemptCombatAp(it.npc) }
         onDefaultOpNpc2 { attemptCombatOp(it.npc) }
+        // These NPCs advertise Attack in the fifth option of the original client definition.
+        for (bird in GameBirds.birds) {
+            onApNpc5(bird) { attemptCombatAp(it.npc) }
+            onOpNpc5(bird) { attemptCombatOp(it.npc) }
+        }
         for (spell in spells.offensiveCombatSpells()) {
             onApNpcT(spell.component) { attemptCombatSpell(it.npc, spell) }
         }
@@ -51,8 +69,6 @@ constructor(
         val type = types.get(player)
         val style = styles.get(player)
         val attackRange = attackRange(style)
-        val canAttack = canAttack(target)
-
         // Weapons such as salamanders have an attack range of `1` but can attack with both ranged
         // and magic. These attacks should be treated as ap range, not op.
         val isMeleeAttackType = type == null || type.isMelee
@@ -61,7 +77,7 @@ constructor(
             return
         }
 
-        if (!canAttack) {
+        if (!canAttack(target)) {
             return
         }
 
@@ -104,6 +120,24 @@ constructor(
     }
 
     private fun ProtectedAccess.canAttack(npc: Npc): Boolean {
+        val superiorOwner = npc.slayerSuperiorOwner
+        if (superiorOwner != null && superiorOwner != player.uid) {
+            mes("This superior creature has appeared for someone else.")
+            clearPendingAction()
+            return false
+        }
+        if (superiorOwner == null && npc.requiresSlayerAssignment(player) && !npc.isAssignedSlayerTarget(player)) {
+            mes("You can only attack this creature if you are assigned to kill it.")
+            clearPendingAction()
+            return false
+        }
+        val slayerLevel = npc.visType.param(params.slayer_levelrequire)
+        if (player.stat(stats.slayer) < slayerLevel) {
+            mes("You need a Slayer level of $slayerLevel to harm this creature.")
+            clearPendingAction()
+            return false
+        }
+
         // TODO(combat): Handle "can attack hooks" here. Seems like the ones that give dialogues
         //  have a cool-down period, but it's more than likely something hardcoded into
         //  their specific conditions. Some npcs like the mage arena (wilderness) npcs

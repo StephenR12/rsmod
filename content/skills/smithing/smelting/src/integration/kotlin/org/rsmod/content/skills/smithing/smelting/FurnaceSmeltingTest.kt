@@ -12,24 +12,42 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.rsmod.api.config.refs.components
 import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.config.refs.objs
+import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
 import org.rsmod.api.player.back
 import org.rsmod.api.player.hands
 import org.rsmod.api.player.input.ResumePauseButtonInput
+import org.rsmod.api.player.interact.WornInteractions
 import org.rsmod.api.player.ring
 import org.rsmod.api.player.torso
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.api.testing.scope.GameTestScope
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.loc.BoundLocInfo
+import org.rsmod.game.type.interf.IfButtonOp
 import org.rsmod.game.type.obj.ObjType
+import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.ui.UserInterface
 import org.rsmod.map.CoordGrid
 
 @Execution(ExecutionMode.SAME_THREAD)
 class FurnaceSmeltingTest {
+    @Test
+    fun GameTestState.`native worn forging ring Check preserves equipment and Remove works`() =
+        runSmeltingTest { d ->
+            player.members = true
+            player.ring = InvObj(objs.ring_of_forging)
+            assertEquals("Check", d.objs[objs.ring_of_forging].param(params.wear_op1))
+            player.withProtectedAccess { d.worn.interact(this, player.worn, 12, IfButtonOp.Op2) }
+            assertMessageSent("Your ring of forging has 140 charges remaining.")
+            assertEquals(objs.ring_of_forging.id, player.ring?.id)
+            player.withProtectedAccess { d.worn.interact(this, player.worn, 12, IfButtonOp.Op1) }
+            assertEquals(null, player.ring)
+            assertEquals(1, player.count(objs.ring_of_forging))
+        }
+
     @Test
     fun GameTestState.`cache 233 exposes every ordinary smelt furnace on its exact operation`() =
         runSmeltingTest { _ ->
@@ -471,6 +489,8 @@ class FurnaceSmeltingTest {
     @Inject
     constructor(
         val smelting: FurnaceSmelting,
+        val worn: WornInteractions,
+        val objs: ObjTypeList,
         val recipes: SmeltingRecipeRegistry,
         val ring: RingOfForgingRepository,
     )

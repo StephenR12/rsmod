@@ -1,0 +1,362 @@
+# Dated Wiki spawn tables; mainland Avium Savannah and the naturally accessible Burrow.
+# Sunlight Moth oldid14786122 2024-10-24T05:36:21Z
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_32_51'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_34_43'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_35_54'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_36_50'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_36_59'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_39_54'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_42_41'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_42_46'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_44_50'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_46_58'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_48_47'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_48_54'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_48_59'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_52_50'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_54_54'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_55_44'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_56_38'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_46_59_42'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_14_8'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_15_4'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_18_8'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_19_4'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_20_9'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_22_8'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_23_6'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_26_4'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_28_8'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_32_3'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_32_14'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_36_8'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_37_16'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_39_13'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_40_9'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_40_15'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_41_16'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_42_12'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_46_16'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_46_23'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_47_3'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_48_13'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_49_1'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_49_18'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_50_5'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_50_11'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_52_16'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_52_19'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_53_2'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_55_28'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_56_4'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_60_12'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_62_8'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_47_62_21'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_15_17'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_15_21'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_17_19'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_18_15'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_18_23'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_20_19'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_21_13'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_21_17'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_21_21'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_24_14'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_24_19'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_24_23'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_26_17'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_26_20'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_24_48_28_15'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_2_25'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_3_13'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_4_29'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_5_20'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_10_22'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_11_12'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_15_20'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_17_16'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_19_23'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_34_24'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_34_28'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_36_21'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_36_26'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_38_23'
+
+[[spawn]]
+npc = 'moth_sunlight'
+coords = '0_25_47_41_28'
+
+# Moonlight moth oldid14984905 2025-09-12T17:30:19Z
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_18_25'
+
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_21_19'
+
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_26_33'
+
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_29_24'
+
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_32_31'
+
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_34_36'
+
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_37_33'
+
+[[spawn]]
+npc = 'moth_moonlight_low_wander'
+coords = '0_24_147_37_38'

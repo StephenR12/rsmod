@@ -6,6 +6,7 @@ import org.rsmod.api.combat.commons.magic.MagicSpell
 import org.rsmod.api.combat.manager.MagicRuneManager
 import org.rsmod.api.combat.manager.MagicRuneManager.Companion.isFailure
 import org.rsmod.api.combat.manager.MagicRuneManager.Companion.usedSunfireRune
+import org.rsmod.api.combat.manager.MagicRuneManager.Companion.usedTomeElement
 import org.rsmod.api.combat.manager.MagicRuneManager.Companion.usedTomeOfWater
 import org.rsmod.api.combat.manager.PlayerAttackManager
 import org.rsmod.api.config.constants
@@ -161,6 +162,7 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
             attackRate = attackRate,
             sunfireRune = castResult.usedSunfireRune(),
             tomeOfWater = castResult.usedTomeOfWater(),
+            tomeElement = castResult.usedTomeElement(),
         )
 
     /** @see [PlayerAttackManager.calculateSpellMaxHit] */
@@ -181,6 +183,7 @@ constructor(private val manager: PlayerAttackManager, private val runes: MagicRu
             attackRate = attackRate,
             sunfireRune = cast.usedSunfireRune(),
             tomeOfWater = cast.usedTomeOfWater(),
+            tomeElement = cast.usedTomeElement(),
         )
 
     /**

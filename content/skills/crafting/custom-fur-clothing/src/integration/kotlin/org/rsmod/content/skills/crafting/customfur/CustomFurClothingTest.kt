@@ -7,11 +7,16 @@ import net.rsprot.protocol.game.outgoing.interfaces.IfSetEventsV2
 import net.rsprot.protocol.game.outgoing.interfaces.IfSetText
 import net.rsprot.protocol.game.outgoing.inv.UpdateInvFull
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.config.refs.stats
+import org.rsmod.game.type.obj.Wearpos
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.config.refs.components
 import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.config.refs.invs
@@ -19,6 +24,7 @@ import org.rsmod.api.config.refs.npcs
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.api.testing.scope.GameTestScope
+import org.rsmod.game.type.interf.IfButtonOp
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.type.obj.ObjType
 
@@ -283,6 +289,41 @@ class CustomFurClothingTest {
             }
         )
         assertFalse(player.ui.containsModal(interfaces.hunting_customfurs))
+    }
+
+    @Test
+    fun GameTestState.`only a commissioned spottier cape equipped with 66 Hunter finishes the hard task`() = runCustomFurTest { _ ->
+        preparePlayer()
+        val task = DiaryTask.EquipCustomSpottierCape
+        player.setBaseLevel(stats.hunter, 66)
+        player.inv[0] = InvObj(objs.spottier_cape)
+        player.withProtectedAccess { invEquip(0) }
+        assertFalse(player.hasCompletedDiaryTask(task))
+        val cape = Wearpos.Back.slot
+        assertEquals(10074,player.worn[cape]?.id)
+        assertEquals(-4535, objTypes.getValue(10074).weight)
+        player.withProtectedAccess { wornUnequip(cape) }
+        player.clearInv()
+        add(objs.dashing_kebbit_fur, 2)
+        add(objs.coins, 800)
+        val asyff = spawnNpc(player.coords.translate(1,0),npcTypes[npcs.asyff])
+        player.opNpc4(asyff)
+        advance()
+        player.ifButton(components.hunting_customfurs_choices_items, comsub=18, obj=objs.spottier_cape.id, op=IfButtonOp.Op1)
+        advance()
+        assertEquals(1,player.count(objs.spottier_cape))
+        assertFalse(player.hasCompletedDiaryTask(task))
+        player.ifClose()
+        advance()
+        val slot=player.inv.indexOfFirst { it?.id == objs.spottier_cape.id }
+        player.setBaseLevel(stats.hunter,65)
+        player.withProtectedAccess { invEquip(slot) }
+        assertNull(player.worn[cape])
+        player.setBaseLevel(stats.hunter,66)
+        player.withProtectedAccess { invEquip(slot) }
+        assertTrue(player.hasCompletedDiaryTask(task))
+        player.withProtectedAccess { wornUnequip(cape) }
+        assertEquals(1,player.count(objs.spottier_cape))
     }
 
     private fun GameTestScope.preparePlayer() {

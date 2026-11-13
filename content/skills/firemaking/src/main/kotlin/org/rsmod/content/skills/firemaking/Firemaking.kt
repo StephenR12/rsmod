@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.firemaking
 
+import org.rsmod.api.player.diary.recordDiaryFire
 import jakarta.inject.Inject
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -13,6 +14,7 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.recordLumbridgeOakFire
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.baseCraftingLvl
 import org.rsmod.api.player.stat.baseFiremakingLvl
@@ -297,6 +299,8 @@ constructor(
                 vars[varbits.brut_fire] = BARBARIAN_FIRE_LIT
             }
             firemakingXp.advance(this, recipe.xp)
+            player.recordDiaryFire(recipe.log.id, fire.coords, request.ignition is FiremakingIgnition.Bow)
+            if (recipe.log.id == objs.oak_logs.id) player.recordLumbridgeOakFire(fire.coords)
             resetAnim()
             mes("The fire catches and the logs begin to burn.")
             walkAfterLighting(this, fire.coords)
@@ -434,7 +438,7 @@ constructor(
     private fun isRegistered(obj: Obj): Boolean = objRepo.findAll(obj.coords).any { it === obj }
 
     private fun createFire(coords: CoordGrid, type: LocType): LocInfo {
-        val shape = LocShape.GroundDecor
+        val shape = LocShape.CentrepieceStraight
         val entity = LocEntity(type.id, shape.id, LocAngle.West.id)
         return LocInfo(LocLayerConstants.of(shape.id), coords, entity)
     }

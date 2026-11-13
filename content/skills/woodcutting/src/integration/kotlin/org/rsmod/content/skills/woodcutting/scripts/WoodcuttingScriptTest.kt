@@ -1,11 +1,17 @@
 package org.rsmod.content.skills.woodcutting.scripts
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.rsmod.api.config.refs.content
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.LumbridgeSkillStepVars
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.player.righthand
 import org.rsmod.api.testing.GameTestState
 import org.rsmod.content.skills.woodcutting.scripts.Woodcutting.Companion.treeLevelReq
@@ -17,6 +23,58 @@ import org.rsmod.game.inv.InvObj
 import org.rsmod.map.CoordGrid
 
 class WoodcuttingScriptTest {
+    @Test
+    fun GameTestState.`local oak harvest records only the first ordered Lumbridge task step`() =
+        runGameTest(Woodcutting::class) {
+            player.members = true
+            player.setVarBit(varbits.vesseled_clues_disabled, 1)
+            player.righthand = InvObj(objs.rune_axe)
+            player.stats[stats.woodcutting] = 99
+            val type =
+                findLocType(content.tree) {
+                    it.treeLogs.id == objs.oak_logs.id && it.hasParam(params.despawn_time)
+                }
+            val tree = placeMapLoc(CoordGrid(3205, 3245), type)
+            player.teleport(tree.coords.translateX(-1))
+            player.opLoc1(tree)
+            advance(3)
+            random.next = 0
+            random.then = 255
+            advance()
+            assertEquals(1, player.vars[LumbridgeSkillStepVars.oakCut])
+            assertFalse(player.hasCompletedDiaryTask(DiaryTask.ChopAndBurnLumbridgeOak))
+        }
+
+    @Test
+    fun GameTestState.`Draynor willow task requires a successful local willow harvest`() =
+        runGameTest(Woodcutting::class) {
+            player.members = true
+            player.setVarBit(varbits.vesseled_clues_disabled, 1)
+            player.righthand = InvObj(objs.rune_axe)
+            player.stats[stats.woodcutting] = 99
+            val type = findLocType(content.tree) { it.treeLogs.id == objs.willow_logs.id }
+            val remote = placeMapLoc(CoordGrid(3205, 3205), type)
+            player.teleport(remote.coords.translateX(-1))
+            player.opLoc1(remote)
+            advance(3)
+            random.next = 0
+            random.then = 255
+            advance()
+            val task = DiaryTask.LUMBRIDGE_DRAYNOR_MEDIUM_CHOP_DRAYNOR_WILLOW
+            assertFalse(player.hasCompletedDiaryTask(task))
+
+            val local = placeMapLoc(CoordGrid(3087, 3230), type)
+            player.teleport(local.coords.translateX(-1))
+            player.actionDelay = -1
+            player.opLoc1(local)
+            advance(3)
+            assertFalse(player.hasCompletedDiaryTask(task))
+            random.next = 0
+            random.then = 255
+            advance()
+            assertTrue(player.hasCompletedDiaryTask(task))
+        }
+
     @Test
     fun GameTestState.`validate axe requirement`() =
         runGameTest(Woodcutting::class) {

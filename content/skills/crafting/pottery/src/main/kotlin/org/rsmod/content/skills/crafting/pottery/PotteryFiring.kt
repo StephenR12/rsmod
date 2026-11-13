@@ -1,6 +1,7 @@
 package org.rsmod.content.skills.crafting.pottery
 
 import jakarta.inject.Inject
+import org.rsmod.api.player.diary.recordDiaryPottery
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.invtx.add
@@ -80,7 +81,7 @@ constructor(
             if (!isWithinDistance(request.oven, distance = 1) || !canFire(recipe, false)) {
                 return
             }
-            fire(recipe)
+            fire(recipe, request.oven.coords)
             val remaining = request.remaining - 1
             if (remaining <= 0 || !canFire(recipe, sendFailure = false)) {
                 return
@@ -94,7 +95,7 @@ constructor(
         }
     }
 
-    private fun ProtectedAccess.fire(recipe: PotteryRecipe) {
+    private fun ProtectedAccess.fire(recipe: PotteryRecipe, coords: org.rsmod.map.CoordGrid) {
         val success = random.of(maxExclusive = SUCCESS_DENOMINATOR) < successThreshold()
         val result =
             player.invTransaction(player.inv) {
@@ -107,6 +108,7 @@ constructor(
         check(result.success) { "Pottery-firing transaction failed after validation: $recipe" }
         if (success) {
             statAdvance(stats.crafting, recipe.firingXp)
+            player.recordDiaryPottery(recipe.fired.id, coords)
         } else {
             mes("The pottery cracks in the oven.")
         }

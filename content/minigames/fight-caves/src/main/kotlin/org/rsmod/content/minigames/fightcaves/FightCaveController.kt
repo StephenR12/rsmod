@@ -9,7 +9,9 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.timers
 import org.rsmod.api.invtx.invAddOrDrop
 import org.rsmod.api.npc.interact.AiPlayerInteractions
-import org.rsmod.api.npc.opPlayer2
+import org.rsmod.api.combat.commons.npc.engagePlayer
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.events.CombatAchievementEvents
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -67,6 +69,7 @@ constructor(
                     return
                 }
         access.telejump(session.arena(FightCaveSpawn.C.localX, FightCaveSpawn.C.localZ))
+        player.completeDiaryTask(DiaryTask.AttemptFightCaves)
         access.mes("You're on your own now, JalYt. Prepare to fight for your life!")
         access.delay(2)
         spawnWave(session)
@@ -171,7 +174,7 @@ constructor(
 
     public fun aggroHealer(healer: Npc, player: Player) {
         if (ownerFor(healer) === player) {
-            healer.opPlayer2(player, interactions)
+            healer.engagePlayer(player, interactions)
         }
     }
 
@@ -211,7 +214,7 @@ constructor(
         session.alive += npc
         owners[npc] = session
         if (type != FightCaveNpcs.healer) {
-            npc.opPlayer2(session.player, interactions)
+            npc.engagePlayer(session.player, interactions)
         }
         return npc
     }

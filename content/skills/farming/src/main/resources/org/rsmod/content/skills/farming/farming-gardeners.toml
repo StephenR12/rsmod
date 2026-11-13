@@ -1,0 +1,159 @@
+[[spawn]]
+npc = 'farming_gardener_cactus'
+coords = '0_51_50_50_1'
+
+[[spawn]]
+npc = 'elstan'
+coords = '0_47_51_45_41'
+
+[[spawn]]
+npc = 'dantaera'
+coords = '0_43_54_58_8'
+
+[[spawn]]
+npc = 'kragen'
+coords = '0_41_52_43_47'
+
+[[spawn]]
+npc = 'lyra'
+coords = '0_56_55_16_4'
+
+[[spawn]]
+npc = 'francis'
+coords = '0_43_52_63_8'
+
+[[spawn]]
+npc = 'garth'
+coords = '0_43_50_13_13'
+
+[[spawn]]
+npc = 'farming_gardener_fruit_4'
+coords = '0_44_53_45_40'
+
+[[spawn]]
+npc = 'farming_gardener_hops_1'
+coords = '0_40_48_18_31'
+
+[[spawn]]
+npc = 'farming_gardener_hops_4'
+coords = '0_41_55_42_5'
+
+[[spawn]]
+npc = 'farming_gardener_bush_1'
+coords = '0_49_52_47_28'
+
+[[spawn]]
+npc = 'farming_gardener_bush_2'
+coords = '0_45_50_61_22'
+
+[[spawn]]
+npc = 'farming_gardener_bush_3'
+coords = '0_40_60_33_24'
+
+[[spawn]]
+npc = 'farming_gardener_bush_4'
+coords = '0_40_50_57_25'
+
+[[spawn]]
+npc = 'farming_gardener_tree_1'
+coords = '0_45_53_57_47'
+
+[[spawn]]
+npc = 'farming_gardener_tree_2'
+coords = '0_46_52_60_46'
+
+[[spawn]]
+npc = 'farming_gardener_fruit_1'
+coords = '0_38_53_45_55'
+
+[[spawn]]
+npc = 'farming_gardener_fruit_2'
+coords = '0_38_49_57_43'
+
+[[spawn]]
+npc = 'farming_gardener_spirit_tree_1'
+coords = '0_47_50_49_59'
+
+[[spawn]]
+npc = 'farming_gardener_spirit_tree_2'
+coords = '0_40_60_54_18'
+
+[[spawn]]
+npc = 'farming_gardener_spirit_tree_3'
+coords = '0_43_50_48_5'
+
+[[spawn]]
+npc = 'farming_gardener_tree_gnome'
+coords = '0_38_53_4_23'
+
+[[spawn]]
+npc = 'farming_gardener_calquat'
+coords = '0_43_48_45_30'
+
+[[spawn]]
+npc = 'farming_gardener_fruit_tree_5'
+coords = '0_36_49_43_26'
+
+[[spawn]]
+npc = 'farming_gardener_spirit_tree_4'
+coords = '0_26_55_29_22'
+
+[[spawn]]
+npc = 'hosidius_allotment_gardener'
+coords = '0_27_55_7_35'
+
+[[spawn]]
+npc = 'fossil_gardener_underwater'
+coords = '1_58_160_23_31'
+
+[[spawn]]
+npc = 'farming_gardener_farmguild_t3'
+coords = '0_19_58_26_45'
+
+[[spawn]]
+npc = 'farming_gardener_farmguild_t2'
+coords = '0_19_58_16_20'
+
+[[spawn]]
+npc = 'farming_gardener_farmguild_t1'
+coords = '0_19_58_48_22'
+
+[[spawn]]
+npc = 'farming_gardener_farmguild_redwood'
+coords = '0_19_58_20_41'
+
+[[spawn]]
+npc = 'farming_gardener_spirit_tree_5'
+coords = '0_19_58_39_41'
+
+[[spawn]]
+npc = 'prif_gardener'
+coords = '0_51_95_28_20'
+
+[[spawn]]
+npc = 'farming_gardener_tree_3_02'
+coords = '0_50_54_29_3'
+
+[[spawn]]
+npc = 'fortis_gardener'
+coords = '0_24_48_48_28'
+
+[[spawn]]
+npc = 'farming_gardener_hops_5'
+coords = '0_21_45_23_56'
+
+[[spawn]]
+npc = 'farming_gardener_tree_7'
+coords = '0_21_51_22_57'
+
+[[spawn]]
+npc = 'farming_gardener_calquat_2'
+coords = '0_21_47_23_24'
+
+[[spawn]]
+npc = 'farming_gardener_fruit_7'
+coords = '0_21_47_6_49'
+
+[[spawn]]
+npc = 'farming_gardener_farmguild_celastrus'
+coords = '0_19_58_31_42'

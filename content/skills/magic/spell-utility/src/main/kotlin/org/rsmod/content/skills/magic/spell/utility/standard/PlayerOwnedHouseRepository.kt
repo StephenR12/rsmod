@@ -16,12 +16,18 @@ import org.rsmod.map.CoordGrid
 public class PlayerOwnedHouseRepository @Inject constructor() {
     private val entrances = WeakHashMap<Player, PlayerOwnedHouseEntrances>()
 
+    private var prepare: ((Player, Boolean) -> CoordGrid?)? = null
+
+    public fun onPrepareHouse(provider: (Player, Boolean) -> CoordGrid?) {
+        prepare = provider
+    }
+
     public fun register(player: Player, regular: CoordGrid, buildingMode: CoordGrid? = null) {
         entrances[player] = PlayerOwnedHouseEntrances(regular, buildingMode)
     }
 
     public fun destination(player: Player, buildingMode: Boolean): CoordGrid? {
-        val entry = entrances[player] ?: return null
+        val entry = entrances[player] ?: return prepare?.invoke(player, buildingMode)
         return if (buildingMode) entry.buildingMode else entry.regular
     }
 

@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.crafting.jewellery
 
+import org.rsmod.api.player.diary.recordDiaryCraft
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.config.refs.objs
@@ -59,7 +60,7 @@ constructor(private val recipes: GoldJewelleryRecipeRegistry, private val objTyp
                 resetAnim()
                 return
             }
-            craft(recipe, request.kind)
+            craft(recipe, request.kind, request.furnace.coords)
             val remaining = request.remaining - 1
             if (remaining <= 0 || !canCraft(recipe, request.kind, sendFailure = false)) {
                 resetAnim()
@@ -95,7 +96,7 @@ constructor(private val recipes: GoldJewelleryRecipeRegistry, private val objTyp
         }
     }
 
-    private fun ProtectedAccess.craft(recipe: GoldJewelleryRecipe, kind: FurnaceKind) {
+    private fun ProtectedAccess.craft(recipe: GoldJewelleryRecipe, kind: FurnaceKind, source: org.rsmod.map.CoordGrid) {
         val fee = furnaceFee(kind)
         val result =
             player.invTransaction(player.inv) {
@@ -108,6 +109,7 @@ constructor(private val recipes: GoldJewelleryRecipeRegistry, private val objTyp
                 add(inventory, recipe.output.id, 1)
             }
         check(result.success) { "Gold-jewellery transaction failed after validation: $recipe" }
+        player.recordDiaryCraft(recipe.output.id, source)
         statAdvance(stats.crafting, recipe.xp)
     }
 

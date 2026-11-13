@@ -9,6 +9,17 @@ import org.rsmod.game.type.npc.NpcType
 public class NpcDropTableRegistry @Inject constructor() {
     private val tables = mutableMapOf<Int, NpcDropTable>()
 
+    private val tertiaryTables = mutableMapOf<Int, NpcDropRoll>()
+
+    /**
+     * Adds a tertiary roll independently of the NPC's primary table and script registration order.
+     */
+    public fun registerTertiary(type: NpcType, roll: NpcDropRoll) {
+        val previous = tertiaryTables[type.id]
+        tertiaryTables[type.id] =
+            if (previous == null) roll else NpcDropRolls.sequence(previous, roll)
+    }
+
     public fun register(type: NpcType, table: NpcDropTable) {
         register(listOf(type), table)
     }
@@ -23,10 +34,15 @@ public class NpcDropTableRegistry @Inject constructor() {
         ids.forEach { tables[it] = table }
     }
 
-    public operator fun get(type: NpcType): NpcDropTable? = tables[type.id]
+    public operator fun get(type: NpcType): NpcDropTable? {
+        val main = tables[type.id]
+        val tertiary = tertiaryTables[type.id] ?: return main
+        return if (main == null) NpcDropTable(tertiary)
+        else NpcDropTable(NpcDropRolls.sequence(NpcDropRoll(main::resolve), tertiary))
+    }
 
-    public fun contains(type: NpcType): Boolean = type.id in tables
+    public fun contains(type: NpcType): Boolean = type.id in tables || type.id in tertiaryTables
 
     /** Stable cache IDs exposed for parity inventory and cache-contract tests. */
-    public fun registeredTypeIds(): Set<Int> = tables.keys.toSortedSet()
+    public fun registeredTypeIds(): Set<Int> = (tables.keys + tertiaryTables.keys).toSortedSet()
 }

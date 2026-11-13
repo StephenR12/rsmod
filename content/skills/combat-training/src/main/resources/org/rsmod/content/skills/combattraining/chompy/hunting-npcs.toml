@@ -1,0 +1,18 @@
+spawn = [
+    { npc = "rantz", coords = "0_41_46_6_37" },
+    { npc = "toad", coords = "0_36_47_30_58" },
+    { npc = "toad", coords = "0_36_47_33_48" },
+    { npc = "toad", coords = "0_36_47_38_54" },
+    { npc = "toad", coords = "0_37_47_22_45" },
+    { npc = "toad", coords = "0_37_47_26_35" },
+    { npc = "toad", coords = "0_37_47_33_39" },
+    { npc = "toad", coords = "0_37_47_34_46" },
+    { npc = "toad", coords = "0_39_46_27_38" },
+    { npc = "toad", coords = "0_39_46_35_34" },
+    { npc = "toad", coords = "0_39_46_49_39" },
+    { npc = "toad", coords = "0_39_46_56_42" },
+    { npc = "toad", coords = "0_39_46_52_46" },
+    { npc = "toad", coords = "0_40_46_34_21" },
+    { npc = "toad", coords = "0_40_46_38_17" },
+    { npc = "toad", coords = "0_40_46_43_24" },
+]

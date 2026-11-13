@@ -7,6 +7,7 @@ import org.rsmod.api.type.refs.varp.VarpReferences
 typealias varps = BaseVarps
 
 object BaseVarps : VarpReferences() {
+    val hunter_rumours_completed = find("hunter_rumours_completed")
     val skillcape_hitpoints_boost_ready_at = find("skillcape_hitpoints_boost_ready_at")
     val skillcape_prayer_boost_ready_at = find("skillcape_prayer_boost_ready_at")
     val toggle_list = find("toggle_list")

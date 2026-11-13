@@ -105,7 +105,7 @@ class SkillcapeTrimmingTest {
                     player.worn[Wearpos.Back.slot] = InvObj(cape)
 
                     player.withProtectedAccess {
-                        deps.worn.interact(this, player.worn, Wearpos.Back.slot, IfButtonOp.Op1)
+                        deps.worn.interact(this, player.worn, Wearpos.Back.slot, IfButtonOp.Op2)
                     }
 
                     assertEquals(

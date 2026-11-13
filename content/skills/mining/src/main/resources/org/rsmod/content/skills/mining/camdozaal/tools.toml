@@ -1,0 +1,5 @@
+spawn = [
+    { obj = "hammer", coords = "0_46_90_12_48" },
+    { obj = "knife", coords = "0_45_90_54_13" },
+    { obj = "net", coords = "0_45_90_49_18" },
+]

@@ -30,7 +30,7 @@ class MiningConfigTest {
     @Test
     fun GameTestState.`standard rocks have complete mining metadata`() = runBasicGameTest {
         val rocks = cacheTypes.locs.values.filter { it.isContentType(content.ore) && !it.gemRock }
-        assertEquals(22, rocks.size)
+        assertEquals(49, rocks.size)
         for (rock in rocks) {
             assertEquals("Mine", rock.op[0], "rock=${rock.id}, ops=${rock.op.contentToString()}")
             val map = checkNotNull(rock.paramMap)
@@ -42,9 +42,20 @@ class MiningConfigTest {
             assertTrue(MiningParams.successLow in map)
             assertTrue(MiningParams.successHigh in map)
             assertTrue(rock.respawnTime > 0)
-            assertTrue(rock.successLow >= 0)
+            if (rock.id in MiningGuildLocs.amethyst.map { it.id })
+                assertEquals(-18, rock.successLow)
+            else assertTrue(rock.successLow >= 0)
             assertTrue(rock.successHigh > rock.successLow)
-            assertTrue(rock.depleted.id in 11390..11392)
+            assertTrue(
+                rock.depleted.id in 11390..11393 ||
+                    rock.depleted.id in 20439..20442 ||
+                    rock.depleted.id == 5992 ||
+                    rock.depleted.id in 11383..11385 ||
+                    rock.depleted.id == MiningLocs.prifEmpty.id ||
+                    rock.depleted.id == MiningLocs.fossilEmpty.id ||
+                    MiningLocs.barroniteEmpty.any { it.id == rock.depleted.id } ||
+                    MiningLocs.calcifiedEmpty.any { it.id == rock.depleted.id }
+            )
         }
     }
 

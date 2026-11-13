@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.herblore
 
+import org.rsmod.api.player.diary.recordDiaryPotion
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
@@ -89,6 +90,7 @@ constructor(private val objTypes: ObjTypeList, private val modifiers: PotionProd
                 add(inventory, recipe.output.id, 1)
             }
         check(result.success) { "Unfinished-potion transaction failed after validation: $recipe" }
+        player.recordDiaryPotion(recipe.output.id, player.coords)
         mes(
             "You put the ${objTypes[recipe.herb].name} into the " +
                 "${objTypes[recipe.base].name.lowercase()}."

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.rsmod.api.config.refs.stats
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.player.feet
 import org.rsmod.api.player.hat
 import org.rsmod.api.player.legs
@@ -236,6 +238,43 @@ class StandardRuneCraftingTest {
             assertEquals(40, player.count(StandardRuneRecipes.mind.output))
         }
 
+    @Test
+    fun GameTestState.`water diary batch requires 140 runes earned by essence and outfit`() =
+        runRunecraftTest { deps ->
+            preparePlayer(level = 76)
+            for (slot in 0 until 27) player.inv[slot] = InvObj(RunecraftObjs.pureEssence)
+            player.withProtectedAccess { deps.standard.craft(this, StandardRuneRecipes.water) }
+            assertTrue(player.hasCompletedDiaryTask(DiaryTask.CraftWaterRunes))
+            assertFalse(player.hasCompletedDiaryTask(DiaryTask.Craft140WaterRunes))
+            player.clearInv()
+            for (slot in player.inv.indices) player.inv[slot] = InvObj(RunecraftObjs.pureEssence)
+            player.withProtectedAccess { deps.standard.craft(this, StandardRuneRecipes.water) }
+            assertTrue(player.hasCompletedDiaryTask(DiaryTask.Craft140WaterRunes))
+        }
+
+    @Test
+    fun GameTestState.guardianUsesTheAltarColourAndRespectsItsColourLockOnTheNextCraft() =
+        runRunecraftTest { deps ->
+            preparePlayer(level = 50)
+            val altar = placeMapLoc(player.coords.translate(1,0),locTypes[StandardRuneRecipes.air.altar])
+            val random = deps.petRandom as org.rsmod.api.testing.random.FixedRandom
+            random.set(1_795_758 - 25 * 50 - 1)
+            player.inv[0] = InvObj(RunecraftObjs.pureEssence)
+            player.opLoc1(altar)
+            advance(6)
+            val following = cacheTypes.varps.getValue(65725)
+            assertEquals(20667,player.vars[following])
+            player.setVarBit(cacheTypes.varbits.getValue(6093),1)
+            random.set(0)
+            player.inv[1] = InvObj(RunecraftObjs.pureEssence)
+            player.withProtectedAccess { deps.standard.craft(this,StandardRuneRecipes.mind) }
+            assertEquals(20667,player.vars[following])
+            player.setVarBit(cacheTypes.varbits.getValue(6093),0)
+            player.inv[1] = InvObj(RunecraftObjs.pureEssence)
+            player.withProtectedAccess { deps.standard.craft(this,StandardRuneRecipes.mind) }
+            assertEquals(20669,player.vars[following])
+        }
+
     private fun GameTestScope.preparePlayer(level: Int = 99) {
         player.members = true
         player.stats[stats.runecrafting] = level
@@ -251,6 +290,32 @@ class StandardRuneCraftingTest {
         val quest = recipe.quest ?: return
         player.withProtectedAccess { vars[quest.varbit] = quest.completionValue }
     }
+
+    @Test
+    fun GameTestState
+        .`cores supply eleven essence outputs each and cannot satisfy the Falador batch`() =
+        runRunecraftTest { deps ->
+            for ((core, recipe) in
+                listOf(
+                    RunecraftObjs.mindCore to StandardRuneRecipes.mind,
+                    RunecraftObjs.bodyCore to StandardRuneRecipes.body,
+                    RunecraftObjs.chaosCore to StandardRuneRecipes.chaos,
+                )) {
+                preparePlayer()
+                player.inv[0] = InvObj(core)
+                player.inv[1] = InvObj(core)
+                player.inv[2] = InvObj(RunecraftObjs.pureEssence)
+                val before = player.statMap.getFineXP(stats.runecrafting)
+                player.withProtectedAccess { deps.standard.craft(this, recipe) }
+                assertEquals(23 * recipe.outputMultiplier(99), player.count(recipe.output))
+                assertEquals(
+                    (21 * recipe.xp * 10).toInt(),
+                    player.statMap.getFineXP(stats.runecrafting) - before,
+                )
+                assertEquals(0, player.count(core))
+                assertFalse(player.hasCompletedDiaryTask(DiaryTask.Craft140MindRunes))
+            }
+        }
 
     private fun GameTestScope.wearFullRaiments() {
         player.hat = InvObj(RunecraftObjs.raimentsHat)
@@ -273,5 +338,5 @@ class StandardRuneCraftingTest {
         }
     }
 
-    data class Dependencies @Inject constructor(val standard: StandardRuneCrafting)
+    data class Dependencies @Inject constructor(val standard: StandardRuneCrafting,@org.rsmod.api.random.CoreRandom val petRandom:org.rsmod.api.random.GameRandom)
 }

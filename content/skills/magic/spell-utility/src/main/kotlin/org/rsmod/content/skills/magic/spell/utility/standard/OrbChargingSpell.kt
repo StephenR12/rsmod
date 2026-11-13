@@ -11,6 +11,8 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.isInCombat
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -106,6 +108,11 @@ constructor(
 
             if (vars[varbits.fountain_of_rune_active] == 0) {
                 statAdvance(stats.magic, spell.castXp)
+            }
+            when (recipe.output.id) {
+                objs.air_orb.id -> player.completeDiaryTask(DiaryTask.ChargeAirOrb)
+                objs.earth_orb.id -> player.completeDiaryTask(DiaryTask.ChargeEarthOrb)
+                objs.water_orb.id -> player.completeDiaryTask(DiaryTask.ChargeWaterOrb)
             }
             anim(seqs.human_castchargeorb)
             spotanim(recipe.spotanim)

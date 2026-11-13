@@ -15,8 +15,8 @@ public data class Hit(
     public val hitmark: Hitmark,
     public val successful: Boolean,
     private val sourceUid: Int?,
-    private val righthandObj: Int?,
-    private val secondaryObj: Int?,
+    public val righthandObj: Int?,
+    public val secondaryObj: Int?,
 ) {
     public val damage: Int
         get() = hitmark.damage

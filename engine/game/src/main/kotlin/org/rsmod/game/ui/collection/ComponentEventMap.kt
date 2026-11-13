@@ -8,19 +8,19 @@ import org.rsmod.game.ui.UserInterface
 public class ComponentEventMap(
     private val interfaces: Int2ObjectMap<MutableList<Event>> = Int2ObjectOpenHashMap()
 ) {
-    public operator fun get(type: ComponentType, slot: Int): Long {
-        val eventList = interfaces[type.interfaceId]
-        if (eventList == interfaces.defaultReturnValue()) {
-            return 0L
-        }
-        var events = 0L
-        for (i in 0 until eventList.size) {
-            val event = eventList[i]
-            if (event.component == type.component && slot >= event.start && slot <= event.end) {
-                events = event.events
+    public operator fun get(type: ComponentType, slot: Int): Long =
+        overrideFor(type, slot) ?: 0L
+
+    /** Null means the cache default applies. A zero mask explicitly disables the operations. */
+    public fun overrideFor(type: ComponentType, slot: Int): Long? {
+        val eventList = interfaces[type.interfaceId] ?: return null
+        for (index in eventList.lastIndex downTo 0) {
+            val event = eventList[index]
+            if (event.component == type.component && slot in event.start..event.end) {
+                return event.events
             }
         }
-        return events
+        return null
     }
 
     public fun add(type: ComponentType, range: IntRange, events: Long) {
@@ -36,9 +36,10 @@ public class ComponentEventMap(
     public data class Event(val component: Int, val start: Int, val end: Int, val events: Long) {
         public companion object {
             public fun from(component: Int, start: Int, end: Int, events: Long): Event {
-                val clampedStart = if (start == -1) 0 else start
-                val clampedEnd = if (end == -1) Int.MAX_VALUE else end
-                return Event(component, clampedStart, clampedEnd, events)
+                // The client stores -1 as the static component itself. Keep support for
+                // callers that use an open-ended range starting at a nonnegative child.
+                val last = if (start >= 0 && end == -1) Int.MAX_VALUE else end
+                return Event(component, start, last, events)
             }
         }
     }

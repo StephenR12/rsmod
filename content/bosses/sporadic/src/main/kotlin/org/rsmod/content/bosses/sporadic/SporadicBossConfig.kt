@@ -1,5 +1,6 @@
 package org.rsmod.content.bosses.sporadic
 
+import org.rsmod.api.type.editors.npc.NpcEditor
 import org.rsmod.api.type.refs.npc.NpcReferences
 import org.rsmod.api.type.refs.obj.ObjReferences
 import org.rsmod.game.type.npc.NpcType
@@ -100,7 +101,7 @@ public object SporadicBosses {
             ),
             SporadicBossDefinition(
                 SporadicBossNpcs.hespori,
-                CoordGrid(1249, 3753, 0),
+                CoordGrid(1246, 10086, 0),
                 SporadicBossFamily.Hespori,
                 300,
                 1,
@@ -125,4 +126,12 @@ public object SporadicBosses {
         )
 
     public val byId: Map<Int, SporadicBossDefinition> = definitions.associateBy { it.npc.id }
+}
+
+internal object SporadicBossAttackRanges : NpcEditor() {
+    init {
+        with(SporadicBossNpcs) {
+            edit(skotizo) { attackRange = 10 }
+        }
+    }
 }

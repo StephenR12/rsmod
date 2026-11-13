@@ -1,5 +1,6 @@
 package org.rsmod.content.travel.fremennikseaboots
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -32,7 +33,7 @@ public class FremennikSeaBootsTeleport @Inject constructor() {
                 mes("A mysterious force prevents you from teleporting!")
                 return
             }
-            if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+            if (player.isTeleportBlocked()) {
                 mes("A magical force stops you from teleporting.")
                 return
             }
@@ -71,7 +72,7 @@ public class FremennikSeaBootsTeleport @Inject constructor() {
         public const val CAST_TICKS: Int = 4
 
         private const val MAX_WILDERNESS_LEVEL = 20
-        private const val TELEBLOCK_IMMUNITY_CYCLES = 100
+
         private const val WILDERNESS_LEVEL_HEIGHT = 8
         private const val WILDERNESS_Z = 3520
         private const val WILDERNESS_UNDERGROUND_Z = 9920

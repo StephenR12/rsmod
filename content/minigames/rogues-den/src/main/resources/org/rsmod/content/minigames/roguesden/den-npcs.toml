@@ -1,0 +1,8 @@
+spawn = [
+    { npc = "roguesden_mazemaster", coords = "1_47_77_41_49" },
+    { npc = "roguesden_guard1", coords = "1_46_78_14_11" },
+    { npc = "roguesden_guard1", coords = "1_47_79_10_16" },
+    { npc = "roguesden_guard2", coords = "1_46_78_12_16" },
+    { npc = "roguesden_guard2", coords = "1_47_79_9_4" },
+    { npc = "roguesden_guard3", coords = "1_46_78_18_16" },
+]

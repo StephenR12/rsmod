@@ -24,6 +24,7 @@ public class TestRegionRegistryFactory {
         smallRegions: RegionListSmall = RegionListSmall(),
         largeRegions: RegionListLarge = RegionListLarge(),
         zoneActivity: ZonePlayerActivityBitSet = ZonePlayerActivityBitSet(),
+        clock: MapClock = MapClock(),
         npcRegistry: NpcRegistry = NpcRegistry(NpcList(), collision, EventBus()),
         controllerReg: ControllerRegistry = ControllerRegistry(MapClock(), ControllerList()),
     ): RegionRegistry =
@@ -37,5 +38,6 @@ public class TestRegionRegistryFactory {
             npcRegistry,
             controllerReg,
             zoneActivity,
+            clock,
         )
 }

@@ -1,0 +1,36 @@
+# The visible NPC at each tunnel is selected individually by fossil_herbiboar_visible.
+[[spawn]]
+npc = 'fossil_herbiboar_1'
+coords = '0_57_59_48_20'
+
+[[spawn]]
+npc = 'fossil_herbiboar_2'
+coords = '0_57_59_56_32'
+
+[[spawn]]
+npc = 'fossil_herbiboar_3'
+coords = '0_57_59_57_51'
+
+[[spawn]]
+npc = 'fossil_herbiboar_4'
+coords = '0_57_60_62_43'
+
+[[spawn]]
+npc = 'fossil_herbiboar_5'
+coords = '0_57_60_49_36'
+
+[[spawn]]
+npc = 'fossil_herbiboar_6'
+coords = '0_58_60_5_0'
+
+[[spawn]]
+npc = 'fossil_herbiboar_7'
+coords = '0_58_60_41_11'
+
+[[spawn]]
+npc = 'fossil_herbiboar_8'
+coords = '0_57_60_35_30'
+
+[[spawn]]
+npc = 'fossil_herbiboar_9'
+coords = '0_57_60_33_25'

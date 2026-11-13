@@ -13,6 +13,7 @@ import org.rsmod.api.combat.player.aggressiveNpc
 import org.rsmod.api.combat.player.lastCombat
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.npc.access.StandardNpcAccess
+import org.rsmod.api.npc.events.NpcMeleeAlternative
 import org.rsmod.api.npc.isInCombat
 import org.rsmod.api.player.events.PlayerCombatEvents
 import org.rsmod.api.player.hit.queueHit
@@ -55,21 +56,22 @@ constructor(
         val attackRate = npc.attackRate()
         actionDelay = mapClock + attackRate
 
-        val attackAnim = npc.visType.param(params.attack_anim)
-        val attackSound = npc.visType.paramOrNull(params.attack_sound)
-
-        anim(attackAnim)
-        attackSound?.let(target::soundSynth)
-
-        val successfulHit = accuracy.rollMeleeAccuracy(npc, target, attack.type, random)
-
-        val damage =
-            if (successfulHit) {
-                val maxHit = maxHits.getMeleeMaxHit(npc, target, attack.type)
-                random.of(0..maxHit)
-            } else {
-                0
+        val hook = eventBus.keyed[NpcMeleeAlternative::class.java, npc.visType.id]
+        val alternative =
+            hook?.let {
+                val event = NpcMeleeAlternative(npc, target)
+                it(event)
+                event.attack
             }
+        val attackAnim = alternative?.animation ?: npc.visType.param(params.attack_anim)
+        anim(attackAnim)
+        if (alternative == null)
+            npc.visType.paramOrNull(params.attack_sound)?.let(target::soundSynth)
+        val damage =
+            alternative?.damage
+                ?: if (accuracy.rollMeleeAccuracy(npc, target, attack.type, random)) {
+                    random.of(0..maxHits.getMeleeMaxHit(npc, target, attack.type))
+                } else 0
 
         setAttackVars(target)
         eventBus.publish(PlayerCombatEvents.Engage(target))
@@ -79,7 +81,7 @@ constructor(
         // last entries in the queue list at the time of processing.
         target.queueCombatRetaliate(npc)
 
-        target.queueHit(npc, 1, HitType.Melee, damage)
+        target.queueHit(npc, 1, alternative?.type ?: HitType.Melee, damage)
         target.combatPlayDefendAnim(objTypes)
     }
 

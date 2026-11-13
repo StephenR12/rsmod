@@ -4,6 +4,8 @@ import org.rsmod.api.combat.commons.magic.Spellbook
 import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.game.loc.BoundLocInfo
 
@@ -41,6 +43,7 @@ public class PrayerSpellbookAltar {
             val current = Spellbook[vars[varbits.spellbook]]
             val next = if (current == Spellbook.Ancients) Spellbook.Standard else Spellbook.Ancients
             vars[varbits.spellbook] = next.varValue
+            if (next == Spellbook.Ancients) player.completeDiaryTask(DiaryTask.ActivateAncients)
             mes(if (next == Spellbook.Ancients) ANCIENT_ACTIVATED else ANCIENT_DEACTIVATED)
         }
     }

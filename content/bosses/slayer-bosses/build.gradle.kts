@@ -12,6 +12,10 @@ dependencies {
     implementation(projects.api.pluginCommons)
     implementation(projects.api.repo)
 
+    integrationImplementation(projects.api.combat.combatCommons)
+    integrationImplementation(projects.api.hitPlugin)
+    integrationImplementation(projects.api.npc)
     integrationImplementation(projects.api.death)
     integrationImplementation(projects.api.repo)
+    integrationImplementation(projects.api.player)
 }

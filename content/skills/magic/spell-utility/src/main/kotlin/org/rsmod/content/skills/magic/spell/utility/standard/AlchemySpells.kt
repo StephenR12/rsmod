@@ -1,6 +1,9 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
 import jakarta.inject.Inject
+import org.rsmod.content.skills.magic.spell.utility.arena.ArenaRoom
+import org.rsmod.content.skills.magic.spell.utility.arena.ArenaItems
+import org.rsmod.content.skills.magic.spell.utility.arena.ArenaPoints
 import jakarta.inject.Singleton
 import java.util.WeakHashMap
 import kotlin.math.max
@@ -17,6 +20,8 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.MagicSpellRegistry
@@ -31,7 +36,8 @@ import org.rsmod.game.type.synth.SynthType
 
 public class AlchemySpells
 @Inject
-constructor(
+internal constructor(
+    private val points:ArenaPoints,
     private val spells: MagicSpellRegistry,
     private val runes: MagicRuneManager,
     private val objTypes: ObjTypeList,
@@ -39,53 +45,75 @@ constructor(
     private val coalBag: CoalBagStorage,
 ) {
     public fun cast(access: ProtectedAccess, spellType: ObjType, targetSlot: Int) {
+        perform(access, spellType, targetSlot, ring = false)
+    }
+
+    /** Used by the Explorer's ring after validating the item, tier and daily charge. */
+    public fun castWithRing(access: ProtectedAccess, spellType: ObjType, targetSlot: Int): Boolean =
+        perform(access, spellType, targetSlot, ring = true)
+
+    private fun perform(
+        access: ProtectedAccess,
+        spellType: ObjType,
+        targetSlot: Int,
+        ring: Boolean,
+    ): Boolean {
         with(access) {
-            val definition = AlchemyDefinition.forSpell(spellType) ?: return
+            val definition = AlchemyDefinition.forSpell(spellType) ?: return false
             if (!cooldowns.isReady(player, mapClock)) {
-                return
+                return false
             }
 
-            val target = player.inv[targetSlot] ?: return
+            val target = player.inv[targetSlot] ?: return false
             val targetType = objTypes[target]
             val isCoalBag = target.id == objs.coal_bag.id || target.id == objs.coal_bag_open.id
-            if (targetType.param(params.no_alchemy) != 0 && !isCoalBag) {
+            val arenaItem = ArenaItems.alchemy.indexOfFirst { it.id == target.id }
+            if (arenaItem >= 0 && !ArenaRoom.Alchemy.contains(coords)) return false
+            val free = arenaItem >= 0 && points.isFree(arenaItem)
+            if (arenaItem < 0 && targetType.param(params.no_alchemy) != 0 && !isCoalBag) {
                 mes("You can't alchemise that!")
-                return
+                return false
             }
 
             val spell = requireNotNull(spells.getObjSpell(spellType))
-            if (!runes.canCastSpell(player, spell)) {
-                return
+            if (!ring && !(if (free) runes.canAccessSpell(player,spell) else runes.canCastSpell(player,spell))) {
+                return false
+            }
+            if (ring && stat(stats.magic) < spell.levelReq) {
+                mes("You need a higher Magic level to cast this spell.")
+                return false
             }
             val targetRuneUse =
-                runes
-                    .validateSpell(player, spell)
-                    .filterIsInstance<MagicRunes.Validation.Valid.HasEnough>()
-                    .flatMap { it.sources }
-                    .filterIsInstance<MagicRunes.Source.InvSource>()
-                    .filter { it.slot == targetSlot }
-                    .sumOf { it.count }
+                if (ring || free) 0
+                else
+                    runes
+                        .validateSpell(player, spell)
+                        .filterIsInstance<MagicRunes.Validation.Valid.HasEnough>()
+                        .flatMap { it.sources }
+                        .filterIsInstance<MagicRunes.Source.InvSource>()
+                        .filter { it.slot == targetSlot }
+                        .sumOf { it.count }
             if (target.count <= targetRuneUse) {
                 mes("You do not have enough runes to cast this spell.")
-                return
+                return false
             }
 
-            val coinCount = definition.coinValue(targetType.cost)
+            val coinCount = if (arenaItem >= 0) points.alchemyValue(arenaItem) else definition.coinValue(targetType.cost)
+            val currency = if(arenaItem >= 0) ArenaItems.coins else objs.coins
             val transaction =
                 player.invTransaction(player.inv, autoCommit = false) {
                     val inventory = select(player.inv)
                     delete(inventory, target.id, count = 1, slot = targetSlot)
                     if (coinCount > 0) {
-                        add(inventory, objs.coins.id, count = coinCount)
+                        add(inventory, currency.id, count = coinCount)
                     }
                 }
             if (!transaction.success) {
-                return
+                return false
             }
 
-            val castResult = runes.attemptCast(player, spell)
-            if (castResult.isFailure()) {
-                return
+            if (!ring && !free && runes.attemptCast(player, spell).isFailure()) {
+                return false
             }
 
             val committed =
@@ -93,7 +121,7 @@ constructor(
                     val inventory = select(player.inv)
                     delete(inventory, target.id, count = 1, slot = targetSlot)
                     if (coinCount > 0) {
-                        add(inventory, objs.coins.id, count = coinCount)
+                        add(inventory, currency.id, count = coinCount)
                     }
                 }
             check(committed.success) { "Alchemy transaction failed after validation: $target" }
@@ -101,13 +129,16 @@ constructor(
                 coalBag.clear(player)
             }
 
-            if (vars[varbits.fountain_of_rune_active] == 0) {
+            if (!ring && vars[varbits.fountain_of_rune_active] == 0) {
                 statAdvance(stats.magic, spell.castXp)
+            } else if (!ring && definition == AlchemyDefinition.Low) {
+                player.completeDiaryTask(DiaryTask.LowAlchemyAtFountain)
             }
             anim(definition.sequence)
             spotanim(definition.spotanim)
             soundSynth(definition.sound)
-            cooldowns.markCast(player, mapClock + definition.castRate)
+            cooldowns.markCast(player, mapClock + if(arenaItem >= 0) 5 else definition.castRate)
+            return true
         }
     }
 

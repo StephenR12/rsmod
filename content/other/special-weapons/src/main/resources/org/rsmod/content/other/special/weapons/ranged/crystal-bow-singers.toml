@@ -1,0 +1,6 @@
+spawn = [
+    { npc = "roving_islwyn_2ops", coords = "0_34_49_30_23" },
+    { npc = "roving_ilfeen_2ops", coords = "0_34_49_30_17" },
+    { npc = "ilfeen_prif", coords = "0_50_94_37_56" },
+    { npc = "islwyn_prif", coords = "0_51_94_36_48" },
+]

@@ -1,0 +1,31 @@
+[[spawn]]
+npc = 'farming_shopkeeper_1'
+coords = '0_47_51_30_30'
+
+[[spawn]]
+npc = 'farming_shopkeeper_2'
+coords = '0_44_54_4_6'
+
+[[spawn]]
+npc = 'farming_shopkeeper_3'
+coords = '0_41_52_21_32'
+
+[[spawn]]
+npc = 'farming_shopkeeper_4'
+coords = '0_56_55_44_6'
+
+[[spawn]]
+npc = 'seed_merchant'
+coords = '0_48_50_7_50'
+
+[[spawn]]
+npc = 'hosidius_tithe_farmer'
+coords = '0_28_54_8_46'
+
+[[spawn]]
+npc = 'hosidius_evilgrapegirl'
+coords = '1_28_54_8_46'
+
+[[spawn]]
+npc = 'farming_guild_master'
+coords = '0_19_58_33_15'

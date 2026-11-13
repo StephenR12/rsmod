@@ -17,12 +17,8 @@ public class SlayerBossDrops @Inject constructor(private val registry: NpcDropTa
             SlayerBossNpcs.cerberus,
             NpcDropTable(
                 sequence(
-                    item(objs.ashes),
-                    item(objs.coins, 20_000..60_000),
-                    independent(denominator = 512, roll = item(SlayerBossObjs.primordialCrystal)),
-                    independent(denominator = 512, roll = item(SlayerBossObjs.pegasianCrystal)),
-                    independent(denominator = 512, roll = item(SlayerBossObjs.eternalCrystal)),
-                    independent(denominator = 512, roll = item(SlayerBossObjs.smoulderingStone)),
+                    item(CerberusLoot.ashes),
+                    CerberusLoot.table(),
                     independent(denominator = 2_000, roll = item(SlayerBossObjs.jarOfSouls)),
                     independent(denominator = 3_000, roll = item(SlayerBossObjs.hellpuppy)),
                 )

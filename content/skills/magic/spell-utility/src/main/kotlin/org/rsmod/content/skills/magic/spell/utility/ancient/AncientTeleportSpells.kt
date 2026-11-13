@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.ancient
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.magic.MagicSpellType
 import org.rsmod.api.combat.manager.MagicRuneManager
@@ -9,6 +10,8 @@ import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.MagicSpellRegistry
 import org.rsmod.api.type.refs.seq.SeqReferences
@@ -40,7 +43,7 @@ constructor(
                 mes("A mysterious force prevents you from teleporting!")
                 return
             }
-            if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+            if (player.isTeleportBlocked()) {
                 mes("A magical force stops you from teleporting.")
                 return
             }
@@ -60,6 +63,12 @@ constructor(
             soundSynth(synths.teleport_all)
             delay(CAST_TICKS)
             spellTeleport(objTypes[spellType].param(params.spell_telecoord))
+            when (spellType.id) {
+                objs.spell_paddewwa_teleport.id ->
+                    player.completeDiaryTask(DiaryTask.TeleportToPaddewwa)
+                objs.spell_ghorrock_teleport.id ->
+                    player.completeDiaryTask(DiaryTask.TeleportToGhorrock)
+            }
         }
     }
 
@@ -73,7 +82,7 @@ constructor(
         const val CAST_TICKS = 4
         const val DESERT_TREASURE_COMPLETE = 15
         const val MAX_WILDERNESS_LEVEL = 20
-        const val TELEBLOCK_IMMUNITY_CYCLES = 100
+
         const val WILDERNESS_LEVEL_HEIGHT = 8
         const val WILDERNESS_Z = 3520
         const val WILDERNESS_UNDERGROUND_Z = 9920

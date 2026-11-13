@@ -5,6 +5,8 @@ import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.output.UpdateRun
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.realm.Realm
@@ -20,7 +22,10 @@ constructor(private val altarRestoration: PrayerAltarRestoration, private val re
                 return
             }
 
+            val prayerBefore = stat(stats.prayer)
             altarRestoration.restore(this, statuette)
+            if (stat(stats.prayer) > prayerBefore)
+                player.completeDiaryTask(DiaryTask.PrayAtElidinis)
 
             val deadman = realm.config.hasWorldFlag(WorldFlag.Deadman)
             val pvp = realm.config.hasWorldFlag(WorldFlag.Pvp)

@@ -166,12 +166,12 @@ verified. This table is a readable projection of the manifest, not a replacement
 | Tele Block world integration | The first ten fixed self teleports, Teleport to House, all four Home Teleports and accepted Teleother offers enforce active blocks; other teleport paths, production Wilderness state, caster-kill cleanup, warning/expiry messages and client-observed timing remain open | researched |
 | Standard Crumble Undead core | Undead-only gate, hit/splash, XP, 15/18 max hits, Salve and Chaos-gauntlet rules, FX, restricted autocast weapons and five-tick cadence | integration-tested |
 | Standard Magic Dart core | Magic/Slayer and staff gates, hit/splash, XP, level-scaled damage, green/white FX, manual/autocast weapon matrices and five-tick cadence | integration-tested |
-| Magic Dart Slayer integration | Real task resolution, enchanted-staff charges/reversion and Turoth/Kurask damage restrictions remain open | researched |
+| Magic Dart Slayer integration | Master and assignment resolution, Konar area gates, enchanted-staff charges and reversion, Turoth/Kurask damage restrictions | integration-tested |
 | Standard Iban Blast core | Staff/rune/charge gates, shared player charges, one-charge PvM and two-charge PvP casts, hit/splash, XP, max hit, FX, Tome substitution, autocast and five-tick cadence | integration-tested |
-| Iban staff lifecycle | Quest access, acquisition/upgrading, recharge/check operations, warnings, exact failure text, audio and client-observed timing remain open | researched |
+| Iban staff lifecycle | Underground Pass completion, Koftik replacement, Dark Mage repair/upgrade/recharge, paladin well, held and worn checks and low-charge feedback | integration-tested |
 | Standard god-spell core | Three staff/rune contracts, hit/splash, XP, 20/30 max hit, Prayer/Defence/Magic effects, matching cape families, autocast restrictions and five-tick cadence | integration-tested |
 | Standard Charge core | Level/rune gate, 180 XP, seven-minute RuneLite-compatible state, one-minute cooldown and matching-cape damage activation | integration-tested |
-| Mage Arena god-spell integration | Exact staff-claim packing, 100-cast unlocks, arena restrictions, Staff of the dead rune saving, messages, audio, logout persistence and client timing remain open | researched |
+| Mage Arena god-spell integration | Five personal Kolodion phases, native statue and staff progression, battle-mage practice, 100-cast unlock per spell and Staff of the dead rune saving | integration-tested |
 | Standard alchemy core | Low/High levels, runes, 40%/60% values, one-item stacks, target-rune reservation, staff substitution, non-alchable objects, Fountain behavior, FX, XP and 3/5-tick rates | integration-tested |
 | Extended alchemy integration | Explorer's rings, restricted activities, Alchemist's Playground timing, queued casts, warnings, animation overrides and exact client sequencing remain open | researched |
 | Bone-conversion spell core | Bananas/Peaches levels, runes, XP, unlock, eligible bone families, all-inventory conversion, Graveyard 1–4 yields, capacity cap, FX and one-tick rate | integration-tested |

@@ -108,6 +108,53 @@ class BankInvScriptTest {
         }
 
     @Test
+    fun GameTestState.`withdrawal offers only newly withdrawn equipment for charging and consumes bank materials`() =
+        runGameTest(BankInvScript::class) {
+            val bank = openBank(player)
+            val device = objTypes.getValue(13116)
+            val tokens = objTypes.getValue(4278)
+            player.inv[0] = InvObj(device, vars = 3)
+            bank[0] = InvObj(device, vars = 5)
+            bank[1] = InvObj(tokens,2)
+            bank[2] = InvObj(objs.coins,17)
+            player.bankTabSizeMain = 3
+            eventBus.subscribeSuspend<ProtectedAccess,BankedObjEvents.Autocharge>(BankedObjEvents.Autocharge::class.java,device.id.toLong()) {
+                val used = it.takeMaterial(tokens,3)
+                inv[it.slot] = it.obj.copy(vars = it.obj.vars + 25 * used)
+            }
+            player.ifButton(bank_components.main_inventory,comsub=0,op=MAIN_INV_WITHDRAW_1)
+            advance()
+            assertEquals(3,player.inv[0]?.vars)
+            assertEquals(55,player.inv[1]?.vars)
+            assertEquals(InvObj(objs.coins,17),bank[0])
+            assertEquals(1,player.bankTabSizeMain)
+        }
+
+    @Test
+    fun GameTestState.`withdrawal publishes the empty equipment form even though it has no configure option`() =
+        runGameTest(BankInvScript::class) {
+            val bank = openBank(player)
+            val device = objTypes[objs.bryophytas_staff_uncharged]
+            assertFalse(device.hasParam(params.bank_autocharge))
+            val tokens = objTypes.getValue(4278)
+            player.inv[0] = InvObj(device, vars = 3)
+            bank[0] = InvObj(device)
+            bank[1] = InvObj(tokens,2)
+            bank[2] = InvObj(objs.coins,17)
+            player.bankTabSizeMain = 3
+            eventBus.subscribeSuspend<ProtectedAccess,BankedObjEvents.Autocharge>(BankedObjEvents.Autocharge::class.java,device.id.toLong()) {
+                val used = it.takeMaterial(tokens,3)
+                inv[it.slot] = it.obj.copy(vars = it.obj.vars + 25 * used)
+            }
+            player.ifButton(bank_components.main_inventory,comsub=0,op=MAIN_INV_WITHDRAW_1)
+            advance()
+            assertEquals(3,player.inv[0]?.vars)
+            assertEquals(50,player.inv[1]?.vars)
+            assertEquals(InvObj(objs.coins,17),bank[0])
+            assertEquals(1,player.bankTabSizeMain)
+        }
+
+    @Test
     fun GameTestState.`withdraw single obj`() =
         runGameTest(BankInvScript::class) {
             val bank = openBank(player)

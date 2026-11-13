@@ -12,8 +12,13 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.SkillDiaryAreas
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.MagicSpellRegistry
+import org.rsmod.api.type.refs.obj.ObjReferences
+import org.rsmod.api.type.refs.varp.VarpReferences
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.type.obj.ObjType
 
@@ -36,24 +41,28 @@ constructor(
                     val output = HumidifyRecipes.byInput[obj.id] ?: return@mapNotNull null
                     HumidifyConversion(slot, obj, output)
                 }
-            if (conversions.isEmpty()) {
+            val refillCan = HumidifyItems.gricollersCan in inv && vars[HumidifyVars.canWater] < 1000
+            if (conversions.isEmpty() && !refillCan) {
                 mes(NO_ELIGIBLE_ITEMS_MESSAGE)
                 return
             }
 
             val spell = requireNotNull(spells.getObjSpell(objs.spell_humidify))
-            val preflight = transform(conversions, autoCommit = false)
-            if (!preflight.success || runes.attemptCast(player, spell).isFailure()) {
-                return
+            if (conversions.isNotEmpty() && !transform(conversions, autoCommit = false).success) return
+            if (runes.attemptCast(player, spell).isFailure()) return
+            if (conversions.isNotEmpty()) {
+                check(transform(conversions, autoCommit = true).success) { "Humidify transaction failed after validation: $conversions" }
             }
-
-            val committed = transform(conversions, autoCommit = true)
-            check(committed.success) {
-                "Humidify transaction failed after validation: $conversions"
-            }
+            if (refillCan) vars[HumidifyVars.canWater] = 1000
 
             if (vars[varbits.fountain_of_rune_active] == 0) {
                 statAdvance(stats.magic, spell.castXp)
+            }
+            if (
+                SkillDiaryAreas.openDesert(coords) &&
+                    conversions.any { it.output.id == objs.water_skin_4.id }
+            ) {
+                player.completeDiaryTask(DiaryTask.HumidifyDesertWaterskin)
             }
             anim(seqs.dream_player_humidify_spell)
             spotanim(spotanims.dream_humidify_spell)
@@ -149,3 +158,6 @@ public object HumidifyRecipes {
 
     public val byInput: Map<Int, ObjType> = all.associate { it.input.id to it.output }
 }
+
+internal object HumidifyItems : ObjReferences() { val gricollersCan = find("zeah_wateringcan") }
+internal object HumidifyVars : VarpReferences() { val canWater = find("gricollers_can_water") }

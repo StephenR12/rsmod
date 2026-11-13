@@ -46,6 +46,7 @@ public object ModernBossObjs : ObjReferences() {
     val oathplateLegs = find("oathplate_legs")
     val oathplateShards = find("oathplate_shards")
     val forgottenLockbox = find("forgotten_lockbox")
+    val diabolicWorms = find("diabolic_worms")
     val yamaDossier = find("yama_dossier")
     val yamaPet = find("yamapet")
 

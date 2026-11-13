@@ -7,7 +7,7 @@ import java.util.IdentityHashMap
 import org.rsmod.api.config.refs.huntmodes
 import org.rsmod.api.config.refs.queues
 import org.rsmod.api.npc.interact.AiPlayerInteractions
-import org.rsmod.api.npc.opPlayer2
+import org.rsmod.api.combat.commons.npc.engagePlayer
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.protect.ProtectedAccessLauncher
@@ -218,7 +218,7 @@ constructor(
         if (phase.snakelings) {
             spawnSnakelings(session)
         }
-        boss.opPlayer2(session.player, interactions)
+        boss.engagePlayer(session.player, interactions)
     }
 
     private fun spawnClouds(session: ZulrahSession, position: ZulrahPosition) {
@@ -254,9 +254,9 @@ constructor(
                 hitpoints = 1
                 baseHitpointsLvl = 1
                 setHunt(HUNT_RANGE)
-                setHuntMode(huntmodes.constant_ranged)
+                setHuntMode(if (type == ZulrahNpcs.meleeSnakeling) huntmodes.constant_melee else huntmodes.constant_ranged)
             }
-            snakeling.opPlayer2(session.player, interactions)
+            snakeling.engagePlayer(session.player, interactions)
         }
     }
 

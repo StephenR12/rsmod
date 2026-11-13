@@ -11441,3 +11441,20 @@ moonlight variants and the exact 100-cycle respawn schedule. The one-tick server
 messages and audiovisual/packet choreography remain qualified implementation choices until manual
 case 144; the production boundary does not claim legacy butterflies, multiplayer sharing, rare
 wings or Hunter Rumour progression.
+
+
+## Cache-233 production-skill and diary completion pass
+
+The consolidated dated sources, cache checks, functional coverage, explicit approximations and
+remaining progression systems for Cooking, Crafting, Smithing, Fletching, Herblore, Mining, Fishing,
+Firemaking, Woodcutting, Thieving and Hunter are recorded in
+[PRODUCTION_SKILLS.md](PRODUCTION_SKILLS.md). This includes ordinary anvil products, portable box
+traps, falconry, aerial fishing, master farmer seeds and legacy butterflies, plus successful-result
+diaries and saved ordered production steps. The record distinguishes exact published data from
+bounded server models; it does not claim full skill/activity/client parity.
+
+
+Production-skill follow-up: the current [production ledger](PRODUCTION_SKILLS.md) now records the
+native high-tier Fishing/Tynan, Kourend mineral gathering, Otto training/Barbarian Smithing,
+Zahur unfinished-potion and post-2024 Wintertodt implementations, dated source revisions,
+private packed-cache test counts and explicit remaining approximations.

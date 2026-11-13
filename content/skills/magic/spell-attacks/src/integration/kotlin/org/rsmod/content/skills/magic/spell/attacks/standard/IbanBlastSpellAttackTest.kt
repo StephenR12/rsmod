@@ -49,6 +49,46 @@ import org.rsmod.map.zone.ZoneKey
 
 class IbanBlastSpellAttackTest {
     @Test
+    fun GameTestState
+        .`Koftik replaces one lost staff and the Dark Mage repairs and upgrades after Underground Pass`() =
+        runInjectedGameTest(Dependencies::class, TestModule, IbanStaffServices::class) { d ->
+            player.members = true
+            fun talk(id: Int, x: Int, z: Int) {
+                player.ifClose()
+                val c = org.rsmod.map.CoordGrid(x, z)
+                player.placeAt(c.translate(1, 0))
+                player.opNpc1(npcRepo.findAll(c).single { it.id == id })
+                advance()
+            }
+            fun choose(i: Int) {
+                player.resumeActiveCoroutine(
+                    org.rsmod.api.player.input.ResumePauseButtonInput(
+                        org.rsmod.api.config.refs.components.chatmenu_pbutton,
+                        i,
+                    )
+                )
+            }
+            val broken = objTypes.getValue(1410)
+            talk(8976, 2436, 3315)
+            assertEquals(0, player.count(broken))
+            player.setVarp(IbanQuest.progress, 11)
+            talk(8976, 2436, 3315)
+            talk(8976, 2436, 3315)
+            assertEquals(1, player.count(broken))
+            talk(7753, 2458, 3311)
+            choose(1)
+            choose(1)
+            assertEquals(1, player.count(broken))
+            player.inv[5] = InvObj(objs.coins, 400000)
+            talk(7753, 2458, 3311)
+            choose(1)
+            choose(1)
+            assertEquals(1, player.count(objs.ibans_staff_u))
+            assertEquals(0, player.count(objs.coins))
+            assertEquals(2500, d.charges.get(player))
+        }
+
+    @Test
     fun GameTestState.`cache contract defines iban blast metadata and presentation`() =
         runIbanBlastTest { deps ->
             val spell = requireNotNull(deps.magicSpells.getObjSpell(objs.spell_iban_blast))
@@ -219,7 +259,7 @@ class IbanBlastSpellAttackTest {
     fun GameTestState.`tome of fire substitutes runes without boosting iban blast`() =
         runIbanBlastTest { deps ->
             prepareCaster(objs.ibans_staff, includeFireRunes = false)
-            player.lefthand = InvObj(objs.tome_of_fire)
+            player.lefthand = InvObj(objs.tome_of_fire, vars = 1)
             deps.charges.set(player, 1)
             val target = spawnNpc(player.coords.translate(3, 0), targetType)
             val (handler, attack) = deps.attack(player.righthand)
@@ -234,7 +274,7 @@ class IbanBlastSpellAttackTest {
 
             assertIbanRunes(0, 0)
             assertEquals(0, deps.charges.get(player))
-            assertEquals(InvObj(objs.tome_of_fire), player.lefthand)
+            assertEquals(InvObj(objs.tome_of_fire, vars = 1), player.lefthand)
         }
 
     @Test
@@ -260,6 +300,7 @@ class IbanBlastSpellAttackTest {
         includeFireRunes: Boolean = true,
     ) {
         player.stats[stats.magic] = 99
+        player.setVarp(IbanQuest.progress, 11)
         player.clearInv()
         if (includeFireRunes) {
             player.inv[0] = InvObj(objs.fire_rune, 5 * casts)

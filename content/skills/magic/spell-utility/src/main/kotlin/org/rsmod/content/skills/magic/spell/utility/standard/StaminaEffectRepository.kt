@@ -3,21 +3,43 @@ package org.rsmod.content.skills.magic.spell.utility.standard
 import jakarta.inject.Singleton
 import java.util.WeakHashMap
 import org.rsmod.api.config.refs.timers
+import org.rsmod.api.config.refs.objs
+import org.rsmod.api.player.EnduranceRing
+import org.rsmod.api.player.ring
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.player.vars.intVarBit
 import org.rsmod.game.entity.Player
 
 private var Player.staminaActiveDisplay by intVarBit(varbits.stamina_active)
 private var Player.staminaDurationDisplay by intVarBit(varbits.stamina_duration)
+private var Player.staminaExtraDisplay by intVarBit(varbits.stamina_duration_extra)
 
 /** Cache-233 two-minute stamina-potion state shared by potion consumption and potion sharing. */
 @Singleton
 public class StaminaEffectRepository {
     private val expiresAt = WeakHashMap<Player, Int>()
 
-    public fun activate(player: Player) {
-        expiresAt[player] = player.currentMapClock + DURATION_CYCLES
-        syncClient(player, DURATION_CYCLES)
+    private val extended = java.util.Collections.newSetFromMap(WeakHashMap<Player, Boolean>())
+
+    /** Returns whether a charge was spent, so the dose can restore its additional run energy. */
+    public fun drinkDose(player: Player): Boolean {
+        val ring = player.ring
+        val charges = EnduranceRing.charges(ring)
+        if (ring == null || charges <= 0) {
+            activate(player)
+            return false
+        }
+        player.ring = EnduranceRing.withCharges(ring,charges-1)
+        activate(player, DURATION_CYCLES * 2)
+        extended.add(player)
+        return true
+    }
+
+    public fun activate(player: Player, duration: Int = DURATION_CYCLES) {
+        require(duration > 0)
+        extended.remove(player)
+        expiresAt[player] = player.currentMapClock + duration
+        syncClient(player, duration)
         player.softTimer(timers.stamina_effect, 1)
     }
 
@@ -34,7 +56,13 @@ public class StaminaEffectRepository {
     }
 
     public fun tick(player: Player) {
-        val remaining = remainingCycles(player)
+        var remaining = remainingCycles(player)
+        val ring = player.ring
+        if (remaining > 0 && player in extended && ring?.id != objs.ring_of_endurance.id && ring?.id != objs.ring_of_endurance_nocharges.id) {
+            remaining = (remaining + 1) / 2
+            extended.remove(player)
+            expiresAt[player] = player.currentMapClock + remaining
+        }
         if (remaining > 0) {
             syncClient(player, remaining)
         }
@@ -42,15 +70,19 @@ public class StaminaEffectRepository {
 
     public fun clear(player: Player) {
         expiresAt.remove(player)
+        extended.remove(player)
         player.staminaActiveDisplay = 0
         player.staminaDurationDisplay = 0
+        player.staminaExtraDisplay = 0
         player.clearSoftTimer(timers.stamina_effect)
     }
 
     private fun syncClient(player: Player, remaining: Int) {
         player.staminaActiveDisplay = 1
         // Cache varbit 24 exposes the remaining duration in ten-cycle units.
-        player.staminaDurationDisplay = (remaining + DISPLAY_UNIT_CYCLES - 1) / DISPLAY_UNIT_CYCLES
+        val units = (remaining + DISPLAY_UNIT_CYCLES - 1) / DISPLAY_UNIT_CYCLES
+        player.staminaDurationDisplay = minOf(units,20)
+        player.staminaExtraDisplay = (units - 20).coerceIn(0,31)
     }
 
     public companion object {

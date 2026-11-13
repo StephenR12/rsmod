@@ -24,6 +24,46 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
 
     public fun state(npc: Npc): SporadicBossState = states.getOrPut(npc, ::SporadicBossState)
 
+    internal fun configure(npc: Npc, definition: SporadicBossDefinition) {
+        npc.apply {
+            hitpoints = definition.hitpoints
+            baseHitpointsLvl = definition.hitpoints
+            attackLvl = definition.attack
+            baseAttackLvl = definition.attack
+            strengthLvl = definition.strength
+            baseStrengthLvl = definition.strength
+            defenceLvl = definition.defence
+            baseDefenceLvl = definition.defence
+            magicLvl = definition.magic
+            baseMagicLvl = definition.magic
+            rangedLvl = definition.ranged
+            baseRangedLvl = definition.ranged
+            mode = NpcMode.Wander
+            setHunt(18)
+            setHuntMode(huntmodes.constant_ranged)
+        }
+    }
+
+    public fun spawnHespori(coords: CoordGrid): Npc {
+        val definition = SporadicBosses.byId.getValue(SporadicBossNpcs.hespori.id)
+        val boss = Npc(npcTypes[definition.npc], coords)
+        configure(boss, definition)
+        boss.mode = NpcMode.None
+        npcs.add(boss, 6000)
+        reset(boss)
+        spawnWave(boss, List(4) { SporadicBossNpcs.hesporiFlower }, 10)
+        return boss
+    }
+
+    public fun removeHespori(boss: Npc) {
+        val flowers = states.remove(boss)?.activeMinions.orEmpty()
+        for (flower in flowers) {
+            owners.remove(flower)
+            if (flower.slotId != -1) npcs.del(flower, Int.MAX_VALUE)
+        }
+        if (boss.slotId != -1) npcs.del(boss, Int.MAX_VALUE)
+    }
+
     public fun modifyHit(npc: Npc, hit: HitBuilder, definition: SporadicBossDefinition) {
         val active = state(npc).activeMinions.size
         when (definition.family) {
@@ -98,7 +138,9 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
 
     private fun spawnWave(boss: Npc, types: List<NpcType>, hitpoints: Int) {
         types.forEachIndexed { index, type ->
-            val offset = WAVE_OFFSETS[index % WAVE_OFFSETS.size]
+            val isFlower = type == SporadicBossNpcs.hesporiFlower
+            val offsets = if (isFlower) FLOWER_OFFSETS else WAVE_OFFSETS
+            val offset = offsets[index % offsets.size]
             val coords =
                 CoordGrid(
                     boss.coords.x + offset.first,
@@ -123,14 +165,19 @@ constructor(private val npcs: NpcRepository, private val npcTypes: NpcTypeList) 
                 setHunt(12)
                 setHuntMode(huntmodes.constant_melee)
             }
+            if (isFlower) {
+                minion.mode = NpcMode.None
+                minion.setHunt(0)
+            }
             owners[minion] = boss
             state(boss).activeMinions.add(minion)
-            npcs.add(minion, MINION_LIFETIME)
+            npcs.add(minion, if (isFlower) 6000 else MINION_LIFETIME)
         }
     }
 
     public companion object {
         private const val MINION_LIFETIME: Int = 200
+        private val FLOWER_OFFSETS = listOf(-4 to -3, -4 to 5, 5 to -3, 5 to 5)
         private val WAVE_OFFSETS = listOf(-2 to 0, 2 to 0, 0 to -2, 0 to 2)
     }
 }

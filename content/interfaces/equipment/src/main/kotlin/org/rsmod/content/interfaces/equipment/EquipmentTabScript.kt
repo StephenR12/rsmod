@@ -7,13 +7,12 @@ import org.rsmod.game.entity.Player
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
-class EquipmentTabScript : PluginScript() {
+class EquipmentTabScript @jakarta.inject.Inject constructor(private val pets: org.rsmod.content.skills.pets.SkillPets) : PluginScript() {
     override fun ScriptContext.startup() {
         onIfOverlayButton(equip_components.call_follower) { player.callFollower() }
     }
 
     private fun Player.callFollower() {
-        // TODO(content): Apply logic once followers are available.
-        mes("You do not have a follower.")
+        if (!pets.call(this)) mes("You do not have a follower.")
     }
 }

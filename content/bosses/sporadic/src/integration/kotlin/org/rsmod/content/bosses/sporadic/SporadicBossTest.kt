@@ -16,15 +16,17 @@ import org.rsmod.plugin.scripts.PluginScript
 @Execution(ExecutionMode.SAME_THREAD)
 class SporadicBossTest {
     @Test
-    fun GameTestState.`five sporadic bosses spawn permanently with registered drops`() =
+    fun GameTestState.`four world bosses spawn permanently and Hespori waits for a mature crop`() =
         runSporadicBossTest(
             scripts = arrayOf(SporadicBossScript::class, SporadicBossDrops::class)
         ) { deps ->
             val bosses =
-                SporadicBosses.definitions.map { definition ->
+                SporadicBosses.definitions.filter { it.family != SporadicBossFamily.Hespori }.map { definition ->
                     deps.npcs.findAll(definition.spawn).single { it.id == definition.npc.id }
                 }
-            assertEquals(5, bosses.size)
+            assertEquals(4, bosses.size)
+            val hespori = SporadicBosses.definitions.single { it.family == SporadicBossFamily.Hespori }
+            assertTrue(deps.npcs.findAll(hespori.spawn).none { it.id == hespori.npc.id })
             assertTrue(bosses.all { it.respawns })
             assertTrue(SporadicBosses.definitions.all { deps.drops[it.npc] != null })
         }
@@ -44,10 +46,9 @@ class SporadicBossTest {
 
             val hesporiDefinition =
                 SporadicBosses.definitions.single { it.family == SporadicBossFamily.Hespori }
-            val hespori =
-                deps.npcs.findAll(hesporiDefinition.spawn).single {
-                    it.id == hesporiDefinition.npc.id
-                }
+            val hespori = deps.controller.spawnHespori(hesporiDefinition.spawn)
+            assertEquals(4, deps.controller.state(hespori).activeMinions.size)
+            deps.controller.state(hespori).activeMinions.toList().forEach(deps.controller::onMinionKilled)
             hespori.hitpoints = 200
             deps.controller.onBossDamaged(hespori, hesporiDefinition)
             assertEquals(4, deps.controller.state(hespori).activeMinions.size)

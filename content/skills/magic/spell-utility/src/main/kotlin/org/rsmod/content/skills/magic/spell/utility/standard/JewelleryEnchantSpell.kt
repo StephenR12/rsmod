@@ -1,6 +1,8 @@
 package org.rsmod.content.skills.magic.spell.utility.standard
 
 import jakarta.inject.Inject
+import org.rsmod.content.skills.magic.spell.utility.arena.ArenaRoom
+import org.rsmod.content.skills.magic.spell.utility.arena.ArenaPoints
 import org.rsmod.api.combat.manager.MagicRuneManager
 import org.rsmod.api.combat.manager.MagicRuneManager.Companion.isFailure
 import org.rsmod.api.config.refs.objs
@@ -13,6 +15,7 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.recordDiaryAmuletEnchant
 import org.rsmod.api.player.isInCombat
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -24,7 +27,8 @@ import org.rsmod.game.type.synth.SynthType
 
 public class JewelleryEnchantSpell
 @Inject
-constructor(
+internal constructor(
+    private val points:ArenaPoints,
     private val spells: MagicSpellRegistry,
     private val runes: MagicRuneManager,
     private val recipes: JewelleryEnchantRecipeRegistry,
@@ -104,6 +108,8 @@ constructor(
             }
             val committed = transform(recipe, sourceSlot, autoCommit = true)
             check(committed.success) { "Jewellery enchant transaction failed: $recipe" }
+            if(recipe.gate==JewelleryEnchantRecipe.Gate.Arena) points.enchanted(player,recipe.source,tier.ordinal+1)
+            player.recordDiaryAmuletEnchant(recipe.output.id, coords)
 
             if (vars[varbits.fountain_of_rune_active] == 0) {
                 statAdvance(stats.magic, spell.castXp)
@@ -129,11 +135,21 @@ constructor(
         }
     }
 
+    internal fun useTablet(access: ProtectedAccess, recipe: JewelleryEnchantRecipe, sourceSlot:Int, tablet: ObjType, tabletSlot:Int) {
+        with(access) {
+            if (!player.members || !passesSpecialGate(recipe)) return
+            if (transform(recipe, sourceSlot, true, tablet, tabletSlot).success) {
+                anim(seqs.poh_smash_magic_tablet)
+            }
+        }
+    }
+
     private fun ProtectedAccess.passesSpecialGate(recipe: JewelleryEnchantRecipe): Boolean =
         when (recipe.gate) {
+            JewelleryEnchantRecipe.Gate.Arena -> ArenaRoom.Enchantment.contains(coords)
             JewelleryEnchantRecipe.Gate.None -> true
             JewelleryEnchantRecipe.Gate.DigsitePendant -> {
-                if (vars[varbits.vm_digsite_talisman] == 0) {
+                if (vars[varbits.vm_necklace] == 0 && vars[varbits.vm_digsite_talisman] == 0) {
                     mes("You need to have discovered the Digsite pendant.")
                     false
                 } else {
@@ -158,9 +174,12 @@ constructor(
         recipe: JewelleryEnchantRecipe,
         sourceSlot: Int,
         autoCommit: Boolean,
+        tablet: ObjType? = null,
+        tabletSlot:Int = -1,
     ) =
         player.invTransaction(player.inv, autoCommit = autoCommit) {
             val inventory = select(player.inv)
+            if (tablet != null) delete(inventory,tablet.id,1,tabletSlot)
             delete(inventory, recipe.source.id, count = 1, slot = sourceSlot)
             add(inventory, recipe.output.id, count = 1, slot = sourceSlot)
         }

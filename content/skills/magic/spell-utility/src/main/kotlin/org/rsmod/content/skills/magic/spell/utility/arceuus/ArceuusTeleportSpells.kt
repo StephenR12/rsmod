@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.magic.spell.utility.arceuus
 
+import org.rsmod.api.player.isTeleportBlocked
 import jakarta.inject.Inject
 import org.rsmod.api.combat.commons.magic.MagicSpellType
 import org.rsmod.api.combat.manager.MagicRuneManager
@@ -68,7 +69,7 @@ constructor(
             mes("A mysterious force prevents you from teleporting!")
             return false
         }
-        if (vars[varbits.teleblock_cycles] > TELEBLOCK_IMMUNITY_CYCLES) {
+        if (player.isTeleportBlocked()) {
             mes("A magical force stops you from teleporting.")
             return false
         }
@@ -91,7 +92,7 @@ constructor(
     private companion object {
         const val CAST_TICKS = 4
         const val MAX_WILDERNESS_LEVEL = 20
-        const val TELEBLOCK_IMMUNITY_CYCLES = 100
+
         const val WILDERNESS_LEVEL_HEIGHT = 8
         const val WILDERNESS_Z = 3520
         const val WILDERNESS_UNDERGROUND_Z = 9920

@@ -17,6 +17,10 @@ import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.spotanims
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.player.hat
+import org.rsmod.api.player.hunter.canCatchImpling
+import org.rsmod.api.player.interact.NpcTInteractions
+import org.rsmod.api.player.events.interact.NpcTEvents
+import org.rsmod.game.type.npc.NpcTypeList
 import org.rsmod.api.player.legs
 import org.rsmod.api.player.torso
 import org.rsmod.api.spells.MagicSpellModule
@@ -311,6 +315,22 @@ class BindingSpellAttackTest {
         )
     }
 
+    @Test fun GameTestState.`native noncombat implings bind through specific spell target without damage or retaliation`() = runBindingTest { deps ->
+        player.members=true;player.stats[stats.magic]=99;giveBindingRunes()
+        val target=spawnNpc(player.coords.translate(3,0),deps.npcTypes[ImplingBindingNpcs.types.first()]){noneMode()}
+        assertEquals(null,target.type.op[1])
+        val hp=target.hitpoints
+        val spell=deps.implings.definitions.first{it.obj==objs.spell_bind}
+        val trigger=deps.npcTargets.apTrigger(player,target,spell.component,0,null)
+        assertTrue(trigger is NpcTEvents.Ap)
+        val other=registerPlayer(player.coords)
+        random.next=0
+        player.withProtectedAccess{deps.implings.cast(this,target,spell)}
+        advanceUntilBindingStatus(deps,target,BindingStatus.Held)
+        assertEquals(hp,target.hitpoints);assertTrue(target.hitpoints>0)
+        assertTrue(target.canCatchImpling(player));assertTrue(!target.canCatchImpling(other))
+    }
+
     private fun GameTestState.runBindingTest(
         testBody: org.rsmod.api.testing.scope.GameTestScope.(Dependencies) -> Unit
     ) =
@@ -325,6 +345,7 @@ class BindingSpellAttackTest {
             UnlimitedRuneScript::class,
             WeaponAttackStylesScript::class,
             BindingImpactScript::class,
+            ImplingBindingScript::class,
             testBody = testBody,
         )
 
@@ -366,6 +387,9 @@ class BindingSpellAttackTest {
         val states: BindingStateRepository,
         val manager: SpellAttackManager,
         val magicSpells: MagicSpellRegistry,
+        val implings: ImplingBindingSpells,
+        val npcTypes: NpcTypeList,
+        val npcTargets: NpcTInteractions,
     ) {
         fun registry(): SpellAttackRegistry {
             val registry = SpellAttackRegistry()

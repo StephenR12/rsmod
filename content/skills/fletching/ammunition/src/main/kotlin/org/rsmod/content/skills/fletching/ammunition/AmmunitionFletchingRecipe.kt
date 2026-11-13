@@ -11,6 +11,7 @@ public enum class AmmunitionFamily(
     public val alwaysMakeX: Boolean,
     public val usesOptionalMakeX: Boolean = false,
 ) {
+    Atlatl(batchSize = 20, alwaysMakeX = true),
     HeadlessArrow(batchSize = 15, alwaysMakeX = true),
     Arrow(batchSize = 15, alwaysMakeX = true),
     Bolt(batchSize = 10, alwaysMakeX = false, usesOptionalMakeX = true),
@@ -50,6 +51,12 @@ public class AmmunitionFletchingRecipeRegistry @Inject constructor() {
                 objs.headless_arrow,
                 1.0,
                 seqs.human_fletching_add_feather,
+            ),
+            AmmunitionFletchingRecipe(
+                "Headless atlatl darts", AmmunitionFamily.Atlatl, 74, objs.atlatl_dart_shaft, objs.feather, objs.headless_atlatl_dart, 1.0, seqs.human_fletching_add_feather
+            ),
+            AmmunitionFletchingRecipe(
+                "Atlatl darts", AmmunitionFamily.Atlatl, 74, objs.headless_atlatl_dart, objs.atlatl_dart_tips, objs.atlatl_dart, 9.5, seqs.human_fletching_add_arrow_tips
             ),
             arrow("Bronze arrow", 1, objs.bronze_arrowheads, objs.bronze_arrow, 1.3),
             arrow("Iron arrow", 15, objs.iron_arrowheads, objs.iron_arrow, 2.5),

@@ -1,0 +1,400 @@
+# Dated Wiki spawn tables; source IDs recorded per creature.
+
+# Ruby-harvest oldid14800303, 2024-11-15T21:38:56Z.
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_19_58_3_49'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_19_58_21_35'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_19_58_48_6'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_11_29'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_7_27'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_17_21'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_12_19'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_21_16'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_24_14'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_15_13'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_20_10'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_34_7'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_56_30_2'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_54_43'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_58_37'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_45_34'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_48_29'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_57_29'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_35_26'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_30_24'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_27_20'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_38_20'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_16_15'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_22_7'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_36_55_39_5'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_23_54_31_28'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_23_54_45_24'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_23_54_53_24'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_23_54_34_19'
+
+[[spawn]]
+npc = 'butterfly_ruby'
+coords = '0_23_54_52_17'
+
+
+# Sapphire-glacialis oldid14805052, 2024-11-21T20:30:48Z.
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_42_59_15_46'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_42_59_20_46'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_42_59_27_32'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_42_59_32_29'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_42_59_32_58'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_42_59_46_47'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_19_58_21_34'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_19_58_42_34'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_22_50_29_35'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_22_50_24_40'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_22_50_24_59'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_22_50_28_49'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_22_50_36_54'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_22_50_44_51'
+
+[[spawn]]
+npc = 'butterfly_glacialis'
+coords = '0_22_50_41_40'
+
+
+# Snowy-knight oldid14953827, 2025-07-29T19:23:34Z.
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_44_61_48_53'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_44_61_54_51'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_44_61_51_50'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_44_61_58_48'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '1_42_59_37_57'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '1_42_59_20_39'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '1_42_59_42_30'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_42_59_13_28'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_42_59_24_21'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_42_59_49_16'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_42_59_8_10'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_42_59_49_2'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_42_59_26_1'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_19_58_22_28'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_19_58_7_11'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_22_50_41_49'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_22_50_38_31'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_22_50_34_40'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_22_50_27_43'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_22_50_22_53'
+
+[[spawn]]
+npc = 'butterfly_snowy'
+coords = '0_22_50_28_59'
+
+
+# Black-warlock oldid14995309, 2025-09-27T15:00:43Z.
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_40_45_3_40'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_39_45_55_35'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_39_45_44_34'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_39_45_36_25'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_39_45_44_18'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_39_45_54_13'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_40_45_6_6'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_19_58_8_52'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_19_58_26_48'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_19_58_44_38'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_19_58_4_35'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_19_58_17_33'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_19_47_59_12'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_13_13'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_8_11'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_3_17'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_8_20'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_10_7'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_5_5'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_1_9'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_3_12'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_2_14'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_6_15'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_49_5_24'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_49_41_24'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_49_27_35'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_47_61_28'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_21_48_20_9'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_48_58_12'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_48_49_20'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_48_19_16'
+
+[[spawn]]
+npc = 'butterfly_warlock'
+coords = '0_20_48_8_1'

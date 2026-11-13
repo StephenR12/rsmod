@@ -13,6 +13,11 @@ import org.rsmod.content.interfaces.journal.tab.configs.journal_components
 import org.rsmod.events.EventBus
 import org.rsmod.game.entity.Player
 
+public fun Player.openDiaryTab(eventBus: EventBus) {
+    ClientScripts.toplevelSidebuttonSwitch(this, org.rsmod.api.config.constants.toplevel_details)
+    switchJournalTab(SideJournalTab.Tasks, eventBus)
+}
+
 internal var Player.sideJournalTab by enumVarBit<SideJournalTab>(varbits.side_journal_tab)
 
 internal fun Player.openJournalTab(tab: SideJournalTab, eventBus: EventBus) =

@@ -147,8 +147,14 @@ public class SkillcapeTrimming {
             definitions.map { it.untrimmed to it.trimmed }
 
         private val trimmedByUntrimmed: Map<Int, ObjType> =
-            capePairs.associate { (untrimmed, trimmed) -> untrimmed.id to trimmed }
+            capePairs.associate { (untrimmed, trimmed) -> untrimmed.id to trimmed } +
+                (WornAgilityCapes.plain.id to WornAgilityCapes.trimmed)
     }
+}
+
+internal object WornAgilityCapes:org.rsmod.api.type.refs.obj.ObjReferences(){
+    val plain=find("skillcape_agility_worn")
+    val trimmed=find("skillcape_agility_trimmed_worn")
 }
 
 public data class SkillcapeDefinition(

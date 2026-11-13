@@ -69,6 +69,11 @@ constructor(private val runes: MagicRuneManager, private val charges: IbanStaffC
         ) {
             // Validate the staff and runes without consuming them so the shared staff charge can be
             // rejected atomically before the normal cast transaction awards XP or removes runes.
+            if (vars[IbanQuest.progress] < 11) {
+                manager.stopCombat(this)
+                mes("You must complete Underground Pass before casting Iban Blast.")
+                return
+            }
             if (!runes.canCastSpell(player, attack.spell)) {
                 manager.stopCombat(this)
                 return
@@ -90,6 +95,8 @@ constructor(private val runes: MagicRuneManager, private val charges: IbanStaffC
                 return
             }
             charges.consume(player, chargeCost)
+            if (charges.get(player) in 1..10)
+                mes("Your staff only has ${charges.get(player)} charges left.")
 
             anim(seqs.human_castibanblast)
             spotanim(spotanims.ibanblast_casting, height = 92)

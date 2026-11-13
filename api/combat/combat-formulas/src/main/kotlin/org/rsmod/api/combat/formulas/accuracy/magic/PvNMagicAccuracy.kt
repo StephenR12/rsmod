@@ -12,6 +12,7 @@ import org.rsmod.api.combat.formulas.attributes.CombatSpellAttributes
 import org.rsmod.api.combat.formulas.attributes.CombatStaffAttributes
 import org.rsmod.api.combat.formulas.attributes.collector.CombatMagicAttributeCollector
 import org.rsmod.api.combat.formulas.attributes.collector.CombatNpcAttributeCollector
+import org.rsmod.api.combat.commons.npc.isAssignedSlayerTarget
 import org.rsmod.api.combat.formulas.isSlayerTask
 import org.rsmod.api.combat.formulas.scale
 import org.rsmod.api.config.refs.params
@@ -45,6 +46,7 @@ constructor(
         return computeSpellHitChance(
             source = player,
             target = targetType,
+            slayerTask = target.isAssignedSlayerTarget(player),
             spell = spell,
             targetDefence = target.defenceLvl,
             targetCurrHp = target.hitpoints,
@@ -71,6 +73,7 @@ constructor(
         usedSunfireRune: Boolean,
         usedTomeOfWater: Boolean = false,
         accuracyPercent: Int = 100,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
         val spellAttributes =
             magicAttributes.spellCollect(
@@ -82,7 +85,6 @@ constructor(
                 random,
             )
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 
@@ -136,6 +138,7 @@ constructor(
         computeStaffHitChance(
             source = player,
             target = target.visType,
+            slayerTask = target.isAssignedSlayerTarget(player),
             targetDefence = target.defenceLvl,
             targetCurrHp = target.hitpoints,
             targetMaxHp = target.baseHitpointsLvl,
@@ -153,10 +156,10 @@ constructor(
         targetMagic: Int,
         attackStyle: MagicAttackStyle?,
         specialMultiplier: Double,
+        slayerTask: Boolean = target.isSlayerTask(source),
     ): Int {
         val staffAttributes = magicAttributes.staffCollect(source, random)
 
-        val slayerTask = target.isSlayerTask(source)
         val npcAttributes =
             npcAttributes.collect(target, targetCurrHp, targetMaxHp, slayerTask, source)
 

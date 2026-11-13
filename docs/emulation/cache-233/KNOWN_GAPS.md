@@ -1,6 +1,8 @@
 # Known gaps
 
-This is an initial audit, not an exhaustive gap list.
+For the November 2026 playtest, use the [current skill and diary report](SKILLS_AND_DIARIES.md) and its production and combat links. The dated sections below retain earlier implementation checkpoints.
+
+The detailed entries below record the original audit and incremental parity work. The [skill and diary coverage ledger](SKILLS_AND_DIARIES.md) tracks current playable routes, task hooks, and the scope of the achievement journal.
 
 ## Coverage gaps
 
@@ -781,21 +783,14 @@ This is an initial audit, not an exhaustive gap list.
   poison/venom in every supported world mode. On a standard world it heals then boosts Hitpoints
   by seven while preserving stronger overheals; on a PvP world it leaves Hitpoints unchanged; on
   Deadman it heals only to the base level. These rules use the selected world's existing database
-  flags through the realm configuration. Its Medium Desert Diary task credit, which
-  should trigger only when at least one Prayer point is restored, remains open until the repository
-  has an achievement-diary task service.
-  Building chapel furniture, lighting burners
-  with marrentill, burner expiry and POH
-  ownership/visiting remain Construction/world-system gaps. The 15 quest/minigame Bury or Scatter
-  objects remain deliberately unhandled until their owning content exists. Chewed-bones pyre
-  charges now triple eligible direct bone-burial XP, decrement once even when Zealot preserves the
-  bone, and exclude big bones, demonic ashes and altar offerings. Bonecrusher-triggered burials
-  remain open because this repository has no Bonecrusher processing path to integrate yet. Exact ash-scattering
-  animation, sound and event ordering, and the production long/curved-bone warning copy and
-  disable-checkbox behavior still require matching-client capture. Bonecrusher, ash sanctifier,
-  Catacombs Prayer restoration, Ectofuntus, other quest-owned altar mechanics, Sinister/Demonic
-  Offering and all
-  other Prayer training/equipment integrations remain open.
+  flags through the realm configuration. Restoring at least one Prayer
+  point there awards the Desert medium diary task. POH chapel furniture and timed incense,
+  Bonecrusher, ash sanctifier, Catacombs burial restoration, Ectofuntus, and the two Arceuus
+  Offering spells have server-side gameplay. Chewed-bone pyre charges apply to direct burials
+  and Bonecrusher conversions, including partial batches, and exclude big bones, ashes and
+  altar offerings. The 15 quest/minigame Bury or Scatter objects still depend on their owning
+  content. Exact ash-scattering animation, sound, event ordering and the long/curved-bone
+  warning copy and disable-checkbox behaviour still need matching-client verification.
 - Only a small set of areas, NPCs, locations, interfaces, special attacks, weapons and travel routes
   are represented by content projects.
 - Broad quest, diary, clue, minigame, raid, boss, drop-table, Grand Exchange, pet and account-mode
@@ -1053,11 +1048,10 @@ This is an initial audit, not an exhaustive gap list.
   message/audio and packet ordering plus wider interruption and task hooks remain open. Crossbow
   diary/task credit and exact matching-client message punctuation, audio and operation ordering
   remain open.
-- Tome of Water's item-local charging, positive-charge water-rune supply, Standard combat-spell
-  charge use, final-charge transition and cast-state-backed combat modifiers are implemented.
-  Removing pages, exact partial-page loss and confirmation behavior, bank Configure-Charges,
-  trade/death handling, exact messages, audiovisuals and packet ordering remain open under manual
-  case 82. The cached Pages operations deliberately have no guessed server handler yet.
+- The three native elemental tomes now accept their own pages, support bank targets, consume
+  charges from eligible casts, and retain the last cast's passive. The three Pages menus can
+  remove pages and discard the spent fraction of the last page. Trade/death handling and the
+  exact matching-client presentation of these operations remain open under manual case 82.
 - All sixteen Ancient combat spells now have their cache-233 contracts and shared combat core.
   Remaining work is deliberately split out rather than implied complete: secondary players selected
   by Burst/Barrage still need the production PvP attackability/team/single-combat rule inventory;
@@ -1154,20 +1148,13 @@ This is an initial audit, not an exhaustive gap list.
 - Crumble Undead uses the cache's production `undead` parameter, but the complete set of tagged NPCs
   and any encounter-specific exclusions or overrides has not been audited. Its exact presentation
   timing also remains unverified in the workspace RuneLite.
-- Magic Dart's production Slayer-task resolver always returns false, preventing the enchanted
-  staff's on-task damage formula from activating. Slayer's staff (e) charge storage, hit-only
-  consumption and zero-charge reversion are absent, as are Turoth/Kurask weapon restrictions. The
-  Slayer-level failure text, boost semantics and exact client presentation also need capture.
-- Iban Blast's combat core now uses shared per-player charges with atomic one-charge NPC and
-  two-charge PvP consumption. Underground Pass access, staff acquisition/upgrading, recharge and
-  charge-check operations, warning thresholds, exact charge-failure messages, audio and client
-  observation remain absent or unverified.
-- The three god spells and Charge have an integration-tested combat core, but Mage Arena progression
-  is incomplete. Charge currently treats nonzero cache varp 267 (`magearena`) as a temporary proxy
-  for having claimed any god staff; its packed subfields, the arena's 100-cast-per-spell unlocks and
-  outside-arena enforcement are unresolved. Staff of the dead's 1-in-7 rune saving, exact Charge
-  messages, named sounds, client-observed impact timing and active/cooldown state across logout are
-  also absent or unverified.
+- Magic Dart resolves real Slayer tasks and consumes enchanted charges. The exact native sounds,
+  projectile timing and level-failure feedback still need a client capture.
+- Iban Blast uses the native post-quest stage. Koftik, the Dark Mage and the paladin recharge
+  well have server handlers. Underground Pass quest execution and its full dungeon route remain open.
+- Mage Arena I uses all five combat forms and persistent staff and cast progression. Mage Arena II
+  has personal rotating tracker locations, three god followers and repeat cape imbuing. Exact
+  follower specials, dialogue, client timing and state across live world hops need further checks.
 - Low and High Level Alchemy have an integration-tested core, but Explorer's ring free casts,
   restricted-activity gates, the Alchemist's Playground timing exception, queued casts, warning
   settings, animation overrides, exact failure text and client-observed sequencing are absent or
@@ -1541,10 +1528,9 @@ This is an initial audit, not an exhaustive gap list.
   recipe owns Crafting 62 explicitly. Exact manual animation, duration, messages and packet order,
   plus Zaff's free-world service, remain researched. The charged staff now consumes the shared bank
   Configure-Charges event and persists a zero-to-1,000 preference through cache varbit 16139,
-  including param 2257/DB row 4340 dispatch. Actual nature-rune deduction and automatic item-local
-  charging during withdrawal, exact configuration presentation, and trade/death behavior remain
-  separate researched groups. Manual case 81 must capture these details before those groups can
-  advance beyond `researched`.
+  including param 2257/DB row 4340 dispatch. Withdrawals consume the available nature runes up to the configured
+  target and transform depleted staves. Exact configuration presentation and trade/death
+  behaviour still require manual case 81.
 - Lunar Spellbook Swap now has an integration-tested 200-tick, one-successful-spell lifecycle with
   access-gated Standard/Ancient/Arceuus selection, atomic post-selection charging, LMS cancellation,
   cache presentation and the moving-cast run-energy exemption. Varbit 4823's selected-book encoding
@@ -1780,6 +1766,11 @@ Every source TODO must eventually be classified as in-scope behavior, engineerin
 or proven out of scope. An unclassified TODO blocks completion.
 
 ## Thieving gaps after the Man/Woman, Farmer, Warrior, Rogue, Guard, Desert Bandit, Knight, Watchman, Menaphite Thug, Paladin, Gnome, Hero, Vyre and Lletya Elf cores
+
+Later production work adds nineteen ordinary stalls, master farmers/Martin, seed tables, gloves of
+silence and diary hooks; see [the current production coverage record](PRODUCTION_SKILLS.md). The
+older research notes below retain their original scope and should not be read as the current
+implementation inventory.
 
 - The 27 cache-operable Man/Woman identities, all 20 ordinary/Varlamore/Kastori/Tal Teklan Farmers,
   all seven Warriors, all 91 ordinary city/regional Guards, all eleven ordinary Ardougne/Varlamore
@@ -2150,8 +2141,9 @@ about test health. Use `./gradlew test` plus the module integration tasks docume
   revision-matched observation work in manual case 143. The cutoff Guild hunter outfit page pins
   a 2.5% increase but explicitly says whether it is additive or multiplicative is unknown;
   production currently applies it additively and case 143 retains that qualification.
-- Hunter Rumour tailfeather requests, Hunter-area/tutorial restrictions, diary/achievement/League
-  hooks and non-bird portable traps remain separate backlog work. Anti-odour salt is not represented
+- Hunter Rumour tailfeather requests, Hunter-area/tutorial restrictions and League hooks remain
+  separate backlog work. Box traps, falconry, source-backed prey placements and relevant ordinary
+  skill diary hooks are now implemented; see `PRODUCTION_SKILLS.md`. Anti-odour salt is not represented
   by a cache-233 symbol and is not imported from later revisions.
 
 ## Varlamore moths and extended butterfly lifecycle
@@ -2160,9 +2152,10 @@ about test health. Use `./gradlew test` plus the module integration tasks docume
   success-rate, optional-jar, restoration and respawn coverage. The visually identical moonlight
   NPC 12773 has no cache operation and is deliberately not registered as catchable.
 - The final pre-cutoff Butterfly Hunter page does not expose exact success curves for ruby harvest,
-  sapphire glacialis, snowy knight or black warlock. Those four legacy catches, their spawn maps
-  and all associated achievement/diary hooks remain unimplemented rather than borrowing unrelated
-  moth curves.
+  sapphire glacialis, snowy knight or black warlock. A later production pass implements their
+  source-backed requirements, XP, jars, effects, 98 spawn coordinates and Snowy knight diary hook
+  with an explicitly approximate catch model. Exact odds remain unverified; unrelated moth curves
+  are not reused. See `LegacyButterflyTable.approximateChance` and `PRODUCTION_SKILLS.md`.
 - Rare sunlight/moonlight wings, Hunter Rumour assignment/progress/pity state and reward routing
   remain separate Hunter Guild work. Their existence must not be inferred from the ordinary moth
   catch path.

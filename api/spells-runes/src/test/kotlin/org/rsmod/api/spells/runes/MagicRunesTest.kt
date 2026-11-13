@@ -54,7 +54,7 @@ class MagicRunesTest {
                 hasEnough(
                     wornObjSource(bryophytas_staff, count = 2),
                     invSource(nature_rune, slot = 4, count = 2),
-                    varBitSource(pouch_count1, count = 1),
+                    varBitSource(pouch_count1, 1, nature_rune),
                 )
             ),
             validation,
@@ -112,7 +112,7 @@ class MagicRunesTest {
 
         val expected =
             listOf(
-                hasEnough(varBitSource(pouch_count1, 1)),
+                hasEnough(varBitSource(pouch_count1, 1, air_rune)),
                 hasEnough(invSource(mind_rune, slot = 0)),
             )
 
@@ -156,7 +156,10 @@ class MagicRunesTest {
         val expected =
             listOf(
                 hasEnough(invSource(wrath_rune, slot = 0, count = 1)),
-                hasEnough(invSource(fire_rune, slot = 1, count = 7), varBitSource(pouch_count1, 3)),
+                hasEnough(
+                    invSource(fire_rune, slot = 1, count = 7),
+                    varBitSource(pouch_count1, 3, sunfire_rune),
+                ),
                 hasEnough(invSource(air_rune, slot = 2, count = 7)),
             )
 
@@ -763,8 +766,8 @@ class MagicRunesTest {
         fun invSource(type: ObjType, slot: Int, count: Int = 1) =
             MagicRunes.Source.InvSource(type, slot, count)
 
-        fun varBitSource(type: VarBitType, count: Int = 1) =
-            MagicRunes.Source.VarBitSource(type, count)
+        fun varBitSource(type: VarBitType, count: Int, rune: ObjType) =
+            MagicRunes.Source.VarBitSource(type, count, rune)
 
         fun wornObjSource(type: ObjType, count: Int = 1) =
             MagicRunes.Source.WornObjSource(

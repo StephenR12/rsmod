@@ -10,6 +10,11 @@ import org.rsmod.routefinder.util.Rotations.rotate
 
 class RotationsTest {
     @Test
+    fun `extra cache flags never block the open face of a rotated chest`() {
+        for (angle in 0..3) assertEquals(rotate(angle, 14), rotate(angle, 30))
+    }
+
+    @Test
     fun `rotate loc width`() {
         val (width, length) = 3 to 2
         assertEquals(width, rotate(angle = 0, width, length))

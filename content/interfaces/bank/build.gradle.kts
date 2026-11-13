@@ -5,5 +5,7 @@ plugins {
 
 dependencies {
     implementation(projects.api.pluginCommons)
+    implementation(projects.api.repo)
+    implementation(projects.engine.utilsBits)
     testImplementation(projects.api.testing.testParams)
 }

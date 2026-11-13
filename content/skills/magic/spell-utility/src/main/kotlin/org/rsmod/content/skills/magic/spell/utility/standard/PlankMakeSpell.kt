@@ -13,8 +13,13 @@ import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
+import org.rsmod.api.player.diary.hasCompletedDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.spells.MagicSpellRegistry
+import org.rsmod.api.type.builders.varp.VarpBuilder
+import org.rsmod.api.type.refs.varp.VarpReferences
 import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.varbit.VarBitType
@@ -133,6 +138,15 @@ constructor(
         if (vars[varbits.fountain_of_rune_active] == 0) {
             statAdvance(stats.magic, spell.castXp)
         }
+        if (
+            recipe.output.id == objs.mahogany_plank.id &&
+                inArea(WildMagicAreas.lumberYard, coords) &&
+                !player.hasCompletedDiaryTask(DiaryTask.CastVarrockPlankMake)
+        ) {
+            val made = vars[PlankDiaryVars.made] + if (useVoucher) 2 else 1
+            vars[PlankDiaryVars.made] = made.coerceAtMost(20)
+            if (made >= 20) player.completeDiaryTask(DiaryTask.CastVarrockPlankMake)
+        }
         anim(seqs.dream_player_make_plank_spell)
         spotanim(spotanims.dream_plank_make_spell_spotanim)
         soundSynth(synths.lunar_make_plank)
@@ -193,5 +207,15 @@ constructor(
         const val REPEAT_AUTO_DELAY = 7
         const val LUNAR_DIPLOMACY_COMPLETE = 190
         const val DREAM_MENTOR_COMPLETE = 28
+    }
+}
+
+internal object PlankDiaryVars : VarpReferences() {
+    val made = find("diary_lumberyard_plank_casts")
+}
+
+internal object PlankDiarySave : VarpBuilder() {
+    init {
+        build("diary_lumberyard_plank_casts") { transmitNever = true }
     }
 }

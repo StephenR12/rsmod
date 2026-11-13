@@ -7,6 +7,7 @@ import net.rsprot.protocol.game.outgoing.zone.payload.MapProjAnimV2
 import org.junit.jupiter.api.Test
 import org.rsmod.api.combat.commons.CombatAttack
 import org.rsmod.api.combat.manager.MagicRuneManager
+import org.rsmod.api.combat.manager.MagicRuneManager.Companion.usedSunfireRune
 import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
@@ -45,6 +46,37 @@ import org.rsmod.game.type.util.ParamMapBuilder
 import org.rsmod.map.zone.ZoneKey
 
 class ElementalSpellAttackTest {
+    @Test
+    fun GameTestState.`pouched sunfire runes grant fire damage on paid and staff-saved casts`() =
+        runElementalTest { deps ->
+            player.members = true
+            player.stats[stats.magic] = 99
+            player.righthand = InvObj(objs.staff_of_the_dead)
+            player.inv[0] = InvObj(objs.air_rune, 7)
+            player.inv[1] = InvObj(objs.wrath_rune, 1)
+            player.inv[2] = InvObj(objs.rune_pouch)
+            player.setVarBit(
+                varbits.rune_pouch_type_1,
+                requireNotNull(deps.compact[objs.sunfire_rune]),
+            )
+            player.setVarBit(varbits.rune_pouch_quantity_1, 10)
+            val spell = requireNotNull(deps.magicSpells.getObjSpell(objs.spell_fire_surge))
+            random.next = 0
+            val saved = deps.runes.attemptCast(player, spell)
+            assertTrue(
+                saved is MagicRuneManager.CastResult.Success.StaffSaved && saved.usedSunfireRune()
+            )
+            assertEquals(10, player.vars[varbits.rune_pouch_quantity_1])
+            assertEquals(1, player.count(objs.wrath_rune))
+            random.next = 1
+            val paid = deps.runes.attemptCast(player, spell)
+            assertTrue(
+                paid is MagicRuneManager.CastResult.Success.Consumed && paid.usedSunfireRune()
+            )
+            assertEquals(0, player.vars[varbits.rune_pouch_quantity_1])
+            assertEquals(0, player.count(objs.wrath_rune))
+        }
+
     @Test
     fun GameTestState.`reject insufficient magic level without consuming runes`() =
         runElementalTest { deps ->
@@ -331,6 +363,8 @@ class ElementalSpellAttackTest {
     data class Dependencies
     @Inject
     constructor(
+        val runes: MagicRuneManager,
+        val compact: CompactRuneRepository,
         val spells: ElementalSpells,
         val manager: SpellAttackManager,
         val magicSpells: MagicSpellRegistry,

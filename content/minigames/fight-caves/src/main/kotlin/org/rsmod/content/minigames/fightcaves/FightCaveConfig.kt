@@ -57,3 +57,13 @@ internal object FightCaveSeqs : SeqReferences() {
     val jadMelee = find("lordmagmus_attack")
     val jadMagic = find("lordmagmus_fire")
 }
+
+
+internal object FightCaveAttackRange : org.rsmod.api.type.editors.npc.NpcEditor() {
+    init {
+        with(FightCaveNpcs) {
+            for (type in listOf(tokXilA, tokXilB, ketZekA, ketZekB, jad))
+                edit(type) { attackRange = 15 }
+        }
+    }
+}

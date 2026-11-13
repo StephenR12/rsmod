@@ -303,3 +303,13 @@ public object GodWarsDungeon {
     val byNpcId: Map<Int, GodWarsCombatant> = combatants.associateBy { it.npc.id }
     val roomByBoss: Map<GodWarsBoss, GodWarsRoom> = rooms.associateBy { it.boss }
 }
+
+
+internal object GodWarsAttackRanges : org.rsmod.api.type.editors.npc.NpcEditor() {
+    init {
+        with(GodWarsNpcs) {
+            for (type in listOf(kree, growler, bree, steelwill, grimspike, balfrug, zakln, skree, geerin))
+                edit(type) { attackRange = 8 }
+        }
+    }
+}

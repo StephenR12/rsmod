@@ -1,18 +1,23 @@
 package org.rsmod.content.skills.runecraft
 
 import jakarta.inject.Inject
+import org.rsmod.content.skills.pets.RiftGuardian
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.invtx.add
 import org.rsmod.api.invtx.delete
 import org.rsmod.api.invtx.invTransaction
 import org.rsmod.api.invtx.select
+import org.rsmod.api.player.diary.DiaryTask
+import org.rsmod.api.player.diary.completeDiaryTask
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.stat.stat
 import org.rsmod.game.type.obj.ObjType
 
 public class StandardRuneCrafting
 @Inject
-constructor(
+internal constructor(
+    private val guardian: RiftGuardian,
+    private val rift:RiftRound,private val imbuing:RiftImbuing,
     private val bloodEssence: BloodEssenceLifecycle,
     private val modifiers: RunecraftOutputModifiers,
 ) {
@@ -23,15 +28,29 @@ constructor(
                 return
             }
 
+            if (rift.playingAltar(player,recipe)) {
+                val temple=riftTemples.first {it.recipe==recipe}
+                imbuing.standard(this,temple)
+                return
+            }
             val essence = availableEssence(recipe)
             val essenceCount = essence.sumOf { it.count }
-            if (essenceCount == 0) {
+            val core =
+                when (recipe) {
+                    StandardRuneRecipes.mind -> RunecraftObjs.mindCore
+                    StandardRuneRecipes.body -> RunecraftObjs.bodyCore
+                    StandardRuneRecipes.chaos -> RunecraftObjs.chaosCore
+                    else -> null
+                }
+            val cores = core?.let { invTotal(inv, it) } ?: 0
+            if (essenceCount == 0 && cores == 0) {
                 mes("You do not have any essence to bind.")
                 return
             }
 
             val multiplier = recipe.outputMultiplier(visibleLevel)
             val baseRunes = essenceCount * multiplier
+            val coreRunes = cores * 11 * multiplier
             val extractCount = modifiers.applicableExtractCount(this, essenceCount, recipe.extract)
             val outfitRunes = modifiers.raimentsBonus(this, baseRunes)
             val bloodEssencePlan =
@@ -42,10 +61,13 @@ constructor(
                 }
             val outputCount =
                 baseRunes +
+                    coreRunes +
+                    modifiers.raimentsBonus(this, coreRunes) +
                     (extractCount * recipe.extractBonus) +
                     outfitRunes +
                     (bloodEssencePlan?.bonusRunes ?: 0)
-            val xp = essence.sumOf { it.count * recipe.xp * it.xpMultiplier }
+            val xp =
+                essence.sumOf { it.count * recipe.xp * it.xpMultiplier } + cores * 10 * recipe.xp
 
             val transaction =
                 player.invTransaction(player.inv) {
@@ -53,6 +75,7 @@ constructor(
                     for (input in essence) {
                         delete(inventory, input.type.id, input.count)
                     }
+                    if (core != null && cores > 0) delete(inventory, core.id, cores)
                     if (extractCount > 0) {
                         delete(inventory, requireNotNull(recipe.extract).id, extractCount)
                     }
@@ -79,6 +102,44 @@ constructor(
                 "Rune altar transaction failed after validation: $transaction"
             }
 
+            val simpleTask =
+                when (recipe) {
+                    StandardRuneRecipes.water -> DiaryTask.CraftWaterRunes
+                    StandardRuneRecipes.earth -> DiaryTask.CraftEarthRunes
+                    StandardRuneRecipes.nature -> DiaryTask.CraftNatureRunes
+                    StandardRuneRecipes.death -> DiaryTask.CraftDeathRunes
+                    else -> null
+                }
+            simpleTask?.let(player::completeDiaryTask)
+            // Additional runes from extracts do not count toward a batch requirement.
+            val eligibleRunes = baseRunes + outfitRunes
+            val quantityTask =
+                when {
+                    recipe == StandardRuneRecipes.mind && eligibleRunes >= 140 ->
+                        DiaryTask.Craft140MindRunes
+                    recipe == StandardRuneRecipes.air && eligibleRunes >= 252 ->
+                        DiaryTask.Craft252AirRunes
+                    recipe == StandardRuneRecipes.astral && eligibleRunes >= 56 ->
+                        DiaryTask.Craft56AstralRunes
+                    recipe == StandardRuneRecipes.nature && eligibleRunes >= 56 ->
+                        DiaryTask.Craft56NatureRunes
+                    recipe == StandardRuneRecipes.cosmic && eligibleRunes >= 56 ->
+                        DiaryTask.Craft56CosmicRunes
+                    recipe == StandardRuneRecipes.water && eligibleRunes >= 140 ->
+                        DiaryTask.Craft140WaterRunes
+                    recipe == StandardRuneRecipes.earth && eligibleRunes >= 100 ->
+                        DiaryTask.Craft100EarthRunes
+                    else -> null
+                }
+            if (
+                quantityTask != null &&
+                    (extractCount == 0 ||
+                        quantityTask.region == org.rsmod.api.player.diary.DiaryRegion.Falador)
+            ) {
+                player.completeDiaryTask(quantityTask)
+            }
+
+            guardian.craft(player,recipe.name,essenceCount)
             anim(RunecraftSeqs.craft)
             spotanim(RunecraftSpotanims.craft)
             statAdvance(stats.runecrafting, xp)

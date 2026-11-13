@@ -7,6 +7,8 @@ import org.rsmod.game.entity.PathingEntity.Companion.INVALID_SLOT
 import org.rsmod.game.entity.Player
 import org.rsmod.game.entity.PlayerList
 import org.rsmod.game.entity.player.SessionStateEvent
+import org.rsmod.game.entity.util.PathingEntityCommon
+import org.rsmod.map.CoordGrid
 import org.rsmod.map.zone.ZoneKey
 import org.rsmod.routefinder.collision.CollisionFlagMap
 
@@ -61,6 +63,16 @@ constructor(
     public fun reveal(player: Player) {
         player.addBlockWalkCollision(collision, player.coords)
         player.hidden = false
+    }
+
+    /** Move an instance occupant to their save point before account logout removes their zone entry. */
+    public fun relocateOnLogout(player: Player, destination: CoordGrid) {
+        PathingEntityCommon.telejump(player, collision, destination)
+        val zone = ZoneKey.from(destination)
+        if (player.lastProcessedZone != zone) {
+            change(player, player.lastProcessedZone, zone)
+            player.lastProcessedZone = zone
+        }
     }
 
     public fun change(player: Player, from: ZoneKey, to: ZoneKey) {

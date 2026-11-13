@@ -1,5 +1,6 @@
 package org.rsmod.content.skills.hunter.moths
 
+import org.rsmod.api.player.events.HunterCapture
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.invtx.add
@@ -66,6 +67,7 @@ constructor(private val npcRepo: NpcRepository, private val random: GameRandom) 
             }
 
             statAdvance(stats.hunter, species.xp)
+            publish(HunterCapture(player, species.npcs.first().internalNameValue))
             if (!jarred) {
                 MothEffects.apply(this, species.effect, directCatch = true)
             }

@@ -51,7 +51,7 @@ constructor(
             target = target,
             attackType = attackType,
             attackStyle = attackStyle,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
         )
 
     /** @see [PvPMeleeMaxHit.getMaxHit] */
@@ -91,7 +91,7 @@ constructor(
             target = target,
             attackType = attackType,
             attackStyle = attackStyle,
-            specialMultiplier = specMultiplier,
+            specialMultiplier = specMultiplier * target.miningMultiplier(player),
             boltSpecDamage = boltSpecDamage,
         )
 
@@ -130,16 +130,18 @@ constructor(
         attackRate: Int,
         usedSunfireRune: Boolean,
         usedTomeOfWater: Boolean = false,
+        tomeElement: ObjType? = null,
     ): IntRange =
         pvnMagicMaxHit.getSpellMaxHit(
             player = player,
             target = target,
             spellbook = spellbook,
             spell = spell,
-            baseMaxHit = baseMaxHit,
+            baseMaxHit = (baseMaxHit * target.miningMultiplier(player)).toInt(),
             attackRate = attackRate,
             usedSunfireRune = usedSunfireRune,
             usedTomeOfWater = usedTomeOfWater,
+            tomeElement = tomeElement,
         )
 
     /** @see [PvPMagicMaxHit.getSpellMaxHit] */
@@ -151,6 +153,7 @@ constructor(
         baseMaxHit: Int,
         usedSunfireRune: Boolean,
         usedTomeOfWater: Boolean = false,
+        tomeElement: ObjType? = null,
     ): IntRange =
         pvpMagicMaxHit.getSpellMaxHit(
             player = player,
@@ -160,6 +163,7 @@ constructor(
             baseMaxHit = baseMaxHit,
             usedSunfireRune = usedSunfireRune,
             usedTomeOfWater = usedTomeOfWater,
+            tomeElement = tomeElement,
         )
 
     /** @see [PvNMagicMaxHit.getStaffMaxHit] */
@@ -173,7 +177,7 @@ constructor(
             player = player,
             target = target,
             baseMaxHit = baseMaxHit,
-            specialMultiplier = specialMultiplier,
+            specialMultiplier = specialMultiplier * target.miningMultiplier(player),
         )
 
     /** @see [PvPMagicMaxHit.getStaffMaxHit] */

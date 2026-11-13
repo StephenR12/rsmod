@@ -3,5 +3,6 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.content.skills.pets)
     implementation(projects.api.pluginCommons)
 }

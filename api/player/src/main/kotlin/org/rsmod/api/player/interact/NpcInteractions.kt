@@ -2,6 +2,7 @@ package org.rsmod.api.player.interact
 
 import jakarta.inject.Inject
 import org.rsmod.api.player.events.interact.ApEvent
+import org.rsmod.api.player.events.interact.NpcConversation
 import org.rsmod.api.player.events.interact.NpcContentEvents
 import org.rsmod.api.player.events.interact.NpcDefaultEvents
 import org.rsmod.api.player.events.interact.NpcEvents
@@ -58,7 +59,7 @@ constructor(
             }
         }
 
-        val typeEvent = npc.toOp(op)
+        val typeEvent = npc.toOp(op, type.id)
         if (eventBus.contains(typeEvent::class.java, type.id)) {
             return typeEvent
         }
@@ -82,7 +83,14 @@ constructor(
     }
 
     public fun hasOpTrigger(player: Player, npc: Npc, op: InteractionOp): Boolean =
-        opTrigger(player, npc, op) != null
+        opTrigger(player, npc, op) != null || conversation(player, npc, op) != null
+
+    public fun conversation(player: Player, npc: Npc, op: InteractionOp): NpcConversation? {
+        val visual = multiNpc(npc.visType, player.vars) ?: npc.visType
+        if (visual.op.getOrNull(op.slot - 1) != "Talk-to") return null
+        if (!eventBus.contains(NpcConversation::class.java, visual.id)) return null
+        return NpcConversation(npc, visual.id)
+    }
 
     public fun apTrigger(
         player: Player,
@@ -98,7 +106,7 @@ constructor(
             }
         }
 
-        val typeEvent = npc.toAp(op)
+        val typeEvent = npc.toAp(op, type.id)
         if (eventBus.contains(typeEvent::class.java, type.id)) {
             return typeEvent
         }
@@ -137,13 +145,13 @@ constructor(
         }
     }
 
-    private fun Npc.toOp(op: InteractionOp): NpcEvents.Op =
+    private fun Npc.toOp(op: InteractionOp, typeId: Int): NpcEvents.Op =
         when (op) {
-            InteractionOp.Op1 -> NpcEvents.Op1(this)
-            InteractionOp.Op2 -> NpcEvents.Op2(this)
-            InteractionOp.Op3 -> NpcEvents.Op3(this)
-            InteractionOp.Op4 -> NpcEvents.Op4(this)
-            InteractionOp.Op5 -> NpcEvents.Op5(this)
+            InteractionOp.Op1 -> NpcEvents.Op1(this, typeId)
+            InteractionOp.Op2 -> NpcEvents.Op2(this, typeId)
+            InteractionOp.Op3 -> NpcEvents.Op3(this, typeId)
+            InteractionOp.Op4 -> NpcEvents.Op4(this, typeId)
+            InteractionOp.Op5 -> NpcEvents.Op5(this, typeId)
             else -> unsupportedPlayerOperation(op)
         }
 
@@ -177,13 +185,13 @@ constructor(
             else -> unsupportedPlayerOperation(op)
         }
 
-    private fun Npc.toAp(op: InteractionOp): NpcEvents.Ap =
+    private fun Npc.toAp(op: InteractionOp, typeId: Int): NpcEvents.Ap =
         when (op) {
-            InteractionOp.Op1 -> NpcEvents.Ap1(this)
-            InteractionOp.Op2 -> NpcEvents.Ap2(this)
-            InteractionOp.Op3 -> NpcEvents.Ap3(this)
-            InteractionOp.Op4 -> NpcEvents.Ap4(this)
-            InteractionOp.Op5 -> NpcEvents.Ap5(this)
+            InteractionOp.Op1 -> NpcEvents.Ap1(this, typeId)
+            InteractionOp.Op2 -> NpcEvents.Ap2(this, typeId)
+            InteractionOp.Op3 -> NpcEvents.Ap3(this, typeId)
+            InteractionOp.Op4 -> NpcEvents.Ap4(this, typeId)
+            InteractionOp.Op5 -> NpcEvents.Ap5(this, typeId)
             else -> unsupportedPlayerOperation(op)
         }
 

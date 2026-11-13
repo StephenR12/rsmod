@@ -76,11 +76,10 @@ staff uses white travel/impact graphics on a hit but retains the ordinary green 
 splash; ordinary, off-task damage still uses the base formula. Boundary formula tests also cover
 the enchanted on-task formula `13 + floor(current Magic / 6)`.
 
-Magic Dart is not `verified`: production Slayer-task resolution is still a stub, so the enchanted
-on-task damage path cannot activate in live gameplay. Slayer's staff (e) charges are not stored,
-consumed on successful on-task hits or reverted at zero, and Turoth/Kurask weapon immunity is not
-implemented. The Slayer-level failure text, boost semantics, projectile profile, sound selection and
-exact audiovisual timing still need workspace RuneLite observation.
+Magic Dart resolves the live Slayer assignment, master, location, enchanted-staff charges and
+eligible target. The staff consumes its on-task charge and reverts on depletion. Turoths and
+Kurasks enforce their special weapon rules. Exact projectile timing and sound still need a client
+capture.
 
 Iban Blast is registered for NPC and player combat. Cache-aware integrations cover level 50 Magic,
 five fire/one death rune, both Iban staff variants, atomic staff/charge rejection, 30 base Magic XP,
@@ -89,10 +88,11 @@ five-tick cadence. Charges are stored once per player, shared between every regu
 staff they own, and consumed once per NPC cast or twice per PvP cast. Tome of Fire substitutes the
 five fire runes without adding its elemental fire damage modifier.
 
-Iban Blast is not `verified`: Underground Pass quest access, staff acquisition/upgrading, recharge
-services, charge-check operations and low-charge warnings are not implemented. The zero-charge and
-insufficient-PvP-charge messages need cutoff client evidence, while cast/impact sounds and exact
-audiovisual timing still require observation in the workspace RuneLite.
+Iban Blast checks Underground Pass varp 161 at stage 11. After the quest, Koftik replaces a lost
+staff with a broken one. The Dark Mage repairs, upgrades and recharges staves for the documented
+fees. The paladin well recharges both versions for free. Inventory and equipment Check report
+remaining charges, and low-charge casts report the remaining count. The quest story itself and the
+full route through Underground Pass are incomplete. [Iban Blast](https://oldschool.runescape.wiki/?oldid=14785260) · [Paladin well](https://oldschool.runescape.wiki/?oldid=14976094)
 
 Saradomin Strike, Claws of Guthix and Flames of Zamorak are registered for NPC and player combat.
 Cache-aware integrations cover their level 60 requirement, spell-specific rune and weapon gates,
@@ -104,11 +104,14 @@ fire and blood runes, grants 180 Magic XP, publishes a RuneLite-compatible seven
 has a one-minute recast cooldown. While active, a matching regular, imbued, locked/trouver or max
 god cape raises only its respective god spell's max hit from 20 to 30.
 
-The god family is not `verified`: the exact packed Mage Arena staff-claim and 100-cast unlock state,
-arena/world-region restrictions, Staff of the dead's 1-in-7 rune-saving effect, named sounds,
-messages, impact timing and logout persistence need cutoff evidence or workspace RuneLite capture.
-The current Charge prerequisite uses nonzero cache varp 267 as a documented temporary proxy for a
-previous god-staff claim; it must not be treated as an exact progression implementation.
+A level-60 member can enter through the Wilderness levers, challenge Kolodion through five
+forms, choose a statue cape and collect the matching first staff. Native varp 267 reaches 6, 7 and
+8 on those last three actions. Further god staffs cost 80,000 coins. Varp 268, 269 or 270 counts
+each paid cast, including a splash, on a battle mage in the arena. At 100 the corresponding spell
+works elsewhere. The Staff of the dead family saves the rune cost of one in seven eligible combat
+casts after validating its requirements. Server tests cover the final unlock and off-site cast,
+spell-specific counters, staff conservation and denied casts. Exact audio, timing and UI appearance
+still await a client capture. [Mage Arena I](https://oldschool.runescape.wiki/?oldid=14994825) · [Battle mages](https://oldschool.runescape.wiki/?oldid=14973934) · [Staff of the dead](https://oldschool.runescape.wiki/?oldid=14953074)
 
 Low and High Level Alchemy are registered as inventory-target utility spells. Cache-aware
 integrations cover their level 21/55 requirements, three/five fire plus one nature rune costs,
@@ -413,13 +416,16 @@ casting operations are catalogued separately rather than treating the menu entry
 1. Expand representative elemental outcome coverage across every tier and element, including
    damage-arrival timing, sounds, all staff/combo/substitute rune families, PvP targets and client
    observation.
-2. Finish Tome of Water page-removal, bank and client-presentation parity plus NPC stat-drain
-   exception primitives, then client-test all six stat-drain spells.
+2. Capture the client presentation of tome page removal and bank configuration, verify NPC
+   stat-drain exceptions, and client-test all six stat-drain spells.
 3. Complete the alternate-destination configuration menus and landing-area randomisation for the
    first ten self teleports, the production Wilderness updater and Tele Block's caster-death
    integration, then client-test timing, presentation and messages.
-4. Audit Crumble Undead's production NPC classification, complete Magic Dart's Slayer integrations
-   and Iban-staff lifecycle, then complete the Mage Arena progression, audio and persistence layers
-   around the implemented god-spell/Charge core.
+4. Audit Crumble Undead's production NPC classification and capture staff recharge, Slayer Dart and
+   Mage Arena spell animations, sounds and saved state across a real client login.
 5. Finish jewellery-enchantment, bolt-enchantment, orb-charging and Monster Inspect client/data
    integration, then continue the remaining non-Standard spellbooks.
+
+### Elemental tome charges
+
+A matching page supplies 20 charges, up to 20,000. The inventory and worn Pages menus load pages or return complete unused pages. Each bank has a saved withdrawal target per tome. A tome with fewer charges takes enough whole pages to meet that target, subject to bank stock. A tome already at or above target consumes nothing. Searing fire pages use a distinct per-item flag and cannot mix with burnt pages. Their minimum hit is calculated before the fire tome's damage bonus. Eligible casts capture their tome effect before the last charge reverts the worn item. Fire and earth tomes exempt other spells that happen to require those runes, including Iban Blast. [Tome of fire](https://oldschool.runescape.wiki/?oldid=14964731) · [Tome of earth](https://oldschool.runescape.wiki/?oldid=14963973) · [Tome of water](https://oldschool.runescape.wiki/?oldid=14898660)

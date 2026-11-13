@@ -121,6 +121,18 @@ public class ClueInventory @Inject constructor(objTypes: ObjTypeList, invTypes: 
                 .toSet()
         }
 
+    private val scrollIds = ClueTier.entries.associateWith { tier ->
+        objTypes.values.asSequence().filter {
+            it.name.equals("Clue scroll (${tier.key})", ignoreCase = true) &&
+                !it.internalName.orEmpty().startsWith("placeholder_")
+        }.map { it.id }.toSet()
+    }
+
+    public fun ownsScroll(player: Player, tier: ClueTier): Boolean {
+        val scrolls = scrollIds.getValue(tier)
+        return player.inv.any { it?.id in scrolls } || player.invMap[bankType]?.any { it?.id in scrolls } == true
+    }
+
     public fun state(
         player: Player,
         inventory: Inventory,

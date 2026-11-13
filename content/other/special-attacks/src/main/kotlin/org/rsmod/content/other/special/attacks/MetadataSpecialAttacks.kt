@@ -12,6 +12,7 @@ import org.rsmod.api.config.refs.seqs
 import org.rsmod.api.config.refs.stats
 import org.rsmod.api.config.refs.varbits
 import org.rsmod.api.config.refs.varps
+import org.rsmod.api.player.events.PlayerCombatEvents
 import org.rsmod.api.player.magic.StaffOfTheDeadStateRepository
 import org.rsmod.api.player.output.UpdateRun
 import org.rsmod.api.player.protect.ProtectedAccess
@@ -450,6 +451,7 @@ constructor(
                 )
             }
             manager.giveCombatXp(this, target, attack, totalDamage)
+            if (effect == "Chainhit" && target is Npc) publish(PlayerCombatEvents.Chainhit(player, target))
             if (effect == "Toxic Siphon") {
                 player.statHeal(stats.hitpoints, totalDamage / 2, percent = 0)
             }

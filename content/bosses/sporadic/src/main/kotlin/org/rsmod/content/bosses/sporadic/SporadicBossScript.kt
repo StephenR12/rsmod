@@ -43,25 +43,29 @@ constructor(
                 if (hit.isFromPlayer) controller.onBossDamaged(npc, definition)
             }
         }
-        minionTypes.forEach { type ->
+        onModifyNpcHit(SporadicBossNpcs.hesporiFlower) {
+            if (hit.isFromPlayer) hit.damage = npc.hitpoints
+        }
+        minionTypes.filterNot { it == SporadicBossNpcs.hesporiFlower }.forEach { type ->
             onAiOpPlayer2(type) { minionAttack(this, it.target, type) }
             onAiApPlayer2(type) { minionAttack(this, it.target, type) }
         }
         onEvent<NpcKillEvents.Credited> { controller.onMinionKilled(npc) }
         onEvent<NpcStateEvents.Respawn> {
             SporadicBosses.byId[npc.id]?.let { definition ->
-                configure(npc, definition)
+                controller.configure(npc, definition)
                 controller.reset(npc)
             }
         }
         SporadicBosses.definitions.forEach { definition ->
+            if (definition.family == SporadicBossFamily.Hespori) return@forEach
             val existing = npcs.findAll(definition.spawn).firstOrNull { it.id == definition.npc.id }
             val boss =
                 existing
                     ?: Npc(npcTypes[definition.npc], definition.spawn).also {
                         npcs.add(it, Int.MAX_VALUE)
                     }
-            configure(boss, definition)
+            controller.configure(boss, definition)
             controller.reset(boss)
         }
     }
@@ -144,26 +148,6 @@ constructor(
                 HitType.Typeless -> true
             }
         return if (accurate) random.of(0..maxHit) else 0
-    }
-
-    private fun configure(npc: Npc, definition: SporadicBossDefinition) {
-        npc.apply {
-            hitpoints = definition.hitpoints
-            baseHitpointsLvl = definition.hitpoints
-            attackLvl = definition.attack
-            baseAttackLvl = definition.attack
-            strengthLvl = definition.strength
-            baseStrengthLvl = definition.strength
-            defenceLvl = definition.defence
-            baseDefenceLvl = definition.defence
-            magicLvl = definition.magic
-            baseMagicLvl = definition.magic
-            rangedLvl = definition.ranged
-            baseRangedLvl = definition.ranged
-            mode = NpcMode.Wander
-            setHunt(18)
-            setHuntMode(huntmodes.constant_ranged)
-        }
     }
 
     public companion object {

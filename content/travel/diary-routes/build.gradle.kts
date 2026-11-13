@@ -1,0 +1,30 @@
+plugins {
+    id("base-conventions")
+    id("integration-test-suite")
+}
+
+dependencies {
+    integrationImplementation(projects.content.skills.combatTraining)
+    integrationImplementation(projects.api.hitPlugin)
+    integrationImplementation(projects.api.death)
+    implementation(projects.api.death)
+    implementation(libs.rsprot.api)
+    implementation(projects.content.skills.woodcutting)
+    implementation(projects.content.skills.mining)
+    implementation(projects.content.skills.firemaking)
+    implementation(projects.api.pluginCommons)
+    implementation(projects.api.shops)
+    integrationImplementation(projects.api.shops)
+    implementation(projects.api.realm)
+    implementation(projects.api.utils.utilsTime)
+    implementation(projects.content.skills.magic.spellUtility)
+    integrationImplementation(projects.content.skills.magic.spellUtility)
+    integrationImplementation(libs.openrs2.buffer)
+    integrationImplementation(libs.openrs2.cache)
+    integrationImplementation(projects.api.gameProcess)
+    integrationImplementation(projects.api.cache)
+    integrationImplementation(projects.api.spells)
+    integrationImplementation(projects.api.spellsRunes)
+    implementation(projects.api.invtx)
+    implementation(projects.content.skills.prayer.remains)
+}

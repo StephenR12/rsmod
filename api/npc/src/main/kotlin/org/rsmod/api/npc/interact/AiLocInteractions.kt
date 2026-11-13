@@ -8,19 +8,23 @@ import org.rsmod.api.npc.events.interact.AiLocUnimplementedEvents
 import org.rsmod.api.npc.events.interact.ApEvent
 import org.rsmod.api.npc.events.interact.OpEvent
 import org.rsmod.api.route.BoundValidator
+import org.rsmod.api.route.RouteFactory
 import org.rsmod.events.EventBus
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.interact.InteractionLocOp
 import org.rsmod.game.interact.InteractionOp
 import org.rsmod.game.loc.BoundLocInfo
+import org.rsmod.game.movement.RouteRequestLoc
 import org.rsmod.game.type.loc.LocTypeList
 import org.rsmod.game.type.loc.UnpackedLocType
+import org.rsmod.map.CoordGrid
 
 public class AiLocInteractions
 @Inject
 constructor(
     private val locTypes: LocTypeList,
     private val boundValidator: BoundValidator,
+    private val routes: RouteFactory,
     private val eventBus: EventBus,
 ) {
     public fun interactOp(
@@ -34,7 +38,22 @@ constructor(
             InteractionLocOp(target = loc, op = op, hasOpTrigger = opTrigger, hasApTrigger = false)
         npc.interaction = interaction
         if (!npc.isWithinOpRange(loc)) {
-            npc.walk(loc.coords)
+            // Scenery may only be reached from one face. Moving straight to its solid origin
+            // leaves an NPC stalled against the blocked side instead of walking around it.
+            val collision = npc.collisionStrategy ?: return
+            val request =
+                RouteRequestLoc(
+                    loc.coords,
+                    type.width,
+                    type.length,
+                    loc.shapeId,
+                    loc.angleId,
+                    type.forceApproachFlags,
+                )
+            val route = routes.create(npc.avatar, request, collision)
+            npc.abortRoute()
+            npc.moveSpeed = npc.defaultMoveSpeed
+            for (step in route) npc.routeDestination.add(CoordGrid(step.x, step.z, step.level))
         }
     }
 
