@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
     implementation(projects.api.clue)
+    implementation(projects.api.shops)
+    implementation(projects.api.spellsRunes)
     implementation(projects.api.pluginCommons)
     implementation(projects.content.interfaces.bank)
     implementation(projects.content.skills.thieving)

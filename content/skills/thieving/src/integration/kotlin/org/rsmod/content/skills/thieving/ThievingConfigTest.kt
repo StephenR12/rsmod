@@ -51,7 +51,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`ham member source boundary identities and outputs match cache 233`() =
+    fun GameTestState.`ham member source boundary identities and outputs match cache 238`() =
         runBasicGameTest {
             assertEquals(setOf(2540, 2541), ThievingNpcs.hamMembers.mapTo(hashSetOf()) { it.id })
             for (npc in ThievingNpcs.hamMembers) {
@@ -162,7 +162,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`ham storeroom guard source boundary matches cache 233`() = runBasicGameTest {
+    fun GameTestState.`ham storeroom guard source boundary matches cache 238`() = runBasicGameTest {
         assertEquals(
             setOf(4522, 4523, 4524, 4525, 4526),
             ThievingNpcs.hamStoreroomGuards.mapTo(hashSetOf()) { it.id },
@@ -204,7 +204,7 @@ class ThievingConfigTest {
         for (key in keys) {
             val type = cacheTypes.objs[key]
             assertFalse(type.isStackable, "obj=${key.id}")
-            assertTrue(type.tradeable, "obj=${key.id}")
+            assertFalse(type.tradeable, "obj=${key.id}")
             assertFalse(type.stockmarket, "obj=${key.id}")
             assertTrue(type.hasPlaceholder, "obj=${key.id}")
         }
@@ -213,7 +213,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`ham storeroom chest source boundary matches cache 233`() =
+    fun GameTestState.`ham storeroom chest source boundary matches cache 238`() =
         runAdvancedGameTest { advanced ->
             val closed =
                 listOf(
@@ -327,7 +327,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`ham storeroom door source boundary matches cache 233`() =
+    fun GameTestState.`ham storeroom door source boundary matches cache 238`() =
         runAdvancedGameTest { advanced ->
             val door = cacheTypes.locs[ThievingLocs.hamLockedDoor]
             assertEquals(15759, door.id)
@@ -354,7 +354,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`wealthy citizen source boundary matches cache 233`() = runBasicGameTest {
+    fun GameTestState.`wealthy citizen source boundary matches cache 238`() = runBasicGameTest {
         assertEquals(
             setOf(13302, 13303, 13304, 13305),
             ThievingNpcs.wealthyCitizens.mapTo(hashSetOf()) { it.id },
@@ -392,7 +392,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`pollnivneach bandit source boundary matches cache 233`() = runBasicGameTest {
+    fun GameTestState.`pollnivneach bandit source boundary matches cache 238`() = runBasicGameTest {
         assertEquals(setOf(734, 735), ThievingNpcs.pollnivneachBandits.mapTo(hashSetOf()) { it.id })
         assertEquals(
             setOf(736, 737),
@@ -437,7 +437,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`historical farmer family and weighted table match cache 233`() =
+    fun GameTestState.`historical farmer family and weighted table match cache 238`() =
         runBasicGameTest {
             val expectedFarmers =
                 setOf(
@@ -487,7 +487,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`rogue outfit references match cache 233`() = runBasicGameTest {
+    fun GameTestState.`rogue outfit references match cache 238`() = runBasicGameTest {
         assertEquals(5553, ThievingObjs.rogueTop.id)
         assertEquals(5554, ThievingObjs.rogueMask.id)
         assertEquals(5555, ThievingObjs.rogueTrousers.id)
@@ -496,7 +496,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`historical warrior family and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`historical warrior family and pouch match cache 238`() = runBasicGameTest {
         val expectedWarriors = setOf(3260, 3292, 11925, 11926, 11927, 11928, 11929)
         assertEquals(
             expectedWarriors,
@@ -518,7 +518,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`historical rogue table and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`historical rogue table and pouch match cache 238`() = runBasicGameTest {
         assertEquals(setOf(526), StandardPickpockets.rogue.npcs.mapTo(hashSetOf()) { it.id })
         assertEquals("Pickpocket", cacheTypes.npcs[ThievingNpcs.rogue].op[2])
         assertFalse("Pickpocket" in cacheTypes.npcs[ThievingNpcs.wildernessRogue].op)
@@ -548,7 +548,7 @@ class ThievingConfigTest {
 
     @Test
     fun GameTestState
-        .`ordinary guard family excludes ham storeroom guards and matches cache 233`() =
+        .`ordinary guard family excludes ham storeroom guards and matches cache 238`() =
         runBasicGameTest {
             val expectedGuards = buildSet {
                 addAll(397..400)
@@ -590,7 +590,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`knight families and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`knight families and pouch match cache 238`() = runBasicGameTest {
         val expectedArdougne = setOf(3297, 3300, 8854, 11902, 11936)
         val expectedVarlamore = (13114..13119).toSet()
         assertEquals(
@@ -628,7 +628,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`watchman bundle and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`watchman bundle and pouch match cache 238`() = runBasicGameTest {
         assertEquals(setOf(5420), StandardPickpockets.watchman.npcs.mapTo(hashSetOf()) { it.id })
         assertEquals("Pickpocket", cacheTypes.npcs[ThievingNpcs.watchman].op[2])
         assertEquals(65, StandardPickpockets.watchman.level)
@@ -654,7 +654,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`menaphite thug quest forms and ordinary pouch match cache 233`() =
+    fun GameTestState.`menaphite thug quest forms and ordinary pouch match cache 238`() =
         runBasicGameTest {
             assertEquals(
                 setOf(3549, 3550),
@@ -699,7 +699,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`paladin family bundle and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`paladin family bundle and pouch match cache 238`() = runBasicGameTest {
         val expected = setOf(3293, 3294, 8853, 11901, 11930, 11931, 11932, 11933)
         assertEquals(expected, StandardPickpockets.paladin.npcs.mapTo(hashSetOf()) { it.id })
         for (npc in StandardPickpockets.paladin.npcs) {
@@ -728,7 +728,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`desert bandit family table and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`desert bandit family table and pouch match cache 238`() = runBasicGameTest {
         assertEquals(
             setOf(690, 695),
             StandardPickpockets.desertBandit.npcs.mapTo(hashSetOf()) { it.id },
@@ -767,7 +767,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`hero family weighted table and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`hero family weighted table and pouch match cache 238`() = runBasicGameTest {
         assertEquals(
             setOf(3295, 11934, 11935),
             StandardPickpockets.hero.npcs.mapTo(hashSetOf()) { it.id },
@@ -811,7 +811,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`gnome family weighted table and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`gnome family weighted table and pouch match cache 238`() = runBasicGameTest {
         assertEquals(
             setOf(6094, 6095, 6096),
             StandardPickpockets.gnome.npcs.mapTo(hashSetOf()) { it.id },
@@ -864,7 +864,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`Lletya elf family and cache exclusions match cache 233`() =
+    fun GameTestState.`Lletya elf family and cache exclusions match cache 238`() =
         runBasicGameTest {
             val expected = setOf(5297, 5299, 5300, 9015)
             assertEquals(expected, StandardPickpockets.lletyaElf.npcs.mapTo(hashSetOf()) { it.id })
@@ -916,7 +916,7 @@ class ThievingConfigTest {
         }
 
     @Test
-    fun GameTestState.`Prifddinas elf source boundary matches cache 233`() = runBasicGameTest {
+    fun GameTestState.`Prifddinas elf source boundary matches cache 238`() = runBasicGameTest {
         val expected = (9054..9090).toSet() + (9106..9117).toSet()
         assertEquals(49, expected.size)
         assertEquals(expected, ThievingNpcs.prifddinasElves.mapTo(hashSetOf()) { it.id })
@@ -948,7 +948,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`Vyre family weighted table and pouch match cache 233`() = runBasicGameTest {
+    fun GameTestState.`Vyre family weighted table and pouch match cache 238`() = runBasicGameTest {
         val expected = (9685..9714).toSet()
         assertEquals(expected, StandardPickpockets.vyre.npcs.mapTo(hashSetOf()) { it.id })
         for (npc in StandardPickpockets.vyre.npcs) {
@@ -991,7 +991,7 @@ class ThievingConfigTest {
     }
 
     @Test
-    fun GameTestState.`citizen pouch and feedback assets match cache 233`() = runBasicGameTest {
+    fun GameTestState.`citizen pouch and feedback assets match cache 238`() = runBasicGameTest {
         val pouch = cacheTypes.objs[ThievingObjs.citizenPouch]
         assertEquals(22521, pouch.id)
         assertEquals("Coin pouch", pouch.name)

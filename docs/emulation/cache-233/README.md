@@ -1,5 +1,7 @@
 # Cache 233 parity programme
 
+> The active world now targets [revision 238 for Demonic Pacts](../cache-238/README.md). This report records the earlier cache-233 checkpoint.
+
 This directory is the durable record for production-game parity with OSRS cache 233.4 (1 October
 2025). The records deliberately separate cache identity from gameplay claims: cache definitions
 show what the client contains, while dated Wiki and official sources establish server behaviour.

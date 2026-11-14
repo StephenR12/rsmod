@@ -8,7 +8,8 @@ import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.openrs2.buffer.use
 import org.openrs2.cache.Cache
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.map.GameMapDecoder
 import org.rsmod.api.cache.map.npc.MapNpcListDecoder
 import org.rsmod.api.cache.util.toInlineBuf
@@ -86,9 +87,8 @@ class SlayerDungeonTest {
                 )
             Cache.open(Path.of(".data/cache/game")).use { cache ->
                 for ((x, z) in squares) {
-                    val name = "n${x}_$z"
                     val group =
-                        cache.read(Js5Archives.MAPS, name, 0).use {
+                        MapArchive(cache).read(MapSquareKey(x, z), MapFile.Npcs)!!.use {
                             MapNpcListDecoder.decode(it.toInlineBuf())
                         }
                     GameMapDecoder.putNpcs(world.repo, npcTypes, MapSquareKey(x, z), group)
@@ -188,17 +188,14 @@ class SlayerDungeonTest {
                 val builder = org.rsmod.api.cache.map.GameMapBuilder()
                 for ((x, z) in squares) {
                     val square = MapSquareKey(x, z)
-                    val group = "${x}_$z"
                     val map =
-                        cache.read(Js5Archives.MAPS, "m$group", 0).use {
+                        MapArchive(cache).read(square, MapFile.Terrain)!!.use {
                             org.rsmod.api.cache.map.tile.MapTileDecoder.decode(it.toInlineBuf())
                         }
                     val key =
-                        org.openrs2.crypto.SymmetricKey.fromIntArray(
-                            xteaRepository.getValue(square)
-                        )
+                        xteaRepository[square]?.let(org.openrs2.crypto.SymmetricKey::fromIntArray) ?: org.openrs2.crypto.SymmetricKey.ZERO
                     val locs =
-                        cache.read(Js5Archives.MAPS, "l$group", 0, key).use {
+                        MapArchive(cache).read(square, MapFile.Locations, key)!!.use {
                             org.rsmod.api.cache.map.loc.MapLocListDecoder.decode(it.toInlineBuf())
                         }
                     GameMapDecoder.putMaps(terrain, square, map)

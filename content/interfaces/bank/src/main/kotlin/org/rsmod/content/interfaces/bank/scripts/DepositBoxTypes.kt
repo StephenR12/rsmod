@@ -12,7 +12,7 @@ internal object DepositBoxComponents : ComponentReferences() {
     val backpack=find("bank_depositbox:deposit_inv")
     val worn=find("bank_depositbox:deposit_worn")
     val looting=find("bank_depositbox:deposit_lootingbag")
-    val settings=find("bank_depositbox:menu")
+    val settings=find("bank_depositbox:lock_menu")
     val quantities=listOf("1","5","10","x","all").map { find("bank_depositbox:$it") }
 }
 internal object DepositBoxVars : VarpReferences() { val locked=find("bank_locked_slots") }

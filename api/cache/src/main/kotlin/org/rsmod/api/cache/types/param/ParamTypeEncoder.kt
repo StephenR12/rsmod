@@ -52,10 +52,15 @@ public object ParamTypeEncoder {
 
     public fun encodeJs5(type: UnpackedParamType<*>, data: ByteBuf): Unit =
         with(type) {
-            typeLiteral?.let {
-                data.writeByte(1)
-                data.writeByte(it.char.code)
-            }
+            val numericType = typeId
+            if (numericType != null) {
+                data.writeByte(8).writeByte(numericType)
+            } else
+                typeLiteral?.let {
+                    data.writeByte(1)
+                    data.writeByte(it.char.code)
+                }
+            defaultLong?.let { data.writeByte(7).writeLong(it) }
             defaultInt?.let {
                 data.writeByte(2)
                 data.writeInt(it)

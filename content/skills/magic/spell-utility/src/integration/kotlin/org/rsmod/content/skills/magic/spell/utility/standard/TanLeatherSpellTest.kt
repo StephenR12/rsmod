@@ -50,7 +50,7 @@ import org.rsmod.game.type.varbit.VarBitTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class TanLeatherSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins Tan Leather spell recipes unlock and presentation`() =
+    fun GameTestState.`cache 238 pins Tan Leather spell recipes unlock and presentation`() =
         runTanLeatherTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_tan_leather))
             assertEquals(1741, spell.obj.id)
@@ -63,7 +63,7 @@ class TanLeatherSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_tan_leather.id ushr 16)
-            assertEquals(122, components.magic_spellbook_tan_leather.id and 0xFFFF)
+            assertEquals(127, components.magic_spellbook_tan_leather.id and 0xFFFF)
             assertEquals(
                 listOf("Cast", "Setup"),
                 deps.components[components.magic_spellbook_tan_leather].op.toList(),

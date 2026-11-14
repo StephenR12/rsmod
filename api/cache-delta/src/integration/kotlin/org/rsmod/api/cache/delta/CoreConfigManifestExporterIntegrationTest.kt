@@ -7,21 +7,21 @@ import org.junit.jupiter.api.Test
 
 class CoreConfigManifestExporterIntegrationTest {
     @Test
-    fun `cache 233 core definitions export with typed symbols and interaction contracts`() {
+    fun `cache 238 core definitions export with typed symbols and interaction contracts`() {
         val manifest =
             CoreConfigManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/vanilla"),
                 symbolDirectory = Path.of(".data/symbols"),
-                revision = "233.4",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
 
         assertEquals(
-            mapOf("locations" to 57_724, "npcs" to 14_799, "objects" to 31_172),
+            mapOf("locations" to 60_710, "npcs" to 15_712, "objects" to 33_372),
             manifest.entries.groupingBy(CacheManifestEntry::domain).eachCount().toSortedMap(),
         )
-        assertEquals(103_695, manifest.entries.size)
+        assertEquals(109_794, manifest.entries.size)
         assertEquals(
             manifest.entries.size,
             manifest.entries.map { it.domain to it.key }.toSet().size,

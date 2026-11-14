@@ -26,7 +26,7 @@ class CharterTravelTest {
             fun sail() {
                 player.opNpc4(crew)
                 advance(2)
-                player.ifButton(cacheTypes.components.getValue((72 shl 16) or 21))
+                player.ifButton(cacheTypes.components.getValue((72 shl 16) or 3), comsub = 3)
                 advance(2)
             }
             sail()

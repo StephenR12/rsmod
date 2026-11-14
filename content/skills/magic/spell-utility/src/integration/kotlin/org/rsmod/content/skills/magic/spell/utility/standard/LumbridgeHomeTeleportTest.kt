@@ -29,10 +29,10 @@ class HomeTeleportTest {
     @Test
     fun GameTestState.`cache contract defines the default Home Teleport channel and timer`() =
         runHomeTeleportTest { deps ->
-            assertEquals(7, components.magic_spellbook_home_teleport.id and 0xFFFF)
-            assertEquals(103, components.magic_spellbook_ancient_home_teleport.id and 0xFFFF)
-            assertEquals(104, components.magic_spellbook_lunar_home_teleport.id and 0xFFFF)
-            assertEquals(148, components.magic_spellbook_arceuus_home_teleport.id and 0xFFFF)
+            assertEquals(6, components.magic_spellbook_home_teleport.id and 0xFFFF)
+            assertEquals(108, components.magic_spellbook_ancient_home_teleport.id and 0xFFFF)
+            assertEquals(109, components.magic_spellbook_lunar_home_teleport.id and 0xFFFF)
+            assertEquals(153, components.magic_spellbook_arceuus_home_teleport.id and 0xFFFF)
             assertEquals(4847, seqs.aide_drawing_chalk_circle.id)
             assertEquals(4850, seqs.aide_sitting_down_crosslegged.id)
             assertEquals(4853, seqs.aide_player_getting_book.id)

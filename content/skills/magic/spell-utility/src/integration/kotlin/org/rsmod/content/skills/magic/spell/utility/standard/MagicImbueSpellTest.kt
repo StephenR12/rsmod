@@ -58,7 +58,7 @@ class MagicImbueSpellTest {
                 mapOf(objs.astral_rune to 2, objs.fire_rune to 7, objs.water_rune to 7),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(128, components.magic_spellbook_magic_imbue.id and 0xFFFF)
+            assertEquals(133, components.magic_spellbook_magic_imbue.id and 0xFFFF)
             assertEquals(8970, seqs.human_cast_selfimbue.id)
             assertEquals(2888, synths.lunar_embue_runes.id)
 

@@ -1,0 +1,42 @@
+# OSRS Wiki revisions as of 2026-06-10 (oldid per row), CC BY-NC-SA 3.0. Module:StoreLine uses item cost when sell is omitted.
+# shop	members	currency object	owners (symbol:slot)	item:quantity:price	Wiki oldid
+Atlazora's Rest	true	coins	fortis_bartender_2:3	beer:1:2,cider:1:2,sunbeam_ale:1:8,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,moonlite:1:15,jug_wine:1:1,stew:1:20,meat_pie:1:15	14991812
+Auburn Pub	true	coins	auburn_bartender:3	beer:1:2,cider:1:2,sunbeam_ale:1:8,axemans_folly:1:2,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,moonlite:1:15,jug_wine:1:1,stew:1:20,meat_pie:1:15	15137280
+Deepfin Inn	true	coins	deepfin_dwarf_brikka:3	beer:1:2,cider:1:2,dwarven_stout:1:2,vodka:1:5,whisky:1:5,jug_wine:1:1,stew:1:20,meat_pie:1:15,kebab:1:3	15209788
+Hair of the Dog	true	coins	werewolfinnkeeper:3	moonlight_mead:1:5,fenk_brain:1:50	15227324
+Nemus Retreat (pub)	true	coins	nemus_retreat_bartender:3	beer:1:2,cider:1:2,sunbeam_ale:1:8,axemans_folly:1:2,greenmans_ale:1:2,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,stew:1:20	15139896
+Stick Your Ore Inn	true	coins	pub_mistrock:3	beer:1:2,cider:1:2,dwarven_stout:1:2,wizards_mind_bomb:1:2,steamforge_brew:1:8,whisky:1:5,sunshine:1:100,jug_wine:1:1,stew:1:20,meat_pie:1:15	15103028
+Sunlight's Sanctum	true	coins	aldarin_bartender:3	beer:1:2,cider:1:2,sunbeam_ale:1:8,greenmans_ale:1:2,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,brandy:1:5,moonlite:1:15,jug_wine:1:1,metztonalli_white:1:500,blackbird_red:1:300,eclipse_wine:1:1000,cup_of_tea:1:10,stew:1:20,meat_pie:1:15	15209759
+The Flaming Arrow	true	coins	fortis_bartender_1:3	beer:1:2,cider:1:2,sunbeam_ale:1:8,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,moonlite:1:15,jug_wine:1:1,metztonalli_white:1:500,blackbird_red:1:300,eclipse_wine:1:1000,cup_of_tea:1:10,stew:1:20,meat_pie:1:15	14991716
+The King's Inn	true	coins	scrambled_king:3	beer:1:2,cider:1:2,sunbeam_ale:1:8,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,moonlite:1:15,jug_wine:1:1,metztonalli_white:1:500,blackbird_red:1:300,eclipse_wine:1:1000,cup_of_tea:1:10,stew:1:20,meat_pie:1:15	15137257
+The Lost Pickaxe	true	coins	cam_torum_bartender:3	beer:1:2,cider:1:2,dwarven_stout:1:2,wizards_mind_bomb:1:2,steamforge_brew:1:8,whisky:1:5,sunshine:1:100,jug_wine:1:1,stew:1:20,meat_pie:1:15	15166908
+The Pandemonium (pub)	true	coins	steve_beanie_1op:1,steve_beanie_2ops:3	beer:1:2,cider:1:2,grog:1:3,barnacle_blaster:1:20,kraken_colada:1:20,whirlpool_surprise:1:300,sailors_mirage:1:20,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,jug_wine:1:1,stew:1:20,meat_pie:1:15	15209766
+The Rolling Tide	true	coins	port_roberts_bartender:3	beer:1:2,cider:1:2,grog:1:3,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,stew:1:20,meat_pie:1:15	15209784
+The Windbreaker	true	coins	quetzacalli_bartender:3	beer:1:2,cider:1:2,sunbeam_ale:1:8,vodka:1:5,rum:1:5,whisky:1:5,gin:1:5,moonlite:1:15,jug_wine:1:1,stew:1:20,meat_pie:1:15	15103214
+Blue Moon Inn	false	coins	bluemoon_bartender:1	beer:1:2	15083723
+Dancing Donkey Inn	false	coins	donkey_bartender:1	beer:1:2	15130142
+Dead Man's Chest	true	coins	deadmans_bartender:1	grog:1:3,karamja_rum:1:27	15131906
+Dragon Inn	true	coins	dragon_bartender:1	dragon_bitter:1:2,greenmans_ale:1:10,beer:1:2	15022515
+Falador Party Room	false	coins	partyroom_barmaid2:1,partyroom_barmaid:1	beer:1:2	15132596
+Fight Arena Bar	true	coins	khazard_barman:1	beer:1:2,khali_brew:1:5	14992428
+Flying Horse Inn	true	coins	flyinghorse_bartender:1	beer:1:2	14991976
+Forester's Arms	true	coins	foresters_bartender:1	beer:1:2,meat_pie:1:16,stew:1:20	14992418
+Hefin Inn	true	coins	prif_bartender:1	beer:1:2,cider:1:2,stew:1:20,prif_elven_dawn:1:6	14991679
+Jolly Boar Inn	false	coins	jollyboar_bartender:1	beer:1:2	15097338
+King's Axe Inn	true	coins	dwarf_city_barman_rich:1	beer:1:1,dwarven_stout:1:2,jug_wine:1:10	14991981
+Kjut's Kebabs	true	coins	dwarf_city_dwarf_man8:1	kebab:1:1	14770961
+Laughing Miner Pub	true	coins	dwarf_city_barmaid_poor:1	beer:1:2,stew:1:20	14991968
+Rat & Bat	true	coins	slepe_bartender_carl:1,slepe_bartender_roy:1	slepe_bloody_bracer:1:99	14992276
+Ratpit bar (Keldagrim)	true	coins	vc_dwarf_rich1:1	beer:1:2,stew:1:20	14991985
+Ratpit bar (Port Sarim)	true	coins	vc_gambler_rich3:1	beer:1:2,stew:1:20	14992448
+Ratpit bar (Varrock)	true	coins	vc_gambler_rich3:1	beer:1:2,stew:1:20	14992008
+Rising Sun Inn	false	coins	risingsun_barmaid2:1,risingsun_barmaid3:1,risingsun_barmaid:1	asgarnian_ale:1:3,wizards_mind_bomb:1:3,dwarven_stout:1:3	14997364
+Rusty Anchor Inn	false	coins	rustyanchor_bartender:1	beer:1:2	15064080
+The Burrow	true	coins	hg_gilman:1	trappers_tipple:1:3,stew:1:20	15169280
+The Legless Faun	true	coins	kourend_entrance_bartender:1	beer:1:4	14991959
+The Old Nite	false	coins	wildy_hub_pub_owner:1	beer:1:2	14991703
+The Sheared Ram	false	coins	ram_bartender:1	beer:1:2	14992191
+Ranging Guild Ticket Exchange	true	archery_ticket	ranging_guild_ticket_exchange:1	barbed_bolttips:30:140,studded_body:1:150,rune_arrow:50:2000,coif:1:100,dragonhide_body:1:2400,adamant_javelin:20:2000	14771047
+The Green Ghost	true	ectotoken	metarialus:1	ale_yeast:1:5	15023226
+Paramaya Inn	true	coins	shiloinnowner:1	jug_wine:1:1,beer:1:2,paramayaticket:1:35,paramayaticket:5:175	15223485
+The Crypt	true	coins	darkm_trader_pub:1	blood_pint:1:2	14992266

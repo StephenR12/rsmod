@@ -38,7 +38,7 @@ class SpinningTest {
                     "${it.name}:${it.level}:${it.inputs.first().id}:${it.output.id}:${it.xp}:${it.members}"
                 },
             )
-            assertEquals(894, seqs.human_spinningwheel.id)
+            assertEquals(13138, seqs.human_spinningwheel.id)
             assertEquals(11, spinning_locs.all.size)
         }
 
@@ -74,7 +74,7 @@ class SpinningTest {
             )
             val events =
                 client.filterIsInstance<IfSetEventsV2>().filter {
-                    it.interfaceId == 270 && it.componentId in 14..18
+                    it.interfaceId == 270 && it.componentId in 15..19
                 }
             assertEquals(5, events.size)
             assertTrue(events.all { it.start == 1 && it.end == 2 })

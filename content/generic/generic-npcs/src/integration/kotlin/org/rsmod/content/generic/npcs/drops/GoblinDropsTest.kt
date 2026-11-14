@@ -186,7 +186,7 @@ class GoblinDropsTest {
                     objs.goblin_skull.id,
                     objs.ensouled_goblin_head_initial.id,
                     objs.clue_scroll_beginner.id,
-                    30_928,
+                    31_268,
                     objs.goblin_champion_scroll.id,
                 ),
                 result.drops.map { it.obj.id },

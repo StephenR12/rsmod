@@ -10,6 +10,7 @@ public object CookingLocs : LocReferences() {
     public val fire = find("fire")
     public val campfires = listOf("forestry_fire", "forestry_fire_red", "forestry_fire_green", "forestry_fire_blue", "forestry_fire_white", "forestry_fire_purple").map { find(it) }
     public val permanentCookFire = find("fire_cook")
+    public val permanentCookFires = listOf(permanentCookFire, find("tempoross_lobby_fire"))
     public val ogreSpitRoast = find("multi_chompybird_spitroast_entity")
     public val ogreSpitRoastEmpty = find("chompybird_spitroast_empty")
     public val ogreSpitRoastRawChompy = find("chompybird_spitroast")
@@ -76,6 +77,10 @@ public object CookingLocs : LocReferences() {
             find("luc2_mov_kitchen_range"),
             find("furnace_clay01_twilight"),
             find("stove_clay01_talkasti01"),
+            find("stove_clay01_talkasti01_noop"),
+            find("pandemonium_cooking_pot"),
+            find("amenity_cooking_pot_built"),
+            find("sailing_facility_range"),
         )
 
     /** Player-owned-house fancy ranges expose `Cook` as their second operation. */
@@ -89,7 +94,7 @@ public object CookingLocs : LocReferences() {
     public val allCookOperationSources =
         standardRangesOp1 +
             standardRangesOp2 +
-            listOf(lumbridgeRange, hosidiusRange, hosidiusRange2, permanentCookFire)
+            listOf(lumbridgeRange, hosidiusRange, hosidiusRange2) + permanentCookFires
 
     public val allFoodUseSources = allCookOperationSources + fire + campfires + houseFireStoves + houseRangeStoves
 }

@@ -13,12 +13,12 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
         val manifest =
             CacheArchiveIndexManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/vanilla"),
-                revision = "233.4",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
 
-        assertEquals(116_016, manifest.entries.size)
+        assertEquals(114_198, manifest.entries.size)
         assertEquals(
             manifest.entries.size,
             manifest.entries.map { it.domain to it.key }.toSet().size,
@@ -33,42 +33,42 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
             manifest.entries.groupingBy { it.attributes.getValue("archiveId") }.eachCount()
         assertEquals(
             mapOf(
-                "0" to 9_596,
-                "1" to 2_464,
-                "2" to 37,
-                "3" to 925,
-                "4" to 10_749,
-                "5" to 14_437,
-                "6" to 830,
-                "7" to 57_380,
-                "8" to 6_415,
+                "0" to 10_676,
+                "1" to 2_631,
+                "2" to 40,
+                "3" to 957,
+                "4" to 11_533,
+                "5" to 2_871,
+                "6" to 861,
+                "7" to 60_484,
+                "8" to 8_357,
                 "9" to 1,
                 "10" to 4,
-                "11" to 311,
-                "12" to 8_093,
+                "11" to 314,
+                "12" to 9_534,
                 "13" to 21,
-                "14" to 501,
-                "15" to 155,
-                "17" to 1,
-                "18" to 1_666,
-                "19" to 49,
-                "20" to 1_666,
-                "21" to 72,
-                "22" to 629,
+                "14" to 566,
+                "15" to 179,
+                "17" to 2,
+                "18" to 2_077,
+                "19" to 54,
+                "20" to 2_077,
+                "21" to 156,
+                "22" to 789,
                 "24" to 14,
             ),
             archives,
         )
         assertEquals(
-            640_720,
+            712_944,
             manifest.entries.sumOf { it.attributes.getValue("fileCount").toInt() },
         )
 
         val lumbridge = manifest.entries.single { it.key == "5:12850" }
-        assertEquals("2906976476", lumbridge.attributes["groupChecksum"])
-        assertEquals("-838284128", lumbridge.attributes["groupNameHash"])
+        assertEquals("2723771615", lumbridge.attributes["groupChecksum"])
+        assertEquals("-1", lumbridge.attributes["groupNameHash"])
         assertEquals(
-            "sha256:065e70a11be0fa72db530999794ec7d0b2d0ebb42c3b065f64a9c1b6354b0602",
+            "sha256:d26991146735b7e2fad3367227a3baab86b703e46cfe178c51b47d1e314040c3",
             lumbridge.fingerprint,
         )
     }
@@ -78,16 +78,16 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
         val vanilla =
             CacheArchiveIndexManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/vanilla"),
-                revision = "233.4",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
         val enriched =
             CacheArchiveIndexManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/game"),
-                revision = "233.4-rsmod-enriched",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603-rsmod-enriched",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
 
         val delta = CacheDeltaEngine.diff(vanilla, enriched)
@@ -99,7 +99,7 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
         assertEquals(0, delta.summary.removed)
         // Motherlode Mine replaces the depleted default veins in its vanilla landscape.
         assertEquals(13, delta.summary.changed)
-        assertEquals(116_003, delta.summary.unchanged)
+        assertEquals(114_185, delta.summary.unchanged)
 
         val additions =
             delta.changes.filter { it.kind == CacheDeltaKind.Added }.map { it.key }.toSet()
@@ -121,7 +121,7 @@ class CacheArchiveIndexManifestExporterIntegrationTest {
                 "2:18",
                 "2:38",
                 "2:39",
-                "5:4453",
+                "5:14936",
             ),
             changes,
         )

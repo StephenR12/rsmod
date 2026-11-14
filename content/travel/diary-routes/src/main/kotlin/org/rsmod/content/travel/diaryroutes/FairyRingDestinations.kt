@@ -69,13 +69,10 @@ internal object FairyRingDestinations {
 }
 
 internal object FairyRingLocs : LocReferences() {
-    val ordinary =
-        FairyRingDestinations.codes.map { find("fairyring_minorhub_last_${it.lowercase()}") }
-    val house = FairyRingDestinations.codes.map { find("poh_fairy_ring_last_${it.lowercase()}") }
-    val combined =
-        FairyRingDestinations.codes.map { find("poh_spirit_ring_last_${it.lowercase()}") }
-    val zanaris =
-        FairyRingDestinations.codes.map { find("fairyring_homehub_last_${it.lowercase()}") }
+    val ordinary = listOf(find("fairyring_minorhub"))
+    val house = listOf(find("poh_fairy_ring"))
+    val combined = listOf(find("poh_spirit_ring"))
+    val zanaris = listOf(find("fairyring_homehub"))
 }
 
 internal object FairyRingBits : VarBitReferences() {

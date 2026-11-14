@@ -43,10 +43,6 @@ examine = 'An evil death demon.'
 slayer_req = 80
 
 [[config]]
-npc = 'floatingtwig_broken1'
-examine = 'Reminds me of playing pooh sticks.'
-
-[[config]]
 npc = 'slayer_nechryael_spawn'
 examine = 'An evil death spawn.'
 
@@ -1109,18 +1105,6 @@ examine = 'A sea bird.'
 
 [[config]]
 npc = 'gull2'
-examine = 'A sea bird.'
-
-[[config]]
-npc = '0_45_48_seabird1'
-examine = 'A sea bird.'
-
-[[config]]
-npc = '0_45_48_seabird2'
-examine = 'A sea bird.'
-
-[[config]]
-npc = '0_45_48_seabird3'
 examine = 'A sea bird.'
 
 [[config]]
@@ -5936,14 +5920,6 @@ examine = 'Keeping an eye out for suspicious activity.'
 [[config]]
 npc = 'crab_1'
 examine = 'No one likes crabs...'
-
-[[config]]
-npc = 'seagull_47_49_1'
-examine = 'A sea bird.'
-
-[[config]]
-npc = 'seagull_47_49_2'
-examine = 'A sea bird.'
 
 [[config]]
 npc = 'fire_wizard'
@@ -15271,22 +15247,6 @@ npc = 'viking_bunny_2'
 examine = 'Hoppity, hoppity.'
 
 [[config]]
-npc = 'viking_seagull'
-examine = 'A sea bird.'
-
-[[config]]
-npc = 'viking_seagull2'
-examine = 'A sea bird.'
-
-[[config]]
-npc = 'viking_seagull3'
-examine = 'A sea bird.'
-
-[[config]]
-npc = 'viking_seagull4'
-examine = 'A sea bird.'
-
-[[config]]
 npc = 'brownbear_cub_1'
 examine = 'Cute. But deadly.'
 
@@ -16678,14 +16638,6 @@ examine = 'Guards the border.'
 [[config]]
 npc = 'borderguard2'
 examine = 'Guards the border.'
-
-[[config]]
-npc = 'seagull_draynor1'
-examine = 'A sea bird.'
-
-[[config]]
-npc = 'seagull_draynor2'
-examine = 'A sea bird.'
 
 [[config]]
 npc = 'swan_herman'
@@ -18295,14 +18247,6 @@ examine = 'Not fond of witches.'
 [[config]]
 npc = 'thurgo'
 examine = 'Dwarvish.'
-
-[[config]]
-npc = 'thurgos_seagull'
-examine = 'A sea bird.'
-
-[[config]]
-npc = 'thurgos_seagull2'
-examine = 'A sea bird.'
 
 [[config]]
 npc = 'sir_vyvin'

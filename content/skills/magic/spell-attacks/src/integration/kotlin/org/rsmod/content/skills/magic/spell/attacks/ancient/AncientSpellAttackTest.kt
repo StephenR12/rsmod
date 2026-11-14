@@ -47,7 +47,7 @@ import org.rsmod.game.type.util.ParamMapBuilder
 
 class AncientSpellAttackTest {
     @Test
-    fun GameTestState.`cache 233 registers every ancient combat spell contract`() =
+    fun GameTestState.`cache 238 registers every ancient combat spell contract`() =
         runAncientTest { deps ->
             val registry = deps.registry()
             assertEquals(16, AncientSpellDefinitions.all.size)

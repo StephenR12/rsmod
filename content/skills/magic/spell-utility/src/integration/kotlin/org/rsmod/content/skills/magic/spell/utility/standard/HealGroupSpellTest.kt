@@ -53,7 +53,7 @@ import org.rsmod.game.type.interf.IfButtonOp
 class HealGroupSpellTest {
     @Test
     fun GameTestState
-        .`cache 233 pins Heal Group spell formula cooldown and presentation contracts`() =
+        .`cache 238 pins Heal Group spell formula cooldown and presentation contracts`() =
         runHealGroupTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_heal_group))
 
@@ -68,7 +68,7 @@ class HealGroupSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_heal_group.id ushr 16)
-            assertEquals(143, components.magic_spellbook_heal_group.id and 0xFFFF)
+            assertEquals(148, components.magic_spellbook_heal_group.id and 0xFFFF)
             assertEquals(
                 listOf("Cast"),
                 deps.components[components.magic_spellbook_heal_group].op.toList(),

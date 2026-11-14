@@ -49,6 +49,8 @@ public data class HashedParamType<T : Any>(
 public data class UnpackedParamType<T : Any>(
     public val type: KClass<T>?,
     public val typeLiteral: CacheVarLiteral?,
+    public val defaultLong: Long? = null,
+    public val typeId: Int? = null,
     public val defaultInt: Int?,
     public val defaultStr: String?,
     public val autoDisable: Boolean,
@@ -83,6 +85,9 @@ public data class UnpackedParamType<T : Any>(
         if (this === other) return true
         if (other !is UnpackedParamType<*>) return false
         if (typeLiteral != other.typeLiteral) return false
+        // Numeric and character opcodes can describe the same cache literal.
+        if (typeLiteral == null && typeId != other.typeId) return false
+        if (defaultLong != other.defaultLong) return false
         if (defaultInt != other.defaultInt) return false
         if (defaultStr != other.defaultStr) return false
         if (autoDisable != other.autoDisable) return false

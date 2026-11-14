@@ -1,6 +1,9 @@
 package org.rsmod.game.type.clientscript
 
 public class ClientScriptTypeBuilder(public var internal: String? = null) {
+    public var longLocalCount: Int = 0
+    public var longArgumentCount: Int = 0
+    public var longOperands: LongArray? = null
     public var intLocalCount: Int? = null
     public var stringLocalCount: Int? = null
     public var intArgumentCount: Int? = null
@@ -20,6 +23,9 @@ public class ClientScriptTypeBuilder(public var internal: String? = null) {
         val commands = commands ?: error("`commands` must be set.")
         val switches = switches ?: error("`switches` must be set.")
         return UnpackedClientScriptType(
+            longLocalCount = longLocalCount,
+            longArgumentCount = longArgumentCount,
+            longOperands = longOperands,
             intLocalCount = intLocalCount,
             stringLocalCount = stringLocalCount,
             intArgumentCount = intArgumentCount,

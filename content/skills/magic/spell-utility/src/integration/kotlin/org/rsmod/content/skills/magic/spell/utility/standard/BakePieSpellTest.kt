@@ -48,7 +48,7 @@ class BakePieSpellTest {
                 mapOf(objs.astral_rune to 1, objs.fire_rune to 5, objs.water_rune to 4),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(105, components.magic_spellbook_bake_pie.id and 0xFFFF)
+            assertEquals(110, components.magic_spellbook_bake_pie.id and 0xFFFF)
             assertEquals(4413, seqs.lunar_human_magic_summon2.id)
             assertEquals(746, spotanims.quest_lunar_bakepie.id)
             assertEquals(91, bake_pie_queues.batch.id)

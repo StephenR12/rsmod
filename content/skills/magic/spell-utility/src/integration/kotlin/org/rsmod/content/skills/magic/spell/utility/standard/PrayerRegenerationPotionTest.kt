@@ -32,7 +32,7 @@ import org.rsmod.game.type.obj.ObjTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class PrayerRegenerationPotionTest {
     @Test
-    fun GameTestState.`cache 233 identities descriptions timer and dispatch are pinned`() =
+    fun GameTestState.`cache 238 identities descriptions timer and dispatch are pinned`() =
         runPotionTest { deps ->
             val doses = PrayerRegenerationPotionDoses.all
 

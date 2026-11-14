@@ -62,7 +62,7 @@ class MonsterInspectSpellTest {
                 mapOf(objs.body_rune to 2, objs.mind_rune to 2),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(193, components.magic_spellbook_monster_inspect.id and 0xFFFF)
+            assertEquals(198, components.magic_spellbook_monster_inspect.id and 0xFFFF)
             assertEquals(522, interfaces.dream_monster_stat.id)
             assertEquals(0, populate.intArgumentCount)
             assertEquals(1, populate.stringArgumentCount)

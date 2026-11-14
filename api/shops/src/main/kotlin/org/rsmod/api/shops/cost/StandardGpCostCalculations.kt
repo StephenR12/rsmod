@@ -28,12 +28,14 @@ public object StandardGpCostCalculations {
         changePercentage: Double,
         cap: Double,
         minCost: Int,
+        basePriceOverride: Int? = null,
     ): PriceParameters {
         val stockDifference = initialStock.toLong() - currentStock.toLong()
         val difference = stockDifference * baseCost * (changePercentage / 100.0)
-        val basePriceWithMarkup = baseCost * (exchangePercentage / 100.0)
+        val basePriceWithMarkup = basePriceOverride?.toDouble() ?: (baseCost * (exchangePercentage / 100.0))
         var firstObjPrice = floor(basePriceWithMarkup + difference)
-        firstObjPrice = max(minCost.toDouble(), max(firstObjPrice, baseCost * cap))
+        val minimumPrice = (basePriceOverride ?: baseCost) * cap
+        firstObjPrice = max(minCost.toDouble(), max(firstObjPrice, minimumPrice))
 
         val priceChangePerObj = max(minCost, (baseCost * (changePercentage / 100.0)).toInt())
         return PriceParameters(
@@ -52,6 +54,7 @@ public object StandardGpCostCalculations {
         baseCost: Int,
         sellPercentage: Double,
         changePercentage: Double,
+        basePriceOverride: Int? = null,
     ): Int {
         val parameters =
             calculatePriceParameters(
@@ -62,6 +65,7 @@ public object StandardGpCostCalculations {
                 changePercentage = changePercentage,
                 cap = BUY_FROM_SHOP_MIN_FRACTION,
                 minCost = 1,
+                basePriceOverride = basePriceOverride,
             )
         return parameters.firstObjPrice
     }
@@ -74,6 +78,7 @@ public object StandardGpCostCalculations {
         availableCurrency: Int,
         sellPercentage: Double,
         changePercentage: Double,
+        basePriceOverride: Int? = null,
     ): BulkPriceParameters {
         val firstObjPrice =
             calculateShopSellSingleValue(
@@ -82,6 +87,7 @@ public object StandardGpCostCalculations {
                 baseCost = baseCost,
                 sellPercentage = sellPercentage,
                 changePercentage = changePercentage,
+                basePriceOverride = basePriceOverride,
             )
         var currentCost = firstObjPrice
         var totalValue = 0
@@ -97,6 +103,7 @@ public object StandardGpCostCalculations {
                     baseCost = baseCost,
                     sellPercentage = sellPercentage,
                     changePercentage = changePercentage,
+                    basePriceOverride = basePriceOverride,
                 )
         }
 
@@ -115,6 +122,7 @@ public object StandardGpCostCalculations {
         baseCost: Int,
         buyPercentage: Double,
         changePercentage: Double,
+        basePriceOverride: Int? = null,
     ): Int {
         val parameters =
             calculatePriceParameters(
@@ -125,6 +133,7 @@ public object StandardGpCostCalculations {
                 changePercentage = changePercentage,
                 cap = SELL_TO_SHOP_MIN_FRACTION,
                 minCost = 0,
+                basePriceOverride = basePriceOverride,
             )
         return parameters.firstObjPrice
     }
@@ -137,6 +146,7 @@ public object StandardGpCostCalculations {
         currencyCap: Int,
         buyPercentage: Double,
         changePercentage: Double,
+        basePriceOverride: Int? = null,
     ): BulkPriceParameters {
         val firstObjPrice =
             calculateShopBuySingleValue(
@@ -145,6 +155,7 @@ public object StandardGpCostCalculations {
                 baseCost = baseCost,
                 buyPercentage = buyPercentage,
                 changePercentage = changePercentage,
+                basePriceOverride = basePriceOverride,
             )
         var currentPrice = firstObjPrice
         var totalValue = 0
@@ -160,6 +171,7 @@ public object StandardGpCostCalculations {
                     baseCost = baseCost,
                     buyPercentage = buyPercentage,
                     changePercentage = changePercentage,
+                    basePriceOverride = basePriceOverride,
                 )
         }
 

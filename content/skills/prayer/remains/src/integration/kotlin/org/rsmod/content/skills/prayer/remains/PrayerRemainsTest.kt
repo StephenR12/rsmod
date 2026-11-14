@@ -96,7 +96,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 Goblin Temple altar pins composite loc and quest contracts`() =
+    fun GameTestState.`cache 238 Goblin Temple altar pins composite loc and quest contracts`() =
         runPrayerRemainsTest { deps ->
             assertEquals(
                 listOf(43089, 43097, 43098),
@@ -167,7 +167,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 Mage Arena statues pin operations state and cape mapping`() =
+    fun GameTestState.`cache 238 Mage Arena statues pin operations state and cape mapping`() =
         runPrayerRemainsTest {
             val statues =
                 listOf(
@@ -189,7 +189,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 trapped Chaos altar pins operation damage and destination`() =
+    fun GameTestState.`cache 238 trapped Chaos altar pins operation damage and destination`() =
         runPrayerRemainsTest {
             assertEquals(412, prayer_altar_locs.trappedChaosAltar.id)
             assertEquals(
@@ -203,7 +203,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 broken and unrestricted altars pin production classification`() =
+    fun GameTestState.`cache 238 broken and unrestricted altars pin production classification`() =
         runPrayerRemainsTest {
             assertEquals(34872, prayer_altar_locs.brokenSunAltar.id)
             assertEquals(
@@ -229,7 +229,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 spellbook altars pin operations quests and spellbook state`() =
+    fun GameTestState.`cache 238 spellbook altars pin operations quests and spellbook state`() =
         runPrayerRemainsTest { deps ->
             assertEquals(34771, prayer_altar_locs.astralAltar.id)
             assertEquals(
@@ -254,7 +254,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`every cache 233 Pray location is explicitly classified`() =
+    fun GameTestState.`every cache 238 Pray location is explicitly classified`() =
         runPrayerRemainsTest {
             assertEquals(645, seqs.human_pray.id)
 
@@ -278,8 +278,8 @@ class PrayerRemainsTest {
                 )
             val classified = categories.flatten().map { it.id }
 
-            assertEquals(84, cachePrayLocs.size)
-            assertEquals(listOf(63, 2, 5, 2, 1, 2, 3, 1, 1, 1, 3), categories.map { it.size })
+            assertEquals(85, cachePrayLocs.size)
+            assertEquals(listOf(64, 2, 5, 2, 1, 2, 3, 1, 1, 1, 3), categories.map { it.size })
             assertEquals(classified.size, classified.toSet().size, "altar categories overlap")
             assertEquals(cachePrayLocs, classified.toSet())
         }
@@ -853,7 +853,7 @@ class PrayerRemainsTest {
 
     @Test
     fun GameTestState
-        .`cache 233 God Wars altar configuration and affiliation catalogues are exact`() =
+        .`cache 238 God Wars altar configuration and affiliation catalogues are exact`() =
         runPrayerRemainsTest {
             assertEquals(4099, varbits.godwars_altar_delay.id)
             assertEquals(695, varbits.godwars_altar_delay.baseVar.id)
@@ -894,9 +894,9 @@ class PrayerRemainsTest {
             val saradomin = cacheGodItems(params.saradominitem)
             val zamorak = cacheGodItems(params.zamorakitem)
             val guthix = cacheGodItems(params.guthixitem)
-            assertEquals(78, saradomin.size)
-            assertEquals(109, zamorak.size)
-            assertEquals(89, guthix.size)
+            assertEquals(80, saradomin.size)
+            assertEquals(112, zamorak.size)
+            assertEquals(90, guthix.size)
             assertTrue(saradomin.containsAll(setOf(542, 3840, 22326, 25731, 29617, 30367)))
             assertTrue(zamorak.containsAll(setOf(1033, 3842, 24288, 29566, 30750, 30777)))
         }
@@ -1073,7 +1073,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 altar offering catalogue and visuals are exact`() =
+    fun GameTestState.`cache 238 altar offering catalogue and visuals are exact`() =
         runPrayerRemainsTest {
             assertEquals(3705, seqs.human_bone_sacrifice.id)
             assertEquals(624, spotanims.poh_bone_sacrifice.id)
@@ -1336,7 +1336,7 @@ class PrayerRemainsTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 ordinary remains catalogue is complete and exact`() =
+    fun GameTestState.`cache 238 ordinary remains catalogue is complete and exact`() =
         runPrayerRemainsTest {
             assertEquals(827, seqs.human_pickupfloor.id)
             assertEquals(2738, synths.bury_bones.id)
@@ -1901,6 +1901,8 @@ class PrayerRemainsTest {
                 532 to 15.0,
                 534 to 30.0,
                 536 to 72.0,
+                31726 to 60.0,
+                31729 to 100.0,
                 2530 to 4.5,
                 2859 to 4.5,
                 3123 to 25.0,

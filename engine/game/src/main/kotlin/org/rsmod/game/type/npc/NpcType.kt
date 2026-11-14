@@ -11,6 +11,7 @@ import org.rsmod.game.type.HashedCacheType
 import org.rsmod.game.type.category.CategoryType
 import org.rsmod.game.type.content.ContentGroupType
 import org.rsmod.game.type.param.ParamType
+import org.rsmod.game.type.util.EntityOption
 import org.rsmod.game.type.util.ParamMap
 import org.rsmod.game.type.util.resolve
 
@@ -52,12 +53,20 @@ public data class UnpackedNpcType(
     public val turnLeftAnim: Int,
     public val turnRightAnim: Int,
     public val category: Int,
+    public val extraOptions: List<EntityOption> = emptyList(),
+    public val lowRenderPriority: Boolean? = null,
+    public val footprintSize: Int? = null,
+    public val flag129: Boolean? = null,
+    public val idleAnimRestart: Boolean? = null,
+    public val canHideForOverlap: Boolean? = null,
+    public val overlapTint: Int? = null,
+    public val disableDepthBuffer: Boolean? = null,
     public val op: Array<String?>,
     public val recolS: ShortArray,
     public val recolD: ShortArray,
     public val retexS: ShortArray,
     public val retexD: ShortArray,
-    public val head: ShortArray,
+    public val head: IntArray,
     public val minimap: Boolean,
     public val vislevel: Int,
     public val resizeH: Int,
@@ -256,6 +265,14 @@ public data class UnpackedNpcType(
         if (turnLeftAnim != other.turnLeftAnim) return false
         if (turnRightAnim != other.turnRightAnim) return false
         if (category != other.category) return false
+        if (extraOptions != other.extraOptions) return false
+        if (lowRenderPriority != other.lowRenderPriority) return false
+        if (footprintSize != other.footprintSize) return false
+        if (flag129 != other.flag129) return false
+        if (idleAnimRestart != other.idleAnimRestart) return false
+        if (canHideForOverlap != other.canHideForOverlap) return false
+        if (overlapTint != other.overlapTint) return false
+        if (disableDepthBuffer != other.disableDepthBuffer) return false
         if (!op.contentEquals(other.op)) return false
         if (!recolS.contentEquals(other.recolS)) return false
         if (!recolD.contentEquals(other.recolD)) return false
@@ -329,6 +346,14 @@ public data class UnpackedNpcType(
         result = 31 * result + turnLeftAnim
         result = 31 * result + turnRightAnim
         result = 31 * result + category
+        result = 31 * result + extraOptions.hashCode()
+        result = 31 * result + lowRenderPriority.hashCode()
+        result = 31 * result + footprintSize.hashCode()
+        result = 31 * result + flag129.hashCode()
+        result = 31 * result + idleAnimRestart.hashCode()
+        result = 31 * result + canHideForOverlap.hashCode()
+        result = 31 * result + overlapTint.hashCode()
+        result = 31 * result + disableDepthBuffer.hashCode()
         result = 31 * result + op.contentHashCode()
         result = 31 * result + recolS.contentHashCode()
         result = 31 * result + recolD.contentHashCode()

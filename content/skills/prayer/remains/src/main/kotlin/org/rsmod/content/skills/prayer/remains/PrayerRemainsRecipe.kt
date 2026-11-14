@@ -26,6 +26,8 @@ public object PrayerRemainsRecipes {
             bone(objs.big_bones, 15.0, members = false),
             bone(objs.babydragon_bones, 30.0),
             bone(objs.dragon_bones, 72.0),
+            bone(objs.strykewyrm_bones, 60.0),
+            bone(objs.frost_dragon_bones, 100.0),
             bone(objs.newbie_bones, 4.5, members = false),
             bone(objs.wolf_bones, 4.5),
             bone(objs.shaikahan_bones, 25.0),

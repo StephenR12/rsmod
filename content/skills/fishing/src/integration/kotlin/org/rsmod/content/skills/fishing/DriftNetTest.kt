@@ -136,7 +136,7 @@ class DriftNetTest {
             player.opLoc1(loc)
             advance(2)
             assertEquals(0, player.vars[cacheTypes.varbits.getValue(5812)])
-            val catch = player.invMap.getValue(cacheTypes.invs.getValue(947))
+            val catch = player.invMap.getValue(cacheTypes.invs.getValue(65011))
             assertTrue(catch.isNotEmpty())
             val claim = cacheTypes.components.getValue((607 shl 16) + 13)
             player.ifButton(claim)

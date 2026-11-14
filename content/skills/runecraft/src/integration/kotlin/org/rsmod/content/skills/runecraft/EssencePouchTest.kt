@@ -34,7 +34,7 @@ class EssencePouchTest {
             for (variant in variants) {
                 val type = objTypes[variant]
                 assertTrue(type.members)
-                assertEquals(listOf("Fill", "Empty", "Check", null, null), type.iop.toList())
+                assertEquals(listOf("Fill", "Check", "Empty", null, null), type.iop.toList())
             }
 
             val amountVars =
@@ -126,7 +126,7 @@ class EssencePouchTest {
                 assertEquals(0, player.count(essence.obj))
 
                 player.withProtectedAccess {
-                    deps.held.interact(this, player.inv, pouchSlot, HeldOp.Op2)
+                    deps.held.interact(this, player.inv, pouchSlot, HeldOp.Op3)
                 }
                 assertEquals(0, deps.storage.count(player, EssencePouchDefinitions.small))
                 assertNull(deps.storage.essenceType(player, EssencePouchDefinitions.small))
@@ -262,7 +262,7 @@ class EssencePouchTest {
             )
             val slot = player.inv.indexOfFirst { it?.id == RunecraftObjs.largePouch.id }
 
-            player.withProtectedAccess { deps.held.interact(this, player.inv, slot, HeldOp.Op2) }
+            player.withProtectedAccess { deps.held.interact(this, player.inv, slot, HeldOp.Op3) }
             assertEquals(1, player.count(RunecraftObjs.pureEssence))
             assertEquals(4, deps.storage.count(player, EssencePouchDefinitions.large))
             assertEquals(
@@ -275,7 +275,7 @@ class EssencePouchTest {
                     player.inv[index] = null
                 }
             }
-            player.withProtectedAccess { deps.held.interact(this, player.inv, slot, HeldOp.Op2) }
+            player.withProtectedAccess { deps.held.interact(this, player.inv, slot, HeldOp.Op3) }
             assertEquals(5, player.count(RunecraftObjs.pureEssence))
             assertEquals(0, deps.storage.count(player, EssencePouchDefinitions.large))
             assertNull(deps.storage.essenceType(player, EssencePouchDefinitions.large))

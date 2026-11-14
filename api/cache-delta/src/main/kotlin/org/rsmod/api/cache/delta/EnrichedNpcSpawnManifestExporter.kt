@@ -6,11 +6,12 @@ import java.nio.file.Path
 import java.util.TreeMap
 import org.openrs2.cache.Cache
 import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.map.npc.MapNpcDefinition
 import org.rsmod.api.cache.map.npc.MapNpcListDecoder
 import org.rsmod.api.cache.types.npc.NpcTypeDecoder
 import org.rsmod.api.cache.util.InlineByteBuf
-import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.game.type.npc.NpcTypeList
 import org.rsmod.game.type.npc.UnpackedNpcType
 import org.rsmod.map.square.MapSquareGrid
@@ -58,15 +59,29 @@ public object EnrichedNpcSpawnManifestExporter {
         }
         val npcTypes = NpcTypeDecoder.decodeAll(cache)
         val entries = ArrayList<CacheManifestEntry>()
-        xteas.sortedBy(MapSquareManifestExporter.XteaRecord::mapsquare).forEach { record ->
-            require(record.archive == Js5Archives.MAPS) {
-                "Map square ${record.mapsquare} belongs to archive ${record.archive}, not ${Js5Archives.MAPS}."
+        val maps = MapArchive(cache)
+        val squares =
+            if (maps.numeric) maps.nativeSquares()
+            else
+                xteas.map { record ->
+                    require(record.archive == Js5Archives.MAPS) {
+                        "Map square ${record.mapsquare} belongs to archive ${record.archive}."
+                    }
+                    MapSquareKey(record.mapsquare)
+                }
+        squares
+            .sortedBy { it.id }
+            .forEach { square ->
+                val encoded = maps.readGroupBytesOrNull(square) ?: return@forEach
+                entries +=
+                    entries(
+                        square,
+                        encoded,
+                        symbols.npcs,
+                        npcTypes,
+                        maps.address(square, MapFile.Npcs),
+                    )
             }
-            val square = MapSquareKey(record.mapsquare)
-            val group = "n${square.x}_${square.z}"
-            val encoded = cache.readGroupBytesOrNull(group) ?: return@forEach
-            entries += entries(square, encoded, symbols.npcs, npcTypes)
-        }
         return CacheManifestNormalizer.normalize(
             CacheManifest(
                 revision = revision,
@@ -82,6 +97,7 @@ public object EnrichedNpcSpawnManifestExporter {
         encoded: ByteArray,
         symbols: Map<Int, String>,
         npcTypes: NpcTypeList,
+        group: String = "n${square.x}_${square.z}",
     ): List<CacheManifestEntry> {
         require(encoded.size >= COUNT_BYTES) {
             "NPC map group n${square.x}_${square.z} is shorter than its count header."
@@ -123,7 +139,7 @@ public object EnrichedNpcSpawnManifestExporter {
                 fingerprint = CoreConfigManifestExporter.fingerprint(encoded),
                 attributes =
                     canonicalAttributes(
-                        "archiveGroup" to "n${square.x}_${square.z}",
+                        "archiveGroup" to group,
                         "fileLength" to encoded.size,
                         "mapSquareId" to square.id,
                         "mapSquareX" to square.x,
@@ -142,7 +158,13 @@ public object EnrichedNpcSpawnManifestExporter {
             val ordinal = duplicateOrdinals.getOrDefault(identity, 0)
             duplicateOrdinals[identity] = ordinal + 1
             result +=
-                placementEntry(identity, ordinal, symbols[placement.id], npcTypes[placement.id])
+                placementEntry(
+                    identity,
+                    ordinal,
+                    symbols[placement.id],
+                    npcTypes[placement.id],
+                    group,
+                )
         }
         return result
     }
@@ -152,6 +174,7 @@ public object EnrichedNpcSpawnManifestExporter {
         duplicateOrdinal: Int,
         symbol: String?,
         type: UnpackedNpcType?,
+        group: String,
     ): CacheManifestEntry {
         val key = identity.key(duplicateOrdinal)
         val risks = sortedSetOf("map-spawn-risk", "npc-contract-risk")
@@ -168,7 +191,7 @@ public object EnrichedNpcSpawnManifestExporter {
                 CoreConfigManifestExporter.fingerprint(key.toByteArray(StandardCharsets.UTF_8)),
             attributes =
                 canonicalAttributes(
-                    "archiveGroup" to "n${identity.square.x}_${identity.square.z}",
+                    "archiveGroup" to group,
                     "mapSquareId" to identity.square.id,
                     "mapSquareX" to identity.square.x,
                     "mapSquareZ" to identity.square.z,
@@ -207,8 +230,8 @@ public object EnrichedNpcSpawnManifestExporter {
             }
         )
 
-    private fun Cache.readGroupBytesOrNull(group: String): ByteArray? {
-        val data = readOrNull(Js5Archives.MAPS, group) ?: return null
+    private fun MapArchive.readGroupBytesOrNull(square: MapSquareKey): ByteArray? {
+        val data = read(square, MapFile.Npcs) ?: return null
         return try {
             ByteArray(data.readableBytes()).also { data.getBytes(data.readerIndex(), it) }
         } finally {

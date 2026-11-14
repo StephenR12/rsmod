@@ -55,8 +55,8 @@ constructor(
         for (pouch in EssencePouchDefinitions.all) {
             for (variant in pouch.variants) {
                 onOpHeld1(variant) { essencePouches.fill(this, pouch, it.slot) }
-                onOpHeld2(variant) { essencePouches.empty(this, pouch) }
-                onOpHeld3(variant) { essencePouches.check(this, pouch) }
+                onOpHeld3(variant) { essencePouches.empty(this, pouch) }
+                onOpHeld2(variant) { essencePouches.check(this, pouch) }
                 onOpBankside(variant) { essencePouches.bankside(player, pouch, slot) }
             }
         }

@@ -54,7 +54,7 @@ import org.rsmod.game.type.obj.ObjTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class VengeanceSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins self Vengeance and animation-picker contracts`() =
+    fun GameTestState.`cache 238 pins self Vengeance and animation-picker contracts`() =
         runVengeanceTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_vengeance))
             val spellComponent = deps.components[components.magic_spellbook_vengeance]
@@ -71,7 +71,7 @@ class VengeanceSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_vengeance.interfaceId)
-            assertEquals(142, components.magic_spellbook_vengeance.component)
+            assertEquals(147, components.magic_spellbook_vengeance.component)
             assertEquals("Cast", spellComponent.op[0])
             assertEquals("Animation", spellComponent.op[8])
             assertEquals(525, interfaces.animation_picker.id)

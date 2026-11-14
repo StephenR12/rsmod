@@ -22,6 +22,40 @@ import org.rsmod.game.type.obj.ObjType
 
 class StandardGpShopOperationsBuyTest {
     @Test
+    fun GameTestState.`buy uses exact shop price and preserves funds when unaffordable`() =
+        runGameTest(ShopScript::class) {
+            val original = openGeneralShop()
+            val shop = original.copy(changePercentage = 0.0, sellPrices = mapOf(objs.newcomer_map.id to 21_000))
+            player.openedShop = shop
+            shop.inv[0] = InvObj(objs.newcomer_map, 5)
+            player.inv[0] = InvObj(objs.coins, 20_999)
+
+            buyStock(shop, objs.newcomer_map, OP_BUY1)
+            assertEquals(20_999, player.count(objs.coins))
+            assertEquals(5, shop.inv.count(objs.newcomer_map))
+            assertEquals(0, player.count(objs.newcomer_map))
+
+            player.inv[0] = InvObj(objs.coins, 21_000)
+            buyStock(shop, objs.newcomer_map, OP_BUY1)
+            assertEquals(0, player.count(objs.coins))
+            assertEquals(4, shop.inv.count(objs.newcomer_map))
+            assertEquals(1, player.count(objs.newcomer_map))
+        }
+
+    @Test
+    fun GameTestState.`shop sale restriction preserves item and coins`() =
+        runGameTest(ShopScript::class) {
+            val original = openGeneralShop()
+            player.openedShop = original.copy(buyPrices = mapOf(objs.spade.id to -1))
+            player.inv[0] = InvObj(objs.spade)
+            player.ifButton(ShopComponents.shop_side_inv, comsub = 0, obj = objs.spade.id, op = IfButtonOp.Op2)
+            advance(1)
+            assertEquals(1, player.count(objs.spade))
+            assertEquals(0, player.count(objs.coins))
+            assertMessageSent("You can't sell this item to this shop.")
+        }
+
+    @Test
     fun GameTestState.`buy single obj successfully`() =
         runGameTest(ShopScript::class) {
             val shop = openGeneralShop()

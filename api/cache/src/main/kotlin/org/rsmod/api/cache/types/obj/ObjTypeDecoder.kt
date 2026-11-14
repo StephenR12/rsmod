@@ -9,6 +9,7 @@ import org.openrs2.cache.Cache
 import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.util.TextUtil
+import org.rsmod.api.cache.util.readEntityOption
 import org.rsmod.api.cache.util.readRawParams
 import org.rsmod.game.type.TypeResolver
 import org.rsmod.game.type.obj.ObjTypeBuilder
@@ -52,10 +53,12 @@ public object ObjTypeDecoder {
                 6 -> yan2d = data.readUnsignedShort()
                 7 -> xof2d = data.readShort().toInt()
                 8 -> yof2d = data.readShort().toInt()
+                9 -> cacheDebugName = data.readString()
                 11 -> stackable = true
                 12 -> cost = data.readInt()
                 13 -> wearpos1 = data.readByte().toInt()
                 14 -> wearpos2 = data.readByte().toInt()
+                15 -> tradeable = false
                 16 -> members = true
                 23 -> {
                     manwear = data.readUnsignedShort()
@@ -113,6 +116,23 @@ public object ObjTypeDecoder {
                         else -> throw NotImplementedError("Unhandled isubop parent op: $op")
                     }
                 }
+                44 -> model = data.readInt()
+                45 -> {
+                    manwear = data.readInt()
+                    manwearOff = data.readUnsignedByte().toInt()
+                }
+                46 -> manwear2 = data.readInt()
+                47 -> manwear3 = data.readInt()
+                48 -> {
+                    womanwear = data.readInt()
+                    womanwearOff = data.readUnsignedByte().toInt()
+                }
+                49 -> womanwear2 = data.readInt()
+                50 -> womanwear3 = data.readInt()
+                51 -> manhead = data.readInt()
+                52 -> manhead2 = data.readInt()
+                53 -> womanhead = data.readInt()
+                54 -> womanhead2 = data.readInt()
                 65 -> stockmarket = true
                 75 -> weight = data.readShort().toInt()
                 78 -> manwear3 = data.readUnsignedShort()
@@ -139,7 +159,7 @@ public object ObjTypeDecoder {
                 140 -> boughttemplate = data.readUnsignedShort()
                 148 -> placeholderlink = data.readUnsignedShort()
                 149 -> placeholdertemplate = data.readUnsignedShort()
-                200 -> {
+                220 -> {
                     val count = data.readUnsignedByte().toInt()
                     val objvar = IntArray(count)
                     for (i in objvar.indices) {
@@ -147,8 +167,8 @@ public object ObjTypeDecoder {
                     }
                     this.objvar = CompactableIntArray(objvar)
                 }
-                201 -> playerCost = data.readInt()
-                202 -> playerCostDerived = data.readInt()
+                221 -> playerCost = data.readInt()
+                222 -> playerCostDerived = data.readInt()
                 203 -> playerCostDerivedConst = data.readInt()
                 204 -> stockMarketBuyLimit = data.readUnsignedShort()
                 205 -> stockMarketRecalcUsers = data.readUnsignedShort()
@@ -159,6 +179,7 @@ public object ObjTypeDecoder {
                 210 -> transformlink = data.readUnsignedShort()
                 211 -> transformtemplate = data.readUnsignedShort()
                 212 -> weaponCategory = data.readUnsignedByte().toInt()
+                in 200..202 -> extraOptions += data.readEntityOption(code - 200)
                 249 -> paramMap = ParamMap(data.readRawParams())
                 else -> throw IOException("Error unrecognised .obj config code: $code")
             }

@@ -52,7 +52,7 @@ import org.rsmod.game.type.util.ParamMapBuilder
 @Execution(ExecutionMode.SAME_THREAD)
 class ArceuusThrallSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins all nine thrall spell npc and presentation contracts`() =
+    fun GameTestState.`cache 238 pins all nine thrall spell npc and presentation contracts`() =
         runThrallTest { deps ->
             assertEquals(9, ThrallRecipes.all.size)
             assertEquals(
@@ -75,7 +75,7 @@ class ArceuusThrallSpellTest {
                 assertEquals(Spellbook.Arceuus, spell.spellbook)
                 assertEquals(MagicSpellType.Combat, spell.type)
                 assertEquals(218, recipe.component.id ushr 16)
-                assertEquals(184 + index, recipe.component.id and 0xFFFF)
+                assertEquals(189 + index, recipe.component.id and 0xFFFF)
                 assertEquals("Cast", requireNotNull(deps.components[recipe.component]).targetVerb)
                 assertEquals(4, deps.npcTypes[recipe.npc].param(params.attackrate))
                 assertEquals(0, deps.npcTypes[recipe.npc].op.count { it != null })

@@ -151,6 +151,7 @@ internal object CleanupBits : VarBitReferences() {
     val favour = find("vill_comm_points")
     val best = find("vill_comm_max")
     val visible = find("villagers_visible")
+    val gabootyShop = find("gabootyshopchat")
     val stage = find("cleanup_progress")
     val chat =
         listOf(
@@ -353,7 +354,7 @@ constructor(
         }
         val opts = mutableListOf("Can I have trading sticks for my work?")
         if (index == 8) opts += "Where can I get a machete?"
-        if (index == 4) opts += "What do you do here?"
+        if (index == 4 || index == 5) opts += "What do you do here?"
         opts += "Leave."
         when (menu("Tai Bwo Wannai", true, opts)) {
             0 -> claim(index)
@@ -372,6 +373,10 @@ constructor(
                             "Jiminua sells machetes northwest of the village. Repair part of the fence and come back."
                         )
                 } else if (index == 4) orderMachete()
+                else if (index == 5) {
+                    vars[CleanupBits.gabootyShop] = 1
+                    mes("Gabooty trades village goods and drinks for trading sticks.")
+                }
         }
     }
 

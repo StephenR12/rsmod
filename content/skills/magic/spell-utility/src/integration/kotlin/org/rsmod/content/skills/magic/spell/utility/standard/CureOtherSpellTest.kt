@@ -45,7 +45,7 @@ import org.rsmod.game.type.comp.ComponentTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class CureOtherSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins Cure Other spell state and presentation contracts`() =
+    fun GameTestState.`cache 238 pins Cure Other spell state and presentation contracts`() =
         runCureOtherTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_cure_other))
 
@@ -60,7 +60,7 @@ class CureOtherSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_cure_other.id ushr 16)
-            assertEquals(109, components.magic_spellbook_cure_other.id and 0xFFFF)
+            assertEquals(114, components.magic_spellbook_cure_other.id and 0xFFFF)
             assertEquals("Cast", deps.components[components.magic_spellbook_cure_other].targetVerb)
             assertEquals(
                 emptyList<String>(),

@@ -66,7 +66,7 @@ class TelekineticGrabSpellTest {
                 mapOf(objs.air_rune to 1, objs.law_rune to 1),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(27, components.magic_spellbook_telegrab.id and 0xFFFF)
+            assertEquals(30, components.magic_spellbook_telegrab.id and 0xFFFF)
             assertEquals(723, seqs.human_casttelegrab.id)
             assertEquals(681, seqs.telegrab_casting.id)
             assertEquals(682, seqs.telegrab_travel.id)

@@ -11,9 +11,9 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 import net.rsprot.protocol.game.incoming.buttons.If3Button
 import net.rsprot.protocol.game.incoming.buttons.IfButtonD
-import net.rsprot.protocol.game.incoming.locs.OpLoc
+import net.rsprot.protocol.game.incoming.locs.OpLocV2
 import net.rsprot.protocol.game.incoming.misc.user.MoveGameClick
-import net.rsprot.protocol.game.incoming.npcs.OpNpc
+import net.rsprot.protocol.game.incoming.npcs.OpNpcV2
 import net.rsprot.protocol.game.incoming.resumed.ResumePCountDialog
 import net.rsprot.protocol.game.outgoing.misc.player.MessageGame
 import net.rsprot.protocol.util.CombinedId
@@ -365,52 +365,52 @@ constructor(
     }
 
     public fun Player.opLoc1(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 1)
+        val message = OpLocV2(loc.id, loc.x, loc.z, controlKey, op = 1, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc2(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 2)
+        val message = OpLocV2(loc.id, loc.x, loc.z, controlKey, op = 2, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc3(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 3)
+        val message = OpLocV2(loc.id, loc.x, loc.z, controlKey, op = 3, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc4(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 4)
+        val message = OpLocV2(loc.id, loc.x, loc.z, controlKey, op = 4, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc5(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 5)
+        val message = OpLocV2(loc.id, loc.x, loc.z, controlKey, op = 5, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opNpc1(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 1)
+        val message = OpNpcV2(npc.slotId, controlKey, op = 1, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc2(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 2)
+        val message = OpNpcV2(npc.slotId, controlKey, op = 2, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc3(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 3)
+        val message = OpNpcV2(npc.slotId, controlKey, op = 3, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc4(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 4)
+        val message = OpNpcV2(npc.slotId, controlKey, op = 4, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc5(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 5)
+        val message = OpNpcV2(npc.slotId, controlKey, op = 5, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 

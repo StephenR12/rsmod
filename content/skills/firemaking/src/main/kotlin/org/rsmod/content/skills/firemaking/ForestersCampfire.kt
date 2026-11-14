@@ -176,7 +176,7 @@ constructor(
         val input =
             skillMulti("How many would you like to burn?", held.map { it.log }, amount, amount, 0)
         val choice = input.component.packed and 0xffff
-        val recipe = held.getOrNull(choice - 14) ?: return
+        val recipe = held.getOrNull(choice - org.rsmod.api.config.refs.components.skillmulti_a.component) ?: return
         ifClose()
         tend(Tending(loc.coords, recipe.log.id, input.subcomponent))
     }

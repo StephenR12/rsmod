@@ -68,6 +68,7 @@ public object PrayerAltarLocs : LocReferences() {
         chapel +
             listOf(
                 find("altar_talkasti01"),
+                find("great_conch_shrine"),
                 find("tox_xerician_altar"),
                 find("altar"),
                 find("contact_lesser_god_temple_altar_fixed"),

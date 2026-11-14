@@ -58,7 +58,7 @@ class TeleportToHouseSpellTest {
                 mapOf(objs.air_rune to 1, objs.earth_rune to 1, objs.law_rune to 1),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(31, spell.component.id and 0xFFFF)
+            assertEquals(34, spell.component.id and 0xFFFF)
             assertEquals(8828, objs.spell_poh_teleport.id)
             assertEquals(218, spell.component.id ushr 16)
             assertEquals(
@@ -76,7 +76,7 @@ class TeleportToHouseSpellTest {
         }
 
     @Test
-    fun GameTestState.`all cache 233 house locations teleport outside after four ticks`() =
+    fun GameTestState.`all cache 238 house locations teleport outside after four ticks`() =
         runHouseTest { deps ->
             for ((location, destination) in outsideDestinations) {
                 prepareCaster(deps, location.cacheValue)

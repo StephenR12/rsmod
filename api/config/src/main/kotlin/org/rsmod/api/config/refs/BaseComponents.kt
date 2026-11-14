@@ -51,7 +51,7 @@ object BaseComponents : ComponentReferences() {
     val toplevel_target_helper_content =
         find("toplevel_osrs_stretch:helper_content", 125361679448962740)
 
-    val chatbox_chatmodal = find("chatbox:chatmodal", 1527608226813778100)
+    val chatbox_chatmodal = find("chatbox:chatmodal", 2917314310066654474)
 
     val chat_right_head = find("chat_right:head", 5373095475151190962)
     val chat_right_name = find("chat_right:name", 6182330832416658165)
@@ -371,10 +371,10 @@ object BaseComponents : ComponentReferences() {
     val dream_player_stats_name = find("dream_player_stats:stat_name")
     val dream_player_stats_close = find("dream_player_stats:dream_playerstat_close")
 
-    val combat_tab_title = find("combat_interface:title", 7028397761873724972)
-    val combat_tab_category = find("combat_interface:category", 311653829278247768)
+    val combat_tab_title = find("combat_interface:title", 584437891524701911)
+    val combat_tab_category = find("combat_interface:category", 311653829278247770)
 
     val fade_overlay_message = find("fade_overlay:message", 9045250929562636923)
 
-    val music_now_playing_text = find("music:now_playing_text", 7229867128976358672)
+    val music_now_playing_text = find("music:now_playing_text", 9137902773523581544)
 }

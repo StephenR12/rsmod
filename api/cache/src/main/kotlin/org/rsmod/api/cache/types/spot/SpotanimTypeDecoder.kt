@@ -45,6 +45,7 @@ public object SpotanimTypeDecoder {
         with(builder) {
             when (code) {
                 1 -> model = data.readUnsignedShortOrNull()
+                3 -> model = data.readInt()
                 2 -> anim = data.readUnsignedShort()
                 4 -> resizeH = data.readUnsignedShort()
                 5 -> resizeV = data.readUnsignedShort()

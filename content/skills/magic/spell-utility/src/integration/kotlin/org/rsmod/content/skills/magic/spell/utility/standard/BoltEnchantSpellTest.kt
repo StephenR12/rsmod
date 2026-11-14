@@ -62,7 +62,7 @@ class BoltEnchantSpellTest {
 
             assertEquals(5000, objs.view_bolt_enchantment_spells.id)
             assertEquals(218, components.magic_spellbook_xbows_enchant.id ushr 16)
-            assertEquals(10, components.magic_spellbook_xbows_enchant.id and 0xFFFF)
+            assertEquals(13, components.magic_spellbook_xbows_enchant.id and 0xFFFF)
             assertEquals(4462, seqs.human_xbow_enchant_arrowtip.id)
             assertEquals(759, spotanims.xbows_enchanting_tips.id)
             assertEquals(2921, synths.enchanted_tipping.id)
@@ -103,7 +103,7 @@ class BoltEnchantSpellTest {
             )
             val events =
                 client.filterIsInstance<IfSetEventsV2>().filter {
-                    it.interfaceId == 270 && it.componentId in 14..23
+                    it.interfaceId == 270 && it.componentId in 15..24
                 }
             assertEquals(10, events.size)
             assertTrue(events.all { it.start == 1 && it.end == 3 && it.events1 == 1 })

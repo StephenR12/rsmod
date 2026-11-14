@@ -1,0 +1,243 @@
+# Unlimited reward shops, June 2026 OSRS Wiki oldid per row.
+# shop	members	payment (native varbit, varp or item)	owners	product	bundle	price	refund	minimum target kills	members product	Wiki oldid
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Deadman's chest	br_deadman_body:1	160	128	0	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Deadman's legs	br_deadman_legs:1	160	128	0	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Deadman's cape	br_deadman_cape:1	160	128	0	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Swift blade	swift_blade:1	350	-	0	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Guthixian icon	icon_of_guthix:1	500	400	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Trouver parchment	trouver_parchment:1	18	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Wilderness crabs teleport	tablet_wildycrabs:1	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted entangle sack	blighted_sack_entangle:70	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted teleport spell sack	blighted_sack_teleblock:50	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted vengeance sack	blighted_sack_vengeance:50	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted ancient ice sack	blighted_sack_icebarrage:30	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Adamant arrow	adamant_arrow:350	1	-	0	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Bolt rack	barrows_karil_ammo:200	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Rune arrow	rune_arrow:300	3	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Dragonstone bolts (e)	xbows_crossbow_bolts_runite_tipped_dragonstone_enchanted:20	3	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted karambwan	blighted_karambwan:12	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted manta ray	blighted_mantaray:15	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted anglerfish	blighted_anglerfish:15	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blighted super restore(4)	blighted_4dose2restore:4	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Climbing boots	death_climbingboots:20	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Looting bag	looting_bag:1	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Looting bag note	promissory_note_lootingbag:1	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Ring of wealth scroll	bh_imbue_ringofwealth:1	5	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Magic shortbow scroll	bh_imbue_magicshortbow:1	5	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Clue box	bh_clue_box:1	5	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Crystal weapon seed	crystal_seed_old:1	12	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Granite clamp	granite_clamp:1	25	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Ornate maul handle	granite_maul_upgrade:1	15	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Steam staff upgrade kit	steam_staff_upgrade_kit:1	13	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Lava staff upgrade kit	lava_staff_upgrade_kit:1	13	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Dragon pickaxe upgrade kit	dragon_pickaxe_upgrade_kit:1	14	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Ward upgrade kit	ward_upgrade_kit:1	20	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Green dark bow paint	bh_green_paint:1	25	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Yellow dark bow paint	bh_yellow_paint:1	25	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	White dark bow paint	bh_white_paint:1	25	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Blue dark bow paint	bh_blue_paint:1	25	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Volcanic whip mix	bh_lava_paint:1	25	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Frozen whip mix	bh_ice_paint:1	25	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Rune pouch	bh_rune_pouch:1	75	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Rune pouch note	promissory_note_runepouch:1	75	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Decorative emblem	bh_decorative_emblem_10:1	100	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Saradomin's tear	tear_of_saradomin:1	150	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Target teleport scroll	bounty_teleport_scroll:1	250	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Vesta's longsword (inactive)	bh_vestas_longsword_inactive:1	300	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Victor's cape (1)	br_cape_1:1	0	-	1	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Victor's cape (10)	br_cape_10:1	0	-	10	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Victor's cape (50)	br_cape_50:1	0	-	50	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Victor's cape (100)	br_cape_100:1	0	-	100	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Victor's cape (500)	br_cape_500:1	0	-	500	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Victor's cape (1000)	br_cape_1000:1	0	-	1000	false	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Armadyl halo	armadyl_halo:1	450	360	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Bandos halo	bandos_halo:1	450	360	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Seren halo	seren_halo:1	450	360	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Ancient halo	zaros_halo:1	450	360	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Brassica halo	brassica_halo:1	450	360	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Paddewwa teleport (tablet)	tablet_paddewa:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Senntisten teleport (tablet)	tablet_senntisten:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Annakarl teleport (tablet)	tablet_annakarl:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Carrallanger teleport (tablet)	tablet_carrallangar:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Dareeyak teleport (tablet)	tablet_dareeyak:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Ghorrock teleport (tablet)	tablet_ghorrock:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Kharyrll teleport (tablet)	tablet_kharyll:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Lassar teleport (tablet)	tablet_lassar:2	1	-	0	true	15218201
+Justine's stuff for the Last Shopper Standing	true	p:br_competitive_shop_points	br_reward_shopkeeper:3	Target teleport	tablet_target:1	1	-	0	true	15218201
+PvP Arena Rewards	true	b:pvpa_points_currency	duel_mubariz:3	Blighted surge sack	blighted_sack_surge:50	10	-	0	false	14975687
+PvP Arena Rewards	true	b:pvpa_points_currency	duel_mubariz:3	Scroll of imbuing	pvpa_imbuing_scroll:1	200	-	0	false	14975687
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Grid master tabard	bingo_tabard:1	750	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Grid master tabard (b)	bingo_tabard_black:1	750	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Grid master tabard (p)	bingo_tabard_pink:1	750	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Grid master tabard (g)	bingo_tabard_green:1	750	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Swords and emblem	bingo_swords:1	1100	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Swords and emblem (b)	bingo_swords_black:1	1100	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Swords and emblem (p)	bingo_swords_pink:1	1100	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Swords and emblem (g)	bingo_swords_green:1	1100	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Grid master altar icon scroll	bingo_altar_icon_scroll:1	6000	-	0	false	15024807
+Events Reward Shop	true	p:event_points_currency	events_shop_3op:3	Grid master torch scroll	bingo_torch_scroll:1	6000	-	0	false	15024807
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Twisted banner	twisted_banner:1	750	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Twisted teleport scroll	twisted_home_teleport_scroll:1	750	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Twisted blueprints	twisted_blueprints:1	4000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Twisted horns	twisted_horns:1	6000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Twisted Relic Hunter (T1)	twisted_relic_hunter_hat_t1:1,twisted_relic_hunter_top_t1:1,twisted_relic_hunter_legs_t1:1,twisted_relic_hunter_boots_t1:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Twisted Relic Hunter (T2)	twisted_relic_hunter_hat_t2:1,twisted_relic_hunter_top_t2:1,twisted_relic_hunter_legs_t2:1,twisted_relic_hunter_boots_t2:1	2500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Twisted Relic Hunter (T3)	twisted_relic_hunter_hat_t3:1,twisted_relic_hunter_top_t3:1,twisted_relic_hunter_legs_t3:1,twisted_relic_hunter_boots_t3:1,twisted_cane:1	10000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer banner	trailblazer_banner:1	500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer teleport scroll	trailblazer_home_teleport_scroll:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer tool ornament kit	trailblazer_tool_ornamentkit:1	1500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer globe	trailblazer_statue:1	4000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer rug	trailblazer_rug:1	5000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer graceful ornament kit	trailblazer_graceful_kit:1	6000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer Relic Hunter (T1)	trailblazer_relic_hunter_hood_t1:1,trailblazer_relic_hunter_top_t1:1,trailblazer_relic_hunter_legs_t1:1,trailblazer_relic_hunter_boots_t1:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer Relic Hunter (T2)	trailblazer_relic_hunter_hood_t2:1,trailblazer_relic_hunter_top_t2:1,trailblazer_relic_hunter_legs_t2:1,trailblazer_relic_hunter_boots_t2:1	3000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer Relic Hunter (T3)	trailblazer_relic_hunter_hood_t3:1,trailblazer_relic_hunter_top_t3:1,trailblazer_relic_hunter_legs_t3:1,trailblazer_relic_hunter_boots_t3:1,trailblazer_cane:1	15000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered banner	league_3_banner:1	500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered teleport scroll	league_3_home_teleport_scroll:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered relics variety ornament kit	league_3_weapon_variety_pack:1	1500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered relics void ornament kit	league_3_void_kit:1	6500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered relics mystic ornament kit	league_3_mystic_ornament_pack:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered cannon ornament kit	league_3_multicannon_pack:1	4500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered Relic Hunter (T1)	league_3_relic_hunter_hood_t1:1,league_3_relic_hunter_top_t1:1,league_3_relic_hunter_legs_t1:1,league_3_relic_hunter_boots_t1:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered Relic Hunter (T2)	league_3_relic_hunter_hood_t2:1,league_3_relic_hunter_top_t2:1,league_3_relic_hunter_legs_t2:1,league_3_relic_hunter_boots_t2:1	3000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Shattered Relic Hunter (T3)	league_3_relic_hunter_hood_t3:1,league_3_relic_hunter_top_t3:1,league_3_relic_hunter_legs_t3:1,league_3_relic_hunter_boots_t3:1,league_3_cane:1	15000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded banner	league_4_banner:1	500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded home teleport scroll	league_4_home_teleport_scroll:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded death scroll	league_4_death_scroll:1	3000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded alchemy scroll	league_4_alchemy_scroll:1	2000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded vengeance scroll	league_4_vengeance_scroll:1	7000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded rejuvenation pool scroll	league_4_rejuvination_pool_scroll:1	9000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded blowpipe ornament kit	toxic_blowpipe_ornament_kit:1	6000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer reloaded bulwark ornament kit	dinhs_bulwark_ornament_kit:1	10000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer Reloaded Relic Hunter (T1)	league_4_relic_hunter_hat_t1:1,league_4_relic_hunter_top_t1:1,league_4_relic_hunter_legs_t1:1,league_4_relic_hunter_boots_t1:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer Reloaded Relic Hunter (T2)	league_4_relic_hunter_hat_t2:1,league_4_relic_hunter_top_t2:1,league_4_relic_hunter_legs_t2:1,league_4_relic_hunter_boots_t2:1	5000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Trailblazer Reloaded Relic Hunter (T3)	league_4_relic_hunter_hat_t3:1,league_4_relic_hunter_top_t3:1,league_4_relic_hunter_legs_t3:1,league_4_relic_hunter_boots_t3:1,league_4_torch:1	18000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes banner	league_5_banner:1	500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging Echoes Relic Hunter (T1)	league5_relic_hunter_hat_t1:1,league5_relic_hunter_top_t1:1,league5_relic_hunter_legs_t1:1,league5_relic_hunter_boots_t1:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging Echoes Relic Hunter (T2)	league5_relic_hunter_hat_t2:1,league5_relic_hunter_top_t2:1,league5_relic_hunter_legs_t2:1,league5_relic_hunter_boots_t2:1	5000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging Echoes Relic Hunter (T3)	league5_relic_hunter_hat_t3:1,league5_relic_hunter_top_t3:1,league5_relic_hunter_legs_t3:1,league5_relic_hunter_boots_t3:1,league5_relic_hunter_cane:1	20000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes spirit tree scroll	league_5_spirit_tree_scroll:1	6000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes nexus scroll	league_5_nexus_scroll:1	4000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes rug	league_5_rug:1	500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes curtains	league_5_curtains:1	500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes scrying pool scroll	league_5_scrying_scroll:1	3000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes portal scroll	league_5_portal_scroll:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Echo home teleport scroll	league_5_home_teleport_scroll:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes death scroll	league_5_death_scroll:1	2000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Raging echoes npc contact scroll	league_5_contact_scroll:1	5000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Echo ahrim's ornament kit	barrows_ahrim_ornament_kit:1	6000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Echo virtus ornament kit	virtus_ornament_kit:1	8000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Echo venator bow ornament kit	venator_bow_ornament_kit:1	10000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic pacts banner	league_6_banner:1	500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic Pacts Relic Hunter (T1)	league_6_relic_hunter_hood_t1:1,league_6_relic_hunter_top_t1:1,league_6_relic_hunter_legs_t1:1,league_6_relic_hunter_boots_t1:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic Pacts Relic Hunter (T2)	league_6_relic_hunter_hood_t2:1,league_6_relic_hunter_top_t2:1,league_6_relic_hunter_legs_t2:1,league_6_relic_hunter_boots_t2:1	5000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic Pacts Relic Hunter (T3)	league_6_relic_hunter_hood_t3:1,league_6_relic_hunter_top_t3:1,league_6_relic_hunter_legs_t3:1,league_6_relic_hunter_boots_t3:1,league_6_relic_hunter_sceptre:1	20000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic pacts throne scroll	league_6_throne:1	3000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Impish ritual scroll	league_6_ritual_kit:1	1000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Impish whistle	league_6_thrall_contract:1	8000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic trident ornament kit	demonic_trident_ornament_kit:1	4500	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic axe ornament kit	demonic_axe_ornament_kit:1	10000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic quill	league_6_demonic_quill:1	3000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic skin contract	demonic_skin_ornament_kit:1	3000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic pacts demon butler scroll	league_6_butler_scroll:1	4000	-	0	false	15229833
+Leagues Reward Shop	true	p:league_points_currency	league_tutor_normal:3,league_3_tutor:3	Demonic staff ornament kit	demonic_staff_ornament_kit:1	2000	-	0	false	15229833
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Soul cape	soul_cape_red:1	2500	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Ectoplasmator	soul_wars_ectoplasmator:1	250	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Spoils of war	soul_wars_spoils:1	30	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted entangle sack	blighted_sack_entangle:70	10	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted teleport spell sack	blighted_sack_teleblock:50	10	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted vengeance sack	blighted_sack_vengeance:50	10	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted ancient ice sack	blighted_sack_icebarrage:30	10	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted manta ray	blighted_mantaray:15	10	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted anglerfish	blighted_anglerfish:15	10	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted karambwan	blighted_karambwan:12	10	-	0	false	15168164
+Soul Wars Reward Shop	true	p:soul_wars_zeal_tokens	soul_wars_nomad_2op:3	Blighted super restore(4)	blighted_4dose2restore:4	10	-	0	false	15168164
+Deadman Reward Store	true	p:deadman_points_currency	deadman_nigel_dmm:4,deadman_nigel_regular:4	Armageddon weapon scroll	deadman_2024_weapon_ornament_scroll:1	12000	12000	0	false	15142101
+Deadman Reward Store	true	p:deadman_points_currency	deadman_nigel_dmm:4,deadman_nigel_regular:4	Armageddon cape fabric	deadman_2024_cape_ornament_scroll:1	6000	6000	0	false	15142101
+Deadman Reward Store	true	p:deadman_points_currency	deadman_nigel_dmm:4,deadman_nigel_regular:4	Armageddon teleport scroll	deadman_2024_home_teleport_scroll:1	9000	9000	0	false	15142101
+Deadman Reward Store	true	p:deadman_points_currency	deadman_nigel_dmm:4,deadman_nigel_regular:4	Armageddon rug	deadman_rug:1	3000	3000	0	false	15142101
+Deadman Reward Store	true	p:deadman_points_currency	deadman_nigel_dmm:4,deadman_nigel_regular:4	Annihilation weapon scroll	deadman_2026_weapon_ornament_scroll:1	12000	12000	0	false	15142101
+Deadman Reward Store	true	p:deadman_points_currency	deadman_nigel_dmm:4,deadman_nigel_regular:4	Annihilation blueprints	deadman_2026_poh_ornament_scroll:1	15000	15000	0	false	15142101
+Deadman Reward Store	true	p:deadman_points_currency	deadman_nigel_dmm:4,deadman_nigel_regular:4	Annihilation teleport scroll	deadman_2026_home_teleport_scroll:1	10000	10000	0	false	15142101
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Vesta's chainbody (bh)(inactive)	bh_vestas_chainbody_inactive:1	600	480	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Vesta's plateskirt (bh)(inactive)	bh_vestas_plateskirt_inactive:1	550	440	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Statius's full helm (bh)(inactive)	bh_statius_full_helm_inactive:1	400	320	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Statius's platebody (bh)(inactive)	bh_statius_platebody_inactive:1	600	480	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Statius's platelegs (bh)(inactive)	bh_statius_platelegs_inactive:1	500	400	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Morrigan's coif (bh)(inactive)	bh_morrigans_coif_inactive:1	400	320	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Morrigan's leather body (bh)(inactive)	bh_morrigans_leather_body_inactive:1	600	480	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Morrigan's leather chaps (bh)(inactive)	bh_morrigans_leather_chaps_inactive:1	500	400	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Zuriel's hood (bh)(inactive)	bh_zuriels_hood_inactive:1	300	240	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Zuriel's robe top (bh)(inactive)	bh_zuriels_robe_top_inactive:1	500	400	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Zuriel's robe bottom (bh)(inactive)	bh_zuriels_robe_bottom_inactive:1	400	320	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Vesta's spear (bh)(inactive)	vestas_spear_bh_inactive:1	300	240	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Vesta's longsword (bh)(inactive)	vestas_longsword_bh_inactive:1	650	520	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Statius's warhammer (bh)(inactive)	statius_warhammer_bh_inactive:1	450	360	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Morrigan's throwing axe (bh)(inactive)	morrigans_thrownaxe_bh_inactive:1	300	240	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Morrigan's javelin (bh)(inactive)	morrigans_javelin_bh_inactive:1	550	440	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Zuriel's staff (bh)(inactive)	zuriels_staff_bh_inactive:1	300	240	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Dark bow imbue scroll	bh_darkbow_imbue_scroll:1	100	80	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Barrelchest anchor imbue scroll	bh_brain_anchor_imbue_scroll:1	75	60	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Dragon mace imbue scroll	bh_dragon_mace_imbue_scroll:1	50	40	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Dragon longsword imbue scroll	bh_dragon_longsword_imbue_scroll:1	50	40	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Abyssal dagger imbue scroll	bh_abyssal_dagger_imbue_scroll:1	150	120	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Bounty hunter ornament kit	bh_ornament_kit:1	50	40	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Elder maul ornament kit	pvpa_elder_maul_kit:1	50	40	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Heavy ballista ornament kit	pvpa_heavy_ballista_kit:1	50	40	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Elder chaos robes ornament kit	pvpa_elderchaos_robes_kit:1	50	40	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Target teleport scroll	bounty_teleport_scroll:1	500	-	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Blighted karambwan	blighted_karambwan:15	2	-	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Blighted manta ray	blighted_mantaray:15	2	-	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Blighted anglerfish	blighted_anglerfish:15	2	-	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Blighted super restore(4)	blighted_4dose2restore:4	2	-	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Esoteric emblem (tier 1)	bh_2023_emblem_1:1	2	-	0	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Bounty hunter hat (tier 1)	bh_hat_tier1:1	0	-	1	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Bounty hunter hat (tier 2)	bh_hat_tier2:1	0	-	25	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Bounty hunter hat (tier 3)	bh_hat_tier3:1	0	-	100	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Bounty hunter hat (tier 4)	bh_hat_tier4:1	0	-	250	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Bounty hunter hat (tier 5)	bh_hat_tier5:1	0	-	1000	false	15123639
+Bounty Hunter Store	true	p:bh_2023_points	bh_emblem_trader:3	Bounty hunter hat (tier 6)	bh_hat_tier6:1	0	-	2500	false	15123639
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative helm (red)	castlewars_med_helm:1	4	4	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative full helm (red)	castlewars_full_helm:1	5	5	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (red platebody)	castlewars_armour_body:1	8	8	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (red platelegs)	castlewars_armour_legs:1	6	6	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (red plateskirt)	castlewars_armour_skirt:1	6	6	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative boots (red)	castlewars_boots:1	4	4	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative shield (red)	castlewars_shield:1	6	6	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative sword (red)	castlewars_sword:1	5	5	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative helm (white)	castlewars_med_helm_2:1	40	40	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative full helm (white)	castlewars_full_helm_2:1	40	40	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (white platebody)	castlewars_armour_body_2:1	80	80	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (white platelegs)	castlewars_armour_legs_2:1	60	60	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (white plateskirt)	castlewars_armour_skirt_2:1	60	60	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative boots (white)	castlewars_boots_2:1	40	40	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative shield (white)	castlewars_shield_2:1	60	60	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative sword (white)	castlewars_sword_2:1	50	50	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative helm (gold)	castlewars_med_helm_3:1	400	400	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative full helm (gold)	castlewars_full_helm_3:1	500	500	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (gold platebody)	castlewars_armour_body_3:1	800	800	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (gold platelegs)	castlewars_armour_legs_3:1	600	600	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (gold plateskirt)	castlewars_armour_skirt_3:1	600	600	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative boots (gold)	castlewars_boots_3:1	400	400	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative shield (gold)	castlewars_shield_3:1	600	600	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative sword (gold)	castlewars_sword_3:1	500	500	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Castlewars hood (Zamorak)	castlewars_hood_zamorak_prize:1	10	10	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Castlewars cloak (Zamorak)	castlewars_cloak_zamorak_prize:1	10	10	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Castlewars hood (Saradomin)	castlewars_hood_saradomin_prize:1	10	10	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Castlewars cloak (Saradomin)	castlewars_cloak_saradomin_prize:1	10	10	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Saradomin banner	saradomin_reward_banner:1	100	100	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Zamorak banner	zamorak_reward_banner:1	100	100	0	false	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (magic hat)	castlewars_mage_hat:1	20	20	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (magic top)	castlewars_mage_top:1	40	40	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (magic legs)	castlewars_mage_legs:1	30	30	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (ranged top)	castlewars_range_top:1	40	40	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (ranged legs)	castlewars_range_legs:1	30	30	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Decorative armour (quiver)	castlewars_range_quiver:1	40	40	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Saradomin halo	castlewars_saradomin_halo:1	75	75	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Zamorak halo	castlewars_zamorak_halo:1	75	75	0	true	15207661
+Castle Wars Ticket Exchange	false	i:castlewars_ticket	castlewars_judge_model:4	Guthix halo	castlewars_guthix_halo:1	75	75	0	true	15207661
+Speedrunning Reward Shop	true	p:speedrun_points_currency	speedrunning_shop_3op:3	Adventurer's outfit (tier 1)	adventurers_hood_t1:1,adventurers_top_t1:1,adventurers_legs_t1:1,adventurers_boots_t1:1	200	-	0	false	14938937
+Speedrunning Reward Shop	true	p:speedrun_points_currency	speedrunning_shop_3op:3	Adventurer's outfit (tier 2)	adventurers_hood_t2:1,adventurers_top_t2:1,adventurers_legs_t2:1,adventurers_boots_t2:1	600	-	0	false	14938937
+Speedrunning Reward Shop	true	p:speedrun_points_currency	speedrunning_shop_3op:3	Adventurer's outfit (tier 3)	adventurers_hood_t3:1,adventurers_top_t3:1,adventurers_legs_t3:1,adventurers_boots_t3:1	1800	-	0	false	14938937
+Speedrunning Reward Shop	true	p:speedrun_points_currency	speedrunning_shop_3op:3	Giant stopwatch	giant_stopwatch:1	1200	-	0	false	14938937
+Speedrunning Reward Shop	true	p:speedrun_points_currency	speedrunning_shop_3op:3	Speedy teleport scroll	speedy_teleport_scroll:1	600	-	0	false	14938937

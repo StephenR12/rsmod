@@ -21,7 +21,8 @@ public value class InlineByteBuf(public val backing: ByteArray) {
         if ((backing[cursor.pos].toInt() and 0x80) == 0) {
             readByte(cursor)
         } else {
-            readShort(cursor)
+            val next = readShort(cursor)
+            Cursor(next.value and 0x7fff, next.pos)
         }
 
     public fun readIncrShortSmart(cursor: Cursor): Cursor {

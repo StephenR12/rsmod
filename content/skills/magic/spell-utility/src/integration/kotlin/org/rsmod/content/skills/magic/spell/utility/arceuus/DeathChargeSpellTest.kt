@@ -52,7 +52,7 @@ import org.rsmod.game.type.npc.UnpackedNpcType
 @Execution(ExecutionMode.SAME_THREAD)
 class DeathChargeSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins normal upgraded and client state contracts`() =
+    fun GameTestState.`cache 238 pins normal upgraded and client state contracts`() =
         runDeathChargeTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_death_charge))
 
@@ -66,7 +66,7 @@ class DeathChargeSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_death_charge.id ushr 16)
-            assertEquals(183, components.magic_spellbook_death_charge.id and 0xFFFF)
+            assertEquals(188, components.magic_spellbook_death_charge.id and 0xFFFF)
             assertEquals(
                 "Cast",
                 deps.components[components.magic_spellbook_death_charge].targetVerb,

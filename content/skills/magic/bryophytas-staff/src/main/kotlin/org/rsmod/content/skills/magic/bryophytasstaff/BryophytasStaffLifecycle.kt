@@ -11,7 +11,6 @@ import org.rsmod.api.player.vars.intVarBit
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.isAnyType
 import org.rsmod.game.inv.isType
-import org.rsmod.utils.bits.withBits
 
 public class BryophytasStaffLifecycle
 @Inject
@@ -34,12 +33,11 @@ constructor(private val chargeManager: ObjChargeManager) {
         val needed =
             access.player.bryophytasStaffAutochargeQuantity.coerceIn(0, MAX_CHARGES) - current
         if (needed <= 0) return
-        val runes = event.takeMaterial(objs.nature_rune, needed)
-        if (runes > 0) {
-            val vars = staff.vars.withBits(varobjs.charges_16383.bits, current + runes)
-            access.inv[event.slot] = InvObj(objs.bryophytas_staff, vars = vars)
-        }
-        if (runes < needed)
+        val result =
+            chargeManager.addCharges(access.inv, event.slot, needed, varobjs.charges_16383, MAX_CHARGES) {
+                event.takeMaterial(objs.nature_rune, it)
+            }
+        if ((result as? ObjChargeManager.Charge.Success)?.added != needed)
             access.mes("There aren't enough nature runes in your bank to charge the staff fully.")
     }
 
@@ -60,25 +58,15 @@ constructor(private val chargeManager: ObjChargeManager) {
             return
         }
 
-        val deletion =
-            access.invDel(inv = access.inv, type = objs.nature_rune, count = add, slot = runeSlot)
-        if (deletion.failure) {
-            return
-        }
-
-        check(
-            access.inv[staffSlot].isAnyType(objs.bryophytas_staff_uncharged, objs.bryophytas_staff)
-        )
         val result =
-            chargeManager.addCharges(
-                inventory = access.inv,
-                slot = staffSlot,
-                add = add,
-                varobj = varobjs.charges_16383,
-                max = MAX_CHARGES,
-            )
-        check(result is ObjChargeManager.Charge.Success)
-        access.mes("You add $add nature runes to Bryophyta's staff.")
+            chargeManager.addCharges(access.inv, staffSlot, add, varobjs.charges_16383, MAX_CHARGES) {
+                count ->
+                val removed = access.invDel(access.inv, objs.nature_rune, count, slot = runeSlot)
+                if (removed.success) count else 0
+            }
+        if (result is ObjChargeManager.Charge.Success) {
+            access.mes("You add ${result.added} nature runes to Bryophyta's staff.")
+        }
     }
 
     public fun check(access: ProtectedAccess, staff: InvObj?) {

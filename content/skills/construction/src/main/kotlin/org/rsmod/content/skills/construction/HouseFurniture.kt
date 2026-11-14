@@ -2,6 +2,7 @@ package org.rsmod.content.skills.construction
 
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import org.rsmod.api.config.refs.objs
 import org.rsmod.game.type.dbrow.DbRowTypeList
 import org.rsmod.game.type.stat.StatTypeList
 import org.rsmod.game.type.stat.UnpackedStatType
@@ -53,7 +54,11 @@ internal class HouseFurniture @Inject constructor(rows: DbRowTypeList, stats: St
                             stats[it[0] as Int]!! to it[1] as Int
                         }
                     val materials =
-                        entry.data.getValue(2).chunked(2).map { it[0] as Int to it[1] as Int }
+                        entry.data.getValue(2).chunked(2).map {
+                            // Revision 238 uses a display-only steel nail token in furniture recipes.
+                            val item = it[0] as Int
+                            (if (item == 32923) objs.steel_nails.id else item) to (it[1] as Int)
+                        }
                     val location =
                         "poh_" +
                             (locations.getOrNull(index) ?: loc.replace("#", variant.toString()))

@@ -11,24 +11,24 @@ class ClientContractArchiveManifestExporterIntegrationTest {
         val manifest =
             ClientContractArchiveManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/vanilla"),
-                revision = "233.4",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
 
         val counts = manifest.entries.groupingBy(CacheManifestEntry::domain).eachCount()
         assertEquals(
             mapOf(
-                "animation-bases" to 2_464,
-                "animation-frames" to 175_868,
-                "client-scripts" to 8_093,
-                "interface-components" to 25_602,
-                "jingles" to 311,
-                "keyframe-sets" to 629,
-                "midi-patches" to 155,
-                "songs" to 830,
-                "sound-effects" to 10_751,
-                "vorbis-samples" to 501,
+                "animation-bases" to 2_631,
+                "animation-frames" to 203_223,
+                "client-scripts" to 9_534,
+                "interface-components" to 26_306,
+                "jingles" to 314,
+                "keyframe-sets" to 789,
+                "midi-patches" to 179,
+                "songs" to 861,
+                "sound-effects" to 11_595,
+                "vorbis-samples" to 566,
             ),
             counts,
         )

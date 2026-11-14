@@ -33,10 +33,8 @@ constructor(private val bankScript: BankInvScript, private val objTypes: ObjType
     override fun ScriptContext.startup() {
         val comps = bank_components
 
-        onIfModalButton(comps.rearrange_mode_swap) { insertMode = false }
-        onIfModalButton(comps.rearrange_mode_insert) { insertMode = true }
-        onIfModalButton(comps.withdraw_mode_item) { withdrawCert = false }
-        onIfModalButton(comps.withdraw_mode_note) { withdrawCert = true }
+        onIfModalButton(comps.rearrange_mode) { insertMode = !insertMode }
+        onIfModalButton(comps.withdraw_mode_note) { withdrawCert = !withdrawCert }
         onIfModalButton(comps.always_placehold) { alwaysPlacehold = !alwaysPlacehold }
         onIfModalButton(comps.quantity_1) { leftClickQtyMode = QuantityMode.One }
         onIfModalButton(comps.quantity_5) { leftClickQtyMode = QuantityMode.Five }

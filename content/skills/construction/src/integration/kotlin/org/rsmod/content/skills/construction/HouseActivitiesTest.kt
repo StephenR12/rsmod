@@ -158,7 +158,8 @@ class HouseActivitiesTest {
             )
             val entry = requireNotNull(deps.house.prepare(player, true))
             val at = entry.translate(10, 5)
-            player.teleport(at.translateZ(-1))
+            // The wall-decoration hotspot is operated from its own walkable floor tile.
+            player.teleport(at)
             player.inv[3] = InvObj(objs.hammer)
             player.inv[4] = InvObj(objTypes.values.single { it.internalName == "poh_saw" })
             for (slot in 5..7) player.inv[slot] = InvObj(objs.mahogany_plank)

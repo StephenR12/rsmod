@@ -29,7 +29,6 @@ object SettingComponents : ComponentReferences() {
     val sound_bobble_container = find("settings_side:sound_bobble_container")
     val areasound_icon = find("settings_side:areasound_icon")
     val areasounds_bobble_container = find("settings_side:areasounds_bobble_container")
-    val music_toggle = find("settings_side:music_toggle")
 
     val brightness_bobble_container = find("settings_side:brightness_bobble_container")
     val zoom_toggle = find("settings_side:zoom_toggle")

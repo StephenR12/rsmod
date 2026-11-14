@@ -12,9 +12,8 @@ import org.rsmod.game.entity.Player
 
 private var Player.staminaActiveDisplay by intVarBit(varbits.stamina_active)
 private var Player.staminaDurationDisplay by intVarBit(varbits.stamina_duration)
-private var Player.staminaExtraDisplay by intVarBit(varbits.stamina_duration_extra)
 
-/** Cache-233 two-minute stamina-potion state shared by potion consumption and potion sharing. */
+/** Two-minute stamina-potion state shared by potion consumption and potion sharing. */
 @Singleton
 public class StaminaEffectRepository {
     private val expiresAt = WeakHashMap<Player, Int>()
@@ -73,16 +72,15 @@ public class StaminaEffectRepository {
         extended.remove(player)
         player.staminaActiveDisplay = 0
         player.staminaDurationDisplay = 0
-        player.staminaExtraDisplay = 0
         player.clearSoftTimer(timers.stamina_effect)
     }
 
     private fun syncClient(player: Player, remaining: Int) {
         player.staminaActiveDisplay = 1
-        // Cache varbit 24 exposes the remaining duration in ten-cycle units.
+        // The client varbit exposes at most twenty ten-cycle units. An Endurance Ring's longer
+        // effect remains tracked by expiresAt; revision 238 no longer has an extra-duration varbit.
         val units = (remaining + DISPLAY_UNIT_CYCLES - 1) / DISPLAY_UNIT_CYCLES
         player.staminaDurationDisplay = minOf(units,20)
-        player.staminaExtraDisplay = (units - 20).coerceIn(0,31)
     }
 
     public companion object {

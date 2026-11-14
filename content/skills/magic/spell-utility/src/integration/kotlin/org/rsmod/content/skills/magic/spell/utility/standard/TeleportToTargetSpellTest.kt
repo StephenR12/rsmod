@@ -59,7 +59,7 @@ class TeleportToTargetSpellTest {
                 mapOf(objs.law_rune to 1, objs.chaos_rune to 1, objs.death_rune to 1),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(73, spell.component.id and 0xFFFF)
+            assertEquals(76, spell.component.id and 0xFFFF)
             assertEquals(17152, objs.spell_teleport_to_target.id)
 
             val scroll = deps.objTypes[objs.bounty_teleport_scroll]

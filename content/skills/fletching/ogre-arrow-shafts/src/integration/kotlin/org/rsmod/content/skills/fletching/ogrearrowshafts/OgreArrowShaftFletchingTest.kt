@@ -75,7 +75,7 @@ class OgreArrowShaftFletchingTest {
             )
             val events =
                 client.filterIsInstance<IfSetEventsV2>().filter {
-                    it.interfaceId == 270 && it.componentId in 14..15
+                    it.interfaceId == 270 && it.componentId in 15..16
                 }
             assertEquals(2, events.size)
             assertTrue(events.all { it.start == 1 && it.end == 1 })

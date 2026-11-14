@@ -103,14 +103,13 @@ constructor(
                 if (inv[it.slot] != it.obj) return@onProtectedEvent
                 val current = chargeManager.getCharges(it.obj, varobjs.tumeken_charges)
                 val materials = listOf(objs.chaos_rune to 5, objs.soul_rune to 2)
-                val added =
-                    banking.takeBankChargeMaterials(
-                        this,
-                        materials,
-                        vars[StaffBits.shadow] - current,
-                    )
-                if (added > 0)
-                    chargeManager.addCharges(inv, it.slot, added, varobjs.tumeken_charges, 20000)
+                chargeManager.addCharges(
+                    inv,
+                    it.slot,
+                    vars[StaffBits.shadow] - current,
+                    varobjs.tumeken_charges,
+                    20000,
+                ) { count -> banking.takeBankChargeMaterials(this, materials, count) }
             }
         }
     }

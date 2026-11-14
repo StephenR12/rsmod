@@ -63,7 +63,7 @@ constructor(
             val data = rows.getValue(entry as Int).data
             val item = data.getValue(0).single() as Int
             val cost = MutableList(3) { 0 }
-            for (pair in data.getValue(6).chunked(2)) {
+            for (pair in data.getValue(7).chunked(2)) {
                 val i =
                     when (pair[0] as Int) {
                         3748 -> 0

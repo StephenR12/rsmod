@@ -94,7 +94,7 @@ object BaseSeqs : SeqReferences() {
     val human_reachforladder = find("human_reachforladder", 5950979418546357048)
     val human_pickuptable = find("human_pickuptable", 3590832051552122083)
     val human_shearing = find("human_shearing", 8525764736895195917)
-    val milkit = find("milkit", 8837273620997483727)
+    val milkit = find("milkit", 8837273620997483666)
     val poh_smash_magic_tablet = find("poh_smash_magic_tablet", 2922113110586613810)
     val poh_absorb_tablet_teleport = find("poh_absorb_tablet_teleport", 762546241074929929)
 
@@ -178,7 +178,7 @@ object BaseSeqs : SeqReferences() {
     val human_amethystcutting = find("human_amethystcutting")
     val xbows_fletching_pearl = find("xbows_fletching_pearl")
     val human_glassblowing = find("human_glassblowing")
-    val human_spinningwheel = find("human_spinningwheel")
+    val human_spinningwheel = find("human_spinningwheel_90")
     val human_loom_weaving = find("farming_useloom")
     val human_potterywheel = find("human_potterywheel")
     val potteryoven_quick = find("potteryoven_quick")

@@ -9,10 +9,10 @@ import org.openrs2.buffer.use
 import org.openrs2.cache.Cache
 import org.rsmod.annotations.InternalApi
 import org.rsmod.api.area.checker.AreaChecker
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.map.GameMapDecoder
 import org.rsmod.api.cache.map.area.MapAreaDecoder
-import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.api.cache.util.toInlineBuf
 import org.rsmod.api.config.refs.BaseStats
 import org.rsmod.api.config.refs.areas
@@ -56,7 +56,7 @@ class WoodcuttingLevelBoostsTest {
                     listOf(MapSquareKey(24, 54), MapSquareKey(25, 54)).forEach { square ->
                         val group = "a${square.x}_${square.z}"
                         val definition =
-                            cache.readOrNull(Js5Archives.MAPS, group)?.use {
+                            MapArchive(cache).read(square, MapFile.Areas)?.use {
                                 MapAreaDecoder.decode(it.toInlineBuf())
                             } ?: error("Missing cached area map $group")
                         GameMapDecoder.putAreas(cachedIndex, square, definition)

@@ -36,6 +36,7 @@ public fun ByteBuf.writeRawParams(params: Map<Int, Any>): ByteBuf {
                 writeInt(value)
             }
 
+            is Long -> writeByte(2).writeMedium(key).writeLong(value)
             else -> error("Invalid param value: $value.")
         }
     }
@@ -46,13 +47,15 @@ public fun ByteBuf.readRawParams(): MutableMap<Int, Any> {
     val parameters = mutableMapOf<Int, Any>()
     val count = readUnsignedByte().toInt()
     repeat(count) {
-        val isString = readBoolean()
+        val type = readUnsignedByte().toInt()
         val key = readUnsignedMedium()
-        if (isString) {
-            parameters[key] = readString()
-        } else {
-            parameters[key] = readInt()
-        }
+        parameters[key] =
+            when (type) {
+                0 -> readInt()
+                1 -> readString()
+                2 -> readLong()
+                else -> error("Unsupported param value type: $type")
+            }
     }
     return parameters
 }
@@ -109,30 +112,23 @@ public fun ByteBuf.readUnsignedSmallSmartPlusOne(): Int {
 }
 
 public fun ByteBuf.writeIntSmart(value: Int): ByteBuf {
-    require(value > Short.MAX_VALUE)
-    require(value < (Int.MAX_VALUE - Short.MAX_VALUE))
-    val diff = value - Short.MAX_VALUE
-    writeShort(0xFFFF)
-    writeUnsignedShortSmart(diff)
-    return this
+    require(value >= Short.MAX_VALUE)
+    var remainder = value
+    while (remainder >= Short.MAX_VALUE) {
+        writeShort(0xFFFF)
+        remainder -= Short.MAX_VALUE
+    }
+    return writeUnsignedShortSmart(remainder)
 }
 
 public fun ByteBuf.writeUnsignedSmartInt(value: Int): ByteBuf =
-    if (value > Short.MAX_VALUE) {
-        writeIntSmart(value)
-    } else {
-        writeUnsignedShortSmart(value)
-    }
+    if (value >= Short.MAX_VALUE) writeIntSmart(value) else writeUnsignedShortSmart(value)
 
-public fun ByteBuf.toInlineBuf(): InlineByteBuf =
-    if (hasArray()) {
-        val bytes = array().copyOf(writerIndex())
-        InlineByteBuf(bytes)
-    } else {
-        val bytes = ByteArray(writerIndex())
-        readBytes(bytes)
-        InlineByteBuf(bytes)
-    }
+public fun ByteBuf.toInlineBuf(): InlineByteBuf {
+    val bytes = ByteArray(readableBytes())
+    getBytes(readerIndex(), bytes)
+    return InlineByteBuf(bytes)
+}
 
 public fun ByteBuf.readColumnValues(types: List<Int>): List<Any> {
     val groupCount = readUnsignedShortSmart()
@@ -159,4 +155,25 @@ public fun ByteBuf.writeColumnValues(values: List<Any>, types: List<Int>) {
             writeInt(value as Int)
         }
     }
+}
+
+internal fun ByteBuf.readUnsignedLeb128(): Int {
+    var result = 0
+    for (shift in 0..28 step 7) {
+        val value = readUnsignedByte().toInt()
+        require(shift < 28 || value <= 7) { "LEB128 value exceeds a nonnegative Int" }
+        result = result or ((value and 0x7f) shl shift)
+        if (value and 0x80 == 0) return result
+    }
+    error("Invalid LEB128 value")
+}
+
+internal fun ByteBuf.writeUnsignedLeb128(value: Int) {
+    require(value >= 0)
+    var remaining = value
+    while (remaining >= 128) {
+        writeByte((remaining and 0x7f) or 0x80)
+        remaining = remaining ushr 7
+    }
+    writeByte(remaining)
 }

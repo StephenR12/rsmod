@@ -10,6 +10,7 @@ import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.util.TextUtil
 import org.rsmod.api.cache.util.readCoordGrid
+import org.rsmod.api.cache.util.readEntityOption
 import org.rsmod.api.cache.util.readNullableLargeSmart
 import org.rsmod.api.cache.util.readRawParams
 import org.rsmod.api.cache.util.readUnsignedShortOrNull
@@ -54,10 +55,13 @@ public object NpcTypeDecoder {
     public fun decode(builder: NpcTypeBuilder, data: ByteBuf, code: Int): Unit =
         with(builder) {
             when (code) {
-                1 -> {
+                1,
+                61 -> {
                     val count = data.readUnsignedByte().toInt()
                     val models = IntArray(count)
-                    repeat(count) { models[it] = data.readUnsignedShort() }
+                    repeat(count) {
+                        models[it] = if (code == 61) data.readInt() else data.readUnsignedShort()
+                    }
                     this.models = CompactableIntArray(models)
                 }
                 2 -> name = data.readString()
@@ -98,10 +102,13 @@ public object NpcTypeDecoder {
                         else -> throw NotImplementedError("Unhandled .npc config code: $code")
                     }
                 }
-                60 -> {
+                60,
+                62 -> {
                     val count = data.readUnsignedByte().toInt()
                     val models = IntArray(count)
-                    repeat(count) { models[it] = data.readUnsignedShort() }
+                    repeat(count) {
+                        models[it] = if (code == 62) data.readInt() else data.readUnsignedShort()
+                    }
                     this.head = CompactableIntArray(models)
                 }
                 74 -> attack = data.readUnsignedShort()
@@ -177,6 +184,13 @@ public object NpcTypeDecoder {
                 122 -> follower = true
                 123 -> lowPriorityOps = true
                 124 -> overlayHeight = data.readUnsignedShort()
+                111 -> lowRenderPriority = true
+                126 -> footprintSize = data.readUnsignedShort()
+                129 -> flag129 = true
+                130 -> idleAnimRestart = true
+                145 -> canHideForOverlap = true
+                146 -> overlapTint = data.readUnsignedShort()
+                147 -> disableDepthBuffer = true
                 200 -> {
                     val id = data.readUnsignedByte().toInt()
                     moveRestrict = MoveRestrict.entries.first { it.id == id }
@@ -217,6 +231,7 @@ public object NpcTypeDecoder {
                 214 -> heroCount = data.readUnsignedShort()
                 215 -> regenRate = data.readUnsignedShort()
                 216 -> huntMode = data.readUnsignedShortOrNull()
+                in 251..253 -> extraOptions += data.readEntityOption(code - 251)
                 249 -> paramMap = ParamMap(data.readRawParams())
                 else -> throw IOException("Error unrecognised .npc config code: $code")
             }

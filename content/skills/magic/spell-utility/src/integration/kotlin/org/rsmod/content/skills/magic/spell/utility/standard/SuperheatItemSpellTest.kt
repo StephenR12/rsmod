@@ -73,7 +73,7 @@ class SuperheatItemSpellTest {
                 ),
                 deps.recipes.recipes.mapTo(mutableSetOf()) { it.output },
             )
-            assertEquals(33, components.magic_spellbook_superheat.id and 0xFFFF)
+            assertEquals(36, components.magic_spellbook_superheat.id and 0xFFFF)
             assertEquals(725, seqs.human_castsuperheatitem.id)
             assertEquals(687, seqs.superheatitem_casting.id)
             assertEquals(148, spotanims.superheatitem_casting.id)

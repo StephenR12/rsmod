@@ -1754,7 +1754,7 @@ class PickpocketScriptTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pickpocket clue pools pin every active initial step`() =
+    fun GameTestState.`cache 238 pickpocket clue pools pin every active initial step`() =
         runThievingTest { deps ->
             val medium = deps.clueSteps.steps(ClueTier.Medium)
             val hard = deps.clueSteps.steps(ClueTier.Hard)
@@ -1762,13 +1762,13 @@ class PickpocketScriptTest {
 
             assertEquals(Cache233ClueSteps.MEDIUM_SIZE, medium.size)
             assertEquals(2_801, medium.first().id)
-            assertEquals(30_935, medium.last().id)
+            assertEquals(31_275, medium.last().id)
             assertEquals(Cache233ClueSteps.HARD_SIZE, hard.size)
             assertEquals(2_722, hard.first().id)
-            assertEquals(30_931, hard.last().id)
+            assertEquals(31_273, hard.last().id)
             assertEquals(Cache233ClueSteps.ELITE_SIZE, elite.size)
             assertEquals(12_073, elite.first().id)
-            assertEquals(30_932, elite.last().id)
+            assertEquals(31_271, elite.last().id)
             for ((tier, steps) in
                 listOf(ClueTier.Medium to medium, ClueTier.Hard to hard, ClueTier.Elite to elite)) {
                 assertTrue(steps.all { it.name == "Clue scroll (${tier.key})" })

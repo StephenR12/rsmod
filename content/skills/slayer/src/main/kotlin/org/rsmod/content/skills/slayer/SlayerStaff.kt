@@ -35,9 +35,14 @@ public class SlayerStaff @Inject constructor(private val charges: ObjChargeManag
     override fun ScriptContext.startup() {
         onOpHeldU(objs.slayers_staff, StaffObjs.enchantment) {
             if (!player.members || !inv[it.firstSlot].isType(objs.slayers_staff)) return@onOpHeldU
-            if (invDel(inv, StaffObjs.enchantment, slot = it.secondSlot).failure) return@onOpHeldU
-            charges.addCharges(inv, it.firstSlot, capacity, varobjs.charges_16383, capacity)
-            mes("You enchant the Slayer staff with 2,500 charges.")
+            val result =
+                charges.addCharges(inv, it.firstSlot, capacity, varobjs.charges_16383, capacity) {
+                    count ->
+                    if (invDel(inv, StaffObjs.enchantment, slot = it.secondSlot).success) count else 0
+                }
+            if (result is ObjChargeManager.Charge.Success) {
+                mes("You enchant the Slayer staff with 2,500 charges.")
+            }
         }
         onOpHeld3(objs.slayers_staff_e) { checkCharges(it.inventory[it.slot]) }
         onOpWorn2(objs.slayers_staff_e) { checkCharges(player.righthand) }

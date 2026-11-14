@@ -103,7 +103,7 @@ class MuggerDropsTest {
             val drops = deps.table.roll(context(deps))
 
             assertEquals(
-                listOf(objs.bones.id, objs.cabbage.id, objs.clue_scroll_beginner.id, 30_928),
+                listOf(objs.bones.id, objs.cabbage.id, objs.clue_scroll_beginner.id, 31_268),
                 drops.map { it.obj.id },
             )
             assertEquals(ClueInventory.CLUE_SCROLL_GROUND_DURATION, drops[2].duration)

@@ -56,7 +56,7 @@ import org.rsmod.routefinder.flag.CollisionFlag
 @Execution(ExecutionMode.SAME_THREAD)
 class ArceuusReanimationTest {
     @Test
-    fun GameTestState.`cache 233 pins every head npc spell and presentation contract`() =
+    fun GameTestState.`cache 238 pins every head npc spell and presentation contract`() =
         runReanimationTest { deps ->
             assertEquals(23, ReanimationRecipes.all.size)
             assertEquals(
@@ -155,10 +155,10 @@ class ArceuusReanimationTest {
                 assertEquals("Attack", deps.npcTypes[recipe.npc].op[1])
             }
 
-            assertSpell(deps, objs.spell_basic_reanimation, 11_997, 16, 32.0, 149, 4, 2, 0)
-            assertSpell(deps, objs.spell_adept_reanimation, 2_885, 41, 80.0, 151, 4, 3, 1)
-            assertSpell(deps, objs.spell_expert_reanimation, 6_208, 72, 138.0, 152, 0, 3, 2, 1)
-            assertSpell(deps, objs.spell_master_reanimation, 6_888, 90, 170.0, 153, 0, 4, 4, 2)
+            assertSpell(deps, objs.spell_basic_reanimation, 11_997, 16, 32.0, 154, 4, 2, 0)
+            assertSpell(deps, objs.spell_adept_reanimation, 2_885, 41, 80.0, 156, 4, 3, 1)
+            assertSpell(deps, objs.spell_expert_reanimation, 6_208, 72, 138.0, 157, 0, 3, 2, 1)
+            assertSpell(deps, objs.spell_master_reanimation, 6_888, 90, 170.0, 158, 0, 4, 4, 2)
             assertEquals(2, deps.types.seqs[ReanimationSeqs.player].tickDuration)
             assertEquals(3, deps.types.seqs[ReanimationSeqs.creature].tickDuration)
             assertEquals(

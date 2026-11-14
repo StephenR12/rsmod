@@ -1,6 +1,7 @@
 package org.rsmod.game.type.obj
 
 import org.rsmod.game.type.util.CompactableIntArray
+import org.rsmod.game.type.util.EntityOption
 import org.rsmod.game.type.util.GenericPropertySelector.select
 import org.rsmod.game.type.util.GenericPropertySelector.selectIntArray
 import org.rsmod.game.type.util.GenericPropertySelector.selectParamMap
@@ -35,6 +36,8 @@ public class ObjTypeBuilder(public var internal: String? = null) {
     public var womanwearOff: Int? = null
     public var womanwear2: Int? = null
     public var wearpos3: Int? = null
+    public val extraOptions: MutableList<EntityOption> = mutableListOf()
+    public var cacheDebugName: String? = null
     public val op: Array<String?> = arrayOfNulls(OP_CAPACITY)
     public val iop: Array<String?> = arrayOfNulls(IOP_CAPACITY)
     public var recolS: CompactableIntArray = CompactableIntArray(RECOL_CAPACITY)
@@ -168,6 +171,8 @@ public class ObjTypeBuilder(public var internal: String? = null) {
             womanwearOff = womanwearOff,
             womanwear2 = womanwear2,
             wearpos3 = wearpos3,
+            extraOptions = extraOptions.toList(),
+            cacheDebugName = cacheDebugName,
             op = op.copyOf(),
             iop = iop.copyOf(),
             recolS = recolS.toShortArray(),
@@ -354,6 +359,8 @@ public class ObjTypeBuilder(public var internal: String? = null) {
                 womanwearOff = womanwearOff,
                 womanwear2 = womanwear2,
                 wearpos3 = wearpos3,
+                extraOptions = edit.extraOptions.ifEmpty { base.extraOptions },
+                cacheDebugName = edit.cacheDebugName ?: base.cacheDebugName,
                 op = op,
                 iop = iop,
                 recolS = recolS,

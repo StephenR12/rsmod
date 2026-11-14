@@ -9,6 +9,7 @@ import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.util.EncoderContext
 import org.rsmod.api.cache.util.encodeConfig
 import org.rsmod.api.cache.util.filterTransmit
+import org.rsmod.api.cache.util.writeEntityOptions
 import org.rsmod.api.cache.util.writeRawParams
 import org.rsmod.game.type.loc.LocTypeBuilder
 import org.rsmod.game.type.loc.UnpackedLocType
@@ -50,10 +51,10 @@ public object LocTypeEncoder {
     public fun encodeJs5(type: UnpackedLocType, data: ByteBuf, ctx: EncoderContext): Unit =
         with(type) {
             if (models.isNotEmpty() && shapes.isNotEmpty()) {
-                data.writeByte(1)
+                data.writeByte(6)
                 data.writeByte(models.size)
                 for (i in models.indices) {
-                    data.writeShort(models[i])
+                    data.writeInt(models[i])
                     data.writeByte(shapes[i].toInt())
                 }
             }
@@ -64,10 +65,10 @@ public object LocTypeEncoder {
             }
 
             if (models.isNotEmpty() && shapes.isEmpty()) {
-                data.writeByte(5)
+                data.writeByte(7)
                 data.writeByte(models.size)
                 for (model in models) {
-                    data.writeShort(model)
+                    data.writeInt(model)
                 }
             }
 
@@ -277,6 +278,16 @@ public object LocTypeEncoder {
                 data.writeByte(90)
             }
 
+            soundDistanceFadeCurve?.let { data.writeByte(91).writeByte(it) }
+            soundFade?.let {
+                data.writeByte(93)
+                data.writeByte(it.inCurve).writeShort(it.inDuration)
+                data.writeByte(it.outCurve).writeShort(it.outDuration)
+            }
+            if (flag94 == true) data.writeByte(94)
+            soundVisibility?.let { data.writeByte(95).writeByte(it) }
+            raise?.let { data.writeByte(96).writeByte(it) }
+            data.writeEntityOptions(100, extraOptions)
             val params = paramMap?.filterTransmit(ctx)?.primitiveMap
             if (params?.isNotEmpty() == true) {
                 data.writeByte(249)

@@ -1,0 +1,13 @@
+# inventory	minimum worn glove tier	buy per mille	sell per mille	currency
+world_shop_tzhaar_hur_lek_s_ore_and_gem_store	1	350	1300	world_shop_tokkul
+world_shop_tzhaar_hur_rin_s_ore_and_gem_store	1	350	1300	world_shop_tokkul
+world_shop_tzhaar_hur_tel_s_equipment_store	1	350	1300	world_shop_tokkul
+world_shop_tzhaar_hur_zal_s_equipment_store	1	350	1300	world_shop_tokkul
+world_shop_tzhaar_mej_roh_s_rune_store	1	350	1300	world_shop_tokkul
+world_shop_davon_s_amulet_store	1	1000	1100	standard_gp
+world_shop_obli_s_general_store	1	600	1300	standard_gp
+world_shop_fernahei_s_fishing_hut	1	800	1000	standard_gp
+world_shop_karamja_general_store	3	600	1100	standard_gp
+world_shop_gabooty_s_tai_bwo_wannai_cooperative_default	1	800	1000	world_shop_trade_sticks
+world_shop_gabooty_s_tai_bwo_wannai_drinky_store_default	1	700	950	world_shop_trade_sticks
+world_shop_tamayu_s_spear_stall_default	1	850	950	standard_gp

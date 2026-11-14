@@ -76,7 +76,7 @@ object BaseNpcs : NpcReferences() {
     val ram_2 = find("ramunsheered2")
     val ram_3 = find("ramunsheered3")
     val ram_monastery = find("ramunsheeredshaggy")
-    val farming_tools_leprechaun = find("farming_tools_leprechaun", 5428755996588687321)
+    val farming_tools_leprechaun = find("farming_tools_leprechaun", 483995881784404575)
     val rod_fishing_spot_1527 = find("0_50_50_freshfish", 1358863933022409758)
     val fishing_spot_1530 = find("0_50_49_saltfish", 8943009170502558049)
     val ellis_tanner = find("ellis_tanner")

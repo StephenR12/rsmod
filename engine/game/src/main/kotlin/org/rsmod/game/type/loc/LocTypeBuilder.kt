@@ -1,6 +1,7 @@
 package org.rsmod.game.type.loc
 
 import org.rsmod.game.type.util.CompactableIntArray
+import org.rsmod.game.type.util.EntityOption
 import org.rsmod.game.type.util.GenericPropertySelector.select
 import org.rsmod.game.type.util.GenericPropertySelector.selectByteArray
 import org.rsmod.game.type.util.GenericPropertySelector.selectIntArray
@@ -31,6 +32,12 @@ public class LocTypeBuilder(public var internal: String? = null) {
     public var wallWidth: Int? = null
     public var ambient: Int? = null
     public var contrast: Int? = null
+    public val extraOptions: MutableList<EntityOption> = mutableListOf()
+    public var soundDistanceFadeCurve: Int? = null
+    public var soundFade: LocSoundFade? = null
+    public var flag94: Boolean? = null
+    public var soundVisibility: Int? = null
+    public var raise: Int? = null
     public val op: Array<String?> = arrayOfNulls(OP_CAPACITY)
     public var recolS: CompactableIntArray = CompactableIntArray(RECOL_CAPACITY)
     public var recolD: CompactableIntArray = CompactableIntArray(RECOL_CAPACITY)
@@ -128,6 +135,12 @@ public class LocTypeBuilder(public var internal: String? = null) {
             wallWidth = wallWidth,
             ambient = ambient,
             contrast = contrast,
+            extraOptions = extraOptions.toList(),
+            soundDistanceFadeCurve = soundDistanceFadeCurve,
+            soundFade = soundFade,
+            flag94 = flag94,
+            soundVisibility = soundVisibility,
+            raise = raise,
             op = op.copyOf(),
             recolS = recolS.toShortArray(),
             recolD = recolD.toShortArray(),
@@ -275,6 +288,12 @@ public class LocTypeBuilder(public var internal: String? = null) {
                 wallWidth = wallWidth,
                 ambient = ambient,
                 contrast = contrast,
+                extraOptions = edit.extraOptions.ifEmpty { base.extraOptions },
+                soundDistanceFadeCurve = edit.soundDistanceFadeCurve ?: base.soundDistanceFadeCurve,
+                soundFade = edit.soundFade ?: base.soundFade,
+                flag94 = edit.flag94 ?: base.flag94,
+                soundVisibility = edit.soundVisibility ?: base.soundVisibility,
+                raise = edit.raise ?: base.raise,
                 op = op,
                 recolS = recolS,
                 recolD = recolD,

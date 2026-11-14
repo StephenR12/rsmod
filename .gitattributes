@@ -1,0 +1,4 @@
+
+
+# Trailing tabs encode empty final fields in tab-separated resource records.
+*.tsv whitespace=-blank-at-eol

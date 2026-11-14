@@ -127,6 +127,7 @@ constructor(
         onCommand("give", "Spawn obj into inv by name or id", ::invAdd) {
             invalidArgs = "Use as ::give objNameOrId [count] (ex: ::give twisted bow)"
         }
+        onCommand("giveleagueitems", "Give Demonic Pacts relic and Echo items", ::giveLeagueItems)
         onCommand("giverunes", "Give every rune", ::giveRunes)
         onCommand("giveammo", "Give arrows, darts, and knives", ::giveAmmo)
         onCommand("bismelee", "Give a best-in-slot melee loadout", ::giveBisMelee)
@@ -454,6 +455,15 @@ constructor(
             }
         }
         return if (bestScore >= 0.5) bestMatch else null
+    }
+
+    private fun giveLeagueItems(cheat: Cheat) {
+        val missing = DEMONIC_PACT_ITEMS.filter { name -> objTypes.values.none { it.internalName == name } }
+        if (missing.isNotEmpty()) {
+            cheat.player.mes("Demonic Pacts items require the revision-238 cache and symbols.")
+            return
+        }
+        givePreset(cheat, "Demonic Pacts items", DEMONIC_PACT_ITEMS.map { PresetEntry(it, 1) })
     }
 
     private fun giveRunes(cheat: Cheat) = givePreset(cheat, "runes", RUNE_PRESET)

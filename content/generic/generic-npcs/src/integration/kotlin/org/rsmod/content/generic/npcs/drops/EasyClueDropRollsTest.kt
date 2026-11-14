@@ -18,19 +18,19 @@ import org.rsmod.game.type.npc.NpcTypeList
 
 class EasyClueDropRollsTest {
     @Test
-    fun GameTestState.`cache 233 easy pool has exact active decoder identities`() =
+    fun GameTestState.`cache 238 easy pool has exact active decoder identities`() =
         runInjectedGameTest(Dependencies::class) { deps ->
             val steps = deps.easySteps.steps
 
             assertEquals(Cache233EasyClueSteps.SIZE, steps.size)
-            assertEquals(Cache233EasyClueSteps.CACHE_233_IDS, steps.map { it.id })
+            assertEquals(Cache233EasyClueSteps.CACHE_238_IDS, steps.map { it.id })
             assertEquals(
                 120,
                 steps.count {
                     "_simple" in it.internalName.orEmpty() || "_vague" in it.internalName.orEmpty()
                 },
             )
-            assertEquals(32, steps.count { "_emote" in it.internalName.orEmpty() })
+            assertEquals(33, steps.count { "_emote" in it.internalName.orEmpty() })
             assertEquals(7, steps.count { "_map" in it.internalName.orEmpty() })
             assertEquals(6, steps.count { "_music" in it.internalName.orEmpty() })
             assertTrue(steps.all { it.name == "Clue scroll (easy)" })
@@ -54,7 +54,7 @@ class EasyClueDropRollsTest {
 
             random.next = 0
             random.then = Cache233EasyClueSteps.SIZE - 1
-            assertEquals(30_928, table.roll(context).drops.single().obj.id)
+            assertEquals(31_268, table.roll(context).drops.single().obj.id)
         }
 
     @Test

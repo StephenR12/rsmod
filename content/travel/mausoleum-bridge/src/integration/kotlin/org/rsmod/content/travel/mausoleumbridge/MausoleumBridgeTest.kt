@@ -1,8 +1,8 @@
 package org.rsmod.content.travel.mausoleumbridge
 
 import jakarta.inject.Inject
-import net.rsprot.protocol.game.outgoing.camera.CamLookAt
-import net.rsprot.protocol.game.outgoing.camera.CamMoveTo
+import net.rsprot.protocol.game.outgoing.camera.CamLookAtV2
+import net.rsprot.protocol.game.outgoing.camera.CamMoveToV2
 import net.rsprot.protocol.game.outgoing.zone.header.UpdateZonePartialFollows
 import net.rsprot.protocol.game.outgoing.zone.payload.LocAddChangeV2
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -237,10 +237,10 @@ class MausoleumBridgeTest {
             val second = surface(CoordGrid(3503, 3557), deps)
 
             player.withProtectedAccess { deps.bridge.cross(this, first) }
-            assertEquals(0, client.filterIsInstance<CamMoveTo>().size)
+            assertEquals(0, client.filterIsInstance<CamMoveToV2>().size)
             player.withProtectedAccess { deps.bridge.cross(this, second) }
-            assertEquals(1, client.filterIsInstance<CamMoveTo>().size)
-            assertEquals(1, client.filterIsInstance<CamLookAt>().size)
+            assertEquals(1, client.filterIsInstance<CamMoveToV2>().size)
+            assertEquals(1, client.filterIsInstance<CamLookAtV2>().size)
             advance(6)
         }
 

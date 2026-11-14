@@ -55,7 +55,7 @@ class HunterKitSpellTest {
                 mapOf(objs.astral_rune to 2, objs.earth_rune to 2),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(114, components.magic_spellbook_hunter_kit.id and 0xFFFF)
+            assertEquals(119, components.magic_spellbook_hunter_kit.id and 0xFFFF)
             assertEquals(6303, seqs.dream_player_hunter_box_spell.id)
             assertEquals(1074, spotanims.dream_hunter_spell.id)
             assertEquals(3618, varbits.dream_mentor.id)

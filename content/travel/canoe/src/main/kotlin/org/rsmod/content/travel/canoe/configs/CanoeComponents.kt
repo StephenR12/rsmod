@@ -11,10 +11,10 @@ object CanoeComponents : ComponentReferences() {
     val shape_waka = find("canoeing:waka", 558687581070453046)
     val shape_close = find("canoeing:close", 1179288482004399632)
 
-    val destination_edgeville = find("canoe_map:edgeville", 7376914826480145382)
-    val destination_lumbridge = find("canoe_map:lumbridge", 3916036672780179471)
-    val destination_champs_guild = find("canoe_map:champions", 1618082157654974091)
-    val destination_barb_village = find("canoe_map:barbarian", 1837217029778931043)
-    val destination_wild_pond = find("canoe_map:wilderness", 2365822516849885548)
-    val destination_ferox_enclave = find("canoe_map:sanctuary", 2875271963303321718)
+    val destination_lumbridge = find("canoe_map_lum:destination_1")
+    val destination_champs_guild = find("canoe_map_lum:destination_2")
+    val destination_barb_village = find("canoe_map_lum:destination_3")
+    val destination_edgeville = find("canoe_map_lum:destination_4")
+    val destination_ferox_enclave = find("canoe_map_lum:destination_5")
+    val destination_wild_pond = find("canoe_map_lum:destination_6")
 }

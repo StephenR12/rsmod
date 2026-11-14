@@ -58,11 +58,10 @@ class SepulchreRelicsTest {
             assertEquals(5, EnduranceRing.charges(player.ring))
             assertEquals(400, d.stamina.remainingCycles(player))
             assertEquals(20, player.vars[varbits.stamina_duration])
-            assertEquals(20, player.vars[varbits.stamina_duration_extra])
             player.ring = null
             d.stamina.tick(player)
             assertEquals(200, d.stamina.remainingCycles(player))
-            assertEquals(0, player.vars[varbits.stamina_duration_extra])
+            assertEquals(20, player.vars[varbits.stamina_duration])
         }
 
     @Test

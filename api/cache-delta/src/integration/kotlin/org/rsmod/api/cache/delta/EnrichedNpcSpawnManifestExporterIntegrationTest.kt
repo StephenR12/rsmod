@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test
 
 class EnrichedNpcSpawnManifestExporterIntegrationTest {
     @Test
-    fun `exports every enriched cache 233 NPC placement group`() {
+    fun `exports every enriched cache 238 NPC placement group`() {
         val manifest =
             EnrichedNpcSpawnManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/game"),
                 xteaFile = Path.of(".data/cache/xteas.json"),
                 symbolDirectory = Path.of(".data/symbols"),
-                revision = "233.4-rsmod-enriched",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603-rsmod-enriched",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
 
         val spawns = manifest.entries.filter { it.domain == "npc-spawns" }
@@ -32,13 +32,15 @@ class EnrichedNpcSpawnManifestExporterIntegrationTest {
         // Read the packed map headers independently of the exporter, including new regions.
         val archive = Js5Archives.MAPS
         Cache.open(Path.of(".data/cache/game")).use { cache ->
-            val available = cache.list(archive).asSequence().mapTo(mutableSetOf()) {it.nameHash}
-            val expected=buildMap<String,Int> {
-                for(x in 0..255)for(z in 0..255){
-                    val name="n${x}_${z}"
-                    if(name.hashCode() !in available)continue
-                    val data=cache.read(archive,name,0)
-                    try { put(((x shl 8) or z).toString(),data.readUnsignedShort()) } finally {data.release()}
+            val expected = buildMap<String, Int> {
+                for (group in cache.list(archive)) {
+                    if (group.id < 65536 || !cache.exists(archive, group.id, 0)) continue
+                    val data = cache.read(archive, group.id, 0)
+                    try {
+                        put((group.id - 65536).toString(), data.readUnsignedShort())
+                    } finally {
+                        data.release()
+                    }
                 }
             }
             assertEquals(expected,counts)

@@ -46,7 +46,7 @@ public class SeaweedCooking @Inject constructor(private val objTypes: ObjTypeLis
             val actions = minOf(quantity, player.inv.count(objTypes[raw]))
             repeat(actions) { index ->
                 if (!canCook(source, raw)) { resetAnim(); return }
-                val fire = source.id == cooking_locs.fire.id || source.id == cooking_locs.permanentCookFire.id || (cooking_locs.houseFireStoves + cooking_locs.campfires).any { it.id == source.id }
+                val fire = source.id == cooking_locs.fire.id || cooking_locs.permanentCookFires.any { it.id == source.id } || (cooking_locs.houseFireStoves + cooking_locs.campfires).any { it.id == source.id }
                 anim(if (fire) seqs.human_firecooking else seqs.human_cooking)
                 delay(if (index == 0) 1 else if (index == 1) 3 else 4)
                 if (!canCook(source, raw)) { resetAnim(); return }

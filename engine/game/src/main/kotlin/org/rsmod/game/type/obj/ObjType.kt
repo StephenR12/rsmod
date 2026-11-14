@@ -9,6 +9,7 @@ import org.rsmod.game.type.HashedCacheType
 import org.rsmod.game.type.category.CategoryType
 import org.rsmod.game.type.content.ContentGroupType
 import org.rsmod.game.type.param.ParamType
+import org.rsmod.game.type.util.EntityOption
 import org.rsmod.game.type.util.ParamMap
 import org.rsmod.game.type.util.resolve
 
@@ -60,6 +61,8 @@ public data class UnpackedObjType(
     public val womanwearOff: Int,
     public val womanwear2: Int,
     public val wearpos3: Int,
+    public val extraOptions: List<EntityOption> = emptyList(),
+    public val cacheDebugName: String? = null,
     public val op: Array<String?>,
     public val iop: Array<String?>,
     public val recolS: ShortArray,
@@ -325,6 +328,8 @@ public data class UnpackedObjType(
         if (womanwearOff != other.womanwearOff) return false
         if (womanwear2 != other.womanwear2) return false
         if (wearpos3 != other.wearpos3) return false
+        if (extraOptions != other.extraOptions) return false
+        if (cacheDebugName != other.cacheDebugName) return false
         if (!op.contentEquals(other.op)) return false
         if (!iop.contentEquals(other.iop)) return false
         if (!recolS.contentEquals(other.recolS)) return false
@@ -404,6 +409,8 @@ public data class UnpackedObjType(
         result = 31 * result + womanwearOff
         result = 31 * result + womanwear2
         result = 31 * result + wearpos3
+        result = 31 * result + extraOptions.hashCode()
+        result = 31 * result + cacheDebugName.hashCode()
         result = 31 * result + op.contentHashCode()
         result = 31 * result + iop.contentHashCode()
         result = 31 * result + recolS.contentHashCode()

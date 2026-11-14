@@ -47,13 +47,13 @@ class JewelleryEnchantSpellTest {
         runEnchantTest { deps ->
             val expectations =
                 listOf(
-                    SpellExpectation(objs.spell_enchant_lvl_1, 7, 17.5, 13, 1, 1),
-                    SpellExpectation(objs.spell_enchant_lvl_2, 27, 37.0, 24, 3, 1),
-                    SpellExpectation(objs.spell_enchant_lvl_3, 49, 59.0, 37, 5, 1),
-                    SpellExpectation(objs.spell_enchant_lvl_4, 57, 67.0, 46, 10, 1),
-                    SpellExpectation(objs.spell_enchant_lvl_5, 68, 78.0, 61, 30, 1),
-                    SpellExpectation(objs.spell_enchant_lvl_6, 87, 97.0, 74, 40, 1),
-                    SpellExpectation(objs.spell_enchant_lvl_7, 93, 110.0, 77, 40, 1),
+                    SpellExpectation(objs.spell_enchant_lvl_1, 7, 17.5, 16, 1, 1),
+                    SpellExpectation(objs.spell_enchant_lvl_2, 27, 37.0, 27, 3, 1),
+                    SpellExpectation(objs.spell_enchant_lvl_3, 49, 59.0, 40, 5, 1),
+                    SpellExpectation(objs.spell_enchant_lvl_4, 57, 67.0, 49, 10, 1),
+                    SpellExpectation(objs.spell_enchant_lvl_5, 68, 78.0, 64, 30, 1),
+                    SpellExpectation(objs.spell_enchant_lvl_6, 87, 97.0, 77, 40, 1),
+                    SpellExpectation(objs.spell_enchant_lvl_7, 93, 110.0, 80, 40, 1),
                 )
 
             for (expected in expectations) {

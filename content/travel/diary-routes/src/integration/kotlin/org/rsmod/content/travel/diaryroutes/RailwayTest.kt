@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.openrs2.buffer.use
 import org.openrs2.cache.Cache
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.map.GameMapDecoder
 import org.rsmod.api.cache.map.area.MapAreaDecoder
-import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.api.cache.util.toInlineBuf
 import org.rsmod.api.player.diary.*
 import org.rsmod.api.testing.GameTestState
@@ -29,7 +29,7 @@ class RailwayTest {
             Cache.open(Path.of(".data/cache/game")).use { cache ->
                 val square = MapSquareKey(38, 86)
                 val carriages =
-                    cache.readOrNull(Js5Archives.MAPS, "a38_86")!!.use {
+                    MapArchive(cache).read(square, MapFile.Areas)!!.use {
                         MapAreaDecoder.decode(it.toInlineBuf())
                     }
                 GameMapDecoder.putAreas(deps.areas, square, carriages)

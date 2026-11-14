@@ -59,7 +59,7 @@ class SpellbookSwapSpellTest {
                 mapOf(objs.astral_rune to 3, objs.cosmic_rune to 2, objs.law_rune to 1),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(144, components.magic_spellbook_spellbook_swap.id and 0xFFFF)
+            assertEquals(149, components.magic_spellbook_spellbook_swap.id and 0xFFFF)
             assertEquals(6299, seqs.dream_player_spellbook_swap.id)
             assertEquals(1062, spotanims.dream_spellbook_spotanim.id)
             assertEquals(3617, varbits.lunar_spellbook_change.id)

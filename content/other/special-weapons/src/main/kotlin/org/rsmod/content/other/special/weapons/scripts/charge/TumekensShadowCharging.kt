@@ -52,6 +52,8 @@ constructor(private val charges: ObjChargeManager, private val objRepo: ObjRepos
     }
 
     private suspend fun ProtectedAccess.charge(inventory: Inventory, invSlot: Int, obj: ObjType) {
+        val staff = inventory[invSlot]
+        if (!staff.isType(obj)) return
         if (objs.soul_rune !in inv) {
             mes("You don't appear to have any soul runes to charge Tumeken's shadow with.")
             return
@@ -73,30 +75,25 @@ constructor(private val charges: ObjChargeManager, private val objRepo: ObjRepos
 
         val maxCharges = min(MAX_CHARGES - currCharges, getMaxRuneCharges())
         val question = "How many charges do you want to apply? (Up to $maxCharges)"
-        val requested = min(countDialog(question), maxCharges)
-        if (requested == 0) {
-            return
+        val requested = countDialog(question).coerceIn(0, maxCharges)
+        if (requested == 0 || inventory[invSlot] != staff) return
+
+        val result =
+            charges.addCharges(inventory, invSlot, requested, varobjs.tumeken_charges, MAX_CHARGES) {
+                count ->
+                val removed =
+                    invDel(
+                        inv = inv,
+                        type1 = objs.chaos_rune,
+                        count1 = count * CHAOS_PER_CHARGE,
+                        type2 = objs.soul_rune,
+                        count2 = count * SOUL_PER_CHARGE,
+                    )
+                if (removed.success) count else 0
+            }
+        if (result is ObjChargeManager.Charge.Success) {
+            objbox(objs.tumekens_shadow, 400, "You apply ${result.added} charges to your Tumeken's shadow.")
         }
-
-        val removeRunes =
-            invDel(
-                inv = inv,
-                type1 = objs.chaos_rune,
-                count1 = requested * CHAOS_PER_CHARGE,
-                type2 = objs.soul_rune,
-                count2 = requested * SOUL_PER_CHARGE,
-            )
-
-        if (removeRunes.failure) {
-            return
-        }
-
-        // Paranoid check: Should always be the case.
-        check(inventory[invSlot].isType(obj))
-
-        charges.addCharges(inventory, invSlot, requested, varobjs.tumeken_charges, MAX_CHARGES)
-        // Official message: Uses "charges" even when applying a single charge.
-        objbox(objs.tumekens_shadow, 400, "You apply $requested charges to your Tumeken's shadow.")
     }
 
     private fun ProtectedAccess.getMaxRuneCharges(): Int {
@@ -112,7 +109,9 @@ constructor(private val charges: ObjChargeManager, private val objRepo: ObjRepos
     }
 
     private suspend fun ProtectedAccess.uncharge(inventory: Inventory, invSlot: Int) {
-        val currCharges = charges.getCharges(inventory[invSlot], varobjs.tumeken_charges)
+        val staff = inventory[invSlot]
+        if (!staff.isType(objs.tumekens_shadow)) return
+        val currCharges = charges.getCharges(staff, varobjs.tumeken_charges)
         if (currCharges == 0) {
             charges.removeAllCharges(inventory, invSlot, varobjs.tumeken_charges)
             return
@@ -146,11 +145,11 @@ constructor(private val charges: ObjChargeManager, private val objRepo: ObjRepos
                 title = "Uncharge all the charges from your staff?",
             )
 
-        if (!confirmation) {
+        if (!confirmation || inventory[invSlot] != staff) {
             return
         }
 
-        val chargesRemoved = charges.removeAllCharges(inv, invSlot, varobjs.tumeken_charges)
+        val chargesRemoved = charges.removeAllCharges(inventory, invSlot, varobjs.tumeken_charges)
         check(chargesRemoved > 0)
 
         val soulCount = chargesRemoved * SOUL_PER_CHARGE

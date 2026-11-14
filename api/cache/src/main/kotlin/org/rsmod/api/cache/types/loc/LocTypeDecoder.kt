@@ -9,9 +9,11 @@ import org.openrs2.cache.Cache
 import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.util.TextUtil
+import org.rsmod.api.cache.util.readEntityOption
 import org.rsmod.api.cache.util.readRawParams
 import org.rsmod.api.cache.util.readUnsignedShortOrNull
 import org.rsmod.game.type.TypeResolver
+import org.rsmod.game.type.loc.LocSoundFade
 import org.rsmod.game.type.loc.LocTypeBuilder
 import org.rsmod.game.type.loc.LocTypeList
 import org.rsmod.game.type.loc.UnpackedLocType
@@ -45,12 +47,13 @@ public object LocTypeDecoder {
     public fun decode(builder: LocTypeBuilder, data: ByteBuf, code: Int): Unit =
         with(builder) {
             when (code) {
-                1 -> {
+                1,
+                6 -> {
                     val count = data.readUnsignedByte().toInt()
                     val models = IntArray(count)
                     val shapes = IntArray(count)
                     repeat(count) {
-                        models[it] = data.readUnsignedShort()
+                        models[it] = if (code == 6) data.readInt() else data.readUnsignedShort()
                         shapes[it] = data.readUnsignedByte().toInt()
                     }
                     this.model = CompactableIntArray(models)
@@ -58,10 +61,13 @@ public object LocTypeDecoder {
                 }
                 2 -> name = data.readString()
                 3 -> desc = data.readString()
-                5 -> {
+                5,
+                7 -> {
                     val count = data.readUnsignedByte().toInt()
                     val models = IntArray(count)
-                    repeat(count) { models[it] = data.readUnsignedShort() }
+                    repeat(count) {
+                        models[it] = if (code == 7) data.readInt() else data.readUnsignedShort()
+                    }
                     this.model = CompactableIntArray(models)
                 }
                 14 -> width = data.readUnsignedByte().toInt()
@@ -154,7 +160,20 @@ public object LocTypeDecoder {
                 82 -> mapIcon = data.readUnsignedShort()
                 89 -> randomAnimFrame = false
                 90 -> fixLocAnimAfterLocChange = true
+                91 -> soundDistanceFadeCurve = data.readUnsignedByte().toInt()
+                93 ->
+                    soundFade =
+                        LocSoundFade(
+                            data.readUnsignedByte().toInt(),
+                            data.readUnsignedShort(),
+                            data.readUnsignedByte().toInt(),
+                            data.readUnsignedShort(),
+                        )
+                94 -> flag94 = true
+                95 -> soundVisibility = data.readUnsignedByte().toInt()
+                96 -> raise = data.readUnsignedByte().toInt()
                 200 -> contentGroup = data.readUnsignedShort()
+                in 100..102 -> extraOptions += data.readEntityOption(code - 100)
                 249 -> paramMap = ParamMap(data.readRawParams())
                 else -> throw IOException("Error unrecognised .loc config code: $code")
             }

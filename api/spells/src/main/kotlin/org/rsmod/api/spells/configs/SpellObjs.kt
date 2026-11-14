@@ -20,6 +20,9 @@ internal object SpellObjEditor : ObjEditor() {
     }
 
     private fun editStandardSpells() {
+        spell(objs.minigame_teleport, 0.0)
+        spell(objs.spell_summon_boat, 66.0)
+        spell(objs.spell_teleport_to_boat, 77.0)
         spell(objs.view_jewellery_enchantment_spells, 0.0)
         spell(objs.spell_hometeleport_lumbridge, 0.0)
         spell(objs.spell_wind_strike, 5.5)
@@ -170,6 +173,7 @@ internal object SpellObjEditor : ObjEditor() {
     }
 
     private fun editAncientSpells() {
+        spell(objs.ancient_minigame_teleport, 0.0)
         spell(objs.spell_hometeleport_edgeville, 0.0)
         spell(objs.spell_smoke_rush, 30.0)
         spell(objs.spell_shadow_rush, 31.0)
@@ -198,6 +202,7 @@ internal object SpellObjEditor : ObjEditor() {
     }
 
     private fun editLunarSpells() {
+        spell(objs.lunar_minigame_teleport, 0.0)
         spell(objs.spell_hometeleport_lunar, 0.0)
         spell(objs.spell_bake_pie, 60.0)
         spell(objs.spell_geomancy, 60.0)
@@ -245,6 +250,7 @@ internal object SpellObjEditor : ObjEditor() {
     }
 
     private fun editArceuusSpells() {
+        spell(objs.arceuus_minigame_teleport, 0.0)
         spell(objs.spell_hometeleport_arceuus, 0.0)
         tele(objs.spell_arceuuslibrary_teleport, 9.0, CoordGrid(0, 25, 59, 33, 62))
         spell(objs.spell_basic_reanimation, 32.0)

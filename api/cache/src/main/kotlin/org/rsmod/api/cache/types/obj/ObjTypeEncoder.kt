@@ -9,6 +9,7 @@ import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.util.EncoderContext
 import org.rsmod.api.cache.util.encodeConfig
 import org.rsmod.api.cache.util.filterTransmit
+import org.rsmod.api.cache.util.writeEntityOptions
 import org.rsmod.api.cache.util.writeRawParams
 import org.rsmod.game.type.obj.ObjTypeBuilder
 import org.rsmod.game.type.obj.UnpackedObjType
@@ -50,8 +51,7 @@ public object ObjTypeEncoder {
     public fun encodeJs5(type: UnpackedObjType, data: ByteBuf, ctx: EncoderContext): Unit =
         with(type) {
             if (model != 0) {
-                data.writeByte(1)
-                data.writeShort(model)
+                writeModel(data, model, 44)
             }
 
             if (name.isNotBlank()) {
@@ -89,6 +89,12 @@ public object ObjTypeEncoder {
                 data.writeShort(yof2d)
             }
 
+            cacheDebugName?.let {
+                data.writeByte(9)
+                data.writeString(it)
+            }
+            if (!tradeable) data.writeByte(15)
+
             if (stackable) {
                 data.writeByte(11)
             }
@@ -113,25 +119,21 @@ public object ObjTypeEncoder {
             }
 
             if (manwear != ObjTypeBuilder.DEFAULT_MANWEAR) {
-                data.writeByte(23)
-                data.writeShort(manwear)
+                writeModel(data, manwear, 45)
                 data.writeByte(manwearOff)
             }
 
             if (manwear2 != ObjTypeBuilder.DEFAULT_MANWEAR2) {
-                data.writeByte(24)
-                data.writeShort(manwear2)
+                writeModel(data, manwear2, 46)
             }
 
             if (womanwear != ObjTypeBuilder.DEFAULT_WOMANWEAR) {
-                data.writeByte(25)
-                data.writeShort(womanwear)
+                writeModel(data, womanwear, 48)
                 data.writeByte(womanwearOff)
             }
 
             if (womanwear2 != ObjTypeBuilder.DEFAULT_WOMANWEAR2) {
-                data.writeByte(26)
-                data.writeShort(womanwear2)
+                writeModel(data, womanwear2, 49)
             }
 
             if (wearpos3 != ObjTypeBuilder.DEFAULT_WEARPOS3) {
@@ -197,33 +199,27 @@ public object ObjTypeEncoder {
             }
 
             if (manwear3 != ObjTypeBuilder.DEFAULT_MANWEAR3) {
-                data.writeByte(78)
-                data.writeShort(manwear3)
+                writeModel(data, manwear3, 47)
             }
 
             if (womanwear3 != ObjTypeBuilder.DEFAULT_WOMANWEAR3) {
-                data.writeByte(79)
-                data.writeShort(womanwear3)
+                writeModel(data, womanwear3, 50)
             }
 
             if (manhead != ObjTypeBuilder.DEFAULT_MANHEAD) {
-                data.writeByte(90)
-                data.writeShort(manhead)
+                writeModel(data, manhead, 51)
             }
 
             if (womanhead != ObjTypeBuilder.DEFAULT_WOMANHEAD) {
-                data.writeByte(91)
-                data.writeShort(womanhead)
+                writeModel(data, womanhead, 53)
             }
 
             if (manhead2 != ObjTypeBuilder.DEFAULT_MANHEAD2) {
-                data.writeByte(92)
-                data.writeShort(manhead2)
+                writeModel(data, manhead2, 52)
             }
 
             if (womanhead2 != ObjTypeBuilder.DEFAULT_WOMANHEAD2) {
-                data.writeByte(93)
-                data.writeShort(womanhead2)
+                writeModel(data, womanhead2, 54)
             }
 
             if (category != ObjTypeBuilder.DEFAULT_CATEGORY) {
@@ -307,6 +303,7 @@ public object ObjTypeEncoder {
                 data.writeShort(placeholdertemplate)
             }
 
+            data.writeEntityOptions(200, extraOptions)
             val params = paramMap?.filterTransmit(ctx)?.primitiveMap
             if (params?.isNotEmpty() == true) {
                 data.writeByte(249)
@@ -317,7 +314,7 @@ public object ObjTypeEncoder {
     public fun encodeGame(type: UnpackedObjType, data: ByteBuf): Unit =
         with(type) {
             if (objvar.isNotEmpty()) {
-                data.writeByte(200)
+                data.writeByte(220)
                 data.writeByte(objvar.size)
                 for (objvar in objvar) {
                     check(objvar and 0xFFFF < 65535)
@@ -326,12 +323,12 @@ public object ObjTypeEncoder {
             }
 
             if (playerCost != 0) {
-                data.writeByte(201)
+                data.writeByte(221)
                 data.writeInt(playerCost)
             }
 
             if (playerCostDerived != 0) {
-                data.writeByte(202)
+                data.writeByte(222)
                 data.writeInt(playerCostDerived)
             }
 
@@ -348,10 +345,6 @@ public object ObjTypeEncoder {
             if (stockMarketRecalcUsers != 0) {
                 data.writeByte(205)
                 data.writeShort(stockMarketRecalcUsers)
-            }
-
-            if (!tradeable) {
-                data.writeByte(206)
             }
 
             if (respawnRate != ObjTypeBuilder.DEFAULT_RESPAWN_RATE) {
@@ -384,4 +377,10 @@ public object ObjTypeEncoder {
                 data.writeByte(weaponCategory)
             }
         }
+
+    // Revision 238's client uses its model-id codec for every model, including IDs below 65536.
+    private fun writeModel(data: ByteBuf, model: Int, code: Int) {
+        data.writeByte(code)
+        data.writeInt(model)
+    }
 }

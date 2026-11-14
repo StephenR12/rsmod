@@ -1,0 +1,2039 @@
+# NPC positions from mejrs/data_osrs @ eda5d252 (June 2026); older records from dennisdev/rs-map-viewer.
+
+# OSRS Wiki NPC pin, oldid 15137256
+[[spawn]]
+npc = 'scrambled_king'
+coords = '0_19_48_7_48'
+
+[[spawn]]
+npc = 'kebos_seed_merchant'
+coords = '0_19_58_30_27'
+
+[[spawn]]
+npc = 'farming_guild_banker1'
+coords = '0_19_58_32_48'
+
+[[spawn]]
+npc = 'farming_guild_banker2'
+coords = '0_19_58_33_48'
+
+[[spawn]]
+npc = 'kebos_farming_store'
+coords = '0_19_58_35_22'
+
+[[spawn]]
+npc = 'kebos_spear_salesmen'
+coords = '0_20_59_17_20'
+
+[[spawn]]
+npc = 'slayer_master_8'
+coords = '0_20_59_28_8'
+
+# OSRS Wiki NPC pin, oldid 15138763
+[[spawn]]
+npc = 'nemus_retreat_bartender'
+coords = '0_21_51_22_38'
+
+# OSRS Wiki NPC pin, oldid 14992739
+[[spawn]]
+npc = 'aldarin_bartender'
+coords = '0_21_45_32_47'
+
+# OSRS Wiki NPC pin, oldid 15196094
+[[spawn]]
+npc = 'pub_mistrock'
+coords = '0_21_44_46_42'
+
+# OSRS Wiki NPC pin, oldid 15197280
+[[spawn]]
+npc = 'mistrock_mining_store'
+coords = '0_21_44_55_51'
+
+# OSRS Wiki NPC pin, oldid 14993477
+[[spawn]]
+npc = 'aldarin_general_store'
+coords = '0_22_46_7_28'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_east'
+coords = '0_22_59_26_46'
+
+[[spawn]]
+npc = 'lovakengj_banker_m_east'
+coords = '0_22_59_26_48'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_east'
+coords = '0_22_59_26_56'
+
+[[spawn]]
+npc = 'lovakengj_banker_m_east'
+coords = '0_22_59_26_58'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_west'
+coords = '0_22_59_32_46'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_west'
+coords = '0_22_59_32_52'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_west'
+coords = '0_22_59_32_58'
+
+[[spawn]]
+npc = 'lovakengj_sulphur_keeper'
+coords = '0_22_60_44_18'
+
+[[spawn]]
+npc = 'shayzien_banker_m_east'
+coords = '0_23_56_14_7'
+
+[[spawn]]
+npc = 'shayzien_banker_f_east'
+coords = '0_23_56_14_8'
+
+[[spawn]]
+npc = 'shayzien_banker_m_east'
+coords = '0_23_56_14_9'
+
+# OSRS Wiki NPC pin, oldid 15197300
+[[spawn]]
+npc = 'quetzacalli_bartender'
+coords = '0_23_50_27_24'
+
+[[spawn]]
+npc = 'shayzien_clothesshop'
+coords = '0_23_56_36_8'
+
+# OSRS Wiki NPC pin, oldid 15197159
+[[spawn]]
+npc = 'sunset_coast_helmet_shop'
+coords = '0_23_46_42_50'
+
+# OSRS Wiki NPC pin, oldid 15197181
+[[spawn]]
+npc = 'sunset_coast_general_store'
+coords = '0_23_46_45_42'
+
+[[spawn]]
+npc = 'shayzien_generalstore'
+coords = '0_23_56_47_7'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_south'
+coords = '0_23_58_48_30'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_north'
+coords = '0_23_58_50_24'
+
+[[spawn]]
+npc = 'lovakengj_banker_m_south'
+coords = '0_23_58_50_30'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_south'
+coords = '0_23_58_52_30'
+
+[[spawn]]
+npc = 'lovakengj_banker_m_south'
+coords = '0_23_58_54_30'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_south'
+coords = '0_23_58_56_30'
+
+[[spawn]]
+npc = 'lovakengj_banker_f_north'
+coords = '0_23_58_58_24'
+
+[[spawn]]
+npc = 'lovakengj_banker_m_south'
+coords = '0_23_58_58_30'
+
+[[spawn]]
+npc = 'shayzien_rangeshop'
+coords = '0_24_55_3_36'
+
+[[spawn]]
+npc = 'shayzien_barman'
+coords = '0_24_55_14_42'
+
+[[spawn]]
+npc = 'shayzien_barmaid'
+coords = '0_24_55_15_46'
+
+[[spawn]]
+npc = 'lovakengj_generalstore'
+coords = '0_24_58_15_37'
+
+# OSRS Wiki NPC pin, oldid 15197158
+[[spawn]]
+npc = 'sunset_coast_fishing_shop'
+coords = '0_24_46_24_16'
+
+[[spawn]]
+npc = 'shayzien_armourshop'
+coords = '0_24_55_29_50'
+
+[[spawn]]
+npc = 'shayzien_weaponshop'
+coords = '0_24_55_31_25'
+
+[[spawn]]
+npc = 'lovakengj_bartender'
+coords = '0_24_58_34_48'
+
+[[spawn]]
+npc = 'arceuus_banker_2_east'
+coords = '0_25_58_22_28'
+
+[[spawn]]
+npc = 'arceuus_banker_1_east'
+coords = '0_25_58_22_31'
+
+[[spawn]]
+npc = 'arceuus_banker_2_east'
+coords = '0_25_58_22_34'
+
+[[spawn]]
+npc = 'arceuus_banker_1_east'
+coords = '0_25_58_22_37'
+
+[[spawn]]
+npc = 'gem_merchant'
+coords = '0_25_57_33_36'
+
+[[spawn]]
+npc = 'arceuus_banker_2_west'
+coords = '0_25_58_37_28'
+
+[[spawn]]
+npc = 'arceuus_banker_1_west'
+coords = '0_25_58_37_31'
+
+[[spawn]]
+npc = 'arceuus_banker_2_west'
+coords = '0_25_58_37_34'
+
+[[spawn]]
+npc = 'arceuus_banker_1_west'
+coords = '0_25_58_37_37'
+
+[[spawn]]
+npc = 'baker_merchant'
+coords = '0_25_57_40_36'
+
+[[spawn]]
+npc = 'wcguild_axeseller'
+coords = '0_25_54_54_45'
+
+# OSRS Wiki NPC pin, oldid 15196584
+[[spawn]]
+npc = 'fortis_shop_blacksmith'
+coords = '0_25_49_58_4'
+
+[[spawn]]
+npc = 'arceuus_staffshop'
+coords = '0_26_58_4_16'
+
+# OSRS Wiki NPC pin, oldid 15197138
+[[spawn]]
+npc = 'fortis_shop_general_1'
+coords = '0_26_48_5_50'
+
+# OSRS Wiki NPC pin, oldid 15227121
+[[spawn]]
+npc = 'fortis_shop_food'
+coords = '0_26_48_38_40'
+
+[[spawn]]
+npc = 'arceuus_generalstore'
+coords = '0_26_58_56_12'
+
+[[spawn]]
+npc = 'arceuus_runeshop'
+coords = '0_26_58_58_33'
+
+[[spawn]]
+npc = 'hosidius_bartender_2'
+coords = '0_27_56_13_28'
+
+[[spawn]]
+npc = 'hosidius_bartender_1'
+coords = '0_27_56_15_28'
+
+[[spawn]]
+npc = 'hosidius_banker_f_east'
+coords = '0_27_56_18_14'
+
+[[spawn]]
+npc = 'hosidius_banker_m_east'
+coords = '0_27_56_18_15'
+
+[[spawn]]
+npc = 'hosidius_banker_f_east'
+coords = '0_27_56_18_16'
+
+[[spawn]]
+npc = 'warrens_fishmonger'
+coords = '0_27_158_33_33'
+
+[[spawn]]
+npc = 'hosidius_farmingstore'
+coords = '0_27_56_35_9'
+
+# OSRS Wiki NPC pin, oldid 15197115
+[[spawn]]
+npc = 'fortis_shop_crafting'
+coords = '0_27_48_38_29'
+
+[[spawn]]
+npc = 'hosidius_foodstore'
+coords = '0_27_56_40_14'
+
+[[spawn]]
+npc = 'kourend_entrance_bartender'
+coords = '0_27_57_41_35'
+
+[[spawn]]
+npc = 'hosidius_generalstore'
+coords = '0_27_56_45_4'
+
+# OSRS Wiki NPC pin, oldid 15197123
+[[spawn]]
+npc = 'fortis_shop_maces'
+coords = '0_27_47_46_51'
+
+[[spawn]]
+npc = 'warrens_shopkeeper'
+coords = '0_27_158_48_35'
+
+[[spawn]]
+npc = 'piscarilius_foodshop'
+coords = '0_27_58_55_46'
+
+[[spawn]]
+npc = 'piscarilius_banker_1'
+coords = '0_28_59_4_16'
+
+[[spawn]]
+npc = 'piscarilius_banker_2'
+coords = '0_28_59_8_16'
+
+[[spawn]]
+npc = 'piscarilius_banker_1'
+coords = '0_28_59_12_16'
+
+[[spawn]]
+npc = 'piscarilius_generalstore_keeper'
+coords = '0_28_58_15_11'
+
+[[spawn]]
+npc = 'piscarilius_banker_2'
+coords = '0_28_59_16_16'
+
+[[spawn]]
+npc = 'piscarilius_fish_trader'
+coords = '0_28_58_39_7'
+
+# OSRS Wiki NPC pin, oldid 15197635
+[[spawn]]
+npc = 'port_roberts_cannonball_trader'
+coords = '0_29_51_11_34'
+
+# OSRS Wiki NPC pin, oldid 15197615
+[[spawn]]
+npc = 'port_roberts_bartender'
+coords = '0_29_51_38_48'
+
+[[spawn]]
+npc = 'vc_dwarf_rich1'
+coords = '0_30_73_18_17'
+
+[[spawn]]
+npc = 'smithing_guild_buyer'
+coords = '0_30_77_19_40'
+
+[[spawn]]
+npc = 'lunar_moonclan_monk3'
+coords = '0_32_61_47_2'
+
+[[spawn]]
+npc = 'lunar_moonclan_monk_man'
+coords = '0_32_61_49_17'
+
+[[spawn]]
+npc = 'lunar_moonclan_monk_man'
+coords = '0_32_61_50_17'
+
+[[spawn]]
+npc = 'dream_birds_eye_jack_multi'
+coords = '0_32_61_51_17'
+
+[[spawn]]
+npc = 'lunar_moonclan_monk5'
+coords = '0_32_61_56_3'
+
+[[spawn]]
+npc = 'regicidegeneralshopkeeper'
+coords = '0_34_49_18_4'
+
+[[spawn]]
+npc = 'boardgames_barmaid'
+coords = '0_34_77_25_14'
+
+[[spawn]]
+npc = 'boardgames_barmaid2'
+coords = '0_34_77_31_30'
+
+[[spawn]]
+npc = 'mourning_bow_seller'
+coords = '0_36_49_20_28'
+
+[[spawn]]
+npc = 'mourning_seamstress'
+coords = '0_36_49_20_43'
+
+[[spawn]]
+npc = 'swan_arnold'
+coords = '0_36_57_26_43'
+
+[[spawn]]
+npc = 'mourning_stores_man'
+coords = '0_36_49_30_46'
+
+[[spawn]]
+npc = 'frisb_n_sto'
+coords = '0_36_59_31_30'
+
+[[spawn]]
+npc = 'deadman_banker_neitiznot'
+coords = '0_36_59_35_31'
+
+[[spawn]]
+npc = 'mourning_elf_bankerm'
+coords = '0_36_49_48_30'
+
+[[spawn]]
+npc = 'mourning_elf_bankerf'
+coords = '0_36_49_50_30'
+
+[[spawn]]
+npc = 'generalassistant8'
+coords = '0_37_69_8_31'
+
+[[spawn]]
+npc = 'generalshopkeeper8'
+coords = '0_37_69_10_31'
+
+[[spawn]]
+npc = 'fairy_banker'
+coords = '0_37_69_15_40'
+
+[[spawn]]
+npc = 'fairy_banker'
+coords = '0_37_69_15_43'
+
+[[spawn]]
+npc = 'fairy_banker'
+coords = '0_37_69_17_41'
+
+[[spawn]]
+npc = 'fairy_banker'
+coords = '0_37_69_18_44'
+
+[[spawn]]
+npc = 'frisd_weaponmerchant'
+coords = '0_37_59_26_29'
+
+[[spawn]]
+npc = 'frisd_armourmerchant'
+coords = '0_37_59_28_22'
+
+[[spawn]]
+npc = 'frisd_oremerchant'
+coords = '0_37_59_30_22'
+
+[[spawn]]
+npc = 'frisd_banker'
+coords = '0_37_59_48_23'
+
+[[spawn]]
+npc = 'frisd_cook'
+coords = '0_37_59_49_41'
+
+[[spawn]]
+npc = 'frisd_fishmerchant'
+coords = '0_37_59_50_37'
+
+[[spawn]]
+npc = 'zogre_uglug_nar'
+coords = '0_38_47_10_41'
+
+[[spawn]]
+npc = 'slayer_master_4'
+coords = '0_38_69_12_15'
+
+[[spawn]]
+npc = 'tzhaar_banker1'
+coords = '0_38_80_13_60'
+
+[[spawn]]
+npc = 'lunar_moonclan_baba_yaga'
+coords = '0_38_72_18_39'
+
+[[spawn]]
+npc = 'tzhaar_merchant_rune'
+coords = '0_38_80_30_5'
+
+[[spawn]]
+npc = 'chadwell'
+coords = '0_38_51_32_23'
+
+[[spawn]]
+npc = 'tzhaar_merchant_oreandgem'
+coords = '0_38_80_32_29'
+
+[[spawn]]
+npc = 'tzhaar_merchant_equipment'
+coords = '0_38_80_46_26'
+
+[[spawn]]
+npc = 'irksol'
+coords = '0_38_69_47_53'
+
+[[spawn]]
+npc = 'jakut'
+coords = '0_38_69_52_36'
+
+[[spawn]]
+npc = 'tzhaar_merchant_cityequipment'
+coords = '0_38_79_58_14'
+
+[[spawn]]
+npc = 'royal_clotheshop_owner'
+coords = '0_39_160_10_10'
+
+[[spawn]]
+npc = 'magearena_guardian'
+coords = '0_39_73_12_24'
+
+[[spawn]]
+npc = 'royal_generalstore_owner'
+coords = '0_39_160_12_20'
+
+[[spawn]]
+npc = 'lathas_shopkeeper'
+coords = '0_39_52_18_57'
+
+[[spawn]]
+npc = 'misc_veg_monger'
+coords = '0_39_60_20_24'
+
+[[spawn]]
+npc = 'ogre_trader1'
+coords = '0_39_47_22_27'
+
+[[spawn]]
+npc = 'misc_fish_monger'
+coords = '0_39_60_22_26'
+
+[[spawn]]
+npc = 'royal_foodshop_owner'
+coords = '0_39_160_25_11'
+
+[[spawn]]
+npc = 'tzhaar_merchant_cityoreandgem'
+coords = '0_39_79_27_19'
+
+[[spawn]]
+npc = 'ogre_merchant'
+coords = '0_39_47_32_40'
+
+[[spawn]]
+npc = 'royal_barmaid'
+coords = '0_39_160_32_19'
+
+[[spawn]]
+npc = 'magearena_runeshop'
+coords = '0_39_73_38_47'
+
+[[spawn]]
+npc = 'tzhaar_banker2'
+coords = '0_39_80_46_20'
+
+[[spawn]]
+npc = 'dragon_bartender'
+coords = '0_39_48_60_6'
+
+[[spawn]]
+npc = 'frenita'
+coords = '0_40_48_6_26'
+
+[[spawn]]
+npc = 'khazard_barman'
+coords = '0_40_49_6_4'
+
+[[spawn]]
+npc = 'hunting_weapon_designer'
+coords = '0_40_48_7_13'
+
+[[spawn]]
+npc = 'corscurs_banker_multi'
+coords = '0_40_44_9_50'
+
+[[spawn]]
+npc = 'flyinghorse_bartender'
+coords = '0_40_51_15_56'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_40_53_24_26'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_40_53_24_27'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_40_53_24_29'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_40_53_24_30'
+
+[[spawn]]
+npc = 'fishguildshop'
+coords = '0_40_53_36_8'
+
+[[spawn]]
+npc = 'etc_veg_monger'
+coords = '0_40_60_42_36'
+
+[[spawn]]
+npc = 'etc_fish_monger'
+coords = '0_40_60_45_36'
+
+[[spawn]]
+npc = 'aemad'
+coords = '0_40_51_53_30'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_40_48_55_19'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_40_48_55_20'
+
+[[spawn]]
+npc = 'deadman_banker_grey_west'
+coords = '0_40_48_55_22'
+
+[[spawn]]
+npc = 'kortan'
+coords = '0_40_51_55_28'
+
+[[spawn]]
+npc = 'deadman_banker_grey_north'
+coords = '0_40_52_55_2'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_40_52_58_2'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_40_52_59_2'
+
+[[spawn]]
+npc = 'misc_banker'
+coords = '0_40_60_60_55'
+
+[[spawn]]
+npc = 'viking_fur_monger'
+coords = '0_41_57_16_27'
+
+[[spawn]]
+npc = 'viking_sigmund'
+coords = '0_41_57_17_32'
+
+[[spawn]]
+npc = 'viking_fish_monger'
+coords = '0_41_57_22_27'
+
+[[spawn]]
+npc = 'pest_squire_storemaster'
+coords = '0_41_41_24_41'
+
+[[spawn]]
+npc = 'zenesha'
+coords = '0_41_51_29_31'
+
+[[spawn]]
+npc = 'baker_merchant_ardougne'
+coords = '0_41_51_30_47'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_41_51_33_16'
+
+[[spawn]]
+npc = 'deadman_banker_grey_west'
+coords = '0_41_51_33_19'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_41_51_33_22'
+
+[[spawn]]
+npc = 'pest_squire_runeshop'
+coords = '0_41_41_34_28'
+
+[[spawn]]
+npc = 'spice_merchant_ardougne'
+coords = '0_41_51_34_32'
+
+[[spawn]]
+npc = 'silver_merchant_ardougne'
+coords = '0_41_51_34_52'
+
+[[spawn]]
+npc = 'ranging_guild_ticket_exchange'
+coords = '0_41_53_35_37'
+
+[[spawn]]
+npc = 'ranging_guild_ticket_exchange'
+coords = '0_41_53_35_39'
+
+[[spawn]]
+npc = 'ranging_guild_tribal_salesman'
+coords = '0_41_53_37_27'
+
+[[spawn]]
+npc = 'viking_longhall_barkeep'
+coords = '0_41_57_38_25'
+
+[[spawn]]
+npc = 'viking_weapons_salesman'
+coords = '0_41_57_39_46'
+
+[[spawn]]
+npc = 'deadman_banker_pest_north'
+coords = '0_41_41_42_27'
+
+[[spawn]]
+npc = 'fur_merchant_ardougne'
+coords = '0_41_51_42_31'
+
+[[spawn]]
+npc = 'pest_squire_rangeshop'
+coords = '0_41_41_43_36'
+
+[[spawn]]
+npc = 'pest_squire_bank_2'
+coords = '0_41_41_44_27'
+
+[[spawn]]
+npc = 'gem_merchant_ardougne'
+coords = '0_41_51_45_39'
+
+[[spawn]]
+npc = 'baker_merchant_ardougne2'
+coords = '0_41_51_45_46'
+
+[[spawn]]
+npc = 'ranging_guild_bow_salesman'
+coords = '0_41_53_49_42'
+
+[[spawn]]
+npc = 'dorgesh_male_banker'
+coords = '0_42_83_11_36'
+
+[[spawn]]
+npc = 'dorgesh_female_banker'
+coords = '0_42_83_11_37'
+
+[[spawn]]
+npc = 'dorgesh_market_head'
+coords = '0_42_83_29_3'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_42_54_33_39'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_42_54_34_39'
+
+[[spawn]]
+npc = 'dorgesh_male_leather_seller'
+coords = '0_42_83_34_1'
+
+[[spawn]]
+npc = 'dorgesh_female_lamp_seller'
+coords = '0_42_83_35_9'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_42_54_36_39'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_42_54_38_40'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_42_54_39_39'
+
+[[spawn]]
+npc = 'deadman_banker_grey_south'
+coords = '0_42_54_40_39'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_42_54_41_39'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_42_54_41_40'
+
+[[spawn]]
+npc = 'slug2_lovecraft'
+coords = '0_42_51_44_26'
+
+[[spawn]]
+npc = 'mm_ifaba'
+coords = '0_43_43_2_23'
+
+[[spawn]]
+npc = 'mm_tutab'
+coords = '0_43_43_5_18'
+
+[[spawn]]
+npc = 'mm_daga'
+coords = '0_43_43_7_23'
+
+[[spawn]]
+npc = 'mm_solihib'
+coords = '0_43_43_17_37'
+
+[[spawn]]
+npc = 'mourning_bow_seller'
+coords = '0_43_95_20_28'
+
+[[spawn]]
+npc = 'mourning_seamstress'
+coords = '0_43_95_20_43'
+
+[[spawn]]
+npc = 'mm2_javelinstoreowner'
+coords = '0_43_43_22_26'
+
+[[spawn]]
+npc = 'mm2_monkey_banker'
+coords = '0_43_43_29_30'
+
+[[spawn]]
+npc = 'mm_hamab'
+coords = '0_43_43_29_41'
+
+[[spawn]]
+npc = 'mourning_stores_man'
+coords = '0_43_95_30_46'
+
+[[spawn]]
+npc = 'alfonse_the_waiter'
+coords = '0_43_49_41_52'
+
+[[spawn]]
+npc = 'farming_gardener_fruit_tree_5'
+coords = '0_43_95_42_24'
+
+[[spawn]]
+npc = 'deadmans_bartender'
+coords = '0_43_49_45_19'
+
+[[spawn]]
+npc = 'contact_banker_male'
+coords = '0_43_80_46_51'
+
+[[spawn]]
+npc = 'contact_banker_female'
+coords = '0_43_80_47_51'
+
+[[spawn]]
+npc = 'contact_banker_female'
+coords = '0_43_80_48_51'
+
+[[spawn]]
+npc = 'mourning_elf_bankerm'
+coords = '0_43_95_48_30'
+
+[[spawn]]
+npc = 'contact_banker_deadman'
+coords = '0_43_80_49_51'
+
+[[spawn]]
+npc = 'mourning_elf_bankerf'
+coords = '0_43_95_50_30'
+
+[[spawn]]
+npc = 'davon'
+coords = '0_43_49_51_16'
+
+[[spawn]]
+npc = 'arhein'
+coords = '0_43_53_51_38'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_43_53_55_51'
+
+[[spawn]]
+npc = 'frincos'
+coords = '0_43_52_56_14'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_43_53_57_51'
+
+[[spawn]]
+npc = 'deadman_banker_grey_south'
+coords = '0_43_53_58_51'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_43_53_59_51'
+
+[[spawn]]
+npc = 'shilogeneralstore'
+coords = '0_44_46_8_15'
+
+[[spawn]]
+npc = 'myarm_leprechaun'
+coords = '0_44_57_10_37'
+
+[[spawn]]
+npc = 'dwarf_city_shop_armour'
+coords = '0_44_159_11_23'
+
+[[spawn]]
+npc = 'dwarf_city_shop_weapons'
+coords = '0_44_159_12_53'
+
+[[spawn]]
+npc = 'dwarf_city_banker1'
+coords = '0_44_159_20_29'
+
+[[spawn]]
+npc = 'dwarf_city_banker2'
+coords = '0_44_159_22_29'
+
+[[spawn]]
+npc = 'warguild_banker'
+coords = '0_44_55_25_23'
+
+[[spawn]]
+npc = 'dwarf_city_barman_rich'
+coords = '0_44_159_25_21'
+
+[[spawn]]
+npc = 'warguild_food_shopkeeper'
+coords = '0_44_55_26_31'
+
+[[spawn]]
+npc = 'warguild_potion_shopkeeper'
+coords = '0_44_55_29_33'
+
+[[spawn]]
+npc = 'shilobanker'
+coords = '0_44_46_35_10'
+
+[[spawn]]
+npc = 'shilobanker'
+coords = '0_44_46_37_11'
+
+[[spawn]]
+npc = 'xbows_sales_dwarf_white_wolf_mt'
+coords = '0_44_154_49_15'
+
+[[spawn]]
+npc = 'dwarf_city_shop_general_store'
+coords = '0_44_159_53_14'
+
+[[spawn]]
+npc = 'dwarf_city_shop_cloth'
+coords = '0_44_159_53_35'
+
+[[spawn]]
+npc = 'shilofishowner'
+coords = '0_44_46_54_28'
+
+[[spawn]]
+npc = 'dwarf_city_shop_warhammer'
+coords = '0_44_159_57_33'
+
+[[spawn]]
+npc = 'gaius'
+coords = '0_45_53_5_57'
+
+[[spawn]]
+npc = 'dwarf_city_shop_silver'
+coords = '0_45_159_5_21'
+
+[[spawn]]
+npc = 'xbows_sales_dwarf_keldegrim'
+coords = '0_45_159_5_26'
+
+[[spawn]]
+npc = 'dwarf_city_shop_craft'
+coords = '0_45_159_5_31'
+
+[[spawn]]
+npc = 'dwarf_city_shop_cloth_poor'
+coords = '0_45_159_7_13'
+
+[[spawn]]
+npc = 'dwarf_city_shop_gems'
+coords = '0_45_159_8_36'
+
+[[spawn]]
+npc = 'dwarf_city_shop_bakery'
+coords = '0_45_159_12_36'
+
+[[spawn]]
+npc = 'jatix'
+coords = '0_45_53_19_35'
+
+[[spawn]]
+npc = 'generalshopkeeper7'
+coords = '0_45_49_22_10'
+
+[[spawn]]
+npc = 'generalassistant7'
+coords = '0_45_49_22_14'
+
+[[spawn]]
+npc = 'death_barman'
+coords = '0_45_55_26_17'
+
+[[spawn]]
+npc = 'dwarf_city_dwarf_man8'
+coords = '0_45_159_26_40'
+
+[[spawn]]
+npc = 'vc_gambler_rich3'
+coords = '0_45_79_29_20'
+
+[[spawn]]
+npc = 'dwarf_city_barmaid_poor'
+coords = '0_45_159_36_19'
+
+[[spawn]]
+npc = 'dwarf_city_shop_pickaxe'
+coords = '0_45_159_45_34'
+
+[[spawn]]
+npc = 'death_shopkeeper'
+coords = '0_45_55_48_26'
+
+[[spawn]]
+npc = 'dragon_bartender'
+coords = '0_45_73_60_6'
+
+[[spawn]]
+npc = 'herquin'
+coords = '0_46_52_0_6'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_46_52_1_38'
+
+[[spawn]]
+npc = 'rommik'
+coords = '0_46_50_2_5'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_46_52_2_38'
+
+[[spawn]]
+npc = 'generalshopkeeper6'
+coords = '0_46_50_3_17'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_46_52_3_38'
+
+[[spawn]]
+npc = 'generalassistant6'
+coords = '0_46_50_4_17'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_46_52_4_38'
+
+[[spawn]]
+npc = 'deadman_banker_grey_north'
+coords = '0_46_52_5_38'
+
+[[spawn]]
+npc = 'flynn'
+coords = '0_46_52_7_58'
+
+[[spawn]]
+npc = 'risingsun_barmaid'
+coords = '0_46_52_10_45'
+
+[[spawn]]
+npc = 'generalassistant4'
+coords = '0_46_52_11_61'
+
+[[spawn]]
+npc = 'salesman_ranging'
+coords = '0_46_50_13_3'
+
+[[spawn]]
+npc = 'risingsun_barmaid2'
+coords = '0_46_52_13_42'
+
+[[spawn]]
+npc = 'generalshopkeeper4'
+coords = '0_46_52_13_58'
+
+[[spawn]]
+npc = 'wilderness_capeseller_2'
+coords = '0_46_58_23_53'
+
+[[spawn]]
+npc = 'wayne'
+coords = '0_46_51_29_48'
+
+[[spawn]]
+npc = 'cassie'
+coords = '0_46_52_35_55'
+
+[[spawn]]
+npc = 'vc_gambler_rich3'
+coords = '0_46_150_40_56'
+
+[[spawn]]
+npc = 'dwarven_shopkeeper'
+coords = '0_46_153_49_36'
+
+[[spawn]]
+npc = 'xbows_sales_dwarf_mine'
+coords = '0_46_153_59_7'
+
+[[spawn]]
+npc = 'falador_banker'
+coords = '0_47_52_2_25'
+
+[[spawn]]
+npc = 'falador_banker'
+coords = '0_47_52_3_25'
+
+[[spawn]]
+npc = 'betty'
+coords = '0_47_50_4_59'
+
+[[spawn]]
+npc = 'falador_banker'
+coords = '0_47_52_4_25'
+
+[[spawn]]
+npc = 'gerrant'
+coords = '0_47_50_5_25'
+
+[[spawn]]
+npc = 'grum'
+coords = '0_47_50_5_48'
+
+[[spawn]]
+npc = 'falador_banker'
+coords = '0_47_52_5_25'
+
+[[spawn]]
+npc = 'rc_zmi_banker'
+coords = '0_47_87_5_57'
+
+[[spawn]]
+npc = 'wydin'
+coords = '0_47_50_6_4'
+
+[[spawn]]
+npc = 'falador_banker'
+coords = '0_47_52_6_25'
+
+[[spawn]]
+npc = 'deadman_banker_grey_north'
+coords = '0_47_52_7_25'
+
+[[spawn]]
+npc = 'noterazzo'
+coords = '0_47_57_17_53'
+
+[[spawn]]
+npc = 'brian'
+coords = '0_47_50_20_50'
+
+[[spawn]]
+npc = 'mguild_pickaxeseller'
+coords = '0_47_152_22_18'
+
+[[spawn]]
+npc = 'mguild_oreseller'
+coords = '0_47_152_24_20'
+
+[[spawn]]
+npc = 'fat_tony'
+coords = '0_47_57_28_59'
+
+[[spawn]]
+npc = 'drogo'
+coords = '0_47_153_28_54'
+
+[[spawn]]
+npc = 'rustyanchor_bartender'
+coords = '0_47_50_37_57'
+
+[[spawn]]
+npc = 'oziach'
+coords = '0_47_54_61_61'
+
+[[spawn]]
+npc = 'peksa'
+coords = '0_48_53_4_37'
+
+[[spawn]]
+npc = 'generalshopkeeper5'
+coords = '0_48_54_8_55'
+
+[[spawn]]
+npc = 'aprilfoolshorsesalesman'
+coords = '0_48_50_9_47'
+
+[[spawn]]
+npc = 'generalassistant5'
+coords = '0_48_54_9_55'
+
+[[spawn]]
+npc = 'rag_wine_merchant'
+coords = '0_48_50_13_51'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_48_50_16_42'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_48_50_18_42'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_48_50_18_43'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_48_50_18_45'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_48_54_24_33'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_48_54_24_35'
+
+[[spawn]]
+npc = 'banker2'
+coords = '0_48_54_24_36'
+
+[[spawn]]
+npc = 'banker1'
+coords = '0_48_54_26_36'
+
+[[spawn]]
+npc = 'ned'
+coords = '0_48_50_28_58'
+
+[[spawn]]
+npc = 'slayer_master_7'
+coords = '0_48_54_37_60'
+
+[[spawn]]
+npc = 'lost_property_merchant_model'
+coords = '0_48_56_56_47'
+
+[[spawn]]
+npc = 'wildy_hub_banker'
+coords = '0_48_56_62_45'
+
+[[spawn]]
+npc = 'deadman_banker_wildy'
+coords = '0_48_56_63_43'
+
+[[spawn]]
+npc = 'merchant_pies'
+coords = '0_49_53_3_56'
+
+[[spawn]]
+npc = 'br_reward_shopkeeper'
+coords = '0_49_56_7_50'
+
+[[spawn]]
+npc = 'banker1_new'
+coords = '0_49_53_11_56'
+
+[[spawn]]
+npc = 'slayer_master_3'
+coords = '0_49_154_11_58'
+
+[[spawn]]
+npc = 'banker2_new'
+coords = '0_49_53_12_56'
+
+[[spawn]]
+npc = 'wildy_hub_pub_owner'
+coords = '0_49_56_12_59'
+
+[[spawn]]
+npc = 'tempoross_ishmael'
+coords = '0_49_44_23_31'
+
+[[spawn]]
+npc = 'fourdiamonds_bartender'
+coords = '0_49_46_23_37'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_23_34'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_24_31'
+
+# OSRS Wiki NPC pin, oldid 15197421
+[[spawn]]
+npc = 'tortugan_krill_2ops'
+coords = '0_49_37_27_49'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_27_27'
+
+[[spawn]]
+npc = 'banker1_west'
+coords = '0_49_54_27_33'
+
+[[spawn]]
+npc = 'deadman_banker_grey_west'
+coords = '0_49_54_27_34'
+
+[[spawn]]
+npc = 'banker1_east'
+coords = '0_49_54_30_33'
+
+[[spawn]]
+npc = 'banker2_east'
+coords = '0_49_54_30_34'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_33_22'
+
+# OSRS Wiki NPC pin, oldid 15197419
+[[spawn]]
+npc = 'tortugan_coco_2ops'
+coords = '0_49_37_35_36'
+
+# OSRS Wiki NPC pin, oldid 15197422
+[[spawn]]
+npc = 'tortugan_blunn_2ops'
+coords = '0_49_37_36_48'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_36_23'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_37_27'
+
+[[spawn]]
+npc = 'dt_bandit_shopkeeper'
+coords = '0_49_46_39_44'
+
+# OSRS Wiki NPC pin, oldid 15197560
+[[spawn]]
+npc = 'tortugan_mag_2ops'
+coords = '0_49_37_40_43'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_40_30'
+
+[[spawn]]
+npc = 'bedabin'
+coords = '0_49_47_40_35'
+
+[[spawn]]
+npc = 'deadman_banker_blue_west'
+coords = '0_49_53_51_44'
+
+[[spawn]]
+npc = 'banker2_new'
+coords = '0_49_53_51_46'
+
+[[spawn]]
+npc = 'banker1_new'
+coords = '0_49_53_51_48'
+
+[[spawn]]
+npc = 'banker2_new'
+coords = '0_49_53_51_50'
+
+[[spawn]]
+npc = 'banker1_new'
+coords = '0_49_53_51_52'
+
+[[spawn]]
+npc = 'lotr_banker'
+coords = '0_49_71_58_25'
+
+[[spawn]]
+npc = 'wild_cave_trader'
+coords = '0_49_159_60_48'
+
+[[spawn]]
+npc = 'swordshop1'
+coords = '0_50_53_3_5'
+
+[[spawn]]
+npc = 'zaff'
+coords = '0_50_53_3_41'
+
+[[spawn]]
+npc = 'swordshop2'
+coords = '0_50_53_5_7'
+
+[[spawn]]
+npc = 'generalassistant2'
+coords = '0_50_53_17_19'
+
+[[spawn]]
+npc = 'prif_staffstore'
+coords = '0_50_95_17_9'
+
+[[spawn]]
+npc = 'generalshopkeeper2'
+coords = '0_50_53_18_23'
+
+[[spawn]]
+npc = 'wilderness_capeseller_1'
+coords = '0_50_60_18_39'
+
+[[spawn]]
+npc = 'prif_runestore'
+coords = '0_50_95_21_36'
+
+[[spawn]]
+npc = 'prif_seamstress'
+coords = '0_50_94_22_58'
+
+[[spawn]]
+npc = 'bluemoon_bartender'
+coords = '0_50_53_26_7'
+
+[[spawn]]
+npc = 'farming_gardener_tree_3'
+coords = '0_50_54_26_2'
+
+[[spawn]]
+npc = 'wilderness_capeseller_3'
+coords = '0_50_57_28_39'
+
+[[spawn]]
+npc = 'prif_dyestore'
+coords = '0_50_94_28_39'
+
+[[spawn]]
+npc = 'horvik_the_armourer'
+coords = '0_50_53_29_46'
+
+[[spawn]]
+npc = 'prif_lliann'
+coords = '0_50_94_30_52'
+
+[[spawn]]
+npc = 'lowe'
+coords = '0_50_53_32_31'
+
+[[spawn]]
+npc = 'wilderness_capeseller_9'
+coords = '0_50_56_37_37'
+
+[[spawn]]
+npc = 'prif_bartender'
+coords = '0_50_95_37_47'
+
+[[spawn]]
+npc = 'deadman_banker_blue_north'
+coords = '0_50_53_51_26'
+
+[[spawn]]
+npc = 'banker1_new'
+coords = '0_50_53_52_26'
+
+[[spawn]]
+npc = 'prif_armourstore'
+coords = '0_50_94_52_44'
+
+[[spawn]]
+npc = 'banker1_new'
+coords = '0_50_53_53_26'
+
+[[spawn]]
+npc = 'banker2_new'
+coords = '0_50_53_54_26'
+
+[[spawn]]
+npc = 'banker2_new'
+coords = '0_50_53_55_26'
+
+[[spawn]]
+npc = 'prif_bankerf2'
+coords = '0_50_95_55_23'
+
+[[spawn]]
+npc = 'prif_macestore'
+coords = '0_50_95_55_46'
+
+[[spawn]]
+npc = 'banker2_new'
+coords = '0_50_53_56_26'
+
+[[spawn]]
+npc = 'prif_bankerm4'
+coords = '0_50_95_56_23'
+
+[[spawn]]
+npc = 'prif_bankerm2'
+coords = '0_50_95_56_31'
+
+[[spawn]]
+npc = 'prif_weaponstore'
+coords = '0_50_94_58_42'
+
+[[spawn]]
+npc = 'prif_bankerm4'
+coords = '0_50_95_58_23'
+
+[[spawn]]
+npc = 'prif_bankerm3'
+coords = '0_50_95_58_31'
+
+[[spawn]]
+npc = 'kharidbanker1'
+coords = '0_51_49_3_28'
+
+[[spawn]]
+npc = 'kharidbanker2'
+coords = '0_51_49_3_30'
+
+[[spawn]]
+npc = 'kharidbanker1'
+coords = '0_51_49_3_31'
+
+[[spawn]]
+npc = 'kharidbanker2'
+coords = '0_51_49_3_32'
+
+[[spawn]]
+npc = 'kharidbanker1'
+coords = '0_51_49_3_33'
+
+[[spawn]]
+npc = 'donkey_bartender'
+coords = '0_51_53_4_1'
+
+[[spawn]]
+npc = 'tea_seller'
+coords = '0_51_53_7_19'
+
+[[spawn]]
+npc = 'prif_foodstore'
+coords = '0_51_95_10_23'
+
+[[spawn]]
+npc = 'jollyboar_bartender'
+coords = '0_51_54_13_32'
+
+[[spawn]]
+npc = 'prif_spice'
+coords = '0_51_95_13_13'
+
+[[spawn]]
+npc = 'prif_gem'
+coords = '0_51_95_13_21'
+
+[[spawn]]
+npc = 'prif_silver'
+coords = '0_51_95_18_19'
+
+[[spawn]]
+npc = 'ics_little_embalmer'
+coords = '0_51_43_23_3'
+
+[[spawn]]
+npc = 'prif_herbstore'
+coords = '0_51_95_23_38'
+
+[[spawn]]
+npc = 'zeke'
+coords = '0_51_49_24_54'
+
+[[spawn]]
+npc = 'gem_trader'
+coords = '0_51_50_24_12'
+
+[[spawn]]
+npc = 'prif_miningstore'
+coords = '0_51_94_26_28'
+
+[[spawn]]
+npc = 'prif_farmingstore'
+coords = '0_51_95_32_8'
+
+[[spawn]]
+npc = 'prif_bankerf1'
+coords = '0_51_94_33_42'
+
+[[spawn]]
+npc = 'prif_bankerm1'
+coords = '0_51_94_33_43'
+
+[[spawn]]
+npc = 'prif_bankerf1'
+coords = '0_51_94_33_44'
+
+[[spawn]]
+npc = 'prif_generalstore'
+coords = '0_51_94_38_36'
+
+[[spawn]]
+npc = 'feud_ali_m'
+coords = '0_51_50_40_11'
+
+[[spawn]]
+npc = 'prif_rangestore'
+coords = '0_51_94_41_58'
+
+[[spawn]]
+npc = 'duel_mubariz'
+coords = '0_51_50_50_40'
+
+[[spawn]]
+npc = 'ranael'
+coords = '0_51_49_52_28'
+
+[[spawn]]
+npc = 'louie_legs'
+coords = '0_51_49_52_39'
+
+[[spawn]]
+npc = 'generalassistant3'
+coords = '0_51_49_52_46'
+
+[[spawn]]
+npc = 'generalshopkeeper3'
+coords = '0_51_49_52_48'
+
+[[spawn]]
+npc = 'dommik'
+coords = '0_51_49_58_58'
+
+[[spawn]]
+npc = 'dttd_bone_dealer'
+coords = '0_51_150_60_7'
+
+[[spawn]]
+npc = 'feud_marketseller'
+coords = '0_52_46_31_43'
+
+[[spawn]]
+npc = 'feud_ali_the_barman'
+coords = '0_52_46_33_11'
+
+[[spawn]]
+npc = 'duel_fadli'
+coords = '0_52_51_55_5'
+
+[[spawn]]
+npc = 'elid_shield_seller'
+coords = '0_53_45_15_45'
+
+[[spawn]]
+npc = 'elid_general_seller'
+coords = '0_53_45_22_26'
+
+[[spawn]]
+npc = 'elid_banker'
+coords = '0_53_45_33_9'
+
+[[spawn]]
+npc = 'elid_banker'
+coords = '0_53_45_33_11'
+
+[[spawn]]
+npc = 'elid_banker'
+coords = '0_53_45_33_13'
+
+[[spawn]]
+npc = 'elid_banker'
+coords = '0_53_45_33_14'
+
+[[spawn]]
+npc = 'elid_choc_ice_seller'
+coords = '0_53_45_38_34'
+
+[[spawn]]
+npc = 'hunting_shop_owner_nardah'
+coords = '0_53_45_51_22'
+
+[[spawn]]
+npc = 'werewolfshopkeeper3'
+coords = '0_54_54_19_41'
+
+[[spawn]]
+npc = 'werewolfinnkeeper'
+coords = '0_54_54_37_15'
+
+[[spawn]]
+npc = 'werewolfshopkeeper2'
+coords = '0_54_54_43_50'
+
+[[spawn]]
+npc = 'werewolfshopkeeper1'
+coords = '0_54_54_51_40'
+
+[[spawn]]
+npc = 'werewolfbanker'
+coords = '0_54_54_58_23'
+
+[[spawn]]
+npc = 'werewolfbanker'
+coords = '0_54_54_58_25'
+
+[[spawn]]
+npc = 'burgh_general_store_owner'
+coords = '0_54_50_61_41'
+
+[[spawn]]
+npc = 'darkm_trader_clothes'
+coords = '0_56_52_17_51'
+
+[[spawn]]
+npc = 'darkm_banker_male'
+coords = '0_56_52_19_41'
+
+[[spawn]]
+npc = 'myq3_black_market_trader'
+coords = '0_56_50_20_1'
+
+[[spawn]]
+npc = 'darkm_banker_female'
+coords = '0_56_52_20_41'
+
+[[spawn]]
+npc = 'darkm_banker_male'
+coords = '0_56_52_21_41'
+
+[[spawn]]
+npc = 'darkm_banker_female'
+coords = '0_56_52_23_41'
+
+[[spawn]]
+npc = 'darkm_trader_food'
+coords = '0_56_52_35_59'
+
+[[spawn]]
+npc = 'darkm_trader_general'
+coords = '0_56_52_57_8'
+
+[[spawn]]
+npc = 'darkm_trader_candles'
+coords = '0_56_52_61_31'
+
+[[spawn]]
+npc = 'vampyre_banker_male'
+coords = '0_57_50_1_6'
+
+[[spawn]]
+npc = 'vampyre_banker_female'
+coords = '0_57_50_3_6'
+
+[[spawn]]
+npc = 'vampyre_banker_male'
+coords = '0_57_50_4_6'
+
+[[spawn]]
+npc = 'ahoy_ghost_shopkeeper'
+coords = '0_57_54_10_21'
+
+[[spawn]]
+npc = 'fever_mama_la_fiette'
+coords = '0_57_46_15_36'
+
+[[spawn]]
+npc = 'fever_harpoon_joe'
+coords = '0_57_46_18_46'
+
+[[spawn]]
+npc = 'fever_pirate_two_feet_charley'
+coords = '0_57_46_25_26'
+
+[[spawn]]
+npc = 'fever_banker_01'
+coords = '0_57_46_34_37'
+
+[[spawn]]
+npc = 'fever_banker_02'
+coords = '0_57_46_34_38'
+
+[[spawn]]
+npc = 'fever_banker_01'
+coords = '0_57_46_34_39'
+
+[[spawn]]
+npc = 'ahoy_ghost_banker'
+coords = '0_57_54_39_8'
+
+[[spawn]]
+npc = 'ahoy_ghost_banker'
+coords = '0_57_54_40_8'
+
+[[spawn]]
+npc = 'fever_smithing_smith'
+coords = '0_57_46_41_10'
+
+[[spawn]]
+npc = 'deadman_banker_ahoy_north'
+coords = '0_57_54_42_8'
+
+[[spawn]]
+npc = 'ahoy_ghost_banker'
+coords = '0_57_54_43_8'
+
+[[spawn]]
+npc = 'fever_dodgy_mike'
+coords = '0_57_46_47_34'
+
+[[spawn]]
+npc = 'fossil_squirrel_gardener3'
+coords = '0_57_59_57_62'
+
+[[spawn]]
+npc = 'fossil_squirrel_gardener2'
+coords = '0_57_59_60_60'
+
+[[spawn]]
+npc = 'fossil_squirrel_gardener1'
+coords = '0_58_59_3_56'
+
+[[spawn]]
+npc = 'fossil_general_store'
+coords = '0_58_59_14_40'
+
+# OSRS Wiki NPC pin, oldid 14992592
+[[spawn]]
+npc = 'cam_torum_shop_magic'
+coords = '1_22_149_16_32'
+
+# OSRS Wiki NPC pin, oldid 14993479
+[[spawn]]
+npc = 'cam_torum_shop_general'
+coords = '1_22_149_17_19'
+
+# OSRS Wiki NPC pin, oldid 14992740
+[[spawn]]
+npc = 'cam_torum_bartender'
+coords = '1_22_149_21_49'
+
+# OSRS Wiki NPC pin, oldid 15197170
+[[spawn]]
+npc = 'cam_torum_shop_herbalist'
+coords = '1_22_149_28_15'
+
+# OSRS Wiki NPC pin, oldid 15197169
+[[spawn]]
+npc = 'cam_torum_shop_jewellery'
+coords = '1_22_149_29_24'
+
+# OSRS Wiki NPC pin, oldid 15197167
+[[spawn]]
+npc = 'cam_torum_shop_baker'
+coords = '1_22_149_33_24'
+
+# OSRS Wiki NPC pin, oldid 15197171
+[[spawn]]
+npc = 'cam_torum_shop_mining'
+coords = '1_22_149_34_18'
+
+# OSRS Wiki NPC pin, oldid 15197154
+[[spawn]]
+npc = 'cam_torum_shop_blacksmith'
+coords = '1_22_149_40_49'
+
+[[spawn]]
+npc = 'mourning_elven_cook'
+coords = '1_36_49_37_22'
+
+[[spawn]]
+npc = 'blurberrybarmen'
+coords = '1_37_54_49_42'
+
+[[spawn]]
+npc = 'gnomebanker'
+coords = '1_38_54_7_31'
+
+[[spawn]]
+npc = 'deadman_banker_gnome_east'
+coords = '1_38_54_8_32'
+
+[[spawn]]
+npc = 'deadman_banker_gnome_east'
+coords = '1_38_53_11_32'
+
+[[spawn]]
+npc = 'gnomebanker'
+coords = '1_38_53_11_33'
+
+[[spawn]]
+npc = 'gnomebanker'
+coords = '1_38_53_16_32'
+
+[[spawn]]
+npc = 'gnomebanker'
+coords = '1_38_53_16_35'
+
+[[spawn]]
+npc = 'gnomebanker'
+coords = '1_38_54_16_24'
+
+[[spawn]]
+npc = 'deadman_banker_gnome_north'
+coords = '1_38_54_18_24'
+
+[[spawn]]
+npc = 'myths_guild_herbalist'
+coords = '1_38_44_22_37'
+
+[[spawn]]
+npc = 'blurberrybarmen'
+coords = '1_38_54_50_31'
+
+[[spawn]]
+npc = 'blurberrybarmen'
+coords = '1_38_54_50_33'
+
+[[spawn]]
+npc = 'horror_lighthousekeeeper_well'
+coords = '1_39_56_13_55'
+
+[[spawn]]
+npc = 'treevillage_shopkeeper1'
+coords = '1_39_49_31_25'
+
+[[spawn]]
+npc = 'magic_store_owner'
+coords = '1_40_48_35_15'
+
+[[spawn]]
+npc = 'magic_store_owner2'
+coords = '1_40_48_35_16'
+
+[[spawn]]
+npc = 'fionella'
+coords = '1_42_52_37_50'
+
+[[spawn]]
+npc = 'mourning_elven_cook'
+coords = '1_43_95_37_22'
+
+[[spawn]]
+npc = 'warguild_armour_shopkeeper'
+coords = '1_44_55_39_16'
+
+[[spawn]]
+npc = 'helemos'
+coords = '1_45_54_14_54'
+
+[[spawn]]
+npc = 'risingsun_barmaid3'
+coords = '1_46_52_12_45'
+
+[[spawn]]
+npc = 'partyroom_barmaid'
+coords = '1_47_52_35_45'
+
+[[spawn]]
+npc = 'partyroom_barmaid2'
+coords = '1_47_52_38_55'
+
+[[spawn]]
+npc = 'scavvo'
+coords = '1_49_52_55_23'
+
+[[spawn]]
+npc = 'valaine'
+coords = '1_49_52_57_33'
+
+[[spawn]]
+npc = 'fossil_mermaid_deepwater'
+coords = '1_58_160_53_50'
+
+[[spawn]]
+npc = 'deadman_banker_grey_north'
+coords = '2_25_57_11_31'
+
+[[spawn]]
+npc = 'banker1'
+coords = '2_25_57_12_31'
+
+[[spawn]]
+npc = 'myths_guild_cape_seller'
+coords = '2_38_44_16_31'
+
+[[spawn]]
+npc = 'myths_guild_smith'
+coords = '2_38_44_31_31'
+
+[[spawn]]
+npc = 'myths_guild_weapon_seller'
+coords = '2_38_44_34_30'
+
+
+# Open tile within the mapped trading area, OSRS Wiki oldid 15209782.
+[[spawn]]
+npc = 'port_roberts_gem_trader'
+coords = '0_29_51_15_24'
+
+# Open tile within the mapped trading area, OSRS Wiki oldid 15197612.
+[[spawn]]
+npc = 'port_roberts_silver_trader'
+coords = '0_29_51_12_24'
+
+# Open tile within the mapped trading area, OSRS Wiki oldid 15197625.
+[[spawn]]
+npc = 'port_roberts_silk_trader'
+coords = '0_29_51_16_31'
+
+# Open tile within the mapped trading area, OSRS Wiki oldid 14992693.
+[[spawn]]
+npc = 'aldarin_wine_store'
+coords = '0_21_45_16_42'

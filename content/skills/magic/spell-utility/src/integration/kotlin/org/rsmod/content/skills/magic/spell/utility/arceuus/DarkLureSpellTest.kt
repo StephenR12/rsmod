@@ -45,7 +45,7 @@ import org.rsmod.game.type.comp.ComponentTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class DarkLureSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins spell presentation and timing contracts`() =
+    fun GameTestState.`cache 238 pins spell presentation and timing contracts`() =
         runDarkLureTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_dark_lure))
             assertEquals(15_303, spell.obj.id)
@@ -58,7 +58,7 @@ class DarkLureSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_dark_lure.id ushr 16)
-            assertEquals(182, components.magic_spellbook_dark_lure.id and 0xFFFF)
+            assertEquals(187, components.magic_spellbook_dark_lure.id and 0xFFFF)
             assertEquals("Cast", deps.components[components.magic_spellbook_dark_lure].targetVerb)
             assertEquals(1_882, spotanims.dark_lure_cast.id)
             assertEquals(1_883, spotanims.dark_lure_travel.id)

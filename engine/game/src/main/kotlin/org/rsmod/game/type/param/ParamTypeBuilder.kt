@@ -12,6 +12,8 @@ public class ParamTypeBuilder<T : Any>(
     public val type: KClass<T>?,
     public var internal: String? = null,
 ) {
+    public var typeId: Int? = null
+    public var defaultLong: Long? = null
     public var typeCharId: Char? = null
     public var defaultInt: Int? = null
     public var defaultStr: String? = null
@@ -21,12 +23,15 @@ public class ParamTypeBuilder<T : Any>(
 
     public fun build(id: Int): UnpackedParamType<T> {
         val internal = checkNotNull(internal) { "`internal` must be set." }
-        val typeLiteral = CacheVarLiteral.forCharId(typeCharId)
+        val typeLiteral =
+            typeId?.let { CacheVarLiteral[it] } ?: CacheVarLiteral.forCharId(typeCharId)
         val autoDisable = autoDisable ?: DEFAULT_AUTO_DISABLE
         val transmit = transmit ?: DEFAULT_TRANSMIT
         return UnpackedParamType(
             type = type,
             typeLiteral = typeLiteral,
+            typeId = typeId,
+            defaultLong = defaultLong,
             defaultInt = defaultInt,
             defaultStr = defaultStr,
             autoDisable = autoDisable,
@@ -56,6 +61,12 @@ public class ParamTypeBuilder<T : Any>(
             return UnpackedParamType(
                 type = type,
                 typeLiteral = typeLiteral,
+                typeId =
+                    edit.typeId
+                        ?: base.typeId?.takeIf {
+                            edit.typeLiteral == null || edit.typeLiteral == base.typeLiteral
+                        },
+                defaultLong = edit.defaultLong ?: base.defaultLong,
                 defaultInt = defaultInt,
                 defaultStr = defaultStr,
                 autoDisable = autoDisable,

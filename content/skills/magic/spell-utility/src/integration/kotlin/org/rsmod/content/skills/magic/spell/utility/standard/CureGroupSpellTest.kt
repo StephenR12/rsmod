@@ -47,7 +47,7 @@ import org.rsmod.game.type.interf.IfButtonOp
 @Execution(ExecutionMode.SAME_THREAD)
 class CureGroupSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins Cure Group state and presentation contracts`() =
+    fun GameTestState.`cache 238 pins Cure Group state and presentation contracts`() =
         runCureGroupTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_cure_group))
 
@@ -62,7 +62,7 @@ class CureGroupSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_cure_group.id ushr 16)
-            assertEquals(117, components.magic_spellbook_cure_group.id and 0xFFFF)
+            assertEquals(122, components.magic_spellbook_cure_group.id and 0xFFFF)
             assertEquals(
                 listOf("Cast"),
                 deps.components[components.magic_spellbook_cure_group].op.toList(),

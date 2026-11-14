@@ -1,5 +1,7 @@
 # Skills and Achievement Diaries
 
+> The active world now targets [revision 238 for Demonic Pacts](../cache-238/README.md). This report records the earlier cache-233 checkpoint.
+
 ## In-game test checkpoint, 12 November 2026
 
 All 23 skills listed below have playable server-side actions in the 1 October 2025 world (cache 233.4). Each skill row gives a first in-game check and its expected result. The combat and production reports record the remaining encounter rules, uncertain rates and client presentation details. [Combat and Slayer](COMBAT_AND_SLAYER.md) · [Production skills](PRODUCTION_SKILLS.md)

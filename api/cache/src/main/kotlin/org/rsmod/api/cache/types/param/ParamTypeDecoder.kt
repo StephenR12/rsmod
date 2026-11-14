@@ -46,6 +46,8 @@ public object ParamTypeDecoder {
                 2 -> defaultInt = data.readInt()
                 4 -> autoDisable = false
                 5 -> defaultStr = data.readString()
+                7 -> defaultLong = data.readLong()
+                8 -> typeId = data.readUnsignedByte().toInt()
                 200 -> transmit = false
                 else -> throw IOException("Error unrecognised .param config code: $code")
             }

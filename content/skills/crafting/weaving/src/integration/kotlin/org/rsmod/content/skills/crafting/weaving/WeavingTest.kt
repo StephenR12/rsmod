@@ -93,7 +93,7 @@ class WeavingTest {
             )
             val events =
                 client.filterIsInstance<IfSetEventsV2>().filter {
-                    it.interfaceId == 270 && it.componentId in 14..17
+                    it.interfaceId == 270 && it.componentId in 15..18
                 }
             assertEquals(4, events.size)
             assertTrue(events.all { it.start == 1 && it.end == 2 })

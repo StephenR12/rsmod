@@ -74,7 +74,7 @@ constructor(
                 fun field(column: Int, default: Int) =
                     (data[column]?.firstOrNull() as? Int) ?: default
                 val price =
-                    data.getValue(6).chunked(2).map { (row, count) ->
+                    data.getValue(7).chunked(2).map { (row, count) ->
                         val currencies = rows.getValue(row as Int).data.getValue(0)
                         Cost(
                             currencies.first() as Int,
@@ -85,11 +85,11 @@ constructor(
                 Stock(
                     field(0, -1),
                     price,
-                    field(10, 1),
-                    field(7, 1000),
-                    field(8, (rows.getValue(id).data[7]?.firstOrNull() as? Int) ?: 1000),
-                    field(14, 1) != 0,
-                    field(15, 1) != 0,
+                    field(11, 1),
+                    field(8, 1000),
+                    field(9, (rows.getValue(id).data[7]?.firstOrNull() as? Int) ?: 1000),
+                    field(17, 1) != 0,
+                    field(18, 1) != 0,
                 )
             }
         }

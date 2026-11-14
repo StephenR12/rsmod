@@ -4,13 +4,13 @@ import io.netty.buffer.ByteBuf
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import java.io.IOException
 import org.openrs2.buffer.readUnsignedShortSmart
-import org.openrs2.buffer.readVarInt
 import org.openrs2.buffer.use
 import org.openrs2.cache.Cache
 import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.util.TextUtil
 import org.rsmod.api.cache.util.readColumnValues
+import org.rsmod.api.cache.util.readUnsignedLeb128
 import org.rsmod.game.type.TypeResolver
 import org.rsmod.game.type.dbrow.DbRowTypeBuilder
 import org.rsmod.game.type.dbrow.DbRowTypeList
@@ -64,7 +64,7 @@ public object DbRowTypeDecoder {
                     this.types = columnTypes
                     this.columnCount = columnCount
                 }
-                4 -> table = data.readVarInt()
+                4 -> table = data.readUnsignedLeb128()
                 else -> throw IOException("Error unrecognised .dbrow config code: $code")
             }
         }

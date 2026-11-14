@@ -5,7 +5,7 @@ import org.rsmod.game.type.obj.ObjType
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.obj.UnpackedObjType
 
-/** Exact initial-step pool for ordinary cache-233.4 Easy clue rewards. */
+/** Exact initial-step pool for ordinary cache-238 Easy clue rewards. */
 public class Cache233EasyClueSteps @Inject constructor(objTypes: ObjTypeList) {
     public val steps: List<UnpackedObjType> =
         objTypes.values
@@ -18,8 +18,8 @@ public class Cache233EasyClueSteps @Inject constructor(objTypes: ObjTypeList) {
             .sortedBy { it.id }
             .toList()
             .also { resolved ->
-                check(resolved.map { it.id } == CACHE_233_IDS) {
-                    "Cache-233.4 Easy clue pool changed: ${resolved.map { it.id }}"
+                check(resolved.map { it.id } == CACHE_238_IDS) {
+                    "Cache-238 Easy clue pool changed: ${resolved.map { it.id }}"
                 }
             }
 
@@ -31,10 +31,13 @@ public class Cache233EasyClueSteps @Inject constructor(objTypes: ObjTypeList) {
     }
 
     public companion object {
-        public const val SIZE: Int = 165
+        public const val SIZE: Int = 166
 
-        /** Sorted IDs independently cross-checked against RuneLite 1.11.18's four clue decoders. */
-        public val CACHE_233_IDS: List<Int> =
+        public val CACHE_233_IDS: List<Int>
+            get() = CACHE_238_IDS.dropLast(1)
+
+        /** Sorted IDs independently cross-checked against RuneLite 1.12.28's four clue decoders. */
+        public val CACHE_238_IDS: List<Int> =
             buildList(SIZE) {
                     addAll(2_677..2_713)
                     add(2_716)
@@ -60,6 +63,7 @@ public class Cache233EasyClueSteps @Inject constructor(objTypes: ObjTypeList) {
                     addAll(28_913..28_914)
                     addAll(29_853..29_854)
                     add(30_928)
+                    add(31_268)
                 }
                 .also { check(it.size == SIZE) }
     }

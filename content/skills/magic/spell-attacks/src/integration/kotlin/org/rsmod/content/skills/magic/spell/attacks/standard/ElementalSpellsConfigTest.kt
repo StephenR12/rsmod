@@ -53,7 +53,7 @@ class ElementalSpellsConfigTest {
         }
 
     @Test
-    fun GameTestState.`match cache 233 elemental spell requirements`() =
+    fun GameTestState.`match cache 238 elemental spell requirements`() =
         runInjectedGameTest(Dependencies::class, childModule = MagicSpellModule()) { deps ->
             for (expected in elementalSpellContracts()) {
                 val actual = deps.magicSpells.getObjSpell(expected.spell)

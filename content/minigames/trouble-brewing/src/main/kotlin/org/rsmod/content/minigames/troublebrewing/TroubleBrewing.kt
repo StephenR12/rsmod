@@ -463,7 +463,13 @@ constructor(
         if (!player.members) return
         val goods =
             (BrewObjs.rum + BrewObjs.yeast + BrewObjs.clothing + BrewObjs.flags).map {
-                it to types[it].cost * 10
+                it to when {
+                    it in BrewObjs.rum -> 20
+                    it == BrewObjs.yeast -> 50
+                    it in BrewObjs.flags -> listOf(2000, 2000, 3000, 4000, 5000, 6000)[BrewObjs.flags.indexOf(it)]
+                    types[it].name.contains("hat", ignoreCase = true) -> 500
+                    else -> 1000
+                }
             }
         val i =
             menu(

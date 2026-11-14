@@ -13,6 +13,8 @@ import java.util.TreeMap
 import org.openrs2.cache.Cache
 import org.openrs2.crypto.SymmetricKey
 import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.map.loc.MapLocDefinition
 import org.rsmod.api.cache.map.loc.MapLocListDecoder
 import org.rsmod.api.cache.map.tile.MapTileDecoder
@@ -65,24 +67,37 @@ public object MapSquareManifestExporter {
         require(xteas.map(XteaRecord::mapsquare).distinct().size == xteas.size) {
             "XTEA input contains duplicate map-square IDs."
         }
+        val maps = MapArchive(cache)
         val entries = ArrayList<CacheManifestEntry>(xteas.size * 2)
-        xteas.sortedBy(XteaRecord::mapsquare).forEach { record ->
-            require(record.key.size == 4) {
-                "Map square ${record.mapsquare} must have exactly four XTEA words."
+        if (maps.numeric) {
+            for (square in maps.nativeSquares()) {
+                entries +=
+                    terrainEntry(square, maps.readBytes(square, MapFile.Terrain), numeric = true)
+                entries += locationEntry(square, maps.readBytes(square, MapFile.Locations), null)
             }
-            val square = MapSquareKey(record.mapsquare)
-            val name = "${square.x}_${square.z}"
-            require(record.archive == Js5Archives.MAPS) {
-                "Map square ${record.mapsquare} belongs to archive ${record.archive}, not ${Js5Archives.MAPS}."
+        } else {
+            xteas.sortedBy(XteaRecord::mapsquare).forEach { record ->
+                require(record.key.size == 4) {
+                    "Map square ${record.mapsquare} must have exactly four XTEA words."
+                }
+                val square = MapSquareKey(record.mapsquare)
+                val name = "${square.x}_${square.z}"
+                require(record.archive == Js5Archives.MAPS) {
+                    "Map square ${record.mapsquare} belongs to archive ${record.archive}, not ${Js5Archives.MAPS}."
+                }
+                require(record.name == "l$name") {
+                    "Map square ${record.mapsquare} has XTEA group name '${record.name}', expected 'l$name'."
+                }
+                val terrain = maps.readBytes(square, MapFile.Terrain)
+                val locations =
+                    maps.readBytes(
+                        square,
+                        MapFile.Locations,
+                        SymmetricKey.fromIntArray(record.key.toIntArray()),
+                    )
+                entries += terrainEntry(square, terrain)
+                entries += locationEntry(square, locations, record)
             }
-            require(record.name == "l$name") {
-                "Map square ${record.mapsquare} has XTEA group name '${record.name}', expected 'l$name'."
-            }
-            val terrain = cache.readBytes("m$name", SymmetricKey.ZERO)
-            val locations =
-                cache.readBytes("l$name", SymmetricKey.fromIntArray(record.key.toIntArray()))
-            entries += terrainEntry(square, terrain)
-            entries += locationEntry(square, locations, record)
         }
         return CacheManifestNormalizer.normalize(
             CacheManifest(
@@ -94,7 +109,11 @@ public object MapSquareManifestExporter {
         )
     }
 
-    internal fun terrainEntry(square: MapSquareKey, encoded: ByteArray): CacheManifestEntry {
+    internal fun terrainEntry(
+        square: MapSquareKey,
+        encoded: ByteArray,
+        numeric: Boolean = false,
+    ): CacheManifestEntry {
         val data = Unpooled.wrappedBuffer(encoded)
         var decodedBytes = 0
         val definition =
@@ -110,7 +129,7 @@ public object MapSquareManifestExporter {
             encoded = encoded,
             attributes =
                 mapOf(
-                    "archiveGroup" to "m${square.x}_${square.z}",
+                    "archiveGroup" to if (numeric) "${square.id}/0" else "m${square.x}_${square.z}",
                     "tiles" to TILE_COUNT,
                     "decodedBytes" to decodedBytes,
                     "trailingBytes" to encoded.size - decodedBytes,
@@ -131,7 +150,7 @@ public object MapSquareManifestExporter {
     internal fun locationEntry(
         square: MapSquareKey,
         encoded: ByteArray,
-        xtea: XteaRecord,
+        xtea: XteaRecord?,
     ): CacheManifestEntry {
         val definition = MapLocListDecoder.decode(InlineByteBuf(encoded))
         val levels = IntArray(CoordGrid.LEVEL_COUNT)
@@ -150,13 +169,16 @@ public object MapSquareManifestExporter {
             encoded = encoded,
             attributes =
                 mapOf(
-                    "archiveGroup" to "l${square.x}_${square.z}",
-                    "archiveGroupId" to xtea.group,
-                    "xteaProtected" to true,
+                    "archiveGroup" to
+                        if (xtea == null) "${square.id}/1" else "l${square.x}_${square.z}",
+                    "archiveGroupId" to (xtea?.group ?: square.id),
+                    "xteaProtected" to (xtea != null),
                     "xteaKeyFingerprint" to
-                        CoreConfigManifestExporter.fingerprint(
-                            xtea.key.joinToString(",").toByteArray(StandardCharsets.UTF_8)
-                        ),
+                        xtea?.let {
+                            CoreConfigManifestExporter.fingerprint(
+                                it.key.joinToString(",").toByteArray(StandardCharsets.UTF_8)
+                            )
+                        },
                     "placements" to definition.spawns.size,
                     "distinctLocationIds" to ids.size,
                     "distinctShapes" to shapes.size,
@@ -190,8 +212,12 @@ public object MapSquareManifestExporter {
 
     private fun Collection<Byte>.countSet(flag: Int): Int = count { it.toInt() and flag != 0 }
 
-    private fun Cache.readBytes(group: String, key: SymmetricKey): ByteArray {
-        val data = read(Js5Archives.MAPS, group, file = 0, key)
+    private fun MapArchive.readBytes(
+        square: MapSquareKey,
+        type: MapFile,
+        key: SymmetricKey = SymmetricKey.ZERO,
+    ): ByteArray {
+        val data = requireNotNull(read(square, type, key)) { "Missing $type for $square" }
         return try {
             ByteArray(data.readableBytes()).also { data.getBytes(data.readerIndex(), it) }
         } finally {

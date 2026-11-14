@@ -55,7 +55,7 @@ class CelestialRingChargesTest {
             player.members = true
             val charged = objTypes.getValue(25545)
             val dust = objTypes.getValue(25527)
-            val buttons = cacheTypes.components.getValue((12 shl 16) + 13)
+            val buttons = cacheTypes.components.getValue((12 shl 16) + 12)
             val bank = player.invMap.getOrPut(cacheTypes.invs[invs.bank])
             bank[0] = InvObj(charged, vars = 3)
             bank[1] = InvObj(dust, 14)

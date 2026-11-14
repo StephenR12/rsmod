@@ -24,7 +24,7 @@ import org.rsmod.game.type.seq.SeqTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class TeaDrinkingTest {
     @Test
-    fun GameTestState.`cache 233 ordinary tea contract and Drink dispatch are pinned`() =
+    fun GameTestState.`cache 238 ordinary tea contract and Drink dispatch are pinned`() =
         runTeaTest { deps ->
             assertEquals(1978, objs.cup_of_tea.id)
             assertEquals(1980, objs.empty_cup.id)

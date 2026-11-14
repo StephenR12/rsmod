@@ -54,7 +54,7 @@ import org.rsmod.game.type.comp.ComponentTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class VengeanceOtherSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins Vengeance Other spell and presentation contracts`() =
+    fun GameTestState.`cache 238 pins Vengeance Other spell and presentation contracts`() =
         runVengeanceTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_vengeance_other))
 
@@ -69,7 +69,7 @@ class VengeanceOtherSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_vengeance_other.id ushr 16)
-            assertEquals(141, components.magic_spellbook_vengeance_other.id and 0xFFFF)
+            assertEquals(146, components.magic_spellbook_vengeance_other.id and 0xFFFF)
             assertEquals(
                 "Cast",
                 deps.components[components.magic_spellbook_vengeance_other].targetVerb,

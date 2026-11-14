@@ -7,6 +7,7 @@ import org.rsmod.game.type.CacheType
 import org.rsmod.game.type.HashedCacheType
 import org.rsmod.game.type.content.ContentGroupType
 import org.rsmod.game.type.param.ParamType
+import org.rsmod.game.type.util.EntityOption
 import org.rsmod.game.type.util.ParamMap
 import org.rsmod.game.type.util.resolve
 
@@ -54,6 +55,12 @@ public data class UnpackedLocType(
     public val wallWidth: Int,
     public val ambient: Int,
     public val contrast: Int,
+    public val extraOptions: List<EntityOption> = emptyList(),
+    public val soundDistanceFadeCurve: Int? = null,
+    public val soundFade: LocSoundFade? = null,
+    public val flag94: Boolean? = null,
+    public val soundVisibility: Int? = null,
+    public val raise: Int? = null,
     public val op: Array<String?>,
     public val recolS: ShortArray,
     public val recolD: ShortArray,
@@ -213,6 +220,12 @@ public data class UnpackedLocType(
         if (wallWidth != other.wallWidth) return false
         if (ambient != other.ambient) return false
         if (contrast != other.contrast) return false
+        if (extraOptions != other.extraOptions) return false
+        if (soundDistanceFadeCurve != other.soundDistanceFadeCurve) return false
+        if (soundFade != other.soundFade) return false
+        if (flag94 != other.flag94) return false
+        if (soundVisibility != other.soundVisibility) return false
+        if (raise != other.raise) return false
         if (!op.contentEquals(other.op)) return false
         if (!recolS.contentEquals(other.recolS)) return false
         if (!recolD.contentEquals(other.recolD)) return false
@@ -270,6 +283,12 @@ public data class UnpackedLocType(
         result = 31 * result + wallWidth
         result = 31 * result + ambient
         result = 31 * result + contrast
+        result = 31 * result + extraOptions.hashCode()
+        result = 31 * result + soundDistanceFadeCurve.hashCode()
+        result = 31 * result + soundFade.hashCode()
+        result = 31 * result + flag94.hashCode()
+        result = 31 * result + soundVisibility.hashCode()
+        result = 31 * result + raise.hashCode()
         result = 31 * result + op.contentHashCode()
         result = 31 * result + recolS.contentHashCode()
         result = 31 * result + recolD.contentHashCode()
@@ -314,3 +333,10 @@ public fun LocType.isAssociatedWith(loc: LocInfo?): Boolean {
     contract { returns(true) implies (loc != null) }
     return loc != null && loc.isType(this)
 }
+
+public data class LocSoundFade(
+    public val inCurve: Int,
+    public val inDuration: Int,
+    public val outCurve: Int,
+    public val outDuration: Int,
+)

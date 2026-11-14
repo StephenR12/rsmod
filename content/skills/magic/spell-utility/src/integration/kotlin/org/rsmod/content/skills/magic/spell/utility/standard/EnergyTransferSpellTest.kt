@@ -53,7 +53,7 @@ import org.rsmod.game.type.obj.Wearpos
 @Execution(ExecutionMode.SAME_THREAD)
 class EnergyTransferSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins Energy Transfer spell and presentation contracts`() =
+    fun GameTestState.`cache 238 pins Energy Transfer spell and presentation contracts`() =
         runEnergyTransferTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_energy_transfer))
 
@@ -68,7 +68,7 @@ class EnergyTransferSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_energy_transfer.id ushr 16)
-            assertEquals(139, components.magic_spellbook_energy_transfer.id and 0xFFFF)
+            assertEquals(144, components.magic_spellbook_energy_transfer.id and 0xFFFF)
             assertEquals(
                 "Cast",
                 deps.components[components.magic_spellbook_energy_transfer].targetVerb,

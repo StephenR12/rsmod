@@ -448,15 +448,34 @@ internal object CharterMap : InterfaceReferences() {
 }
 
 internal object CharterButtons : ComponentReferences() {
-    val ports = CharterPort.entries.associateWith { find("sailing_menu:${it.button}") }
-    val targets =
-        CharterPort.entries.associateWith { port ->
-            listOf(
-                find("sailing_menu:${port.button}_marker"),
-                find("sailing_menu:${port.button}_label"),
-            )
-        }
-    val crandor = listOf(find("sailing_menu:crandor_marker"), find("sailing_menu:crandor_label"))
+    // The revision 238 client builds the map's clickable children from chartering_destinations
+    // (DB table 206). Each row creates a map image followed by its clickable marker.
+    val content = find("sailing_menu:content")
+    private val destinationsInClientOrder =
+        listOf(
+            CharterPort.PortSarim,
+            CharterPort.Brimhaven,
+            CharterPort.Catherby,
+            CharterPort.MosLeHarmless,
+            CharterPort.MusaPoint,
+            CharterPort.PortKhazard,
+            CharterPort.PortPhasmatys,
+            CharterPort.ShipYard,
+            CharterPort.PortTyras,
+            CharterPort.CorsairCove,
+            CharterPort.Prifddinas,
+            CharterPort.PortPiscarilius,
+            CharterPort.LandsEnd,
+            CharterPort.CivitasIllaFortis,
+            CharterPort.Aldarin,
+            CharterPort.SunsetCoast,
+        )
+    val childToDestination = destinationsInClientOrder.mapIndexed { index, port ->
+        (index * 2 + 1) to port
+    }.toMap()
+    val destinationToChild = childToDestination.entries.associate { (child, port) -> port to child }
+    // Tempestus occupies the next DB row. Crandor follows it and has no charter route.
+    const val crandorChild = 18 * 2 + 1
 }
 
 internal object CharterVars : VarpReferences() {
@@ -520,6 +539,7 @@ internal object CharterItems : ObjReferences() {
             Goods(find("sail_tyras_helm"), 25, 200),
             Goods(find("raw_rabbit"), 20, 100),
             Goods(find("eye_patch"), 5, 100),
+            Goods(find("bronze_cannonball"), 250, 100),
         )
 }
 
@@ -589,14 +609,11 @@ constructor(private val types: NpcTypeList, private val shops: Shops) : PluginSc
                     sail(from, dest)
                 }
         }
-        for ((port, buttons) in CharterButtons.targets) for (button in buttons) onIfModalButton(
-            button
-        ) {
+        onIfModalButton(CharterButtons.content) {
             val from = browsing[player] ?: return@onIfModalButton
-            sail(from, port)
-        }
-        for (button in CharterButtons.crandor) onIfModalButton(button) {
-            if (browsing[player] != null && vars[CharterVars.dragon] in 2..9)
+            val port = CharterButtons.childToDestination[it.comsub]
+            if (port != null) sail(from, port)
+            else if (it.comsub == CharterButtons.crandorChild && vars[CharterVars.dragon] in 2..9)
                 mes("No charter captain will sail to Crandor.")
         }
         onIfClose(CharterMap.main) { browsing.remove(player) }
@@ -660,18 +677,16 @@ constructor(private val types: NpcTypeList, private val shops: Shops) : PluginSc
         if (!canDepart(from)) return
         ifOpenMainModal(CharterMap.main)
         browsing[player] = from
-        for ((dest, button) in CharterButtons.ports) {
+        for ((dest, child) in CharterButtons.destinationToChild) {
             val usable = available(dest) && from.fareTo(dest) > 0
-            ifSetHide(button, !usable)
-            if (usable)
-                for (target in CharterButtons.targets.getValue(dest)) ifSetEvents(
-                    target,
-                    -1..-1,
-                    IfEvent.Op1,
-                )
+            if (usable) ifSetEvents(CharterButtons.content, child..child, IfEvent.Op1)
         }
         if (vars[CharterVars.dragon] in 2..9)
-            for (button in CharterButtons.crandor) ifSetEvents(button, -1..-1, IfEvent.Op1)
+            ifSetEvents(
+                CharterButtons.content,
+                CharterButtons.crandorChild..CharterButtons.crandorChild,
+                IfEvent.Op1,
+            )
     }
 
     private suspend fun ProtectedAccess.sail(from: CharterPort, to: CharterPort) {

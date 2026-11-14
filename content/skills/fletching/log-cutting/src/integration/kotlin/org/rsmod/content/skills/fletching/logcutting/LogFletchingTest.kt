@@ -124,7 +124,7 @@ class LogFletchingTest {
             )
             val events =
                 client.filterIsInstance<IfSetEventsV2>().filter {
-                    it.interfaceId == 270 && it.componentId in 14..18
+                    it.interfaceId == 270 && it.componentId in 15..19
                 }
             assertEquals(5, events.size)
             assertTrue(events.all { it.start == 1 && it.end == 3 })

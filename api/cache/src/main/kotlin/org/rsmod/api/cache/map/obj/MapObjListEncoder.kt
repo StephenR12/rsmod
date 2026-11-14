@@ -6,9 +6,9 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.iterator
 import org.openrs2.cache.Cache
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.util.EncoderContext
-import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.map.square.MapSquareKey
 
 public object MapObjListEncoder {
@@ -22,13 +22,12 @@ public object MapObjListEncoder {
             return
         }
         val buffer = PooledByteBufAllocator.DEFAULT.buffer()
-        val archive = Js5Archives.MAPS
+        val archive = MapArchive(cache)
         for ((key, definition) in spawns) {
-            val group = "o${key.x}_${key.z}"
-            val oldBuf = cache.readOrNull(archive, group, file = 0)
+            val oldBuf = archive.read(key, MapFile.Objs)
             val newBuf = buffer.clear().apply { encode(definition, this) }
             if (newBuf != oldBuf) {
-                cache.write(archive, group, file = 0, newBuf)
+                archive.write(key, MapFile.Objs, newBuf)
             }
             oldBuf?.release()
         }

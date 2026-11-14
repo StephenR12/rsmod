@@ -60,7 +60,7 @@ import org.rsmod.game.type.util.ParamMapBuilder
 
 class ArceuusSpellTest {
     @Test
-    fun GameTestState.`cache 233 defines mark grasp and demonbane contracts`() =
+    fun GameTestState.`cache 238 defines mark grasp and demonbane contracts`() =
         runArceuusTest { deps ->
             val contracts =
                 listOf(
@@ -161,16 +161,16 @@ class ArceuusSpellTest {
 
     @Test
     fun GameTestState.`cache presentation refs resolve to the cutoff assets`() = runArceuusTest {
-        assertEquals(170, components.magic_spellbook_mark_of_darkness.id and 0xFFFF)
-        assertEquals(167, components.magic_spellbook_inferior_demonbane.id and 0xFFFF)
-        assertEquals(168, components.magic_spellbook_superior_demonbane.id and 0xFFFF)
-        assertEquals(169, components.magic_spellbook_dark_demonbane.id and 0xFFFF)
-        assertEquals(171, components.magic_spellbook_ghostly_grasp.id and 0xFFFF)
-        assertEquals(172, components.magic_spellbook_skeletal_grasp.id and 0xFFFF)
-        assertEquals(173, components.magic_spellbook_undead_grasp.id and 0xFFFF)
-        assertEquals(174, components.magic_spellbook_ward_of_arceuus.id and 0xFFFF)
-        assertEquals(175, components.magic_spellbook_lesser_corruption.id and 0xFFFF)
-        assertEquals(176, components.magic_spellbook_greater_corruption.id and 0xFFFF)
+        assertEquals(175, components.magic_spellbook_mark_of_darkness.id and 0xFFFF)
+        assertEquals(172, components.magic_spellbook_inferior_demonbane.id and 0xFFFF)
+        assertEquals(173, components.magic_spellbook_superior_demonbane.id and 0xFFFF)
+        assertEquals(174, components.magic_spellbook_dark_demonbane.id and 0xFFFF)
+        assertEquals(176, components.magic_spellbook_ghostly_grasp.id and 0xFFFF)
+        assertEquals(177, components.magic_spellbook_skeletal_grasp.id and 0xFFFF)
+        assertEquals(178, components.magic_spellbook_undead_grasp.id and 0xFFFF)
+        assertEquals(179, components.magic_spellbook_ward_of_arceuus.id and 0xFFFF)
+        assertEquals(180, components.magic_spellbook_lesser_corruption.id and 0xFFFF)
+        assertEquals(181, components.magic_spellbook_greater_corruption.id and 0xFFFF)
         assertEquals(8972, seqs.human_spellcast_grasp.id)
         assertEquals(8977, seqs.human_spellcast_demonbane.id)
         assertEquals(8982, seqs.self_imbue.id)

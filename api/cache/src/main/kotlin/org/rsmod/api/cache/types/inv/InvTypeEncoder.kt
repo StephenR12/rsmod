@@ -81,7 +81,8 @@ public object InvTypeEncoder {
             val defaultStock = type.stock
             if (defaultStock?.isNotEmpty() == true) {
                 check(defaultStock.size < 256) { "Can only store up to 255 default stock." }
-                data.writeByte(205)
+                val wideCycles = defaultStock.any { it != null && it.restockCycles > 65535 }
+                data.writeByte(if (wideCycles) 206 else 205)
                 data.writeByte(defaultStock.size - 1)
                 for (stock in defaultStock) {
                     if (stock == null) {
@@ -93,7 +94,8 @@ public object InvTypeEncoder {
                         data.writeInt(stock.count)
                     }
                     data.writeShort(stock.obj)
-                    data.writeShort(stock.restockCycles)
+                    if (wideCycles) data.writeInt(stock.restockCycles)
+                    else data.writeShort(stock.restockCycles)
                 }
             }
         }

@@ -7,6 +7,7 @@ import jakarta.inject.Inject
 import java.util.EnumMap
 import net.rsprot.protocol.api.util.ZonePartialEnclosedCacheBuffer
 import net.rsprot.protocol.common.client.OldSchoolClientType
+import net.rsprot.protocol.message.ZoneProt
 import org.rsmod.api.registry.zone.ZoneUpdateMap
 import org.rsmod.api.registry.zone.ZoneUpdateTransformer
 import org.rsmod.map.zone.ZoneKey
@@ -33,6 +34,10 @@ constructor(
             buffers[zone] = enclosedCache.computeZone(filtered)
         }
     }
+
+    /** Encode a player-specific zone snapshot or private update using the same tick buffer pool. */
+    public fun computeForClient(client: OldSchoolClientType, prots: Collection<ZoneProt>): ByteBuf =
+        enclosedCache.computeZoneForClient(client, prots)
 
     public fun clear() {
         buffers.clear()

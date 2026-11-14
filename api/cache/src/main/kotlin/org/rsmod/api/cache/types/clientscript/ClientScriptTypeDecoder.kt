@@ -17,6 +17,7 @@ public object ClientScriptTypeDecoder {
     private const val VERSION_GROUP = 0
 
     private const val OPCODE_PUSH_CONSTANT_STRING = 3
+    private const val OPCODE_PUSH_CONSTANT_LONG = 61
     private const val OPCODE_RETURN = 21
     private const val OPCODE_POP_INT_DISCARD = 38
     private const val OPCODE_POP_STRING_DISCARD = 39
@@ -48,18 +49,21 @@ public object ClientScriptTypeDecoder {
     public fun decode(builder: ClientScriptTypeBuilder, data: ByteBuf): Unit =
         with(builder) {
             val switchDataLength = data.getUnsignedShort(data.writerIndex() - Short.SIZE_BYTES)
-            val commandEndPosition = data.writerIndex() - Short.SIZE_BYTES - switchDataLength - 12
+            val commandEndPosition = data.writerIndex() - Short.SIZE_BYTES - switchDataLength - 16
             data.readerIndex(commandEndPosition)
 
             val commandCount = data.readInt()
             val commands = IntArray(commandCount)
             val intOperands = IntArray(commandCount)
+            var longOperands: LongArray? = null
             val stringOperands = arrayOfNulls<String>(commandCount)
 
             val intLocalCount = data.readUnsignedShort()
             val stringLocalCount = data.readUnsignedShort()
+            val longLocalCount = data.readUnsignedShort()
             val intArgumentCount = data.readUnsignedShort()
             val stringArgumentCount = data.readUnsignedShort()
+            val longArgumentCount = data.readUnsignedShort()
             val switchCount = data.readUnsignedByte().toInt()
 
             val switches =
@@ -84,6 +88,11 @@ public object ClientScriptTypeDecoder {
                     OPCODE_PUSH_CONSTANT_STRING -> {
                         stringOperands[index] = data.readString()
                     }
+                    OPCODE_PUSH_CONSTANT_LONG -> {
+                        val operands =
+                            longOperands ?: LongArray(commandCount).also { longOperands = it }
+                        operands[index] = data.readLong()
+                    }
                     OPCODE_RETURN,
                     OPCODE_POP_INT_DISCARD,
                     OPCODE_POP_STRING_DISCARD,
@@ -102,6 +111,12 @@ public object ClientScriptTypeDecoder {
                 index++
             }
 
+            check(index == commandCount && data.readerIndex() == commandEndPosition) {
+                "Malformed client script instruction count"
+            }
+            this.longOperands = longOperands
+            this.longLocalCount = longLocalCount
+            this.longArgumentCount = longArgumentCount
             this.intOperands = intOperands
             this.stringOperands = stringOperands
             this.intLocalCount = intLocalCount

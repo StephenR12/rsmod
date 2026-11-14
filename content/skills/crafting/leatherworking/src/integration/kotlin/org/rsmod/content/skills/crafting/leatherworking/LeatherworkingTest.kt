@@ -110,7 +110,7 @@ class LeatherworkingTest {
             )
             val events =
                 client.filterIsInstance<IfSetEventsV2>().filter {
-                    it.interfaceId == 270 && it.componentId in 14..20
+                    it.interfaceId == 270 && it.componentId in 15..21
                 }
             assertEquals(7, events.size)
             assertTrue(events.all { it.start == 1 && it.end == 2 })

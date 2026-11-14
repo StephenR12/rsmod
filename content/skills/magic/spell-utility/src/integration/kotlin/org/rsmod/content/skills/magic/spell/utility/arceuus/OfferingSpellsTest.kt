@@ -45,7 +45,7 @@ import org.rsmod.map.CoordGrid
 @Execution(ExecutionMode.SAME_THREAD)
 class OfferingSpellsTest {
     @Test
-    fun GameTestState.`cache 233 pins both offering spell and presentation contracts`() =
+    fun GameTestState.`cache 238 pins both offering spell and presentation contracts`() =
         runOfferingTest { deps ->
             val demonic = requireNotNull(deps.registry.getObjSpell(objs.spell_demonic_offering))
             assertEquals(15_346, demonic.obj.id)
@@ -69,8 +69,8 @@ class OfferingSpellsTest {
                 sinister.objReqs.associate { it.obj to it.count },
             )
 
-            assertComponent(deps, components.magic_spellbook_demonic_offering.id, 177)
-            assertComponent(deps, components.magic_spellbook_sinister_offering.id, 178)
+            assertComponent(deps, components.magic_spellbook_demonic_offering.id, 182)
+            assertComponent(deps, components.magic_spellbook_sinister_offering.id, 183)
             assertEquals(1_871, spotanims.demonic_offering_cast.id)
             assertEquals(1_872, spotanims.sinister_offering_cast.id)
             assertEquals(

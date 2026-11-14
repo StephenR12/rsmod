@@ -27,13 +27,69 @@ val cache233ArchiveManifest =
     layout.projectDirectory.file(".data/audit/cache-233.4-archive-index-manifest.json")
 val dependencyCatalog = layout.projectDirectory.file("gradle/libs.versions.toml")
 
+tasks.register("validateCacheRevision") {
+    group = "verification"
+    description = "Validates the active cache, protocol, and server revision contract."
+    val contractFile = layout.projectDirectory.file("docs/emulation/cache-238/revision-contract.json")
+    inputs.file(contractFile)
+    inputs.file(cache233BuildSource)
+    inputs.file(layout.projectDirectory.file("gradle/libs.versions.toml"))
+    doLast {
+        val contract = JsonSlurper().parse(contractFile.asFile) as Map<*, *>
+        val cache = contract["cache"] as Map<*, *>
+        val protocol = contract["protocol"] as Map<*, *>
+        val source = cache233BuildSource.asFile.readText()
+        fun constant(name: String): String {
+            val match = Regex(
+                """const\s+val\s+$name\s*:\s*\w+\s*=\s*(?:"([^"]*)"|([0-9_]+))"""
+            ).find(source) ?: error("Missing literal Build.$name")
+            return match.groupValues.drop(1).first(String::isNotEmpty).replace("_", "")
+        }
+        val expected = mapOf(
+            "MAJOR" to contract["major"],
+            "FINAL_SUBREVISION" to contract["finalSubrevision"],
+            "CACHE_ARCHIVE" to cache["archive"],
+            "CACHE_CAPTURED_AT" to cache["capturedAt"],
+            "CACHE_GROUPS" to cache["groups"],
+            "CACHE_FILE_IDENTITIES" to cache["fileIdentities"],
+            "CACHE_ARCHIVE_INDEX_MANIFEST_SHA256" to cache["manifestSha256"],
+            "XTEA_SHA256" to cache["xteaSha256"],
+            "CACHE_URL" to cache["diskUrl"],
+            "XTEA_URL" to cache["keysUrl"],
+        )
+        expected.forEach { (name, value) ->
+            check(constant(name) == value.toString()) { "Build.$name disagrees with the revision contract." }
+        }
+        val catalog = layout.projectDirectory.file("gradle/libs.versions.toml").asFile.readText()
+        check(catalog.contains("rsprot = " + '"' + protocol["version"] + '"'))
+        check(catalog.contains("module = " + '"' + protocol["apiModule"] + '"'))
+        check(catalog.contains("module = " + '"' + protocol["sharedModule"] + '"'))
+        val manifest = layout.projectDirectory.file(cache["manifest"].toString()).asFile
+        if (manifest.exists()) {
+            val digest = MessageDigest.getInstance("SHA-256")
+            manifest.inputStream().use { input ->
+                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                while (true) {
+                    val count = input.read(buffer)
+                    if (count < 0) break
+                    digest.update(buffer, 0, count)
+                }
+            }
+            val actual = digest.digest().joinToString("") { "%02x".format(it.toInt() and 0xff) }
+            check(actual == cache["manifestSha256"]) { "The installed archive manifest fingerprint disagrees with the revision contract." }
+        }
+        logger.lifecycle("Active cache revision ${contract["major"]}, archive ${cache["archive"]}, protocol ${protocol["version"]} verified.")
+    }
+}
+
 tasks.register("validateCache233Parity") {
     group = "verification"
-    description = "Validates the cache-233 parity manifest and revision lock."
+    dependsOn("validateCacheRevision")
+    description = "Validates historical cache-233 parity evidence and the active revision lock."
     inputs.file(cache233Manifest)
     inputs.file(cache233RevisionContract)
     inputs.file(cache233BuildSource)
-    inputs.file(cache233ArchiveManifest).optional()
+    inputs.files(provider { listOf(cache233ArchiveManifest.asFile).filter { it.exists() } })
     inputs.file(dependencyCatalog)
 
     doLast {
@@ -71,40 +127,43 @@ tasks.register("validateCache233Parity") {
                 ?: throw GradleException("Build.$name is missing or is not a literal constant.")
             return match.groupValues.drop(1).first(String::isNotEmpty)
         }
-        check(kotlinConstant("MAJOR") == contract["major"].toString()) {
-            "Build.MAJOR does not match the revision contract."
-        }
-        check(kotlinConstant("FINAL_SUBREVISION") == contract["finalSubrevision"]) {
-            "Build.FINAL_SUBREVISION does not match the revision contract."
-        }
-        check(kotlinConstant("CACHE_ARCHIVE") == cache["archive"].toString()) {
-            "Build.CACHE_ARCHIVE does not match the revision contract."
-        }
-        check(kotlinConstant("CACHE_CAPTURED_AT") == cache["capturedAt"]) {
-            "Build.CACHE_CAPTURED_AT does not match the revision contract."
-        }
-        check(kotlinConstant("CACHE_GROUPS").replace("_", "") == cache["groups"].toString()) {
-            "Build.CACHE_GROUPS does not match the revision contract."
-        }
-        check(
-            kotlinConstant("CACHE_FILE_IDENTITIES").replace("_", "") ==
-                cache["fileIdentities"].toString()
-        ) {
-            "Build.CACHE_FILE_IDENTITIES does not match the revision contract."
-        }
-        check(
-            kotlinConstant("CACHE_ARCHIVE_INDEX_MANIFEST_SHA256") == cache["manifestSha256"]
-        ) {
-            "Build.CACHE_ARCHIVE_INDEX_MANIFEST_SHA256 does not match the revision contract."
-        }
-        check(kotlinConstant("XTEA_SHA256") == cache["xteaSha256"]) {
-            "Build.XTEA_SHA256 does not match the revision contract."
-        }
-        check(kotlinConstant("CACHE_URL") == cache["diskUrl"]) {
-            "Build.CACHE_URL does not match the revision contract."
-        }
-        check(kotlinConstant("XTEA_URL") == cache["keysUrl"]) {
-            "Build.XTEA_URL does not match the revision contract."
+        // Keep the 233.4 evidence usable after an explicitly selected major upgrade.
+        if (kotlinConstant("MAJOR") == contract["major"].toString()) {
+            check(kotlinConstant("MAJOR") == contract["major"].toString()) {
+                "Build.MAJOR does not match the revision contract."
+            }
+            check(kotlinConstant("FINAL_SUBREVISION") == contract["finalSubrevision"]) {
+                "Build.FINAL_SUBREVISION does not match the revision contract."
+            }
+            check(kotlinConstant("CACHE_ARCHIVE") == cache["archive"].toString()) {
+                "Build.CACHE_ARCHIVE does not match the revision contract."
+            }
+            check(kotlinConstant("CACHE_CAPTURED_AT") == cache["capturedAt"]) {
+                "Build.CACHE_CAPTURED_AT does not match the revision contract."
+            }
+            check(kotlinConstant("CACHE_GROUPS").replace("_", "") == cache["groups"].toString()) {
+                "Build.CACHE_GROUPS does not match the revision contract."
+            }
+            check(
+                kotlinConstant("CACHE_FILE_IDENTITIES").replace("_", "") ==
+                    cache["fileIdentities"].toString()
+            ) {
+                "Build.CACHE_FILE_IDENTITIES does not match the revision contract."
+            }
+            check(
+                kotlinConstant("CACHE_ARCHIVE_INDEX_MANIFEST_SHA256") == cache["manifestSha256"]
+            ) {
+                "Build.CACHE_ARCHIVE_INDEX_MANIFEST_SHA256 does not match the revision contract."
+            }
+            check(kotlinConstant("XTEA_SHA256") == cache["xteaSha256"]) {
+                "Build.XTEA_SHA256 does not match the revision contract."
+            }
+            check(kotlinConstant("CACHE_URL") == cache["diskUrl"]) {
+                "Build.CACHE_URL does not match the revision contract."
+            }
+            check(kotlinConstant("XTEA_URL") == cache["keysUrl"]) {
+                "Build.XTEA_URL does not match the revision contract."
+            }
         }
 
         check(cache["manifest"] == ".data/audit/cache-233.4-archive-index-manifest.json") {
@@ -131,31 +190,33 @@ tasks.register("validateCache233Parity") {
             )
         }
 
-        val versions = dependencyCatalog.asFile.readText()
-        fun tomlString(name: String): String {
-            val match =
-                Regex("(?m)^\\s*${Regex.escape(name)}\\s*=\\s*\"([^\"]+)\"\\s*$")
-                    .find(versions)
-                    ?: throw GradleException("Dependency catalog is missing $name.")
-            return match.groupValues[1]
-        }
-        fun tomlModule(name: String): String {
-            val match =
-                Regex(
-                        "(?m)^\\s*${Regex.escape(name)}\\s*=\\s*\\{[^}]*module\\s*=\\s*\"([^\"]+)\"[^}]*}\\s*$"
-                    )
-                    .find(versions)
-                    ?: throw GradleException("Dependency catalog is missing module $name.")
-            return match.groupValues[1]
-        }
-        check(tomlString("rsprot") == protocol["version"]) {
-            "rsprot version does not match the revision contract."
-        }
-        check(tomlModule("rsprot-api") == protocol["apiModule"]) {
-            "rsprot API module does not match the revision contract."
-        }
-        check(tomlModule("rsprot-shared") == protocol["sharedModule"]) {
-            "rsprot shared module does not match the revision contract."
+        if (kotlinConstant("MAJOR") == contract["major"].toString()) {
+            val versions = dependencyCatalog.asFile.readText()
+            fun tomlString(name: String): String {
+                val match =
+                    Regex("(?m)^\\s*${Regex.escape(name)}\\s*=\\s*\"([^\"]+)\"\\s*$")
+                        .find(versions)
+                        ?: throw GradleException("Dependency catalog is missing $name.")
+                return match.groupValues[1]
+            }
+            fun tomlModule(name: String): String {
+                val match =
+                    Regex(
+                            "(?m)^\\s*${Regex.escape(name)}\\s*=\\s*\\{[^}]*module\\s*=\\s*\"([^\"]+)\"[^}]*}\\s*$"
+                        )
+                        .find(versions)
+                        ?: throw GradleException("Dependency catalog is missing module $name.")
+                return match.groupValues[1]
+            }
+            check(tomlString("rsprot") == protocol["version"]) {
+                "rsprot version does not match the revision contract."
+            }
+            check(tomlModule("rsprot-api") == protocol["apiModule"]) {
+                "rsprot API module does not match the revision contract."
+            }
+            check(tomlModule("rsprot-shared") == protocol["sharedModule"]) {
+                "rsprot shared module does not match the revision contract."
+            }
         }
 
         val expectedSkills =
@@ -223,7 +284,7 @@ tasks.register("validateCache233Parity") {
         }
 
         val counts = featureMaps.groupingBy { it["status"].toString() }.eachCount().toSortedMap()
-        logger.lifecycle("Cache 233 parity manifest valid: ${featureMaps.size} feature groups, $counts")
+        logger.lifecycle("Historical cache 233 parity manifest valid: ${featureMaps.size} feature groups, $counts")
 
         val requireComplete =
             providers.gradleProperty("cacheParityRequireComplete").orNull.toBoolean()

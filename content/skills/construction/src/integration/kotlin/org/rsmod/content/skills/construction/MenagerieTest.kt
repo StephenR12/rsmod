@@ -36,7 +36,7 @@ class MenagerieTest{
                 player.withProtectedAccess{check(eventBus.publish(this,LocUDefaultEvents.OpType(arena,arena,mat,item,2)))}
             }
             add(24701);add(1561)
-            val holding=player.invMap[cacheTypes.invs.getValue(948)]!!
+            val holding=player.invMap[cacheTypes.invs.getValue(65012)]!!
             assertEquals(listOf(24701,1561),holding.filterNotNull().map{it.id})
             add(6670)
             assertEquals(6670,player.inv[2]?.id)

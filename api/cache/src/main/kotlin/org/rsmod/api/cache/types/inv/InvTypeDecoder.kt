@@ -57,7 +57,7 @@ public object InvTypeDecoder {
                 202 -> size = data.readUnsignedByte().toInt()
                 203 -> size = data.readUnsignedShort()
                 204 -> flags = data.readInt()
-                205 -> {
+                205, 206 -> {
                     val stockCount = data.readUnsignedByte().toInt() + 1
                     val defaultStock = arrayOfNulls<InvStock>(stockCount)
                     for (i in defaultStock.indices) {
@@ -72,7 +72,7 @@ public object InvTypeDecoder {
                                 countHeader - 1
                             }
                         val obj = data.readUnsignedShort()
-                        val restockCycles = data.readUnsignedShort().toInt()
+                        val restockCycles = if (code == 206) data.readInt() else data.readUnsignedShort()
                         defaultStock[i] = InvStock(obj, count, restockCycles)
                     }
                     this.stock = defaultStock

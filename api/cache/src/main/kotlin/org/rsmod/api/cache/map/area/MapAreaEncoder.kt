@@ -3,9 +3,9 @@ package org.rsmod.api.cache.map.area
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.PooledByteBufAllocator
 import org.openrs2.cache.Cache
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.util.EncoderContext
-import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.game.area.AreaIndex
 import org.rsmod.map.CoordGrid
 import org.rsmod.map.square.MapSquareGrid
@@ -26,15 +26,14 @@ public object MapAreaEncoder {
             return
         }
         val buffer = PooledByteBufAllocator.DEFAULT.buffer()
-        val archive = Js5Archives.MAPS
+        val archive = MapArchive(cache)
         for ((key, area) in areas) {
             validateAreaLimits(key, area)
 
-            val group = "a${key.x}_${key.z}"
-            val oldBuf = cache.readOrNull(archive, group, file = 0)
+            val oldBuf = archive.read(key, MapFile.Areas)
             val newBuf = buffer.clear().apply { encode(area, this) }
             if (newBuf != oldBuf) {
-                cache.write(archive, group, file = 0, newBuf)
+                archive.write(key, MapFile.Areas, newBuf)
             }
             oldBuf?.release()
         }

@@ -12,9 +12,9 @@ class ProjectileProfileManifestExporterIntegrationTest {
             ProjectileProfileManifestExporter.export(
                 cacheDirectory = Path.of(".data/cache/game"),
                 symbolDirectory = Path.of(".data/symbols"),
-                revision = "233.4-rsmod-enriched",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603-rsmod-enriched",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
 
         assertEquals(16, manifest.entries.size)

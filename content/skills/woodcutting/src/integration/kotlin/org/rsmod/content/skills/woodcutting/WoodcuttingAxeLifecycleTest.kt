@@ -190,7 +190,7 @@ class WoodcuttingAxeLifecycleTest {
             )
             val events =
                 client.filterIsInstance<IfSetEventsV2>().single {
-                    it.interfaceId == interfaces.skillmulti.id && it.componentId == 14
+                    it.interfaceId == interfaces.skillmulti.id && it.componentId == 15
                 }
             assertEquals(1, events.start)
             assertEquals(1, events.end)

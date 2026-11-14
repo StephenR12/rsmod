@@ -155,7 +155,7 @@ class FarmerDropsTest {
                 }
             val memberDrops = deps.table.roll(context(deps, members))
             assertEquals(
-                listOf(objs.bones.id, objs.watering_can_8.id, objs.clue_scroll_beginner.id, 30_928),
+                listOf(objs.bones.id, objs.watering_can_8.id, objs.clue_scroll_beginner.id, 31_268),
                 memberDrops.map { it.obj.id },
             )
             assertEquals(ClueInventory.CLUE_SCROLL_GROUND_DURATION, memberDrops[2].duration)

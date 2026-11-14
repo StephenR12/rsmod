@@ -9,6 +9,7 @@ dependencies {
     integrationImplementation(projects.api.combat.combatWeapon)
     integrationImplementation(projects.api.combat.combatCommons)
     integrationImplementation(projects.content.skills.woodcutting)
+    integrationImplementation(projects.api.objCharges)
     integrationImplementation(projects.api.hitPlugin)
     integrationImplementation(projects.api.combat.combatManager)
     integrationImplementation(projects.api.weapons)

@@ -5,10 +5,11 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.openrs2.buffer.use
 import org.openrs2.cache.Cache
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.map.square.MapSquareKey
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.map.npc.MapNpcDefinition
 import org.rsmod.api.cache.map.npc.MapNpcListDecoder
-import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.api.cache.util.toInlineBuf
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.config.refs.varbits
@@ -46,7 +47,7 @@ class MainSpiritualCreaturesTest {
                 )
             Cache.open(Path.of(".data/cache/game")).use { cache ->
                 for (mx in 44..45) for (mz in 81..83) {
-                    val group = cache.readOrNull(Js5Archives.MAPS, "n${mx}_${mz}") ?: continue
+                    val group = MapArchive(cache).read(MapSquareKey(mx, mz), MapFile.Npcs) ?: continue
                     group.use {
                         for (packed in MapNpcListDecoder.decode(it.toInlineBuf()).packedSpawns) {
                             val npc = MapNpcDefinition(packed)

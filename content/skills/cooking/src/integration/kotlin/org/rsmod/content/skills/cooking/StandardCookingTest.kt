@@ -88,7 +88,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`every cache 233 Cook location is classified and registered`() =
+    fun GameTestState.`every cache 238 Cook location is classified and registered`() =
         runCookingTest { deps ->
             val cacheAppliances =
                 deps.locs.values
@@ -152,7 +152,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 recipes sources animations and dispatch are pinned`() =
+    fun GameTestState.`cache 238 recipes sources animations and dispatch are pinned`() =
         runCookingTest { deps ->
             assertEquals(
                 listOf(
@@ -1277,7 +1277,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pins the chompy iron spit fire contract and dispatch`() =
+    fun GameTestState.`cache 238 pins the chompy iron spit fire contract and dispatch`() =
         runCookingTest { deps ->
             assertEquals(2876, objs.raw_chompy.id)
             assertEquals(2878, objs.cooked_chompy.id)
@@ -1481,7 +1481,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pins ordinary iron spit recipes and dispatch`() =
+    fun GameTestState.`cache 238 pins ordinary iron spit recipes and dispatch`() =
         runCookingTest { deps ->
             assertEquals(7222, objs.burnt_rabbit_spit.id)
             assertEquals(7223, objs.roast_rabbit.id)
@@ -1762,7 +1762,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pins ogre spit roast morphs animations and dispatch`() =
+    fun GameTestState.`cache 238 pins ogre spit roast morphs animations and dispatch`() =
         runCookingTest { deps ->
             assertEquals(6895, cooking_locs.ogreSpitRoast.id)
             assertEquals(3375, cooking_locs.ogreSpitRoastEmpty.id)
@@ -2960,7 +2960,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 food preparation recipes and held interactions are pinned`() =
+    fun GameTestState.`cache 238 food preparation recipes and held interactions are pinned`() =
         runCookingTest { deps ->
             assertEquals(87, FoodPreparationRecipes.all.size)
             assertEquals(12, FoodPreparationRecipes.doughRecipes.size)
@@ -3219,7 +3219,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 hot drink recipes curves and dispatch are pinned`() =
+    fun GameTestState.`cache 238 hot drink recipes curves and dispatch are pinned`() =
         runCookingTest { deps ->
             assertEquals(
                 listOf(
@@ -3754,7 +3754,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pins every standard pie preparation stage`() = runCookingTest {
+    fun GameTestState.`cache 238 pins every standard pie preparation stage`() = runCookingTest {
         assertEquals(
             listOf(
                 PiePreparationContract(1953, 2313, 2315, 1, false, 2),
@@ -3967,7 +3967,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pins the complete potato topping preparation graph`() =
+    fun GameTestState.`cache 238 pins the complete potato topping preparation graph`() =
         runCookingTest {
             assertEquals(
                 listOf(
@@ -4146,7 +4146,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pins every dairy churn route location and animation tier`() =
+    fun GameTestState.`cache 238 pins every dairy churn route location and animation tier`() =
         runCookingTest { deps ->
             assertEquals(listOf(11695, 11696, 25720, 35937), cooking_locs.dairyChurns.map { it.id })
             for (churn in cooking_locs.dairyChurns) {
@@ -4366,7 +4366,7 @@ class StandardCookingTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 pins grape wine recipes graphics timers and dispatch`() =
+    fun GameTestState.`cache 238 pins grape wine recipes graphics timers and dispatch`() =
         runCookingTest { deps ->
             assertEquals(
                 listOf(

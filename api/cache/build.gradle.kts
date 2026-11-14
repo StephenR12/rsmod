@@ -8,6 +8,9 @@ kotlin {
 }
 
 dependencies {
+    integrationImplementation(libs.openrs2.buffer)
+    integrationImplementation(libs.openrs2.cache)
+    integrationImplementation(libs.fastutil)
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.fastutil)
     implementation(libs.openrs2.buffer)

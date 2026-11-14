@@ -5,6 +5,7 @@ import org.rsmod.game.type.TypeListMap
 import org.rsmod.game.type.area.AreaType
 import org.rsmod.game.type.category.CategoryType
 import org.rsmod.game.type.comp.ComponentType
+import org.rsmod.game.type.comp.HashedComponentType
 import org.rsmod.game.type.dbrow.DbRowType
 import org.rsmod.game.type.dbtable.DbTableType
 import org.rsmod.game.type.enums.EnumType
@@ -21,6 +22,7 @@ import org.rsmod.game.type.stat.StatType
 import org.rsmod.game.type.synth.SynthType
 import org.rsmod.game.type.varbit.VarBitType
 import org.rsmod.game.type.varp.VarpType
+import org.rsmod.game.ui.Component
 import org.rsmod.map.CoordGrid
 
 public sealed class CacheVarCodec<K, V : Any>(public val out: KClass<V>) {
@@ -76,8 +78,15 @@ public object CacheVarCoordGridCodec : BaseIntVarCodec<CoordGrid>(CoordGrid::cla
 }
 
 public object CacheVarComponentCodec : BaseIntVarCodec<ComponentType>(ComponentType::class) {
-    override fun decode(types: TypeListMap, value: Int): ComponentType? =
-        types.components[value]?.toHashedType()
+    override fun decode(types: TypeListMap, value: Int): ComponentType? {
+        if (value == -1) return null
+        // Redirect enums can contain component references with a sentinel child and no JS5 file.
+        // Preserve the packed key, since translating it to a concrete child changes enum lookup.
+        if (Component(value).child == Component.CHILD_BIT_MASK) {
+            return HashedComponentType(startHash = null, internalName = null, internalId = value)
+        }
+        return types.components[value]?.toHashedType()
+    }
 
     override fun encode(value: ComponentType): Int = value.packed
 }

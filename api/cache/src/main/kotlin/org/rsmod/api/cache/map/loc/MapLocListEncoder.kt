@@ -4,7 +4,8 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.PooledByteBufAllocator
 import org.openrs2.cache.Cache
 import org.openrs2.crypto.SymmetricKey
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.api.cache.util.writeUnsignedSmartInt
 import org.rsmod.game.map.xtea.XteaMap
 import org.rsmod.map.square.MapSquareKey
@@ -16,12 +17,11 @@ public object MapLocListEncoder {
         xteaMap: XteaMap,
     ) {
         val buffer = PooledByteBufAllocator.DEFAULT.buffer()
-        val archive = Js5Archives.MAPS
+        val archive = MapArchive(cache)
         for ((key, definition) in spawns) {
-            val group = "l${key.x}_${key.z}"
             val newBuf = buffer.clear().apply { encode(definition, this) }
             val xtea = xteaMap[key]?.let(SymmetricKey::fromIntArray) ?: SymmetricKey.ZERO
-            cache.write(archive, group, file = 0, newBuf, key = xtea)
+            archive.write(key, MapFile.Locations, newBuf, key = xtea)
         }
         buffer.release()
     }

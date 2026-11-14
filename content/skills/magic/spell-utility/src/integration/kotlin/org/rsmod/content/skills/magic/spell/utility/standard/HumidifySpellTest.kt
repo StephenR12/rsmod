@@ -39,7 +39,7 @@ import org.rsmod.game.type.dbrow.DbRowTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class HumidifySpellTest {
     @Test
-    fun GameTestState.`cache contracts define Humidify and the cache 233 conversion set`() =
+    fun GameTestState.`cache contracts define Humidify and the cache 238 conversion set`() =
         runHumidifyTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_humidify))
             assertEquals(11145, spell.obj.id)
@@ -51,7 +51,7 @@ class HumidifySpellTest {
                 mapOf(objs.astral_rune to 1, objs.water_rune to 3, objs.fire_rune to 1),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(110, components.magic_spellbook_humidify.id and 0xFFFF)
+            assertEquals(115, components.magic_spellbook_humidify.id and 0xFFFF)
             assertEquals(6294, seqs.dream_player_humidify_spell.id)
             assertEquals(1061, spotanims.dream_humidify_spell.id)
             assertEquals(3618, varbits.dream_mentor.id)
@@ -144,7 +144,7 @@ class HumidifySpellTest {
         }
 
     @Test
-    fun GameTestState.`every cache 233 item transform keeps its slot`() = runHumidifyTest { deps ->
+    fun GameTestState.`every cache 238 item transform keeps its slot`() = runHumidifyTest { deps ->
         for (chunk in HumidifyRecipes.all.chunked(25)) {
             prepareCaster(deps)
             chunk.forEachIndexed { index, recipe -> player.inv[index + 3] = InvObj(recipe.input) }

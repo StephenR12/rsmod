@@ -52,10 +52,10 @@ class OrbChargingSpellTest {
         runOrbTest { deps ->
             val expectations =
                 listOf(
-                    SpellExpectation(objs.spell_chargeorb_water, 56, 66.0, 45, 30, 2151),
-                    SpellExpectation(objs.spell_chargeorb_earth, 60, 70.0, 49, 30, 2150),
-                    SpellExpectation(objs.spell_chargeorb_fire, 63, 73.0, 56, 30, 2153),
-                    SpellExpectation(objs.spell_chargeorb_air, 66, 76.0, 59, 30, 2152),
+                    SpellExpectation(objs.spell_chargeorb_water, 56, 66.0, 48, 30, 2151),
+                    SpellExpectation(objs.spell_chargeorb_earth, 60, 70.0, 52, 30, 2150),
+                    SpellExpectation(objs.spell_chargeorb_fire, 63, 73.0, 59, 30, 2153),
+                    SpellExpectation(objs.spell_chargeorb_air, 66, 76.0, 62, 30, 2152),
                 )
 
             assertEquals(4, deps.recipes.recipes.size)

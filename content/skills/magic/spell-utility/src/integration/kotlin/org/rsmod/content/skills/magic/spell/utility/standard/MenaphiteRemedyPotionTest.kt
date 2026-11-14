@@ -36,7 +36,7 @@ import org.rsmod.game.type.varbit.VarBitType
 @Execution(ExecutionMode.SAME_THREAD)
 class MenaphiteRemedyPotionTest {
     @Test
-    fun GameTestState.`cache 233 identities descriptions timers and dispatch are pinned`() =
+    fun GameTestState.`cache 238 identities descriptions timers and dispatch are pinned`() =
         runPotionTest { deps ->
             val doses = MenaphiteRemedyPotionDoses.all
 

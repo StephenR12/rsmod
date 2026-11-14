@@ -44,6 +44,11 @@ public class ShopRestockProcess @Inject constructor(private val mapClock: MapClo
             }
 
             val restockRate = stockObj?.restockCycles ?: NON_STOCK_NORMALIZE_CYCLES
+            if (restockRate <= 0) {
+                // A zero rate records stock with an unpublished restock interval.
+                fullyRestocked = false
+                continue
+            }
             if (mapClock % restockRate != 0) {
                 fullyRestocked = false
                 continue

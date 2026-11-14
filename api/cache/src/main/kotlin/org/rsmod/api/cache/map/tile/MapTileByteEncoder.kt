@@ -5,7 +5,8 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.iterator
 import org.openrs2.cache.Cache
-import org.rsmod.api.cache.Js5Archives
+import org.rsmod.api.cache.map.MapArchive
+import org.rsmod.api.cache.map.MapFile
 import org.rsmod.map.square.MapSquareKey
 
 /*
@@ -18,11 +19,10 @@ import org.rsmod.map.square.MapSquareKey
  */
 public object MapTileByteEncoder {
     public fun encodeAll(cache: Cache, definitions: Map<MapSquareKey, MapTileByteDefinition>) {
-        val archive = Js5Archives.MAPS
+        val archive = MapArchive(cache)
         for ((key, definition) in definitions) {
-            val group = "m${key.x}_${key.z}"
             val newBuf = Unpooled.wrappedBuffer(definition.data)
-            cache.write(archive, group, file = 0, newBuf)
+            archive.write(key, MapFile.Terrain, newBuf)
         }
     }
 }

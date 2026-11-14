@@ -281,10 +281,10 @@ class BankInvScriptTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 bank item operations route configure placeholder and examine`() =
+    fun GameTestState.`cache 238 bank item operations route configure placeholder and examine`() =
         runGameTest(BankInvScript::class) {
             assertEquals(12, bank_components.bank_item_options_toggle.interfaceId)
-            assertEquals(61, bank_components.bank_item_options_toggle.component)
+            assertEquals(126, bank_components.bank_item_options_toggle.component)
             assertEquals(16_125, cacheTypes.varbits[bank_varbits.bank_item_options].id)
 
             val bank = openBank(player)

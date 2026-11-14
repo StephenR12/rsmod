@@ -47,7 +47,7 @@ internal object GroupButtons : ComponentReferences() {
     val tabs = (0..3).map { find("side_channels:tab_$it") }
     val contents = find("side_channels:contents")
     // Client script 435 creates the Teleport button as a dynamic child indexed by enum 848.
-    val travel = find("grouping:com_32")
+    val travel = find("grouping:teleport")
 }
 internal object GroupBits : VarBitReferences() {
     val selected = find("side_channels_tab_selected")

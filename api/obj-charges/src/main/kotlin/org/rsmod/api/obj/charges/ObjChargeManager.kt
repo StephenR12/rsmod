@@ -2,7 +2,6 @@ package org.rsmod.api.obj.charges
 
 import jakarta.inject.Inject
 import kotlin.contracts.contract
-import kotlin.math.min
 import org.rsmod.api.config.refs.params
 import org.rsmod.game.entity.Player
 import org.rsmod.game.inv.InvObj
@@ -21,22 +20,12 @@ public class ObjChargeManager @Inject constructor(private val objTypes: ObjTypeL
     }
 
     /**
-     * Adds charges to the obj in the given [slot] of the provided [inventory].
+     * Adds up to [add] charges. The obj's configured variant determines whether it needs replacing,
+     * including when a charged variant has zero stored charges.
      *
-     * If the obj has **no existing charges**, it is assumed to be the uncharged variant and will be
-     * replaced with its charged counterpart if at least one charge is added. This requires the obj
-     * type to define a `charged_variant` param; otherwise, an [IllegalStateException] is thrown.
-     *
-     * @param add The number of charges to attempt to add. This can exceed [max], but the final
-     *   charge count will never go above [max].
-     * @param max The maximum number of charges the obj can hold (e.g., `20_000` for Tumeken's
-     *   Shadow). This must not exceed the capacity allowed by [varobj], or an
-     *   [IllegalArgumentException] is thrown.
-     * @return [Charge.Success] if at least one charge was added; otherwise, a [Charge.Failure]
-     *   indicating the reason (e.g., obj already has [max] charges).
-     * @throws IllegalStateException if the obj has no charges and does not define a
-     *   `charged_variant` param (required to convert it into its charged form).
-     * @throws IllegalArgumentException if [max] exceeds the representable value for [varobj].
+     * Once the target and capacity are validated, [takeMaterials] may consume materials for any
+     * number of charges up to its argument. It returns the number actually paid for, or zero on
+     * failure. It must leave the target slot untouched.
      */
     public fun addCharges(
         inventory: Inventory,
@@ -44,37 +33,32 @@ public class ObjChargeManager @Inject constructor(private val objTypes: ObjTypeL
         add: Int,
         varobj: UnpackedVarObjBitType,
         max: Int,
+        takeMaterials: (Int) -> Int = { it },
     ): Charge {
-        val chargeRange = 0..varobj.bits.bitMask
-        require(max in chargeRange) {
-            "`max` charges ($max) must be within range [0..${varobj.bits.bitMask}]. (var=$varobj)"
-        }
+        require(max in 0..varobj.bits.bitMask) { "Invalid charge capacity $max for $varobj" }
         val obj = inventory[slot] ?: return Charge.Failure.ObjNotFound
-        val curr = getCharges(obj, varobj)
-        val total = min(max, curr + add)
-        if (curr == total) {
-            return Charge.Failure.AlreadyFullCharges
-        }
-        val updatedVar = obj.vars.withBits(varobj.bits, total)
-        val added = total - curr
+        val current = getCharges(obj, varobj)
+        if (current >= max) return Charge.Failure.AlreadyFullCharges
+        if (add <= 0) return Charge.Failure.NoChargesAdded
 
-        if (curr == 0) {
-            // If the obj currently has no charges, we assume it is a _valid_ uncharged version
-            // (i.e., it has the `charged_variant` param defined). If not, we throw an exception.
-            // While someone with spawn permissions could technically have a "charged" obj with
-            // 0 charges, we enforce strict correctness here: they should spawn the uncharged
-            // variant and charge it properly. This helps avoid unintended oversights.
-            val charged = objTypes[obj].paramOrNull(params.charged_variant)
-            if (charged == null) {
-                val message = "Obj missing `charged_variant` param: $obj (type=${objTypes[obj]})"
-                throw IllegalStateException(message)
-            }
-            inventory[slot] = InvObj(charged, vars = updatedVar)
-            return Charge.Success.AddChangeObj(added = added, total = total, charged = charged)
+        val type = objTypes[obj]
+        val charged = type.paramOrNull(params.charged_variant)
+        if (charged == null && !type.hasParam(params.uncharged_variant)) {
+            return Charge.Failure.UnsupportedObj
         }
+        val limit = minOf(add, max - current)
+        val paid = takeMaterials(limit)
+        require(paid in 0..limit) { "Paid for $paid charges, expected 0..$limit" }
+        if (paid == 0) return Charge.Failure.NoChargesAdded
 
-        inventory[slot] = obj.copy(vars = updatedVar)
-        return Charge.Success.AddSameObj(added = added, total = total)
+        val total = current + paid
+        val vars = obj.vars.withBits(varobj.bits, total)
+        if (charged != null) {
+            inventory[slot] = InvObj(charged, obj.count, vars)
+            return Charge.Success.AddChangeObj(paid, total, charged)
+        }
+        inventory[slot] = obj.copy(vars = vars)
+        return Charge.Success.AddSameObj(paid, total)
     }
 
     /**
@@ -189,6 +173,10 @@ public class ObjChargeManager @Inject constructor(private val objTypes: ObjTypeL
             public data object ObjNotFound : Failure()
 
             public data object AlreadyFullCharges : Failure()
+
+            public data object NoChargesAdded : Failure()
+
+            public data object UnsupportedObj : Failure()
         }
     }
 

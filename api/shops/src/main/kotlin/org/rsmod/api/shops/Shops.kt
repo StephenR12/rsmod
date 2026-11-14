@@ -55,6 +55,8 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
         sellPercentage: Double,
         changePercentage: Double,
         currency: CurrencyType = currencies.standard_gp,
+        buyPrices: Map<Int, Int> = emptyMap(),
+        sellPrices: Map<Int, Int> = emptyMap(),
     ) {
         val inv = shopInv.toInventory(player)
         open(
@@ -66,6 +68,8 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
             buyPercentage = buyPercentage,
             sellPercentage = sellPercentage,
             changePercentage = changePercentage,
+            buyPrices = buyPrices,
+            sellPrices = sellPrices,
         )
     }
 
@@ -78,8 +82,10 @@ constructor(private val invTypes: InvTypeList, private val eventBus: EventBus) {
         buyPercentage: Double,
         sellPercentage: Double,
         changePercentage: Double,
+        buyPrices: Map<Int, Int> = emptyMap(),
+        sellPrices: Map<Int, Int> = emptyMap(),
     ) {
-        player.openedShop = Shop(shopInv, currency, buyPercentage, sellPercentage, changePercentage)
+        player.openedShop = Shop(shopInv, currency, buyPercentage, sellPercentage, changePercentage, buyPrices, sellPrices)
 
         player.startInvTransmit(shopInv)
         player.startInvTransmit(sideInv)

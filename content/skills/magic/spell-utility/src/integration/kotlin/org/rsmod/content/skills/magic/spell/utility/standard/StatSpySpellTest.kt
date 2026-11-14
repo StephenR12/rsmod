@@ -66,7 +66,7 @@ class StatSpySpellTest {
                 mapOf(objs.astral_rune to 2, objs.cosmic_rune to 2, objs.body_rune to 5),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(118, components.magic_spellbook_stat_spy.component)
+            assertEquals(123, components.magic_spellbook_stat_spy.component)
             assertEquals(523, interfaces.dream_player_stats.id)
             assertEquals(6293, seqs.dream_player_monsterexam_statspy.id)
             assertEquals(7, deps.seqs[seqs.dream_player_monsterexam_statspy].tickDuration)
@@ -87,9 +87,9 @@ class StatSpySpellTest {
                     .flatMap { listOf(it.current, it.base) }
                     .all { deps.components[it].type == 4 }
             )
-            assertEquals(94, components.dream_player_stats_name.component)
+            assertEquals(98, components.dream_player_stats_name.component)
             assertEquals("Player ~ Name", deps.components[components.dream_player_stats_name].text)
-            assertEquals(95, components.dream_player_stats_close.component)
+            assertEquals(99, components.dream_player_stats_close.component)
         }
 
     @Test

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 
 class ClientScriptSemanticInspectorIntegrationTest {
     @Test
-    fun `cache 233 quest routing resolves X Marks to cluequest varbit`() {
+    fun `cache 238 quest routing resolves X Marks to cluequest varbit`() {
         val questVar =
             ClientScriptSemanticInspector.inspect(
                 cacheDirectory = Path.of(".data/cache/vanilla"),
@@ -38,7 +38,7 @@ class ClientScriptSemanticInspectorIntegrationTest {
     }
 
     @Test
-    fun `cache 233 quest routing resolves gated rune altar quest variables`() {
+    fun `cache 238 quest routing resolves gated rune altar quest variables`() {
         val questVar =
             ClientScriptSemanticInspector.inspect(
                 cacheDirectory = Path.of(".data/cache/vanilla"),

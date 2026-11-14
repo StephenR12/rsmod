@@ -61,7 +61,7 @@ import org.rsmod.map.CoordGrid
 @Execution(ExecutionMode.SAME_THREAD)
 class BoostPotionShareSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins spell interface potion and presentation contracts`() =
+    fun GameTestState.`cache 238 pins spell interface potion and presentation contracts`() =
         runPotionShareTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_statboost_pot_share))
 
@@ -76,7 +76,7 @@ class BoostPotionShareSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_boost_potion_share.id ushr 16)
-            assertEquals(130, components.magic_spellbook_boost_potion_share.id and 0xFFFF)
+            assertEquals(135, components.magic_spellbook_boost_potion_share.id and 0xFFFF)
             assertEquals(
                 emptyList<String>(),
                 deps.components[components.magic_spellbook_boost_potion_share].op.toList(),

@@ -40,7 +40,7 @@ import org.rsmod.game.type.comp.ComponentTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class VileVigourSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins the spell and presentation contracts`() =
+    fun GameTestState.`cache 238 pins the spell and presentation contracts`() =
         runVileVigourTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_vile_vigour))
 
@@ -54,7 +54,7 @@ class VileVigourSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_vile_vigour.id ushr 16)
-            assertEquals(181, components.magic_spellbook_vile_vigour.id and 0xFFFF)
+            assertEquals(186, components.magic_spellbook_vile_vigour.id and 0xFFFF)
             assertEquals("Cast", deps.components[components.magic_spellbook_vile_vigour].targetVerb)
             assertEquals(8978, seqs.human_cast_vile_vigour.id)
             assertEquals(1876, spotanims.vile_vigour_cast.id)

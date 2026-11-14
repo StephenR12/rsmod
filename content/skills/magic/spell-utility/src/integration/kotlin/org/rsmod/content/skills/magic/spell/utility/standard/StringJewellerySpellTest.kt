@@ -44,7 +44,7 @@ import org.rsmod.game.type.interf.IfButtonOp
 @Execution(ExecutionMode.SAME_THREAD)
 class StringJewellerySpellTest {
     @Test
-    fun GameTestState.`cache 233 pins String Jewellery and exactly fourteen outputs`() =
+    fun GameTestState.`cache 238 pins String Jewellery and exactly fourteen outputs`() =
         runStringJewelleryTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_string_jewelry))
             assertEquals(9122, spell.obj.id)
@@ -56,7 +56,7 @@ class StringJewellerySpellTest {
                 mapOf(objs.astral_rune to 2, objs.water_rune to 5, objs.earth_rune to 10),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(126, components.magic_spellbook_string_jewel.id and 0xFFFF)
+            assertEquals(131, components.magic_spellbook_string_jewel.id and 0xFFFF)
             assertEquals(4412, seqs.lunar_human_magic_summon1.id)
             assertEquals(730, spotanims.quest_lunar_spellbook_string_jewelery_spot_anim.id)
             assertEquals(2905, synths.lunar_string_amulet2.id)

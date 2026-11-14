@@ -27,7 +27,7 @@ import org.rsmod.game.type.obj.Wearpos
 @Execution(ExecutionMode.SAME_THREAD)
 class DegradableEquipmentTest {
     @Test
-    fun GameTestState.`cache 233 degradation graph and check operations are pinned`() =
+    fun GameTestState.`cache 238 degradation graph and check operations are pinned`() =
         runDegradationTest { deps ->
             assertEquals(
                 28,
@@ -51,8 +51,8 @@ class DegradableEquipmentTest {
             assertFalse(deps.objs[objs.eclipse_moon_helm_broken].isEquipable)
 
             for (definition in DegradableEquipmentCatalog.definitions) {
-                assertTrue(deps.objs[definition.repaired].tradeable)
-                assertTrue(deps.objs[definition.broken].tradeable)
+                assertEquals(definition.repaired.id !in UNTRADEABLE_ORNAMENTS, deps.objs[definition.repaired].tradeable, "repaired=" + definition.repaired.id)
+                assertEquals(definition.broken.id !in UNTRADEABLE_ORNAMENTS, deps.objs[definition.broken].tradeable, "broken=" + definition.broken.id)
                 for (active in definition.activeStages) {
                     assertTrue(
                         deps.events.contains(HeldObjEvents.Op3::class.java, active.id.toLong())
@@ -196,3 +196,6 @@ class DegradableEquipmentTest {
         val events: EventBus,
     )
 }
+
+// Native revision-238 tradeability flags, independently read from archive 2565.
+private val UNTRADEABLE_ORNAMENTS = setOf(30445, 30447, 30449, 30519, 30521, 30523, 30525, 30527, 30529, 30531, 30533, 30535, 30537, 30539, 30541, 30543, 30545, 30547, 30568, 30570, 30571, 30572, 30573, 30574)

@@ -1,20 +1,20 @@
 package org.rsmod.api.core
 
 public object Build {
-    public const val MAJOR: Int = 233
-    public const val FINAL_SUBREVISION: String = "233.4"
-    public const val CACHE_ARCHIVE: Int = 2317
-    public const val CACHE_CAPTURED_AT: String = "2025-10-01T10:45:07.114859Z"
-    public const val CACHE_GROUPS: Int = 116_016
-    public const val CACHE_FILE_IDENTITIES: Int = 640_720
+    public const val MAJOR: Int = 238
+    public const val FINAL_SUBREVISION: String = "238-20260603"
+    public const val CACHE_ARCHIVE: Int = 2565
+    public const val CACHE_CAPTURED_AT: String = "2026-06-03T13:45:06.049779Z"
+    public const val CACHE_GROUPS: Int = 114198
+    public const val CACHE_FILE_IDENTITIES: Int = 712944
     public const val CACHE_ARCHIVE_INDEX_MANIFEST_SHA256: String =
-        "26ef85c11abc5a056df60c9cbc264f031e442ae2d455d49e1a5fa33c295227ae"
+        "4772916ef97a81a7b8016fff676d8644d5fe7d9457ed8a738850463f697048e8"
     public const val XTEA_SHA256: String =
-        "78a4b5a47254c796aff994d1900d34c78a8486bb1cfdb3d5384b6b49b1c686db"
+        "5984eac0c5c6d947241e29dd5671b81a1546cedf77e08d38438ac47029969afa"
 
     public const val CACHE_URL: String =
-        "https://archive.openrs2.org/caches/runescape/2317/disk.zip"
+        "https://archive.openrs2.org/caches/runescape/2565/disk.zip"
 
     public const val XTEA_URL: String =
-        "https://archive.openrs2.org/caches/runescape/2317/keys.json"
+        "https://archive.openrs2.org/caches/runescape/2565/keys.json"
 }

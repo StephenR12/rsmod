@@ -43,7 +43,7 @@ import org.rsmod.game.type.comp.ComponentTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class ShadowVeilSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins spell state and presentation contracts`() =
+    fun GameTestState.`cache 238 pins spell state and presentation contracts`() =
         runShadowVeilTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_shadow_veil))
             assertEquals(15_344, spell.obj.id)
@@ -56,7 +56,7 @@ class ShadowVeilSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_shadow_veil.id ushr 16)
-            assertEquals(180, components.magic_spellbook_shadow_veil.id and 0xFFFF)
+            assertEquals(185, components.magic_spellbook_shadow_veil.id and 0xFFFF)
             assertEquals("Cast", deps.components[components.magic_spellbook_shadow_veil].targetVerb)
             assertEquals(8_979, seqs.human_spellcast_shadow_veil.id)
             assertEquals(8_998, seqs.shadow_veil_effect.id)

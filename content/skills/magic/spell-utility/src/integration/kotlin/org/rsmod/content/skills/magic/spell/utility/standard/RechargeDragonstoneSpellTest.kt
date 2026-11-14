@@ -47,7 +47,7 @@ import org.rsmod.game.type.interf.IfButtonOp
 @Execution(ExecutionMode.SAME_THREAD)
 class RechargeDragonstoneSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins spell unlock recipes and audiovisual identities`() =
+    fun GameTestState.`cache 238 pins spell unlock recipes and audiovisual identities`() =
         runRechargeDragonstoneTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_recharge_dragonstone))
             assertEquals(2529, spell.obj.id)
@@ -60,7 +60,7 @@ class RechargeDragonstoneSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_recharge_dragonstone.id ushr 16)
-            assertEquals(136, components.magic_spellbook_recharge_dragonstone.id and 0xFFFF)
+            assertEquals(141, components.magic_spellbook_recharge_dragonstone.id and 0xFFFF)
             assertEquals(
                 listOf("Cast"),
                 deps.components[components.magic_spellbook_recharge_dragonstone].op.toList(),

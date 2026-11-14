@@ -27,14 +27,42 @@ import org.rsmod.objtx.TransactionResult
 private typealias CostCalculation = StandardGpCostCalculations
 
 public class StandardGpShopOperations
-@Inject
-constructor(
+private constructor(
     private val objTypes: ObjTypeList,
     private val restockProcess: ShopRestockProcess,
     private val marketPrices: MarketPrices,
     private val eventBus: EventBus,
+    private val payment: ObjType,
+    private val singular: String,
+    private val plural: String,
 ) : StandardShopOperations {
-    private val currencyObj: UnpackedObjType by lazy { objTypes[objs.coins] }
+    @Inject
+    public constructor(
+        objTypes: ObjTypeList,
+        restockProcess: ShopRestockProcess,
+        marketPrices: MarketPrices,
+        eventBus: EventBus,
+    ) : this(objTypes, restockProcess, marketPrices, eventBus, objs.coins, "coin", "coins")
+
+    /**
+     * Reuses stock pricing, noted sales and the atomic two-inventory purchase for item currencies.
+     */
+    public fun withPayment(
+        item: ObjType,
+        singular: String,
+        plural: String,
+    ): StandardGpShopOperations =
+        StandardGpShopOperations(
+            objTypes,
+            restockProcess,
+            marketPrices,
+            eventBus,
+            item,
+            singular,
+            plural,
+        )
+
+    private val currencyObj: UnpackedObjType by lazy { objTypes[payment] }
 
     override fun examineShopValue(player: Player, shop: Shop, slot: Int) {
         val obj = shop.inv[slot] ?: return
@@ -48,12 +76,13 @@ constructor(
                 baseCost = objType.cost,
                 sellPercentage = shop.sellPercentage,
                 changePercentage = shop.changePercentage,
+                basePriceOverride = shop.sellPrices[objType.id],
             )
 
         if (value == 1) {
-            player.mes("${objType.name}: currently costs 1 coin.")
+            player.mes("${objType.name}: currently costs 1 $singular.")
         } else {
-            player.mes("${objType.name}: currently costs ${value.formatAmount} coins.")
+            player.mes("${objType.name}: currently costs ${value.formatAmount} $plural.")
         }
     }
 
@@ -86,6 +115,7 @@ constructor(
                 availableCurrency = availableCurrencyCount,
                 sellPercentage = shop.sellPercentage,
                 changePercentage = shop.changePercentage,
+                basePriceOverride = shop.sellPrices[objType.id],
             )
         val finalPurchaseCost = max(totalCost, firstObjPrice)
 
@@ -116,12 +146,13 @@ constructor(
 
         val message =
             when {
-                currencyDel == TransactionResult.ObjNotFound -> NOT_ENOUGH_COINS
-                currencyDel == TransactionResult.NotEnoughObjCount -> NOT_ENOUGH_COINS
+                currencyDel == TransactionResult.ObjNotFound -> "You don't have enough $plural."
+                currencyDel == TransactionResult.NotEnoughObjCount ->
+                    "You don't have enough $plural."
                 stockObjAdd == TransactionResult.NotEnoughSpace -> NOT_ENOUGH_INV_SPACE
                 success && finalPurchaseCount < initialPurchaseRequest -> {
                     if (availableCurrencyCount <= finalPurchaseCost) {
-                        NOT_ENOUGH_COINS
+                        "You don't have enough $plural."
                     } else {
                         NOT_ENOUGH_INV_SPACE
                     }
@@ -159,6 +190,11 @@ constructor(
         val uncert = objTypes.uncert(obj)
         val objType = objTypes[uncert]
 
+        if (shop.buyPrices[objType.id] == -1) {
+            player.mes("You can't sell this item to this shop.")
+            return
+        }
+
         val tradeable = isTradeable(player, obj, objType)
         if (!tradeable) {
             player.mes("You can't sell this item.")
@@ -186,12 +222,13 @@ constructor(
                 baseCost = objType.cost,
                 buyPercentage = shop.buyPercentage,
                 changePercentage = shop.changePercentage,
+                basePriceOverride = shop.buyPrices[objType.id],
             )
 
         if (value == 1) {
-            player.mes("${objType.name}: shop will buy for 1 coin.")
+            player.mes("${objType.name}: shop will buy for 1 $singular.")
         } else {
-            player.mes("${objType.name}: shop will buy for ${value.formatAmount} coins.")
+            player.mes("${objType.name}: shop will buy for ${value.formatAmount} $plural.")
         }
     }
 
@@ -199,6 +236,11 @@ constructor(
         val obj = sideInv[slot] ?: return
         val objType = objTypes[obj]
         val uncertType = objTypes.uncert(objType)
+
+        if (shop.buyPrices[uncertType.id] == -1) {
+            player.mes("You can't sell this item to this shop.")
+            return
+        }
 
         val tradeable = isTradeable(player, obj, uncertType)
         if (!tradeable) {
@@ -237,6 +279,7 @@ constructor(
                 currencyCap = Int.MAX_VALUE - currencyCount,
                 buyPercentage = shop.buyPercentage,
                 changePercentage = shop.changePercentage,
+                basePriceOverride = shop.buyPrices[uncertType.id],
             )
 
         val transaction =

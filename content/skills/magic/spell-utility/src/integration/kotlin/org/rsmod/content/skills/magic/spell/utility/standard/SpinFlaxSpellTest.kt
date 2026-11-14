@@ -48,7 +48,7 @@ import org.rsmod.game.type.obj.ObjTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class SpinFlaxSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins the Spin Flax spell and presentation contract`() =
+    fun GameTestState.`cache 238 pins the Spin Flax spell and presentation contract`() =
         runSpinFlaxTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_spin_flax))
             assertEquals(20589, spell.obj.id)
@@ -60,7 +60,7 @@ class SpinFlaxSpellTest {
                 mapOf(objs.astral_rune to 1, objs.nature_rune to 2, objs.air_rune to 5),
                 spell.objReqs.associate { it.obj to it.count },
             )
-            assertEquals(146, components.magic_spellbook_spin_flax.id and 0xFFFF)
+            assertEquals(151, components.magic_spellbook_spin_flax.id and 0xFFFF)
             assertEquals(1779, objs.flax.id)
             assertEquals(1777, objs.bow_string.id)
             assertEquals(31052, objs.bow_string_spool.id)

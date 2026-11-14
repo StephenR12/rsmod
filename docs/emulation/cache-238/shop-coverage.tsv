@@ -1,0 +1,506 @@
+# RSPSApp/osrsreboxed-db bfbc35fb (504 variants), OSRS Wiki revision cutoff 2026-06-10, Jagex archive 2565. Bespoke entries identify an existing interaction; their full stock was not independently compared.
+source shop	coverage	evidence / remaining work
+Aaron's Archery Appendages.	catalog	shops.tsv
+Aemad's Adventuring Supplies.	catalog	shops.tsv
+Agelus' Farm Shop	catalog	shops.tsv
+Agility Arena Store	bespoke	BrimhavenArena.kt
+Agmundi Quality Clothes	catalog	shops.tsv
+Ak-Haranu's Exotic Shop.	catalog	shops.tsv
+Al Kharid General Store	catalog	shops.tsv
+Aldarin General Store	catalog	shops.tsv
+Aleck's Hunter Emporium.	catalog	shops.tsv
+Ali's Discount Wares.	stock unresolved	multiple or transcluded tables
+Alice's Farming shop.	catalog	shops.tsv
+Allanna's Farming Shop	catalog	shops.tsv
+Alry the Angler's Angling Accessories	bespoke	AerialFishingScript.kt
+Amelia's Seed Shop	catalog	shops.tsv
+Amlodd's Magical Supplies	catalog	shops.tsv
+Aneirin's Armour	catalog	shops.tsv
+Arcuani's Archery Supplies	catalog	shops.tsv
+Ardougne Baker's Stall.	catalog	shops.tsv; east and west variants mapped to distinct native Baker NPCs and restock tables
+Ardougne Fur Stall.	catalog	shops.tsv
+Ardougne Gem Stall.	catalog	shops.tsv
+Ardougne Silver Stall.	catalog	shops.tsv
+Ardougne Spice Stall.	catalog	shops.tsv
+Armour store.	catalog	shops.tsv
+Armoury	catalog	shops.tsv
+Arnold's Eclectic Supplies.	catalog	shops.tsv
+Artima's Crafting Supplies	catalog	shops.tsv
+The Asp & Snake Bar.	catalog	shops.tsv
+Atlazora's Rest	counter sale	counter-sales.tsv
+Auburn Pub	counter sale	counter-sales.tsv
+Auburnvale General Store	catalog	shops.tsv
+Aubury's Rune Shop.	catalog	shops.tsv
+Aurel's Supplies	catalog	shops.tsv
+Authentic Throwing Weapons.	catalog	shops.tsv
+Ava's Odds and Ends	catalog	shops.tsv
+Baba Yaga's Magic Shop. (After Lunar Diplomacy)	conditional inventory	quest-shops.tsv
+Baba Yaga's Magic Shop. (During Lunar Diplomacy)	conditional inventory	quest-shops.tsv
+Bandit Bargains	catalog	shops.tsv
+Bandit Duty Free	catalog	shops.tsv
+Barbarian Assault Reward Shop	bespoke	AssaultRewards.kt
+Barkers' Haberdashery	catalog	shops.tsv
+Battle Runes (Post-miniquest)	conditional inventory	quest-shops.tsv
+Battle Runes (Pre-miniquest)	conditional inventory	quest-shops.tsv
+Beach Cocktails	removed before cutoff	June Wiki describes a former shop or expired event
+Beach Kit	removed before cutoff	June Wiki describes a former shop or expired event
+Bedabin Village Bartering	catalog	shops.tsv
+The Big Heist Lodge	catalog	shops.tsv
+Blades by Urbi.	catalog	shops.tsv
+Blair's Armour	catalog	shops.tsv
+Blue Moon Inn	counter sale	counter-sales.tsv
+Blurberry Bar	catalog	shops.tsv
+Bob's Brilliant Axes.	catalog	shops.tsv
+Bolkoy's Village Shop	catalog	shops.tsv
+Bounty Hunter Shop (Deadman Mode)	Deadman world only	seasonal/permanent Deadman emblem ledger; absent from normal worlds
+Bounty Hunter Shop (historical)	removed before cutoff	historical Wiki revision: removed January 13, 2021
+Bounty Hunter Store	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+Branwen's Farming Shop	catalog	shops.tsv
+Brian's Archery Supplies.	catalog	shops.tsv
+Brian's Battleaxe Bazaar.	catalog	shops.tsv
+Briget's Weapons	catalog	shops.tsv
+Brimhaven Agility Arena Ticket Exchange	bespoke	BrimhavenArena.kt
+Bunbridge General Store	removed before cutoff	June Wiki describes a former shop or expired event
+The Burrow	counter sale	counter-sales.tsv
+Burthorpe Supplies	catalog	shops.tsv
+Cam Torum Blacksmith	catalog	shops.tsv
+Cam Torum General Store	catalog	shops.tsv
+Candle Shop	catalog	shops.tsv
+Carefree Crafting Stall	catalog	shops.tsv
+Cassie's Shield Shop.	catalog	shops.tsv
+Castle Wars Ticket Exchange	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+The Cloak and Stagger	catalog	shops.tsv
+Cobado's Groceries	catalog	shops.tsv
+Conara's Jewels	catalog; restock rate pending	shops.tsv; unpublished intervals disabled (0); see docs/emulation/cache-238/shop-restock-pending.md
+Construction supplies	bespoke	Sawmill.kt
+Contraband yak produce.	conditional inventory	quest-shops.tsv
+Crossbow Shop (Dwarven Mine)	catalog	shops.tsv
+Crossbow Shop (Keldagrim)	catalog	shops.tsv
+Crossbow Shop (White Wolf Mountain)	catalog	shops.tsv
+The Crypt	counter sale	counter-sales.tsv
+Culinaromancer's Chest (food, full)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, full, diary)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 0 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 1 Subquest)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 2 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 3 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 4 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 5 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 6 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 7 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (food, 8 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (Full)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (Elite Diary)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (0 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (1 Subquest)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (2 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (3 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (4 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (5 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (6 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (7 Subquests)	bespoke	CulinaromancerChest.kt
+Culinaromancer's Chest (8 Subquests)	bespoke	CulinaromancerChest.kt
+Daga's Scimitar Smithy (Default)	conditional inventory	quest-shops.tsv
+Daga's Scimitar Smithy (Monkey Madness I)	conditional inventory	quest-shops.tsv
+Dal's General Ogre Supplies	catalog	shops.tsv
+Dancing Donkey Inn	counter sale	counter-sales.tsv
+Dargaud's Bow and Arrows.	catalog	shops.tsv
+Darkmeyer General Store	catalog	shops.tsv; native nontradeable Long rope cannot be sold to shop
+Darkmeyer Lantern Shop	catalog	shops.tsv
+Darkmeyer Meat Shop	catalog	shops.tsv
+Darkmeyer Seamstress	catalog	shops.tsv; native nontradeable Vyre noble clothes cannot be sold to shop
+Darren's Wilderness Cape Shop.	catalog	shops.tsv
+Daryl's Ranging Surplus	catalog	shops.tsv
+Davon's Amulet Store. (Default)	catalog	shops.tsv
+Davon's Amulet Store. (Karamja gloves)	catalog	shops.tsv
+Dead Man's Chest	counter sale	counter-sales.tsv
+Deadman Reward Store	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+The Deeper Lode	catalog	shops.tsv
+Diango's Toy Store	catalog	shops.tsv, shop-prices.tsv
+Dodgy Mike's Second Hand Clothing.	catalog	shops.tsv
+Dom Onion's Reward Shop	bespoke	DreamRewards.kt
+Dommik's Crafting Store.	catalog	shops.tsv
+Dorgesh-Kaan General Supplies	catalog	shops.tsv
+Dragon Inn	counter sale	counter-sales.tsv
+Draynor Seed Market	catalog	shops.tsv
+Drogo's Mining Emporium.	catalog	shops.tsv
+Dusuri's Star Shop	bespoke	Dusuri.kt
+Dwarven shopping store	catalog	shops.tsv
+Dyes to Die For	catalog	shops.tsv
+Edgeville General Store	catalog	shops.tsv
+Edmond's Wilderness Cape Shop.	catalog	shops.tsv
+Edward's Wilderness Cape Shop.	catalog	shops.tsv
+Elgan's Exceptional Staffs!	catalog	shops.tsv
+Emelio's Kebab Shop	conditional inventory	quest-shops.tsv
+The Esoterican Arms	catalog	shops.tsv
+Etceteria Fish	catalog	shops.tsv
+Fairy Fixit's Fairy Enchantment	catalog	shops.tsv
+Falador General Store	catalog	shops.tsv
+Falador Party Room	counter sale	counter-sales.tsv
+Fancy Clothes Store	catalog	shops.tsv
+Farmer Gricoller's Rewards	bespoke	TitheRewards.kt
+Farming Supplies	bespoke	FarmingShops.kt
+Faustus' Fruit and Veg	catalog	shops.tsv
+Fernahei's Fishing Hut. (Default)	catalog	shops.tsv
+Fernahei's Fishing Hut. (Karamja gloves)	catalog	shops.tsv
+Fight Arena Bar	counter sale	counter-sales.tsv
+Filamina's Wares	catalog	shops.tsv
+Fine Fashions	catalog	shops.tsv
+Fishing Guild Shop.	catalog	shops.tsv
+Floria's Fashion	catalog	shops.tsv
+Flosi's Fishmongers	catalog	shops.tsv
+Flying Horse Inn	counter sale	counter-sales.tsv
+Flynn's Mace Market.	catalog	shops.tsv
+Food Store	catalog	shops.tsv
+Forester's Arms	counter sale	counter-sales.tsv
+Forestry Shop	bespoke	ForestryShop.kt
+Fortis Baker's Stall	catalog	shops.tsv
+Fortis Blacksmith	catalog	shops.tsv
+Fortis Fur Stall	catalog	shops.tsv
+Fortis Gem Stall	catalog	shops.tsv
+Fortis General Store	catalog	shops.tsv
+Fortis Silk Stall	catalog	shops.tsv
+Fortis Spice Stall	catalog	shops.tsv
+Fossil Island General Store	catalog	shops.tsv
+Frankie's Fishing Emporium	catalog	shops.tsv
+Fremennik Fish Monger	catalog	shops.tsv
+Fremennik Fur Trader	catalog	shops.tsv
+Frenita's Cookery Shop.	catalog	shops.tsv
+Frincos' Fabulous Herb Store.	catalog	shops.tsv
+Funch's Fine Groceries	catalog	shops.tsv
+Gabooty's Tai Bwo Wannai Cooperative. (Default)	conditional inventory	quest-shops.tsv
+Gabooty's Tai Bwo Wannai Cooperative. (Karamja gloves)	conditional inventory	quest-shops.tsv
+Gabooty's Tai Bwo Wannai Drinky Store. (Default)	conditional inventory	quest-shops.tsv
+Gabooty's Tai Bwo Wannai Drinky Store. (Karamja gloves)	conditional inventory	quest-shops.tsv
+Gaius' Two Handed Shop.	catalog	shops.tsv
+Garden Centre	catalog	shops.tsv
+Gem Trader.	catalog	shops.tsv
+General Store (Canifis)	catalog	shops.tsv
+Gerrant's Fishy Business.	catalog	shops.tsv
+Gianne's Restaurant	catalog	shops.tsv
+Giants' Foundry Reward Shop	bespoke	FoundryShop.kt
+The Golden Field	catalog	shops.tsv
+Grace's Graceful Clothing	bespoke	Grace.kt
+Grand Tree Groceries	catalog	shops.tsv
+Green Gemstone Gems	catalog	shops.tsv
+The Green Ghost	counter sale	counter-sales.tsv
+Greengrocer of Miscellania	catalog	shops.tsv
+Grud's Herblore Stall.	catalog	shops.tsv
+Grum's Gold Exchange.	catalog	shops.tsv
+Guinevere's Dyes	catalog	shops.tsv
+Gulluck and Sons	catalog	shops.tsv
+Gunslik's Assorted Items	catalog	shops.tsv
+Gwyn's Mining Emporium	catalog	shops.tsv
+Hair of the Dog	counter sale	counter-sales.tsv
+Hamab's Crafting Emporium	catalog	shops.tsv; native nontradeable M'amulet mould cannot be sold to shop
+Happy Heroes' H'emporium.	catalog	shops.tsv
+Harpoon Joe's House of 'Rum'.	catalog	shops.tsv; native nontradeable Braindeath rum cannot be sold to shop
+Harry's Fishing Shop.	catalog	shops.tsv
+The Haymaker's Arms	removed before cutoff	June Wiki describes a former shop or expired event
+Hefin Inn	counter sale	counter-sales.tsv
+Helmet Shop.	catalog	shops.tsv
+Henderson's Catch of the Day	catalog	shops.tsv
+Hendor's Awesome Ores	catalog	shops.tsv
+Herquin's Gems.	catalog	shops.tsv
+Hickton's Archery Emporium.	catalog	shops.tsv
+Honest Jimmy's House of Stuff	bespoke	TroubleBrewing.kt
+Horvik's Armour Shop.	catalog	shops.tsv
+Huito's Herbal Supplies	catalog	shops.tsv
+Ian's Wilderness Cape Shop.	catalog	shops.tsv
+Ifaba's General Store	catalog	shops.tsv
+Imia's Supplies	catalog	shops.tsv
+Initiate Temple Knight Armoury	conditional inventory	quest-shops.tsv
+Iorwerth's Arms	catalog	shops.tsv
+Irksol (shop)	catalog	shops.tsv
+Ishmael's Fish He Sells	catalog	shops.tsv
+Island Fishmonger	catalog	shops.tsv
+Island Greengrocer	catalog	shops.tsv
+Ivan's Supplies	catalog	shops.tsv; explicit sell prices match native cost and 100% multiplier; only Trade-capable Ivan variant
+Iwan's Maces	catalog	shops.tsv
+Jamila's Craft Stall.	catalog	shops.tsv
+Jatix's Herblore Shop.	catalog	shops.tsv
+Jennifer's General Supplies	catalog	shops.tsv
+Jiminua's Jungle Store. (Default)	bespoke	TaiBwoCleanup.kt
+Jiminua's Jungle Store. (Karamja gloves 3+)	bespoke	TaiBwoCleanup.kt
+Jolly Boar Inn	counter sale	counter-sales.tsv
+Jukat (shop)	catalog	shops.tsv
+Justine's stuff for the Last Shopper Standing	reward inventory	point-rewards.tsv; 67 physical rewards. Cosmetic godsword animation unlocks are separate.
+Karamja General Store (Default)	catalog	shops.tsv
+Karamja General Store (Karamja gloves 3)	catalog	shops.tsv
+Karamja Wines, Spirits, and Beers.	catalog	shops.tsv; native nontradeable Karamjan rum cannot be sold to shop
+Kastori Farming Supplies	catalog	shops.tsv
+Kastori General Store	catalog	shops.tsv
+Keepa Kettilon's store	catalog	shops.tsv
+Keldagrim Stonemason	catalog	shops.tsv
+Keldagrim's Best Bread	catalog	shops.tsv
+Kenelme's Wares	catalog	shops.tsv
+Khazard General Store	catalog	shops.tsv
+King Narnode's Royal Seed Pods	catalog	shops.tsv; native nontradeable Royal seed pod cannot be sold to shop
+King's Axe Inn	counter sale	counter-sales.tsv
+Kjut's Kebabs	counter sale	counter-sales.tsv
+Kourend Castle Baker's Stall.	catalog	shops.tsv
+Kourend Castle Gem Stall.	catalog	shops.tsv
+Larry's Wilderness Cape Shop.	catalog	shops.tsv
+Laughing Miner Pub	counter sale	counter-sales.tsv
+Leagues Reward Shop	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+Leenz's General Supplies	catalog	shops.tsv
+Legends Guild General Store.	catalog	shops.tsv
+Legends Guild Shop of Useful Items.	bespoke	DiaryShops.kt
+The Legless Faun	counter sale	counter-sales.tsv
+Leon's Prototype Crossbow.	catalog	shops.tsv
+Leprechaun Larry's Farming Supplies.	catalog	shops.tsv
+Little Munty's Little Shop	catalog	shops.tsv
+Little Shop of Horace	catalog	shops.tsv
+Lletya Archery Shop	catalog	shops.tsv
+Lletya Food Store	catalog	shops.tsv
+Lletya General Store	catalog	shops.tsv
+Lletya Seamstress	catalog	shops.tsv
+Lliann's Wares	catalog	shops.tsv; native nontradeable crystal variants cannot be sold to shop
+Logava Gricoller's Cooking Supplies	catalog	shops.tsv
+The Long Hall	no stock at cutoff	June Wiki describes item spawns; shop crosswalk has no items
+Lost Property shop	conditional reclaim service unresolved	Perdu and Chris require individually unlocked items and fees; historical item panel does not establish every entitlement
+Louie's Armoured Legs Bazaar.	catalog	shops.tsv
+Lovecraft's Tackle	catalog	shops.tsv
+Lowe's Archery Emporium	catalog	shops.tsv
+Lumbridge General Store	bespoke	GeneralStore.kt
+Lunami's Axe Shop	catalog	shops.tsv
+Lundail's Arena-side Rune Shop.	catalog	shops.tsv
+Mage Arena Staffs.	bespoke	MageArenaAccess.kt
+Magic Guild Store (Mystic Robes)	catalog	shops.tsv
+Magic Guild Store (Runes and Staves)	catalog	shops.tsv
+Mahogany Homes Reward Shop	bespoke	MahoganyHomes.kt
+Mairin's Market	conditional inventory	quest-shops.tsv, mermaid tears; finite restocking stock
+Martin Thwait's Lost and Found.	bespoke	SpecialThefts.kt
+Miltog's Lamps	catalog	shops.tsv
+Mining Guild Mineral Exchange	bespoke	MiningGuild.kt
+Miscellanian Clothes Shop	catalog	shops.tsv
+Miscellanian Food Shop	catalog	shops.tsv
+Miscellanian General Store	catalog	shops.tsv
+Mistrock Mining Supplies	catalog	shops.tsv
+Mixology Rewards	bespoke	MixologyRewards.kt
+Moon Clan Fine Clothes.	catalog	shops.tsv; native nontradeable Moonclan clothes cannot be sold to shop
+Moon Clan General Store.	catalog	shops.tsv
+Moonrise Wines	catalog	shops.tsv, shop-prices.tsv; historic restock interval unpublished
+Mount Karuulm Weapon Shop	catalog	shops.tsv
+Multicannon parts for sale	stock unresolved	stock/custom item mismatch
+Mysterious Hallowed Goods	bespoke	SepulchreStranger.kt
+Mysterious Stranger (shop)	catalog	shops.tsv
+Mythical Cape Store	catalog	shops.tsv, shop-prices.tsv
+Myths' Guild Armoury	catalog	shops.tsv
+Myths' Guild Herbalist	catalog	shops.tsv
+Myths' Guild Weaponry	catalog	shops.tsv
+Nardah General Store.	catalog	shops.tsv
+Nardah Hunter Shop.	catalog	shops.tsv
+Nardok's Bone Weapons	catalog	shops.tsv
+Nathifa's Bake Stall.	catalog	shops.tsv
+Ned's Handmade Rope (100% Wool) (Default)	conditional inventory	quest-shops.tsv
+Ned's Handmade Rope (100% Wool) (Fremennik Isles)	conditional inventory	quest-shops.tsv
+Neil's Wilderness Cape Shop.	catalog	shops.tsv
+Neitiznot supplies.	catalog	shops.tsv
+Nemus Retreat (pub)	counter sale	counter-sales.tsv
+Nurmof's Pickaxe Shop.	catalog	shops.tsv
+The Nutcracker	removed before cutoff	June Wiki describes a former shop or expired event
+Obli's General Store. (Default)	catalog	shops.tsv
+Obli's General Store. (Karamja gloves)	catalog	shops.tsv
+Shop of Distaste	conditional inventory	quest-shops.tsv
+The Old Nite	counter sale	counter-sales.tsv
+Oobapohk's Javelin Store	catalog	shops.tsv
+Ore seller.	catalog	shops.tsv
+Ore store	catalog	shops.tsv
+The Other Inn.	catalog	shops.tsv; native nontradeable Braindeath rum cannot be sold to shop
+Outer Fortis General Store	catalog	shops.tsv
+Oziach (shop)	catalog	shops.tsv
+Paramaya Inn	counter sale	counter-sales.tsv
+Pellem's Fur Store	catalog	shops.tsv
+Pelters' Veg Stall	location shop	Shop of Distaste stock, native pillory crate interaction
+Perry's Chop-chop Shop	catalog	shops.tsv
+Petrified Pete's Ore Shop	bespoke	PetrifiedPete.kt
+Picaria's Fishing Shop	catalog	shops.tsv
+Pickaxe-Is-Mine	catalog	shops.tsv
+Pie Shop	catalog	shops.tsv
+Pollnivneach general store.	catalog	shops.tsv
+Port Phasmatys General Store	catalog	shops.tsv
+Prifddinas Foodstuffs	catalog	shops.tsv
+Prifddinas Gem Stall	catalog	shops.tsv
+Prifddinas General Store	catalog	shops.tsv
+Prifddinas Herbal Supplies	catalog	shops.tsv
+Prifddinas Silver Stall	catalog	shops.tsv
+Prifddinas Spice Stall	catalog	shops.tsv
+Prifddinas' Seamstress	catalog	shops.tsv
+Proselyte Temple Knight Armoury	conditional inventory	quest-shops.tsv
+Prospector Percy's Nugget Shop	bespoke	MotherlodePercy.kt
+PvP Arena Rewards	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+Quality Armour Shop	catalog	shops.tsv
+Quality Weapons Shop	catalog	shops.tsv
+Quartermaster's Stores	catalog	shops.tsv
+Quetzacalli Gorge General Store	catalog	shops.tsv
+Raetul and Co's Cloth Store. (Before Contact!)	conditional inventory	quest-shops.tsv
+Raetul and Co's Cloth Store. (After Contact!)	conditional inventory	quest-shops.tsv
+Ramarno's Shard Exchange	stock unresolved	multiple or transcluded tables
+Ranael's Super Skirt Store.	catalog	shops.tsv
+Ranging Guild Ticket Exchange	counter sale	counter-sales.tsv
+Rasolo the Wandering Merchant	catalog	shops.tsv; native nontradeable instruction manual cannot be sold to shop
+Rat & Bat	counter sale	counter-sales.tsv
+Ratpit bar (Keldagrim)	counter sale	counter-sales.tsv
+Ratpit bar (Port Sarim)	counter sale	counter-sales.tsv
+Ratpit bar (Varrock)	counter sale	counter-sales.tsv
+Razmire Builders Merchants.	catalog	shops.tsv
+Razmire General Store.	catalog	shops.tsv
+Regath's Wares	catalog	shops.tsv
+Reldak's Leather Armour	catalog	shops.tsv
+Rellekka Longhall Bar	catalog	shops.tsv
+Richard's Farming shop.	catalog	shops.tsv
+Richard's Wilderness Cape Shop.	catalog	shops.tsv
+Rimmington General Store	catalog	shops.tsv
+Rising Sun Inn	counter sale	counter-sales.tsv
+Rok's Chocs Box.	catalog	shops.tsv
+Rommik's Crafty Supplies.	catalog	shops.tsv
+Rufus' Meat Emporium	catalog	shops.tsv
+Rusty Anchor Inn	counter sale	counter-sales.tsv
+Salius' Armour Shop	catalog; restock rate pending	shops.tsv; unpublished intervals disabled (0); see docs/emulation/cache-238/shop-restock-pending.md
+Salvager Overlook General Store	catalog	shops.tsv
+Sam's Wilderness Cape Shop.	catalog	shops.tsv
+Sarah's Farming shop.	catalog	shops.tsv
+Sawmill	bespoke	Sawmill.kt, same shop and stock as Construction supplies
+Scavvo's Rune Store.	catalog	shops.tsv, shop-prices.tsv
+Sebamo's Sublime Staffs	catalog	shops.tsv
+Seddu's Adventurer's Store.	catalog	shops.tsv
+Shantay Pass Shop	catalog	shops.tsv
+Shayzien Styles	catalog	shops.tsv
+The Sheared Ram	counter sale	counter-sales.tsv
+Shields of Mistrock	catalog	shops.tsv
+The Shrimp and Parrot	catalog	shops.tsv
+Sian's Ranged Weaponry	catalog	shops.tsv
+Sigmund the Merchant (shop)	catalog	shops.tsv
+Silver Cog Silver Stall	catalog	shops.tsv
+Simon's Wilderness Cape Shop.	catalog	shops.tsv
+Skulgrimen's Battle Gear	catalog	shops.tsv
+Skull in a Chest Inn	location interface	no NPC owner in source crosswalk
+Slayer Equipment (shop)	bespoke	SlayerMasterScript.kt
+Slayer Rewards	bespoke	SlayerRewards.kt
+Smithing Smith's Shop.	catalog	shops.tsv
+Solihib's Food Stall	catalog	shops.tsv; explicit sell prices match native cost and 100% multiplier
+Soul Wars Reward Shop	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+Speedrunning Reward Shop	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+The Spice Is Right.	catalog	shops.tsv
+Spike's Spikes	catalog; restock rate pending	shops.tsv; unpublished intervals disabled (0); see docs/emulation/cache-238/shop-restock-pending.md
+Stick Your Ore Inn	counter sale	counter-sales.tsv
+Stonecutter Supplies	catalog; restock rate pending	shops.tsv; unpublished intervals disabled (0); see docs/emulation/cache-238/shop-restock-pending.md
+Sulisal's Superb Fishing Store	catalog	shops.tsv
+Sunlight's Sanctum	counter sale	counter-sales.tsv
+Sunset Coast General Store	catalog	shops.tsv
+Tal Teklan General Store	catalog	shops.tsv
+Tal Teklan Rune Shop	catalog	shops.tsv
+Tamayu's Spear Stall (Default)	conditional inventory	quest-shops.tsv
+Tamayu's Spear Stall (Karamja gloves)	conditional inventory	quest-shops.tsv
+Temple Supplies	bespoke	RiftRewards.kt
+The Flaming Arrow	counter sale	counter-sales.tsv
+The King's Inn	counter sale	counter-sales.tsv
+The Lighthouse Store	catalog	shops.tsv
+The Lost Pickaxe	counter sale	counter-sales.tsv
+The Runic Emporium	catalog	shops.tsv
+The Windbreaker	counter sale	counter-sales.tsv
+Thessalia's Fine Clothes.	bespoke	DiaryShops.kt
+Thessalia's Makeovers	removed before cutoff	June Wiki describes a former shop or expired event
+Thirus Urkar's Fine Dynamite Store	catalog	shops.tsv
+Thurid's Brain Buckets	catalog	shops.tsv
+Thyria's Wares	catalog	shops.tsv
+Tiadeche's Karambwan Stall	catalog	shops.tsv; native nontradeable Raw karambwanji cannot be sold to shop
+Tizoro's Pickaxes	catalog	shops.tsv
+The Toad and Chicken	catalog	shops.tsv
+Toci's Gem Store	catalog	shops.tsv
+Tony's Pizza Bases	catalog	shops.tsv
+Toothy's Pickaxes	catalog	shops.tsv
+Trader Stan's Trading Post	stock unresolved	stock/custom item mismatch
+Trader Sven's Black-market Goods.	catalog	shops.tsv
+Tutab's Magical Market	catalog	shops.tsv
+Two Feet Charley's Fish Shop.	catalog	shops.tsv
+Tynan's Fishing Supplies	catalog	shops.tsv
+TzHaar-Hur-Lek's Ore and Gem Store (Default)	catalog	shops.tsv
+TzHaar-Hur-Lek's Ore and Gem Store (Karamja gloves)	catalog	shops.tsv
+TzHaar-Hur-Rin's Ore and Gem Store (Default)	catalog	shops.tsv
+TzHaar-Hur-Rin's Ore and Gem Store (Karamja gloves)	catalog	shops.tsv
+TzHaar-Hur-Tel's Equipment Store (Default)	catalog	shops.tsv
+TzHaar-Hur-Tel's Equipment Store (Karamja gloves)	catalog	shops.tsv
+TzHaar-Hur-Zal's Equipment Store (Default)	catalog	shops.tsv
+TzHaar-Hur-Zal's Equipment Store (Karamja gloves)	catalog	shops.tsv
+TzHaar-Mej-Roh's Rune Store (Default)	catalog	shops.tsv
+TzHaar-Mej-Roh's Rune Store (Karamja gloves)	catalog	shops.tsv
+Valaine's Shop of Champions.	catalog	shops.tsv
+Vale Research Exchange	bespoke	ValeRewards.kt
+Vanessa's Farming shop.	catalog	shops.tsv
+Vannah's Farming Stall	catalog	shops.tsv
+Varrock General Store	catalog	shops.tsv
+Varrock Swordshop	catalog	shops.tsv
+Vermundi's Clothes Stall	catalog	shops.tsv
+Vigr's Warhammers	catalog	shops.tsv
+Void Knight Archery Store	catalog	shops.tsv
+Void Knight General Store	catalog	shops.tsv
+Void Knight Magic Store	catalog	shops.tsv
+Void Knights' Reward Options	bespoke	PestRewards.kt
+Warrens Fish Monger	catalog	shops.tsv
+Warrens General Store	catalog	shops.tsv
+Warrior Guild Armoury	catalog	shops.tsv
+Warrior Guild Food Shop	catalog	shops.tsv
+Warrior Guild Potion Shop	catalog	shops.tsv
+Wayne's Chains! - Chainmail specialist.	catalog	shops.tsv
+Weapons galore	catalog	shops.tsv
+West Ardougne General Store	catalog	shops.tsv
+White Knight Armoury (Master)	bespoke	WhiteKnightArmoury.kt
+White Knight Armoury (Adept)	bespoke	WhiteKnightArmoury.kt
+White Knight Armoury (Noble)	bespoke	WhiteKnightArmoury.kt
+White Knight Armoury (Page)	bespoke	WhiteKnightArmoury.kt
+White Knight Armoury (Peon)	bespoke	WhiteKnightArmoury.kt
+White Knight Armoury (Novice)	bespoke	WhiteKnightArmoury.kt
+William's Wilderness Cape Shop.	catalog	shops.tsv
+Wine Shop.	catalog	shops.tsv
+Worm Tongue's Wares	bespoke	ColossalWyrm.kt
+Yarnio's Baked Goods	catalog	shops.tsv
+Yarsul's Prodigious Pickaxes	catalog	shops.tsv
+Ye olde Tea Shoppe.	catalog	shops.tsv
+Yrsa's Accoutrements	bespoke	DiaryShops.kt
+Yrsa's Shoe Store	bespoke	MakeoverServices.kt
+Zaff's Superior Staffs!	catalog	shops.tsv
+Zanaris General Store	catalog	shops.tsv
+Zeke's Superior Scimitars.	catalog	shops.tsv
+Zenesha's Plate Mail Body Shop.	catalog	shops.tsv
+~ Uglug's stuffsies ~	catalog	shops.tsv
+Events Reward Shop	reward inventory	point-rewards.tsv; complete historical stock tables. Minigame activities and experience redemption are separate.
+Arhein's General Goods	catalog	shops.tsv
+Durrik's Goods	catalog; restock rate pending	shops.tsv; unpublished intervals disabled (0); see docs/emulation/cache-238/shop-restock-pending.md
+Elder Blunn's Spear and Shield Stall	catalog; restock rate pending	shops.tsv; unpublished intervals disabled (0); see docs/emulation/cache-238/shop-restock-pending.md
+Elder Coco's Crafting Stall	catalog; restock rate pending	shops.tsv; unpublished intervals disabled (0); see docs/emulation/cache-238/shop-restock-pending.md
+Elder Krill's Fishing Stall	catalog	shops.tsv
+Elder Raley's Herblore Stall	catalog	shops.tsv
+Elder Reggle's Farming Shop	catalog	shops.tsv
+Elder Strom's Hunting Stall	catalog	shops.tsv
+Port Roberts Cannonball Stall	catalog	shops.tsv; explicit prices match native cost and shop multipliers
+Port Roberts Fish Stall	catalog	shops.tsv
+Port Roberts Fur Stall	catalog	shops.tsv
+Port Roberts Gem Stall	catalog	shops.tsv, shop-prices.tsv
+Port Roberts General Store	catalog	shops.tsv
+Port Roberts Ore Stall	catalog	shops.tsv
+Port Roberts Silk Stall	catalog	shops.tsv, shop-prices.tsv
+Port Roberts Silver Stall	catalog	shops.tsv, shop-prices.tsv
+Port Roberts Spice Stall	catalog	shops.tsv
+Port Roberts Veg Stall	catalog	shops.tsv
+Seb's Shipyard Supplies	catalog	shops.tsv; Facility bottle prices match native cost and shop multipliers
+The Rolling Tide	counter sale	counter-sales.tsv
+Deepfin Inn	counter sale	counter-sales.tsv
+Deepfin Point Ore Exchange	catalog	shops.tsv
+The Pandemonium (pub)	counter sale	counter-sales.tsv
+Efaritay's Supplies	outside cache	owner NPC IDs absent from revision 238
+Garlic Cocktail Supply	outside cache	owner NPC IDs absent from revision 238
+Old Man Ral's Supplies	historical data unresolved	June Wiki revision unavailable under this source title
+Betty's Magic Emporium	catalog	shops.tsv
+Myreque's Rest	no stock at cutoff	June Wiki revision 15112921 describes Burgh de Rott pub, no merchant or sales
+Supplies's Supplies	outside cache	owner NPC IDs absent from revision 238
+Where Wyrmscraig's Wear Wares Were	outside cache	owner NPC IDs absent from revision 238
+Apothecary's Potions	historical data unresolved	June Wiki revision unavailable under this source title
+Flakes 'n' Flotsam	historical data unresolved	June Wiki revision unavailable under this source title
+Alliance Supplies	outside cache	owner NPC IDs absent from revision 238
+Theatre of Blood Supplies	location interface	chest; no NPC owner
+Useful Supplies	location interface	chest; no NPC owner
+Armour Shop	catalog	shops.tsv
+Death (shop)	historical data unresolved	June Wiki revision unavailable under this source title
+Lumbridge Blacksmith	historical data unresolved	June Wiki revision unavailable under this source title

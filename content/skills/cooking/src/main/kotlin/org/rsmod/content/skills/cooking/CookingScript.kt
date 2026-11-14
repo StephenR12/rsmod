@@ -41,7 +41,7 @@ constructor(
         for (stove in cooking_locs.houseFireStoves + cooking_locs.campfires) registerFoodUse(stove, CookingSourceKind.Fire)
         for (stove in cooking_locs.houseRangeStoves) registerFoodUse(stove, CookingSourceKind.Range)
         registerFoodUse(cooking_locs.fire, CookingSourceKind.Fire)
-        registerRange(cooking_locs.permanentCookFire, CookingSourceKind.Fire)
+        for (fire in cooking_locs.permanentCookFires) registerRange(fire, CookingSourceKind.Fire)
         onOpHeldU(objs.raw_chompy, objs.iron_spit) {
             chompy.skewer(this, it.firstSlot, it.secondSlot)
         }

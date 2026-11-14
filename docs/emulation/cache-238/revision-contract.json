@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "game": "oldschool",
+  "environment": "live",
+  "language": "en",
+  "major": 238,
+  "finalSubrevision": "238-20260603",
+  "cache": {
+    "provider": "OpenRS2",
+    "archive": 2565,
+    "capturedAt": "2026-06-03T13:45:06.049779Z",
+    "catalogUrl": "https://archive.openrs2.org/caches/runescape/2565",
+    "diskUrl": "https://archive.openrs2.org/caches/runescape/2565/disk.zip",
+    "keysUrl": "https://archive.openrs2.org/caches/runescape/2565/keys.json",
+    "groups": 114198,
+    "fileIdentities": 712944,
+    "nonEmptyArchiveIndexes": 23,
+    "manifest": ".data/audit/cache-238-archive-index-manifest.json",
+    "manifestSha256": "4772916ef97a81a7b8016fff676d8644d5fe7d9457ed8a738850463f697048e8",
+    "xteaRecords": 0,
+    "xteaSha256": "5984eac0c5c6d947241e29dd5671b81a1546cedf77e08d38438ac47029969afa"
+  },
+  "protocol": {
+    "version": "1.0.0-ALPHA-20260506",
+    "apiModule": "net.rsprot:osrs-238-api",
+    "sharedModule": "net.rsprot:osrs-238-shared"
+  },
+  "client": {
+    "tag": "runelite-parent-1.12.28"
+  },
+  "selectionReason": "Last archive captured while Demonic Pacts League was active, before the June 11 rewards-shop cache."
+}

@@ -47,7 +47,7 @@ import org.rsmod.game.type.seq.SeqTypeList
 @Execution(ExecutionMode.SAME_THREAD)
 class DreamSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins Dream state and presentation contracts`() =
+    fun GameTestState.`cache 238 pins Dream state and presentation contracts`() =
         runDreamTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_dream))
 
@@ -62,7 +62,7 @@ class DreamSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_dream.id ushr 16)
-            assertEquals(125, components.magic_spellbook_dream.id and 0xFFFF)
+            assertEquals(130, components.magic_spellbook_dream.id and 0xFFFF)
             assertEquals(
                 listOf("Cast"),
                 deps.components[components.magic_spellbook_dream].op.toList(),

@@ -7,38 +7,38 @@ import org.junit.jupiter.api.Test
 
 class SemanticConfigManifestExporterIntegrationTest {
     @Test
-    fun `cache 233 semantic configs export every cached definition`() {
+    fun `cache 238 semantic configs export every cached definition`() {
         val cachePath = Path.of(".data/cache/vanilla")
         val manifest =
             SemanticConfigManifestExporter.export(
                 cacheDirectory = cachePath,
                 symbolDirectory = Path.of(".data/symbols"),
-                revision = "233.4",
-                archive = 2317,
-                capturedAt = "2025-10-01T10:45:07.114859Z",
+                revision = "238-20260603",
+                archive = 2565,
+                capturedAt = "2026-06-03T13:45:06.049779Z",
             )
 
         assertEquals(
             mapOf(
-                "database-rows" to 6_655,
-                "database-tables" to 117,
-                "enums" to 5_625,
-                "inventories" to 936,
-                "locations" to 57_724,
-                "npcs" to 14_799,
-                "objects" to 31_172,
-                "parameters" to 2_318,
-                "sequences" to 12_521,
-                "spot-animations" to 3_456,
-                "structs" to 5_879,
-                "varbits" to 18_031,
-                "varclients" to 1_261,
-                "varobjects" to 107,
-                "varps" to 4_876,
+                "database-rows" to 16_211,
+                "database-tables" to 233,
+                "enums" to 5_864,
+                "inventories" to 1_022,
+                "locations" to 60_710,
+                "npcs" to 15_712,
+                "objects" to 33_372,
+                "parameters" to 2_569,
+                "sequences" to 13_902,
+                "spot-animations" to 3_792,
+                "structs" to 3_974,
+                "varbits" to 18_714,
+                "varclients" to 1_377,
+                "varobjects" to 122,
+                "varps" to 5_588,
             ),
             manifest.entries.groupingBy(CacheManifestEntry::domain).eachCount().toSortedMap(),
         )
-        assertEquals(165_477, manifest.entries.size)
+        assertEquals(183_162, manifest.entries.size)
         assertEquals(
             manifest.entries.size,
             manifest.entries.map { it.domain to it.key }.toSet().size,
@@ -54,19 +54,19 @@ class SemanticConfigManifestExporterIntegrationTest {
         assertEquals("fairyrings_scrollpos", fairyRingScroll.symbol)
         assertTrue("persistent" in fairyRingScroll.attributes)
         assertEquals(
-            494,
+            530,
             manifest.entries.count {
                 it.domain == "varclients" && it.attributes["persistent"] == "true"
             },
         )
         assertEquals(
-            767,
+            847,
             manifest.entries.count {
                 it.domain == "varclients" && it.attributes["persistent"] == "false"
             },
         )
 
-        assertEquals(107, manifest.entries.count { it.domain == "varobjects" })
+        assertEquals(122, manifest.entries.count { it.domain == "varobjects" })
         assertTrue(manifest.entries.filter { it.domain == "varobjects" }.all { it.symbol == null })
 
         val equipment = manifest.entry("inventories", "94")

@@ -13,15 +13,20 @@ import org.rsmod.api.script.onApNpc1
 import org.rsmod.api.script.onApNpc3
 import org.rsmod.api.script.onApNpc4
 import org.rsmod.api.script.onApNpcU
+import org.rsmod.api.script.onGameStartup
+import org.rsmod.api.script.onMissingNpcService
 import org.rsmod.api.script.onOpNpc1
 import org.rsmod.api.script.onOpNpc3
 import org.rsmod.api.script.onOpNpc4
 import org.rsmod.api.script.onOpNpcU
+import org.rsmod.api.spells.runes.compact.CompactRuneRepository
+import org.rsmod.api.type.refs.interf.InterfaceReferences
 import org.rsmod.api.utils.format.formatAmount
 import org.rsmod.content.interfaces.bank.scripts.BankTutorialScript
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.enums.EnumTypeMapResolver
 import org.rsmod.game.inv.isType
+import org.rsmod.game.type.npc.NpcTypeList
 import org.rsmod.game.type.obj.UnpackedObjType
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
@@ -29,6 +34,8 @@ import org.rsmod.plugin.scripts.ScriptContext
 class Banker
 @Inject
 private constructor(
+    private val compactRunes: CompactRuneRepository,
+    private val npcTypes: NpcTypeList,
     private val spaceShop: BankSpaceShop,
     private val tutorial: BankTutorialScript,
 ) : PluginScript() {
@@ -53,6 +60,37 @@ private constructor(
         onApNpcU(content.banker_tutor) { apBanknote(it.npc, it.invSlot, it.objType) }
         onOpNpcU(content.banker_tutor) { banknote(it.npc, it.invSlot, it.objType) }
 
+        onGameStartup {
+            for (type in npcTypes.values) {
+                if ("Bank" !in type.op) continue
+                for ((index, option) in type.op.withIndex()) {
+                    val slot = index + 1
+                    when (option) {
+                        "Bank" ->
+                            onMissingNpcService(type, slot) {
+                                when (type.internalName) {
+                                    "rc_zmi_banker" -> payOuraniaFee()
+                                    "lotr_banker" -> if (payTarnFee()) openBank()
+                                    else -> openBank()
+                                }
+                            }
+                        "Collect" ->
+                            onMissingNpcService(type, slot) {
+                                if (type.internalName != "lotr_banker" || payTarnFee())
+                                    openCollectionBox()
+                            }
+                        "Deposit-box" ->
+                            onMissingNpcService(type, slot) {
+                                ifOpenMainModal(BankServiceInterfaces.deposit)
+                            }
+                        "Talk-to" ->
+                            if (type.name == "Banker") {
+                                onMissingNpcService(type, slot) { talkToBanker(it) }
+                            }
+                    }
+                }
+            }
+        }
         spaceShop.startup()
     }
 
@@ -66,6 +104,76 @@ private constructor(
         if (isWithinApRange(npc, distance = 2)) {
             openBank()
         }
+    }
+
+    private fun ProtectedAccess.payTarnFee(): Boolean {
+        if (invTakeFee(100)) return true
+        mes("Odovacar charges 100 coins to use his services.")
+        return false
+    }
+
+    private suspend fun ProtectedAccess.payOuraniaFee() {
+        val pouchSlots =
+            when {
+                objs.divine_rune_pouch in inv || objs.divine_rune_pouch_l in inv -> 4
+                objs.rune_pouch in inv || objs.rune_pouch_l in inv -> 3
+                else -> 0
+            }
+        val types =
+            listOf(
+                varbits.rune_pouch_type_1,
+                varbits.rune_pouch_type_2,
+                varbits.rune_pouch_type_3,
+                varbits.rune_pouch_type_4,
+            )
+        val counts =
+            listOf(
+                varbits.rune_pouch_quantity_1,
+                varbits.rune_pouch_quantity_2,
+                varbits.rune_pouch_quantity_3,
+                varbits.rune_pouch_quantity_4,
+            )
+        fun pouchSlot(rune: org.rsmod.game.type.obj.ObjType) =
+            (0 until pouchSlots).firstOrNull { vars[types[it]] == compactRunes[rune] }
+
+        val choices =
+            listOf(
+                    objs.air_rune,
+                    objs.mind_rune,
+                    objs.water_rune,
+                    objs.earth_rune,
+                    objs.fire_rune,
+                    objs.body_rune,
+                    objs.chaos_rune,
+                    objs.cosmic_rune,
+                    objs.nature_rune,
+                    objs.law_rune,
+                    objs.death_rune,
+                    objs.astral_rune,
+                    objs.blood_rune,
+                    objs.soul_rune,
+                    objs.wrath_rune,
+                )
+                .filter { rune ->
+                    invTotal(inv, rune) >= 20 ||
+                        pouchSlot(rune)?.let { vars[counts[it]] >= 20 } == true
+                }
+        if (choices.isEmpty()) {
+            mes("You need 20 runes of the same type to use this bank.")
+            return
+        }
+        val selected =
+            menu("Pay with 20 of which rune?", false, choices.map { ocName(it) } + "Cancel")
+        val rune = choices.getOrNull(selected) ?: return
+        if (invTotal(inv, rune) >= 20) {
+            if (invDel(inv, rune, 20).success) openBank()
+            return
+        }
+        val slot = pouchSlot(rune) ?: return
+        if (vars[counts[slot]] < 20) return
+        vars[counts[slot]] -= 20
+        if (vars[counts[slot]] == 0) vars[types[slot]] = 0
+        openBank()
     }
 
     private fun ProtectedAccess.openBank() {
@@ -659,4 +767,8 @@ private class BankSpaceShop @Inject constructor(private val enumResolver: EnumTy
     fun hasPurchasedAll(purchasedBlocks: Int): Boolean {
         return purchasedBlocks >= blockCosts.size
     }
+}
+
+internal object BankServiceInterfaces : InterfaceReferences() {
+    val deposit = find("bank_depositbox")
 }

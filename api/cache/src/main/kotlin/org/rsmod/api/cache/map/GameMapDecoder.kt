@@ -12,7 +12,6 @@ import org.openrs2.cache.Cache
 import org.openrs2.crypto.SymmetricKey
 import org.rsmod.annotations.GameCache
 import org.rsmod.annotations.InternalApi
-import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.map.area.MapAreaDecoder
 import org.rsmod.api.cache.map.area.MapAreaDefinition
 import org.rsmod.api.cache.map.loc.MapLocDefinition
@@ -27,7 +26,6 @@ import org.rsmod.api.cache.map.obj.MapObjListDefinition
 import org.rsmod.api.cache.map.tile.MapTileDecoder
 import org.rsmod.api.cache.map.tile.MapTileSimpleDefinition
 import org.rsmod.api.cache.util.InlineByteBuf
-import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.api.cache.util.toInlineBuf
 import org.rsmod.api.repo.npc.NpcRepository
 import org.rsmod.api.repo.obj.ObjRepository
@@ -80,17 +78,28 @@ constructor(
             cacheLocs(mapBuilder)
         }
 
-    private fun Cache.readMapBuffers(xteaMap: XteaMap): List<MapBuffer> =
-        xteaMap.map { (mapSquareKey, keyArray) ->
-            val name = "${mapSquareKey.x}_${mapSquareKey.z}"
-            val key = SymmetricKey.fromIntArray(keyArray)
-            val map = read(Js5Archives.MAPS, "m$name", file = 0).use(ByteBuf::toInlineBuf)
-            val locs = read(Js5Archives.MAPS, "l$name", file = 0, key).use(ByteBuf::toInlineBuf)
-            val npcs = readOrNull(Js5Archives.MAPS, "n$name")?.use(ByteBuf::toInlineBuf)
-            val objs = readOrNull(Js5Archives.MAPS, "o$name")?.use(ByteBuf::toInlineBuf)
-            val areas = readOrNull(Js5Archives.MAPS, "a$name")?.use(ByteBuf::toInlineBuf)
+    private fun Cache.readMapBuffers(xteaMap: XteaMap): List<MapBuffer> {
+        val archive = MapArchive(this)
+        val squares = if (archive.numeric) archive.nativeSquares() else xteaMap.keys.toList()
+        check(squares.isNotEmpty()) { "No map squares found in the game cache" }
+        return squares.map { mapSquareKey ->
+            val key = xteaMap[mapSquareKey]?.let(SymmetricKey::fromIntArray) ?: SymmetricKey.ZERO
+            val map =
+                requireNotNull(archive.read(mapSquareKey, MapFile.Terrain)) {
+                        "Missing terrain for $mapSquareKey"
+                    }
+                    .use(ByteBuf::toInlineBuf)
+            val locs =
+                requireNotNull(archive.read(mapSquareKey, MapFile.Locations, key)) {
+                        "Missing landscape for $mapSquareKey"
+                    }
+                    .use(ByteBuf::toInlineBuf)
+            val npcs = archive.read(mapSquareKey, MapFile.Npcs)?.use(ByteBuf::toInlineBuf)
+            val objs = archive.read(mapSquareKey, MapFile.Objs)?.use(ByteBuf::toInlineBuf)
+            val areas = archive.read(mapSquareKey, MapFile.Areas)?.use(ByteBuf::toInlineBuf)
             MapBuffer(mapSquareKey, map, locs, npcs, objs, areas)
         }
+    }
 
     private suspend fun decodeAll(buffers: List<MapBuffer>): List<DecodedMap> = coroutineScope {
         buffers.map { buffer -> async { buffer.decode() } }.awaitAll()

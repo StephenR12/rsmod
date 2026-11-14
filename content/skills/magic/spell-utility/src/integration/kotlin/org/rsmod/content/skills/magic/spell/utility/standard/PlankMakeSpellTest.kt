@@ -44,7 +44,7 @@ import org.rsmod.game.ui.Component
 @Execution(ExecutionMode.SAME_THREAD)
 class PlankMakeSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins Plank Make recipes settings and presentation`() =
+    fun GameTestState.`cache 238 pins Plank Make recipes settings and presentation`() =
         runPlankMakeTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_plank_make))
             assertEquals(11149, spell.obj.id)
@@ -57,7 +57,7 @@ class PlankMakeSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_plank_make.id ushr 16)
-            assertEquals(133, components.magic_spellbook_plank_make.id and 0xFFFF)
+            assertEquals(138, components.magic_spellbook_plank_make.id and 0xFFFF)
             assertEquals(
                 emptyList<String>(),
                 deps.components[components.magic_spellbook_plank_make].op.toList(),

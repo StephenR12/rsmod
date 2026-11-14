@@ -35,6 +35,9 @@ public data class HashedClientScriptType(
 }
 
 public data class UnpackedClientScriptType(
+    public val longLocalCount: Int = 0,
+    public val longArgumentCount: Int = 0,
+    public val longOperands: LongArray? = null,
     public val intLocalCount: Int,
     public val stringLocalCount: Int,
     public val intArgumentCount: Int,
@@ -64,6 +67,11 @@ public data class UnpackedClientScriptType(
         result = 61 * result + stringOperands.contentHashCode()
         result = 61 * result + commands.contentHashCode()
         result = 61 * result + switches.contentHashCode()
+        if (longLocalCount != 0 || longArgumentCount != 0 || longOperands != null) {
+            result = 61 * result + longLocalCount
+            result = 61 * result + longArgumentCount
+            result = 61 * result + longOperands.contentHashCode()
+        }
         result = 61 * result + (internalId ?: 0)
         return result and 0x7FFFFFFFFFFFFFFF
     }
@@ -87,6 +95,9 @@ public data class UnpackedClientScriptType(
         if (this === other) return true
         if (other !is UnpackedClientScriptType) return false
         if (internalId != other.internalId) return false
+        if (longLocalCount != other.longLocalCount || longArgumentCount != other.longArgumentCount)
+            return false
+        if (!longOperands.contentEquals(other.longOperands)) return false
         if (intLocalCount != other.intLocalCount) return false
         if (stringLocalCount != other.stringLocalCount) return false
         if (intArgumentCount != other.intArgumentCount) return false

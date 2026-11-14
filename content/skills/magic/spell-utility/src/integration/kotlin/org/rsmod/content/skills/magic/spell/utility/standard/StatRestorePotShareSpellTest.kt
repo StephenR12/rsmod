@@ -51,7 +51,7 @@ import org.rsmod.game.ui.Component
 @Execution(ExecutionMode.SAME_THREAD)
 class StatRestorePotShareSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins spell interface potion and presentation contracts`() =
+    fun GameTestState.`cache 238 pins spell interface potion and presentation contracts`() =
         runPotionShareTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_res_pot_share))
 
@@ -66,7 +66,7 @@ class StatRestorePotShareSpellTest {
             )
             assertFalse(deps.spells.offensiveCombatSpells().contains(spell))
             assertEquals(218, components.magic_spellbook_stat_restore_pot_share.id ushr 16)
-            assertEquals(127, components.magic_spellbook_stat_restore_pot_share.id and 0xFFFF)
+            assertEquals(132, components.magic_spellbook_stat_restore_pot_share.id and 0xFFFF)
             assertEquals(
                 emptyList<String>(),
                 deps.components[components.magic_spellbook_stat_restore_pot_share].op.toList(),

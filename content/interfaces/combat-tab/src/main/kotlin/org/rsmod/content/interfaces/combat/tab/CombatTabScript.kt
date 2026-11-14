@@ -1,7 +1,9 @@
 package org.rsmod.content.interfaces.combat.tab
 
 import jakarta.inject.Inject
+import java.util.WeakHashMap
 import org.rsmod.api.combat.commons.CombatStance
+import org.rsmod.api.combat.commons.magic.Spellbook
 import org.rsmod.api.combat.commons.styles.MeleeAttackStyle
 import org.rsmod.api.combat.manager.MagicRuneManager
 import org.rsmod.api.combat.weapon.styles.AttackStyles
@@ -16,13 +18,17 @@ import org.rsmod.api.player.protect.ProtectedAccessLauncher
 import org.rsmod.api.player.righthand
 import org.rsmod.api.player.ui.PlayerInterfaceUpdates
 import org.rsmod.api.player.ui.ifClose
+import org.rsmod.api.player.ui.ifOpenMainModal
+import org.rsmod.api.player.ui.ifSetEvents
 import org.rsmod.api.player.vars.VarPlayerIntMapSetter
 import org.rsmod.api.player.vars.boolVarBit
 import org.rsmod.api.player.vars.boolVarp
 import org.rsmod.api.player.vars.enumVarp
+import org.rsmod.api.player.vars.enumVarBit
 import org.rsmod.api.player.vars.intVarBit
 import org.rsmod.api.script.advanced.onWearposChange
 import org.rsmod.api.script.onIfOpen
+import org.rsmod.api.script.onIfModalButton
 import org.rsmod.api.script.onIfOverlayButton
 import org.rsmod.api.script.onPlayerQueue
 import org.rsmod.api.script.onPlayerQueueWithArgs
@@ -43,6 +49,7 @@ import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.obj.UnpackedObjType
 import org.rsmod.game.type.obj.WeaponCategory
 import org.rsmod.game.type.obj.Wearpos
+import org.rsmod.game.type.interf.IfEvent
 import org.rsmod.game.type.varbit.VarBitType
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
@@ -74,6 +81,9 @@ constructor(
     private var Player.autocastEnabled by boolVarBit(varbits.autocast_set)
     private var Player.autocastSpell by intVarBit(varbits.autocast_spell)
     private var Player.defensiveCasting by boolVarBit(varbits.autocast_defmode)
+    private var Player.spellbook by enumVarBit<Spellbook>(varbits.spellbook)
+
+    private val autocastSelectionMode = WeakHashMap<Player, Boolean>()
 
     private lateinit var stanceSaveVarBits: EnumTypeNonNullMap<Int, VarBitType>
 
@@ -81,7 +91,20 @@ constructor(
         stanceSaveVarBits = enumResolver[combat_enums.weapons_last_stance].filterValuesNotNull()
 
         onIfOpen(interfaces.combat_interface) { player.updateCombatTab() }
+        onIfOpen(interfaces.autocast) {
+            player.ifSetEvents(combat_components.autocast_spells, 0..127, IfEvent.Op1)
+        }
         onWearposChange { player.onWearposChange(wearpos) }
+
+        onIfOverlayButton(combat_components.autocast_normal) {
+            player.openAutocastSelection(defensive = false)
+        }
+        onIfOverlayButton(combat_components.autocast_defensive) {
+            player.openAutocastSelection(defensive = true)
+        }
+        onIfModalButton(combat_components.autocast_spells) {
+            player.selectAutocastSpell(it.comsub)
+        }
 
         onIfOverlayButton(combat_components.auto_retaliate) { player.selectAutoRetaliate() }
 
@@ -98,6 +121,36 @@ constructor(
 
     private fun Player.updateCombatTab() {
         PlayerInterfaceUpdates.updateCombatTab(this, objTypes)
+    }
+
+    private fun Player.openAutocastSelection(defensive: Boolean) {
+        val weapon = objTypes.getOrNull(righthand) ?: return
+        val category = WeaponCategory.getOrUnarmed(weapon.weaponCategory)
+        if (autocast.getVarBits(category) == null) return
+        ifClose(eventBus)
+        autocastSelectionMode[this] = defensive
+        ifOpenMainModal(interfaces.autocast, eventBus)
+    }
+
+    private fun Player.selectAutocastSpell(autocastId: Int) {
+        val defensive = autocastSelectionMode[this] ?: return
+        val weapon = objTypes.getOrNull(righthand) ?: return
+        val category = WeaponCategory.getOrUnarmed(weapon.weaponCategory)
+        val savedVars = autocast.getVarBits(category) ?: return
+        val spell = spells.getAutocastSpell(autocastId) ?: return
+        if (spell.spellbook != spellbook) {
+            mes("You can't autocast that spell with your current active spellbook.")
+            return
+        }
+        if (!autocast.canStaffAutocast(this, weapon, autocastId)) return
+        if (!runes.canCastSpell(this, spell)) return
+
+        autocast.set(this, savedVars, autocastId, defensive)
+        autocastSpell = autocastId
+        defensiveCasting = defensive
+        autocastEnabled = true
+        autocastSelectionMode.remove(this)
+        ifClose(eventBus)
     }
 
     private fun Player.onWearposChange(wearpos: Wearpos) {

@@ -3,7 +3,6 @@ package org.rsmod.api.cache.types.dbrow
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.PooledByteBufAllocator
 import org.openrs2.buffer.writeUnsignedShortSmart
-import org.openrs2.buffer.writeVarInt
 import org.openrs2.cache.Cache
 import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.Js5Configs
@@ -11,6 +10,7 @@ import org.rsmod.api.cache.util.EncoderContext
 import org.rsmod.api.cache.util.encodeConfig
 import org.rsmod.api.cache.util.readOrNull
 import org.rsmod.api.cache.util.writeColumnValues
+import org.rsmod.api.cache.util.writeUnsignedLeb128
 import org.rsmod.game.type.dbrow.UnpackedDbRowType
 
 public object DbRowTypeEncoder {
@@ -50,6 +50,6 @@ public object DbRowTypeEncoder {
                 data.writeByte(0xFF)
             }
             data.writeByte(4)
-            data.writeVarInt(table)
+            data.writeUnsignedLeb128(table)
         }
 }

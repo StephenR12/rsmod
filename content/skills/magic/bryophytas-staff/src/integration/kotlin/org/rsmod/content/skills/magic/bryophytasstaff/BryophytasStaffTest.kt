@@ -79,7 +79,7 @@ class BryophytasStaffTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 staff variants and interaction dispatch are pinned`() =
+    fun GameTestState.`cache 238 staff variants and interaction dispatch are pinned`() =
         runStaffTest { deps ->
             assertEquals(22368, objs.bryophytas_staff_uncharged.id)
             assertEquals(22370, objs.bryophytas_staff.id)

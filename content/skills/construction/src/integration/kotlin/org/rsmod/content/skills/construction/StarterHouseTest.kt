@@ -138,7 +138,8 @@ class StarterHouseTest {
             player.opLoc3(outside)
             advance(3)
             val door = requireNotNull(findLoc(player.coords.translate(3, 1), east))
-            player.teleport(door.coords.translateX(-1))
+            // Approach from the unblocked side of the revision-238 doorway.
+            player.teleport(door.coords.translateX(1))
             player.opLoc5(BoundLocInfo(door, east))
             advance(3)
             menu(2)

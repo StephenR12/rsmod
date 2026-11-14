@@ -4,6 +4,10 @@ plugins {
 }
 
 dependencies {
+    integrationImplementation(projects.api.spells)
+    integrationImplementation(projects.api.spellsAutocast)
+    integrationImplementation(projects.api.combat.combatCommons)
+    integrationImplementation(projects.api.spellsRunes)
     implementation(libs.fastutil)
     implementation(projects.api.combat.combatWeapon)
     implementation(projects.api.pluginCommons)

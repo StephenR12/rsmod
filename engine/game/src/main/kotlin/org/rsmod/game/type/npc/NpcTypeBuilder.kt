@@ -6,6 +6,7 @@ import org.rsmod.game.map.Direction
 import org.rsmod.game.movement.BlockWalk
 import org.rsmod.game.movement.MoveRestrict
 import org.rsmod.game.type.util.CompactableIntArray
+import org.rsmod.game.type.util.EntityOption
 import org.rsmod.game.type.util.GenericPropertySelector.select
 import org.rsmod.game.type.util.GenericPropertySelector.selectIntArray
 import org.rsmod.game.type.util.GenericPropertySelector.selectParamMap
@@ -28,6 +29,14 @@ public class NpcTypeBuilder(public var internal: String? = null) {
     public var turnLeftAnim: Int? = null
     public var turnRightAnim: Int? = null
     public var category: Int? = null
+    public val extraOptions: MutableList<EntityOption> = mutableListOf()
+    public var lowRenderPriority: Boolean? = null
+    public var footprintSize: Int? = null
+    public var flag129: Boolean? = null
+    public var idleAnimRestart: Boolean? = null
+    public var canHideForOverlap: Boolean? = null
+    public var overlapTint: Int? = null
+    public var disableDepthBuffer: Boolean? = null
     public val op: Array<String?> = arrayOfNulls(OP_CAPACITY)
     public var recolS: CompactableIntArray = CompactableIntArray(RECOL_CAPACITY)
     public var recolD: CompactableIntArray = CompactableIntArray(RECOL_CAPACITY)
@@ -155,12 +164,20 @@ public class NpcTypeBuilder(public var internal: String? = null) {
             turnLeftAnim = turnLeftAnim,
             turnRightAnim = turnRightAnim,
             category = category,
+            extraOptions = extraOptions.toList(),
+            lowRenderPriority = lowRenderPriority,
+            footprintSize = footprintSize,
+            flag129 = flag129,
+            idleAnimRestart = idleAnimRestart,
+            canHideForOverlap = canHideForOverlap,
+            overlapTint = overlapTint,
+            disableDepthBuffer = disableDepthBuffer,
             op = op,
             recolS = recolS.toShortArray(),
             recolD = recolD.toShortArray(),
             retexS = retexS.toShortArray(),
             retexD = retexD.toShortArray(),
-            head = head.toShortArray(),
+            head = head.toIntArray(),
             minimap = minimap,
             vislevel = vislevel,
             resizeH = resizeH,
@@ -269,7 +286,7 @@ public class NpcTypeBuilder(public var internal: String? = null) {
             val recolD = selectShortArray(edit, base) { recolD }
             val retexS = selectShortArray(edit, base) { retexS }
             val retexD = selectShortArray(edit, base) { retexD }
-            val head = selectShortArray(edit, base) { head }
+            val head = selectIntArray(edit, base) { head }
             val minimap = select(edit, base, DEFAULT_MINIMAP) { minimap }
             val vislevel = select(edit, base, DEFAULT_VISLEVEL) { vislevel }
             val resizeH = select(edit, base, DEFAULT_RESIZE_H) { resizeH }
@@ -333,6 +350,14 @@ public class NpcTypeBuilder(public var internal: String? = null) {
                 turnLeftAnim = turnLeftAnim,
                 turnRightAnim = turnRightAnim,
                 category = category,
+                extraOptions = edit.extraOptions.ifEmpty { base.extraOptions },
+                lowRenderPriority = edit.lowRenderPriority ?: base.lowRenderPriority,
+                footprintSize = edit.footprintSize ?: base.footprintSize,
+                flag129 = edit.flag129 ?: base.flag129,
+                idleAnimRestart = edit.idleAnimRestart ?: base.idleAnimRestart,
+                canHideForOverlap = edit.canHideForOverlap ?: base.canHideForOverlap,
+                overlapTint = edit.overlapTint ?: base.overlapTint,
+                disableDepthBuffer = edit.disableDepthBuffer ?: base.disableDepthBuffer,
                 op = op,
                 recolS = recolS,
                 recolD = recolD,

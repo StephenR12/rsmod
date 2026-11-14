@@ -44,7 +44,7 @@ import org.rsmod.map.CoordGrid
 @Execution(ExecutionMode.SAME_THREAD)
 class DegrimeSpellTest {
     @Test
-    fun GameTestState.`cache 233 pins spell runes component and all presentation assets`() =
+    fun GameTestState.`cache 238 pins spell runes component and all presentation assets`() =
         runDegrimeTest { deps ->
             val spell = requireNotNull(deps.spells.getObjSpell(objs.spell_degrime))
             assertEquals(15_345, spell.obj.id)
@@ -57,7 +57,7 @@ class DegrimeSpellTest {
                 spell.objReqs.associate { it.obj to it.count },
             )
             assertEquals(218, components.magic_spellbook_degrime.id ushr 16)
-            assertEquals(179, components.magic_spellbook_degrime.id and 0xFFFF)
+            assertEquals(184, components.magic_spellbook_degrime.id and 0xFFFF)
             assertEquals("Cast", deps.components[components.magic_spellbook_degrime].targetVerb)
             assertEquals(8_980, seqs.human_spellcast_degrime.id)
             assertEquals(8_981, seqs.human_prepare_degrime.id)

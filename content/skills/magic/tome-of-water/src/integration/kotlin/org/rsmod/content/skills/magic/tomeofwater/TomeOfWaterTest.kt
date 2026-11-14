@@ -219,7 +219,7 @@ class TomeOfWaterTest {
         }
 
     @Test
-    fun GameTestState.`cache 233 tome variants and core interaction dispatch are pinned`() =
+    fun GameTestState.`cache 238 tome variants and core interaction dispatch are pinned`() =
         runTomeTest { deps ->
             assertEquals(25_574, objs.tome_of_water.id)
             assertEquals(25_576, objs.tome_of_water_uncharged.id)
